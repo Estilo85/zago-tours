@@ -15,8 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^7.2.0",
     "@zagotours/types": "workspace:*",
+    "@zagotours/db": "workspace:*",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",
@@ -40,7 +40,6 @@
     "@zagotours/eslint-config": "workspace:*",
     "@zagotours/typescript-config": "workspace:*",
     "nodemon": "^3.1.11",
-    "prisma": "^7.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

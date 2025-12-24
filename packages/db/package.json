@@ -1,0 +1,17 @@
+{
+  "name": "@zagotours/db",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "scripts": {
+    "db:generate": "prisma generate --schema=./schema/schema.prisma",
+    "db:push": "prisma db push --schema=./schema/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=./schema/schema.prisma"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  }
+}

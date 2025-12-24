@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import { prisma } from '@zagotours/db';
 
 dotenv.config();
 
@@ -20,6 +21,19 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+
+async function testConnection() {
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connected successfully!');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+testConnection();
 
 // Routes
 app.get('/', (req: Request, res: Response) => {
