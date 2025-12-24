@@ -11,18 +11,19 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@zagotours/ui": "workspace:*",
     "@zagotours/types": "workspace:*",
-    "next": "15.1.0",
+    "@zagotours/ui": "workspace:*",
+    "next": "16.1.1",
+    "next-auth": "^4.24.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@zagotours/eslint-config": "workspace:*",
-    "@zagotours/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
+    "@zagotours/eslint-config": "workspace:*",
+    "@zagotours/typescript-config": "workspace:*",
     "eslint": "^9.39.1",
     "typescript": "5.9.2"
   }
