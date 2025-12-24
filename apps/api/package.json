@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^7.2.0",
     "@zagotours/types": "workspace:*",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
@@ -25,7 +26,8 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
-    "multer-storage-cloudinary": "^4.0.0"
+    "multer-storage-cloudinary": "^4.0.0",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -38,6 +40,7 @@
     "@zagotours/eslint-config": "workspace:*",
     "@zagotours/typescript-config": "workspace:*",
     "nodemon": "^3.1.11",
+    "prisma": "^7.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
