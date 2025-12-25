@@ -2,15 +2,17 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
+import path from 'path';
+import { config } from 'dotenv';
 import { prisma } from '@zagotours/db';
 
-dotenv.config();
+config({ path: path.resolve(process.cwd(), '.env') });
+config({ path: path.resolve(process.cwd(), '../../.env'), override: false });
 
 const app: Express = express();
 const port = process.env.PORT || 4000;
 
-// Middleware
+// 2. Middleware Configuration
 app.use(helmet());
 app.use(
   cors({
@@ -22,20 +24,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+// 3. Database Connection Logic
 async function testConnection() {
   try {
     await prisma.$connect();
     console.log('✅ Database connected successfully!');
   } catch (error) {
     console.error('❌ Database connection failed:', error);
-  } finally {
-    await prisma.$disconnect();
+    process.exit(1);
   }
 }
 
 testConnection();
 
-// Routes
+// 4. Routes
 app.get('/', (req: Request, res: Response) => {
   res.json({
     message: 'Welcome to ZagoTour API',
@@ -52,7 +54,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
-// 404 handler
+// 5. 404 Handler
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     error: 'Route not found',
@@ -60,7 +62,7 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-// Error handling middleware
+// 6. Error Handling Middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Error:', err.stack);
   res.status(500).json({
@@ -69,6 +71,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
+// 7. Server Start
 app.listen(port, () => {
   console.log(`⚡️ [server]: API server is running on port ${port}`);
   console.log(

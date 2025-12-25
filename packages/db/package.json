@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "main": "./index.ts",
+  "prisma": {
+    "schema": "./schema/schema.prisma"
+  },
   "scripts": {
-    "db:generate": "prisma generate --schema=./schema/schema.prisma",
-    "db:push": "prisma db push --schema=./schema/schema.prisma",
-    "db:migrate": "prisma migrate dev --schema=./schema/schema.prisma"
+    "db:generate": "prisma generate",
+    "db:push": "dotenv -e ../../.env -- prisma db push",
+    "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
+    "db:studio": "dotenv -e ../../.env -- prisma studio"
   },
   "devDependencies": {
     "prisma": "^5.22.0"

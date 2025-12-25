@@ -7,9 +7,14 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:generate": "pnpm --filter @zagotours/db db:generate"
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "db:migrate": "turbo run db:migrate",
+    "db:studio": "turbo run db:studio",
+    "db:setup": "pnpm db:generate && pnpm db:push"
   },
   "devDependencies": {
+    "dotenv-cli": "^11.0.0",
     "prettier": "^3.7.4",
     "turbo": "^2.7.1",
     "typescript": "5.9.2"
