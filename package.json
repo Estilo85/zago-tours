@@ -7,17 +7,16 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "db:generate": "turbo run db:generate",
-    "db:push": "turbo run db:push",
-    "db:migrate": "turbo run db:migrate",
-    "db:studio": "turbo run db:studio",
-    "db:setup": "pnpm db:generate && pnpm db:push"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "dotenv-cli": "^11.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "turbo": "^2.7.1",
-    "typescript": "5.9.2"
+    "typescript": "5.9.3",
+    "vitest": "^4.0.16"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
@@ -27,5 +26,11 @@
     "overrides": {
       "js-yaml": "^4.1.1"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "vitest run"
+    ]
   }
 }

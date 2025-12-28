@@ -11,7 +11,8 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
-.env*
+.env.*.local
+*.env
 
 # Testing
 coverage
@@ -28,6 +29,11 @@ out/
 build
 dist
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Debug
 npm-debug.log*
@@ -37,3 +43,11 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+
+# Prisma
+**/prisma/migrations/**/*.sql
+**/prisma/dev.db*
+
+# Docker
+.dockerignore

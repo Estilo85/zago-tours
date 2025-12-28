@@ -6,6 +6,7 @@
   "types": "./src/index.ts",
   "devDependencies": {
     "@zagotours/typescript-config": "workspace:*",
-    "typescript": "latest"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
   }
 }

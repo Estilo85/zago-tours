@@ -2,18 +2,39 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "tasks": {
-    "db:generate": {
+    "generate": {
       "inputs": ["schema/schema.prisma"],
+      "outputs": ["../generated/**"],
       "cache": true
     },
     "db:push": {
       "cache": false
     },
+    "db:seed": {
+      "cache": false
+    },
     "build": {
-      "dependsOn": ["^build", "db:generate"],
+      "dependsOn": ["^build", "generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
-      "env": ["DATABASE_URL", "PORT", "CLIENT_URL", "NODE_ENV"]
+      "env": ["PORT", "CLIENT_URL", "NODE_ENV", "DATABASE_URL"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "test:unit": {
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "test:integration": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -23,8 +44,10 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": ["db:generate"]
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
     }
   }
 }
