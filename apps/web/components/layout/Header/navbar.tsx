@@ -8,9 +8,21 @@ import {
   Spacer,
   HStack,
   Link as ChakraLink,
+  Icon,
+  IconButton,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { FaFacebook } from 'react-icons/fa';
+import { ArrowRight } from 'lucide-react';
+
+const navlinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Our Story', href: '#' },
+  { label: 'Adventure', href: '#' },
+  { label: 'Event', href: '#' },
+  { label: 'Community', href: '#' },
+];
 
 export const NavBar = () => {
   const pathname = usePathname();
@@ -30,40 +42,64 @@ export const NavBar = () => {
       top={0}
       zIndex={10}
     >
-      <Flex align='center' maxW='1200px' mx='auto'>
-        <ChakraLink as={NextLink} href='/' _hover={{ textDecoration: 'none' }}>
-          <Heading size='md' color='blue.600'>
-            ZagoTours
-          </Heading>
-        </ChakraLink>
+      <Flex justify='space-between' align='center' mx='auto'>
+        <Flex as='span' alignItems='center' gap={5}>
+          <Icon as={FaFacebook} boxSize={24} />
+          <ChakraLink as={NextLink} href='/' textDecor='none'>
+            <Heading size='md' color='primary'>
+              ZagoTours
+            </Heading>
+          </ChakraLink>
+        </Flex>
 
-        <Spacer />
+        <HStack gap={20}>
+          {navlinks.map((link, index) => (
+            <ChakraLink
+              key={index}
+              as={NextLink}
+              href={link.href}
+              textDecor='none'
+              textTransform='uppercase'
+              fontSize='sm'
+              fontWeight={isActive(link.href) ? 'bold' : 'normal'}
+              color={isActive(link.href) ? 'orange' : 'primary'}
+            >
+              {link.label}
+            </ChakraLink>
+          ))}
+        </HStack>
 
-        <HStack gap={8}>
-          <ChakraLink
-            as={NextLink}
-            href='/posts'
-            fontWeight={isActive('/posts') ? 'bold' : 'medium'}
-            color={isActive('/posts') ? 'blue.500' : 'gray.600'}
-          >
-            Destinations
+        <HStack>
+          <ChakraLink as={NextLink} href='#'>
+            <IconButton
+              aria-label='login'
+              variant='ghost'
+              borderRadius='20px'
+              fontWeight='bold'
+              py={7}
+              px={20}
+              cursor='pointer'
+              bg='white'
+            >
+              Login
+            </IconButton>
           </ChakraLink>
 
-          <ChakraLink
-            as={NextLink}
-            href='/about'
-            fontWeight={isActive('/about') ? 'bold' : 'medium'}
-            color={isActive('/about') ? 'blue.500' : 'gray.600'}
-          >
-            About
-          </ChakraLink>
-
-          <ChakraLink as={NextLink} href='/login'>
-            <Button variant='ghost'>Login</Button>
-          </ChakraLink>
-
-          <ChakraLink as={NextLink} href='/register'>
-            <Button colorScheme='blue'>Sign Up</Button>
+          <ChakraLink as={NextLink} href='#'>
+            <IconButton
+              aria-label='join-us'
+              alignItems='baseline'
+              gap={5}
+              fontWeight='bold'
+              borderRadius='20px'
+              py={10}
+              px={20}
+              cursor='pointer'
+              bg='secondary'
+              border='none'
+            >
+              Join us <ArrowRight size={12} />{' '}
+            </IconButton>
           </ChakraLink>
         </HStack>
       </Flex>
