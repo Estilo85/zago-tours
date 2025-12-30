@@ -1,0 +1,47 @@
+export enum Role {
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  AFFILIATE = 'AFFILIATE',
+  ADVENTURER = 'ADVENTURER',
+  INDEPENDENT_AGENT = 'INDEPENDENT_AGENT',
+  COOPERATE_AGENT = 'COOPERATE_AGENT',
+}
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+}
+
+export enum AdventureStatus {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+}
+
+export enum AdventureLevel {
+  MEDIUM = 'MEDIUM',
+  CHALLENGING = 'CHALLENGING',
+  HARD = 'HARD',
+}
+
+export enum AccessType {
+  LOCKED = 'LOCKED',
+  UNLOCKED = 'UNLOCKED',
+}
+
+export enum CallStatus {
+  SCHEDULED = 'SCHEDULED',
+  EXPIRED = 'EXPIRED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum ContractStatus {
+  SIGNED = 'SIGNED',
+  NOT_SIGNED = 'NOT_SIGNED',
+}
+
+export enum MediaType {
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  DOCUMENT = 'DOCUMENT',
+}

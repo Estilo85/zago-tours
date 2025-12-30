@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": "./src/client.ts"
+    ".": {
+      "types": "./src/client.ts",
+      "default": "./src/client.ts"
+    }
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
@@ -18,7 +21,6 @@
     "generate": "prisma generate",
     "lint": "eslint . --max-warnings 0",
     "prebuild": "npm run generate",
-    "predev": "npm run generate",
     "studio": "prisma studio"
   },
   "dependencies": {
@@ -26,7 +28,6 @@
     "bcryptjs": "^3.0.3"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^3.0.0",
     "eslint": "^9.39.2",
     "prisma": "^5.22.0",
     "rimraf": "^5.0.5",
