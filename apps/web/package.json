@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "chakra": "chakra-cli",
+    "typegen": "chakra-cli typegen ./theme/index.ts",
     "check-types": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:unit": "vitest run --coverage",
