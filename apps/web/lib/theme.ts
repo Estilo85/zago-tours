@@ -4,7 +4,7 @@ export const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        primary: { value: '#008055' },
+        primary: { value: '#196469' },
         secondary: { value: '#FFFF00' },
         dark: { value: '#141414' },
         surface: { value: '#d9d9d9' },

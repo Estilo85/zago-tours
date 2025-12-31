@@ -1,12 +1,14 @@
 import { Role, UserStatus } from '../enums';
 
+export type PublicRole = Exclude<Role, Role.SUPER_ADMIN>;
+
 export interface RegisterDTO {
   name: string;
   email: string;
   password: string;
   phone?: string;
   country?: string;
-  role: Role;
+  role: PublicRole;
   referralCode?: string;
   // Role specific fields
   certifications?: string[];
