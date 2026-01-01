@@ -15,6 +15,7 @@ import NextLink from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRoleStore } from '@/store/role-selector.store';
+import Button from '@/components/ui/button';
 
 const menuList = [
   { label: 'Adventurer', value: 'ADVENTURER' },
@@ -37,11 +38,11 @@ export const ActionButtons = () => {
 
   return (
     <HStack gap={4}>
-      <IconButton
+      <Button
         asChild
         aria-label='login'
         variant='outline'
-        borderRadius='20px'
+        border='1px solid black'
         fontWeight='bold'
         p={5}
         cursor='pointer'
@@ -50,25 +51,23 @@ export const ActionButtons = () => {
         color='dark'
       >
         <NextLink href='/login'>Login</NextLink>
-      </IconButton>
+      </Button>
 
       <MenuRoot>
         <MenuTrigger asChild>
-          <IconButton
+          <Button
             aria-label='join-us'
             alignItems='center'
             gap={3}
             fontWeight='bold'
-            borderRadius='20px'
             p={5}
             cursor='pointer'
             bg='secondary'
-            border='none'
             color='dark'
             onClick={() => router.push('/register')}
           >
             Join us <Icon as={ArrowRight} size={{ base: 'xs', md: 'sm' }} />
-          </IconButton>
+          </Button>
         </MenuTrigger>
         <Portal>
           <MenuPositioner>

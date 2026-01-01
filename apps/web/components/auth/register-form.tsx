@@ -1,178 +1,126 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Box, VStack, Text, Flex } from '@chakra-ui/react';
+import { RegisterDTO } from '@zagotours/types';
+import Button from '@/components/ui/button';
+import { useRegistrationLogic } from '@/hooks/use-registration-logic';
 import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  VStack,
-  Text,
-  HStack,
-} from '@chakra-ui/react';
-import { Field, RadioGroup } from '@chakra-ui/react';
+  mapFormDataToDTO,
+  validateRegistration,
+  FormErrors,
+} from '@/lib/registration-utils';
+
+// Sub-components
 import { RoleSpecificFields } from './role-specific-fields';
-import { PublicRole } from '@zagotours/types';
-import { useRoleStore } from '@/store/role-selector.store';
+import { AgentTypeSelector } from './agent-type-selector';
+import { CommonFormFields } from './common-form-fields';
+import { RegistrationHeader } from './registration-header';
 
-type RoleCategory = 'AFFILIATE' | 'ADVENTURER' | 'AGENT';
-type AgentType = 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT';
+interface RegistrationFormProps {
+  onSubmit?: (data: RegisterDTO) => void | Promise<void>;
+  error?: string | null;
+}
 
-const agentTypeOptions = [
-  { value: 'INDEPENDENT_AGENT' as AgentType, label: 'Independent' },
-  { value: 'COOPERATE_AGENT' as AgentType, label: 'Corporate' },
-];
+export default function RegistrationForm({
+  onSubmit,
+  error: serverError,
+}: RegistrationFormProps) {
+  //Custom Hook
+  const {
+    selectedCategory,
+    selectedAgentType,
+    finalRole,
+    handleAgentTypeSelect,
+  } = useRegistrationLogic();
 
-const commonFields = [
-  {
-    name: 'fullName',
-    label: 'Full Name',
-    type: 'text',
-    placeholder: 'Enter your full name',
-    required: true,
-  },
-  {
-    name: 'email',
-    label: 'Email',
-    type: 'email',
-    placeholder: 'Enter your email',
-    required: true,
-  },
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Enter your password',
-    required: true,
-  },
-];
+  // Local state for validation errors
+  const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
 
-export default function RegistrationForm() {
-  const storeRole = useRoleStore((state) => state.role);
-
-  const [selectedCategory, setSelectedCategory] =
-    useState<RoleCategory>('ADVENTURER');
-  const [selectedAgentType, setSelectedAgentType] =
-    useState<AgentType>('INDEPENDENT_AGENT');
-  const [finalRole, setFinalRole] = useState<PublicRole | null>(null);
-
-  useEffect(() => {
-    if (storeRole === 'AGENT') {
-      setSelectedCategory('AGENT');
-    } else {
-      setSelectedCategory(storeRole as RoleCategory);
-      setFinalRole(storeRole as PublicRole);
-      setSelectedAgentType('INDEPENDENT_AGENT');
-    }
-  }, [storeRole]);
-
-  const handleAgentTypeSelect = (agentType: AgentType) => {
-    setSelectedAgentType(agentType);
-    setFinalRole(agentType as PublicRole);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //HandleSubmit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFieldErrors({});
+
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    const payload = { ...data, role: finalRole };
-    console.log('Final Payload:', payload);
+
+    // Run Validation
+    const errors = validateRegistration(formData, finalRole);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    if (!finalRole) return;
+    const payload = mapFormDataToDTO(formData, finalRole);
+
+    if (onSubmit) {
+      await onSubmit(payload);
+    }
   };
 
   return (
-    <Box
-      display='flex'
-      alignItems='center'
-      justifyContent='center'
-      bg='gray.50'
-      py={8}
-    >
+    <Box py={8}>
       <Box
-        bg='white'
+        bg='textInverse'
         p={8}
         borderRadius='lg'
         boxShadow='sm'
         width='100%'
         maxW='md'
       >
-        <VStack gap={6} align='stretch'>
-          <Box textAlign='center'>
-            <Heading size='lg' mb={2}>
-              Create Account
-            </Heading>
-            <Text color='gray.600' fontSize='sm'>
+        <VStack align='stretch' gap={4}>
+          <RegistrationHeader />
+
+          {(serverError || fieldErrors.general) && (
+            <Box
+              p={3}
+              bg='red.50'
+              color='red.600'
+              borderRadius='md'
+              border='1px solid'
+            >
+              <Text fontSize='sm'>{serverError || fieldErrors.general}</Text>
+            </Box>
+          )}
+
+          <Flex direction='column'>
+            <Text
+              color='primary'
+              fontSize='sm'
+              fontWeight='black'
+              textAlign='center'
+              mb={4}
+            >
               {selectedCategory === 'AGENT'
                 ? 'Complete your Agent details'
                 : `Registering as ${selectedCategory?.toLowerCase()}`}
             </Text>
-          </Box>
 
-          <Box as='form' onSubmit={handleSubmit}>
-            <VStack gap={4} align='stretch'>
-              {/* STICKY AGENT TYPE SELECTION: Only visible if Navbar role is AGENT */}
-              {selectedCategory === 'AGENT' && (
-                <Box
-                  p={3}
-                  bg='blue.50'
-                  borderRadius='md'
-                  border='1px solid'
-                  borderColor='blue.100'
-                >
-                  <Text fontSize='xs' fontWeight='bold' mb={2} color='blue.700'>
-                    AGENT TYPE
-                  </Text>
-                  <RadioGroup.Root
-                    value={selectedAgentType || ''}
-                    onValueChange={(e) =>
-                      handleAgentTypeSelect(e.value as AgentType)
-                    }
-                  >
-                    <HStack gap={4}>
-                      {agentTypeOptions.map((option) => (
-                        <RadioGroup.Item
-                          key={option.value}
-                          value={option.value as string}
-                        >
-                          <RadioGroup.ItemHiddenInput />
-                          <RadioGroup.ItemIndicator />
-                          <RadioGroup.ItemText fontSize='sm'>
-                            {option.label}
-                          </RadioGroup.ItemText>
-                        </RadioGroup.Item>
-                      ))}
-                    </HStack>
-                  </RadioGroup.Root>
-                </Box>
-              )}
-
-              {/* Common Fields */}
-              {commonFields.map((field) => (
-                <Field.Root key={field.name} required={field.required}>
-                  <Field.Label>{field.label}</Field.Label>
-                  <Input
-                    name={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
+            <form onSubmit={handleSubmit}>
+              <VStack gap={4} align='stretch'>
+                {selectedCategory === 'AGENT' && (
+                  <AgentTypeSelector
+                    selectedAgentType={selectedAgentType}
+                    onAgentTypeChange={handleAgentTypeSelect}
                   />
-                </Field.Root>
-              ))}
+                )}
 
-              {/* Dynamic Fields from the Map */}
-              <RoleSpecificFields role={finalRole} />
+                <CommonFormFields errors={fieldErrors} />
+                <RoleSpecificFields role={finalRole} errors={fieldErrors} />
 
-              <Button
-                type='submit'
-                colorPalette='blue'
-                size='lg'
-                mt={2}
-                width='100%'
-                disabled={selectedCategory === 'AGENT' && !selectedAgentType}
-              >
-                {selectedCategory === 'AGENT' && !selectedAgentType
-                  ? 'Select Agent Type'
-                  : 'Create Account'}
-              </Button>
-            </VStack>
-          </Box>
+                <Button
+                  type='submit'
+                  colorPalette='primary'
+                  size='lg'
+                  mt={2}
+                  bg='primary'
+                  width='100%'
+                >
+                  Create Account
+                </Button>
+              </VStack>
+            </form>
+          </Flex>
         </VStack>
       </Box>
     </Box>
