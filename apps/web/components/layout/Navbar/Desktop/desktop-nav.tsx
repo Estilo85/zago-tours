@@ -21,7 +21,7 @@ export const DesktopNav = () => {
       borderColor='dark'
       position='sticky'
       top={0}
-      zIndex='header'
+      zIndex='sticky'
       display={{ base: 'none', md: 'block' }}
       width='full'
     >
