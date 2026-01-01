@@ -14,7 +14,7 @@ import {
 import NextLink from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRoleStore } from '@/store/role-selector.store';
 
 const menuList = [
   { label: 'Adventurer', value: 'ADVENTURER' },
@@ -24,11 +24,15 @@ const menuList = [
 
 export const ActionButtons = () => {
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<string>('ADVENTURER');
+
+  // Store action
+  const selectedRole = useRoleStore((state) => state.role);
+  const setRole = useRoleStore((state) => state.setRole);
 
   const handleRoleSelect = (value: string) => {
-    setSelectedRole(value);
-    router.push(`/register?role=${value}`);
+    setRole(value);
+
+    router.push('/register');
   };
 
   return (
@@ -51,7 +55,6 @@ export const ActionButtons = () => {
       <MenuRoot>
         <MenuTrigger asChild>
           <IconButton
-            asChild
             aria-label='join-us'
             alignItems='center'
             gap={3}
@@ -61,12 +64,10 @@ export const ActionButtons = () => {
             cursor='pointer'
             bg='secondary'
             border='none'
-            textDecor='none'
             color='dark'
+            onClick={() => router.push('/register')}
           >
-            <NextLink href='/register'>
-              Join us <Icon as={ArrowRight} size={{ base: 'xs', md: 'sm' }} />
-            </NextLink>
+            Join us <Icon as={ArrowRight} size={{ base: 'xs', md: 'sm' }} />
           </IconButton>
         </MenuTrigger>
         <Portal>

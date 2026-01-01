@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,29 +12,14 @@ import {
 import { Field, RadioGroup } from '@chakra-ui/react';
 import { RoleSpecificFields } from './role-specific-fields';
 import { PublicRole } from '@zagotours/types';
+import { useRoleStore } from '@/store/role-selector.store';
 
-// Role types
-type RoleCategory = 'AFFILIATE' | 'ADVENTURER' | 'AGENT' | null;
-type AgentType = 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT' | null;
-
-// Array-based configurations
-const roleCategoryOptions = [
-  { label: 'Register as Affiliate', value: 'AFFILIATE' as RoleCategory },
-  { label: 'Register as Adventurer', value: 'ADVENTURER' as RoleCategory },
-  { label: 'Register as Agent', value: 'AGENT' as RoleCategory },
-];
+type RoleCategory = 'AFFILIATE' | 'ADVENTURER' | 'AGENT';
+type AgentType = 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT';
 
 const agentTypeOptions = [
-  {
-    value: 'INDEPENDENT_AGENT' as AgentType,
-    label: 'Independent Agent',
-    description: 'For individual travel professionals',
-  },
-  {
-    value: 'COOPERATE_AGENT' as AgentType,
-    label: 'Corporate Agent',
-    description: 'For travel companies and agencies',
-  },
+  { value: 'INDEPENDENT_AGENT' as AgentType, label: 'Independent' },
+  { value: 'COOPERATE_AGENT' as AgentType, label: 'Corporate' },
 ];
 
 const commonFields = [
@@ -59,62 +44,42 @@ const commonFields = [
     placeholder: 'Enter your password',
     required: true,
   },
-  {
-    name: 'phone',
-    label: 'Phone',
-    type: 'tel',
-    placeholder: 'Enter your phone number',
-    required: false,
-  },
-  {
-    name: 'country',
-    label: 'Country',
-    type: 'text',
-    placeholder: 'Enter your country',
-    required: false,
-  },
 ];
 
 export default function RegistrationForm() {
-  const [selectedCategory, setSelectedCategory] = useState<RoleCategory>(null);
-  const [selectedAgentType, setSelectedAgentType] = useState<AgentType>(null);
+  const storeRole = useRoleStore((state) => state.role);
+
+  const [selectedCategory, setSelectedCategory] =
+    useState<RoleCategory>('ADVENTURER');
+  const [selectedAgentType, setSelectedAgentType] =
+    useState<AgentType>('INDEPENDENT_AGENT');
   const [finalRole, setFinalRole] = useState<PublicRole | null>(null);
 
-  const handleCategorySelect = (category: RoleCategory) => {
-    setSelectedCategory(category);
-    setSelectedAgentType(null);
-
-    if (category === 'AFFILIATE' || category === 'ADVENTURER') {
-      setFinalRole(category as PublicRole);
+  useEffect(() => {
+    if (storeRole === 'AGENT') {
+      setSelectedCategory('AGENT');
     } else {
-      setFinalRole(null);
+      setSelectedCategory(storeRole as RoleCategory);
+      setFinalRole(storeRole as PublicRole);
+      setSelectedAgentType('INDEPENDENT_AGENT');
     }
-  };
+  }, [storeRole]);
 
   const handleAgentTypeSelect = (agentType: AgentType) => {
     setSelectedAgentType(agentType);
-    setFinalRole(agentType);
+    setFinalRole(agentType as PublicRole);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Registering as:', finalRole);
-  };
-
-  const getRoleDisplay = () => {
-    if (selectedCategory === 'AGENT' && selectedAgentType) {
-      return selectedAgentType === 'INDEPENDENT_AGENT'
-        ? 'Independent Agent'
-        : 'Corporate Agent';
-    }
-    if (selectedCategory === 'AFFILIATE') return 'Affiliate';
-    if (selectedCategory === 'ADVENTURER') return 'Adventurer';
-    return '';
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    const payload = { ...data, role: finalRole };
+    console.log('Final Payload:', payload);
   };
 
   return (
     <Box
-      minH='100vh'
       display='flex'
       alignItems='center'
       justifyContent='center'
@@ -135,141 +100,79 @@ export default function RegistrationForm() {
               Create Account
             </Heading>
             <Text color='gray.600' fontSize='sm'>
-              Select your role to get started
+              {selectedCategory === 'AGENT'
+                ? 'Complete your Agent details'
+                : `Registering as ${selectedCategory?.toLowerCase()}`}
             </Text>
           </Box>
 
-          {/* Role Category Selection */}
-          {!selectedCategory ? (
-            <VStack gap={3}>
-              {roleCategoryOptions.map((option) => (
-                <Button
-                  key={option.value}
-                  width='100%'
-                  size='lg'
-                  variant='outline'
-                  onClick={() => handleCategorySelect(option.value)}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </VStack>
-          ) : selectedCategory === 'AGENT' && !selectedAgentType ? (
-            /* Agent Type Selection */
+          <Box as='form' onSubmit={handleSubmit}>
             <VStack gap={4} align='stretch'>
-              <HStack justify='space-between' align='center'>
-                <Text fontSize='sm' fontWeight='semibold' color='gray.700'>
-                  Select Agent Type
-                </Text>
-                <Button
-                  size='xs'
-                  variant='ghost'
-                  onClick={() => setSelectedCategory(null)}
+              {/* STICKY AGENT TYPE SELECTION: Only visible if Navbar role is AGENT */}
+              {selectedCategory === 'AGENT' && (
+                <Box
+                  p={3}
+                  bg='blue.50'
+                  borderRadius='md'
+                  border='1px solid'
+                  borderColor='blue.100'
                 >
-                  Back
-                </Button>
-              </HStack>
+                  <Text fontSize='xs' fontWeight='bold' mb={2} color='blue.700'>
+                    AGENT TYPE
+                  </Text>
+                  <RadioGroup.Root
+                    value={selectedAgentType || ''}
+                    onValueChange={(e) =>
+                      handleAgentTypeSelect(e.value as AgentType)
+                    }
+                  >
+                    <HStack gap={4}>
+                      {agentTypeOptions.map((option) => (
+                        <RadioGroup.Item
+                          key={option.value}
+                          value={option.value as string}
+                        >
+                          <RadioGroup.ItemHiddenInput />
+                          <RadioGroup.ItemIndicator />
+                          <RadioGroup.ItemText fontSize='sm'>
+                            {option.label}
+                          </RadioGroup.ItemText>
+                        </RadioGroup.Item>
+                      ))}
+                    </HStack>
+                  </RadioGroup.Root>
+                </Box>
+              )}
 
-              <RadioGroup.Root
-                value={selectedAgentType || ''}
-                onValueChange={(e) =>
-                  handleAgentTypeSelect(e.value as AgentType)
-                }
+              {/* Common Fields */}
+              {commonFields.map((field) => (
+                <Field.Root key={field.name} required={field.required}>
+                  <Field.Label>{field.label}</Field.Label>
+                  <Input
+                    name={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                  />
+                </Field.Root>
+              ))}
+
+              {/* Dynamic Fields from the Map */}
+              <RoleSpecificFields role={finalRole} />
+
+              <Button
+                type='submit'
+                colorPalette='blue'
+                size='lg'
+                mt={2}
+                width='100%'
+                disabled={selectedCategory === 'AGENT' && !selectedAgentType}
               >
-                <VStack gap={3} align='stretch'>
-                  {agentTypeOptions.map((option) => (
-                    <Box
-                      key={option.value}
-                      p={4}
-                      borderWidth='1px'
-                      borderRadius='md'
-                      cursor='pointer'
-                      _hover={{ bg: 'gray.50' }}
-                    >
-                      <RadioGroup.Item value={option.value as string}>
-                        <RadioGroup.ItemHiddenInput />
-                        <RadioGroup.ItemIndicator />
-                        <RadioGroup.ItemControl />
-                        <RadioGroup.ItemText>
-                          <VStack align='start' gap={1}>
-                            <Text fontWeight='semibold'>{option.label}</Text>
-                            <Text fontSize='xs' color='gray.600'>
-                              {option.description}
-                            </Text>
-                          </VStack>
-                        </RadioGroup.ItemText>
-                      </RadioGroup.Item>
-                    </Box>
-                  ))}
-                </VStack>
-              </RadioGroup.Root>
+                {selectedCategory === 'AGENT' && !selectedAgentType
+                  ? 'Select Agent Type'
+                  : 'Create Account'}
+              </Button>
             </VStack>
-          ) : (
-            /* Registration Form */
-            <Box as='form' onSubmit={handleSubmit}>
-              <VStack gap={4} align='stretch'>
-                {/* Role Badge */}
-                <HStack justify='space-between' align='center'>
-                  <Text fontSize='sm' fontWeight='semibold' color='gray.700'>
-                    Registering as:{' '}
-                    <Text as='span' color='blue.600'>
-                      {getRoleDisplay()}
-                    </Text>
-                  </Text>
-                  <Button
-                    size='xs'
-                    variant='ghost'
-                    onClick={() => {
-                      if (selectedCategory === 'AGENT') {
-                        setSelectedAgentType(null);
-                        setFinalRole(null);
-                      } else {
-                        setSelectedCategory(null);
-                        setFinalRole(null);
-                      }
-                    }}
-                  >
-                    Change
-                  </Button>
-                </HStack>
-
-                {/* Common Fields - Mapped */}
-                {commonFields.map((field) => (
-                  <Field.Root key={field.name} required={field.required}>
-                    <Field.Label>
-                      {field.label}
-                      {field.required && <Field.RequiredIndicator />}
-                    </Field.Label>
-                    <Input
-                      name={field.name}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                    />
-                  </Field.Root>
-                ))}
-
-                {/* Role-Specific Fields */}
-                <RoleSpecificFields role={finalRole} />
-
-                {/* Submit Button */}
-                <Button type='submit' colorScheme='blue' size='lg' mt={2}>
-                  Create Account
-                </Button>
-
-                <Text fontSize='xs' color='gray.500' textAlign='center'>
-                  Already have an account?{' '}
-                  <Text
-                    as='span'
-                    color='blue.600'
-                    cursor='pointer'
-                    _hover={{ textDecoration: 'underline' }}
-                  >
-                    Sign in
-                  </Text>
-                </Text>
-              </VStack>
-            </Box>
-          )}
+          </Box>
         </VStack>
       </Box>
     </Box>
