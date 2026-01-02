@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const Stats = () => {
+export const StatsBanner = () => {
   return <div>stats</div>;
 };
