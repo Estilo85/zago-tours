@@ -7,7 +7,7 @@ export const customConfig = defineConfig({
         primary: { value: '#196469' },
         secondary: { value: '#FFFF00' },
         dark: { value: '#141414' },
-        surface: { value: '#d9d9d9' },
+        surface: { value: '#F1F5EB' },
         textPrimary: { value: '#e6e6e6' },
         textInverse: { value: '#FFFFFF' },
       },
