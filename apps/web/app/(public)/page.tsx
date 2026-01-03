@@ -1,10 +1,24 @@
-import { Heading, Text, Box } from '@chakra-ui/react';
+import {
+  Banner,
+  DestinationMap,
+  FeaturedAdventures,
+  HowItWorks,
+  StatsBanner,
+  Testimonials,
+  WhyChooseUs,
+} from '@/components/home';
+import { Stack } from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <Box p={10}>
-      <Heading>ZagoTour</Heading>
-      <Text mt={4}>Discover and book amazing adventures.</Text>
-    </Box>
+    <Stack gap={5} py={5}>
+      <Banner />
+      <StatsBanner />
+      <HowItWorks />
+      <WhyChooseUs />
+      <FeaturedAdventures />
+      <Testimonials />
+      <DestinationMap />
+    </Stack>
   );
 }
