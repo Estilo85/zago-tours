@@ -13,16 +13,19 @@ import {
 import React from 'react';
 import { AvatarImage } from '../media/avatar-image';
 import { BookAIcon, FileExclamationPointIcon, Rocket } from 'lucide-react';
-import { HowItWorkCard } from '../ui/how-it-work-card';
-import { ResponsiveImage } from '../media/ResponsiveImage';
 
+import { ResponsiveImage } from '../media/ResponsiveImage';
+import { HowItWorkCard } from '../ui/cards/how-it-work-card';
+
+//advisor-images
 const advisors = [
   { src: '/images/home/home-hero-advisor-1.webp', name: 'Belly' },
   { src: '/images/home/home-hero-advisor-2.webp', name: 'Brand' },
   { src: '/images/home/home-hero-advisor-3.webp', name: 'Brook' },
 ];
 
-const cardInfo = [
+//Card-data
+const cardData = [
   {
     heading: 'Select Your Adventure',
     icon: BookAIcon,
@@ -40,6 +43,14 @@ const cardInfo = [
     description:
       'You bring the courage. We bring protection. It is that simple.',
   },
+];
+
+//ResponsiveImage-Data
+const resImageData = [
+  '/images/home/home-how-it-work-sect-1.webp',
+  '/images/home/home-how-it-work-sect-2.webp',
+  '/images/home/home-how-it-work-sect-3.webp',
+  '/images/home/home-how-it-work-sect-4.webp',
 ];
 
 export const HowItWorks = () => {
@@ -87,7 +98,6 @@ export const HowItWorks = () => {
           SIMPLE
         </Text>
 
-        {/*  Flex container for Images and Cards */}
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={10}
@@ -95,22 +105,20 @@ export const HowItWorks = () => {
           justify='center'
           width='full'
         >
-          {/* columns and 2 rows on desktop */}
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-            {[1, 2, 3, 4].map((i) => (
+            {resImageData.map((img, i) => (
               <ResponsiveImage
                 key={i}
-                src='/images/home/home-how-it-work-hero-1.webp'
+                src={img}
                 alt='how it work image'
-                height='250px'
-                width='250px'
+                height='200px'
+                width='200px'
               />
             ))}
           </SimpleGrid>
 
-          {/* Card Container: Always a Stack */}
           <Stack gap={6} flex='1' textAlign='left' maxW={{ lg: '500px' }}>
-            {cardInfo.map((card, idx) => (
+            {cardData.map((card, idx) => (
               <HowItWorkCard
                 key={idx}
                 icon={card.icon}
@@ -121,7 +129,6 @@ export const HowItWorks = () => {
           </Stack>
         </Flex>
 
-        {/*  Absolute Box: Half in, Half out */}
         <Box
           width={{ base: '90%', md: '70%', lg: '60%' }}
           position={{ base: 'relative', md: 'absolute' }}

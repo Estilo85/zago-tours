@@ -1,3 +1,4 @@
+'use client';
 import { Flex, Icon, Stack, Text, Box } from '@chakra-ui/react';
 import React from 'react';
 import { IconType } from 'react-icons';
@@ -11,15 +12,17 @@ interface Prop {
 export const HowItWorkCard = ({ icon, heading, description }: Prop) => {
   return (
     <Flex
-      align='start'
+      direction={{ base: 'column', md: 'row' }}
+      align={{ base: 'center', md: 'start' }}
       gap={4}
       p={5}
       borderRadius='xl'
       bg='white'
       _hover={{ shadow: 'md' }}
       transition='all 0.2s'
+      width='full'
+      maxW={{ md: '450px' }}
     >
-      {/* Left Side: Icon Container */}
       <Box
         p={3}
         bg='textPrimary'
@@ -27,12 +30,17 @@ export const HowItWorkCard = ({ icon, heading, description }: Prop) => {
         display='flex'
         alignItems='center'
         justifyContent='center'
+        flexShrink={0}
       >
         <Icon as={icon} boxSize={6} color='primary' />
       </Box>
 
-      {/* Right Side: Text Content */}
-      <Stack gap={1} flex='1'>
+      <Stack
+        gap={1}
+        flex='1'
+        textAlign={{ base: 'center', md: 'left' }}
+        align={{ base: 'center', md: 'start' }}
+      >
         <Text
           as='h3'
           fontWeight='bold'

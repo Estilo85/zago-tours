@@ -1,4 +1,12 @@
-import { Banner, HowItWorks, StatsBanner } from '@/components/home';
+import {
+  Banner,
+  DestinationMap,
+  FeaturedAdventures,
+  HowItWorks,
+  StatsBanner,
+  Testimonials,
+  WhyChooseUs,
+} from '@/components/home';
 import { Stack } from '@chakra-ui/react';
 
 export default function Home() {
@@ -7,6 +15,10 @@ export default function Home() {
       <Banner />
       <StatsBanner />
       <HowItWorks />
+      <WhyChooseUs />
+      <FeaturedAdventures />
+      <Testimonials />
+      <DestinationMap />
     </Stack>
   );
 }

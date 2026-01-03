@@ -1,6 +1,10 @@
-import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react';
-import React from 'react';
+'use client';
+
+import { Box, Center, Heading, Icon, Stack, Text } from '@chakra-ui/react';
+import NextLink from 'next/link';
 import { ResponsiveImage } from '../media/ResponsiveImage';
+import Button from '../ui/button';
+import { ArrowRight } from 'lucide-react';
 
 export const Banner = () => {
   return (
@@ -40,6 +44,13 @@ export const Banner = () => {
           seriously.
         </Text>
 
+        <Button asChild bg='secondary' color='dark' fontWeight='bold'>
+          <NextLink href='/register'>
+            Join Us
+            <Icon as={ArrowRight} ml={2} />
+          </NextLink>
+        </Button>
+
         <Box
           width={{ base: '100%', md: '70%', lg: '60%' }}
           position={{ base: 'relative', md: 'absolute' }}
@@ -52,7 +63,6 @@ export const Banner = () => {
           <ResponsiveImage
             src='/images/home/banner.webp'
             alt='home page banner image'
-            // ratio={undefined}
             width='100%'
             height={{ base: '250px', md: '400px' }}
             borderRadius='2xl'
