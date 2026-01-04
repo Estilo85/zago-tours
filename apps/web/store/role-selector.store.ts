@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { PublicRole } from '@zagotours/types';
+import { CustomerRole } from '@zagotours/types';
 
 interface RoleState {
-  role: string | PublicRole;
-  setRole: (newRole: string | PublicRole) => void;
+  role: string | CustomerRole;
+  setRole: (newRole: string | CustomerRole) => void;
 }
 
 export const useRoleStore = create<RoleState>((set) => ({
