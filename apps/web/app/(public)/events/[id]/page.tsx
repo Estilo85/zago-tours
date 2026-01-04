@@ -1,5 +1,14 @@
-import React from 'react';
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-export default function page() {
-  return <div>page</div>;
+export default async function EventDetails({ params }: PageProps) {
+  const { id } = await params;
+
+  return (
+    <div>
+      <h1>Adventure Detail</h1>
+      <p>Viewing adventure: {id}</p>
+    </div>
+  );
 }
