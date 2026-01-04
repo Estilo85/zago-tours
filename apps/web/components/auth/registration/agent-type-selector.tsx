@@ -1,7 +1,8 @@
 'use client';
 import { Box, Flex, RadioGroup } from '@chakra-ui/react';
+import { Role } from '@zagotours/types';
 
-type AgentType = 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT';
+type AgentType = Role.INDEPENDENT_AGENT | Role.COOPERATE_AGENT;
 
 interface AgentTypeSelectorProps {
   selectedAgentType: AgentType;

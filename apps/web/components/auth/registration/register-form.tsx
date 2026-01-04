@@ -1,31 +1,21 @@
 'use client';
 import { useState } from 'react';
-import { Box, VStack, Text, Flex } from '@chakra-ui/react';
-import { RegisterDTO } from '@zagotours/types';
+import { Box, VStack, Text } from '@chakra-ui/react';
 import Button from '@/components/ui/button';
 import { useRegistrationLogic } from '@/hooks/use-registration-logic';
-import {
-  mapFormDataToDTO,
-  validateRegistration,
-  FormErrors,
-} from '@/lib/registration-utils';
+import { mapFormDataToDTO, FormErrors } from '@/lib/registration-utils';
 
 // Sub-components
-import { RoleSpecificFields } from './role-specific-fields';
 import { AgentTypeSelector } from './agent-type-selector';
-import { CommonFormFields } from './common-form-fields';
 import { RegistrationHeader } from './registration-header';
-
-interface RegistrationFormProps {
-  onSubmit?: (data: RegisterDTO) => void | Promise<void>;
-  error?: string | null;
-}
+import { FormField } from './form-field';
+import { validateRegistration } from '@/lib/validate-registration';
+import { Role } from '@zagotours/types';
 
 export default function RegistrationForm({
   onSubmit,
   error: serverError,
-}: RegistrationFormProps) {
-  //Custom Hook
+}: any) {
   const {
     selectedCategory,
     selectedAgentType,
@@ -33,18 +23,30 @@ export default function RegistrationForm({
     handleAgentTypeSelect,
   } = useRegistrationLogic();
 
-  // Local state for validation errors
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
 
-  //HandleSubmit
+  //  Dynamic Labels
+  const labels = {
+    fullName: finalRole === Role.COOPERATE_AGENT ? 'Company Name' : 'Full Name',
+    email:
+      finalRole === Role.COOPERATE_AGENT ? 'Contact Email' : 'Email address',
+    description:
+      finalRole === Role.AFFILIATE
+        ? 'Marketing Experience'
+        : 'Business Description',
+    placeholder:
+      finalRole === Role.COOPERATE_AGENT
+        ? 'Enter registered company name'
+        : 'Enter your full name',
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFieldErrors({});
 
     const formData = new FormData(e.currentTarget);
-
-    // Run Validation
     const errors = validateRegistration(formData, finalRole);
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -53,26 +55,25 @@ export default function RegistrationForm({
     if (!finalRole) return;
     const payload = mapFormDataToDTO(formData, finalRole);
 
-    if (onSubmit) {
-      await onSubmit(payload);
-    }
+    if (onSubmit) await onSubmit(payload);
   };
 
   return (
     <Box
-      bg='textInverse'
+      bg='white'
       p={7}
       borderRadius='lg'
       boxShadow='sm'
       width={{ base: '100%', md: 'md' }}
       minH={{ base: 'fit-content', md: '570px' }}
       maxH={{ base: 'fit-content', md: '570px' }}
-      overflow='auto'
+      overflowY='auto'
       scrollbar='hidden'
     >
       <VStack align='stretch' gap={4}>
         <RegistrationHeader />
 
+        {/* Global Error Display */}
         {(serverError || fieldErrors.general) && (
           <Box
             p={3}
@@ -85,42 +86,127 @@ export default function RegistrationForm({
           </Box>
         )}
 
-        <Flex direction='column'>
-          <Text
-            color='primary'
-            fontSize='sm'
-            fontWeight='black'
-            textAlign='center'
-            mb={4}
-          >
-            {selectedCategory === 'AGENT' && 'Complete your Agent details'}
-          </Text>
-
-          <form onSubmit={handleSubmit}>
-            <VStack gap={4} align='stretch'>
-              {selectedCategory === 'AGENT' && (
+        <form onSubmit={handleSubmit}>
+          <VStack gap={3} align='stretch'>
+            {/*  AGENT SWITCHER (Nested between fields) */}
+            {selectedCategory === 'AGENT' && (
+              <Box my={2}>
+                <Text fontSize='xs' fontWeight='bold' mb={2} color='gray.500'>
+                  AGENT TYPE
+                </Text>
                 <AgentTypeSelector
                   selectedAgentType={selectedAgentType}
                   onAgentTypeChange={handleAgentTypeSelect}
                 />
-              )}
+              </Box>
+            )}
 
-              <CommonFormFields errors={fieldErrors} />
-              <RoleSpecificFields role={finalRole} errors={fieldErrors} />
+            {/*  TOP COMMON FIELDS */}
+            <FormField
+              name='fullName'
+              label={labels.fullName}
+              placeholder={labels.placeholder}
+              error={fieldErrors.fullName}
+            />
 
-              <Button
-                type='submit'
-                colorPalette='primary'
-                size='lg'
-                mt={2}
-                bg='primary'
-                width='100%'
-              >
-                Create Account
-              </Button>
-            </VStack>
-          </form>
-        </Flex>
+            <FormField
+              name='email'
+              label={labels.email}
+              type='email'
+              placeholder='Enter your email'
+              error={fieldErrors.email}
+            />
+            {finalRole === 'ADVENTURER' && (
+              <FormField
+                name='country'
+                label='Country of Residence'
+                type='select'
+                error={fieldErrors.country}
+              />
+            )}
+
+            {/* 3. DYNAMIC ROLE-SPECIFIC FIELDS */}
+            {finalRole != 'COOPERATE_AGENT' && (
+              <FormField
+                name='phone'
+                label='Phone'
+                type='tel'
+                error={fieldErrors.phone}
+              />
+            )}
+            {/* 3. DYNAMIC ROLE-SPECIFIC FIELDS */}
+            {finalRole === 'COOPERATE_AGENT' && (
+              <FormField
+                name='business_description'
+                label='Tell us a bit about your travel business'
+                type='textarea'
+                error={fieldErrors.business_description}
+              />
+            )}
+
+            {finalRole === 'INDEPENDENT_AGENT' && (
+              <FormField
+                name='certifications'
+                label='Certifications'
+                type='combo'
+                placeholder='e.g. IATA, Local License'
+                error={fieldErrors.certifications}
+              />
+            )}
+
+            {finalRole === 'AFFILIATE' && (
+              <>
+                <FormField
+                  name='find_us'
+                  label='How did you hear about us?'
+                  error={fieldErrors.find_us}
+                />
+                <FormField
+                  name='community'
+                  label='Community/Brand/Host agency name'
+                  error={fieldErrors.find_us}
+                />
+                <FormField
+                  name='website_link'
+                  label='Website/Social Link'
+                  error={fieldErrors.find_us}
+                />
+              </>
+            )}
+
+            {/*  BOTTOM COMMON FIELDS */}
+            <FormField
+              name='password'
+              label='Password'
+              type='password'
+              error={fieldErrors.password}
+            />
+
+            <FormField
+              name='confirmPassword'
+              label='Confirm Password'
+              type='password'
+              error={fieldErrors.confirmPassword}
+            />
+            {finalRole === 'ADVENTURER' && (
+              <FormField
+                name='subscribe'
+                label='Become a safety ambassador'
+                type='checkbox'
+              />
+            )}
+            <Button
+              type='submit'
+              colorPalette='primary'
+              size='lg'
+              mt={2}
+              bg='primary'
+              width='100%'
+            >
+              Create Account
+            </Button>
+          </VStack>
+        </form>
       </VStack>
     </Box>
   );
