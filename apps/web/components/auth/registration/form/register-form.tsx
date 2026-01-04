@@ -6,11 +6,14 @@ import { useRegistrationLogic } from '@/hooks/use-registration-logic';
 import { mapFormDataToDTO, FormErrors } from '@/lib/registration-utils';
 
 // Sub-components
-import { AgentTypeSelector } from './agent-type-selector';
-import { RegistrationHeader } from './registration-header';
+import { AgentTypeSelector } from '../agent-type-selector';
+import { RegistrationHeader } from '../registration-header';
 import { FormField } from './form-field';
 import { validateRegistration } from '@/lib/validate-registration';
 import { Role } from '@zagotours/types';
+import { DynamicRoleSection } from './dynamic-role-section';
+import { SecuritySection } from './security-section';
+import { IdentitySection } from './identity-section';
 
 export default function RegistrationForm({
   onSubmit,
@@ -101,100 +104,15 @@ export default function RegistrationForm({
               </Box>
             )}
 
-            {/*  TOP COMMON FIELDS */}
-            <FormField
-              name='fullName'
-              label={labels.fullName}
-              placeholder={labels.placeholder}
-              error={fieldErrors.fullName}
+            <IdentitySection
+              finalRole={finalRole}
+              labels={labels}
+              errors={fieldErrors}
             />
 
-            <FormField
-              name='email'
-              label={labels.email}
-              type='email'
-              placeholder='Enter your email'
-              error={fieldErrors.email}
-            />
-            {finalRole === 'ADVENTURER' && (
-              <FormField
-                name='country'
-                label='Country of Residence'
-                type='select'
-                error={fieldErrors.country}
-              />
-            )}
+            <DynamicRoleSection finalRole={finalRole} errors={fieldErrors} />
 
-            {/* 3. DYNAMIC ROLE-SPECIFIC FIELDS */}
-            {finalRole != 'COOPERATE_AGENT' && (
-              <FormField
-                name='phone'
-                label='Phone'
-                type='tel'
-                error={fieldErrors.phone}
-              />
-            )}
-            {/* 3. DYNAMIC ROLE-SPECIFIC FIELDS */}
-            {finalRole === 'COOPERATE_AGENT' && (
-              <FormField
-                name='business_description'
-                label='Tell us a bit about your travel business'
-                type='textarea'
-                error={fieldErrors.business_description}
-              />
-            )}
-
-            {finalRole === 'INDEPENDENT_AGENT' && (
-              <FormField
-                name='certifications'
-                label='Certifications'
-                type='combo'
-                placeholder='e.g. IATA, Local License'
-                error={fieldErrors.certifications}
-              />
-            )}
-
-            {finalRole === 'AFFILIATE' && (
-              <>
-                <FormField
-                  name='find_us'
-                  label='How did you hear about us?'
-                  error={fieldErrors.find_us}
-                />
-                <FormField
-                  name='community'
-                  label='Community/Brand/Host agency name'
-                  error={fieldErrors.find_us}
-                />
-                <FormField
-                  name='website_link'
-                  label='Website/Social Link'
-                  error={fieldErrors.find_us}
-                />
-              </>
-            )}
-
-            {/*  BOTTOM COMMON FIELDS */}
-            <FormField
-              name='password'
-              label='Password'
-              type='password'
-              error={fieldErrors.password}
-            />
-
-            <FormField
-              name='confirmPassword'
-              label='Confirm Password'
-              type='password'
-              error={fieldErrors.confirmPassword}
-            />
-            {finalRole === 'ADVENTURER' && (
-              <FormField
-                name='subscribe'
-                label='Become a safety ambassador'
-                type='checkbox'
-              />
-            )}
+            <SecuritySection finalRole={finalRole} errors={fieldErrors} />
             <Button
               type='submit'
               colorPalette='primary'
