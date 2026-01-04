@@ -1,7 +1,7 @@
-// components/auth/common-form-fields.tsx
 'use client';
 import { Input, Field } from '@chakra-ui/react';
 import { FormErrors } from '@/lib/registration-utils';
+import { PasswordInput } from '@/components/ui/password-input';
 
 const commonFields = [
   {
@@ -25,6 +25,13 @@ const commonFields = [
     placeholder: 'Enter your password',
     required: true,
   },
+  {
+    name: 'confirmPassword',
+    label: 'Confirm Password',
+    type: 'password',
+    placeholder: 'Confirm your password',
+    required: true,
+  },
 ];
 
 interface CommonFormFieldsProps {
@@ -36,6 +43,7 @@ export function CommonFormFields({ errors }: CommonFormFieldsProps) {
     <>
       {commonFields.map((field) => {
         const errorMessage = errors?.[field.name as keyof FormErrors];
+        const isPassword = field.type === 'password';
 
         return (
           <Field.Root
@@ -44,11 +52,21 @@ export function CommonFormFields({ errors }: CommonFormFieldsProps) {
             invalid={!!errorMessage}
           >
             <Field.Label>{field.label}</Field.Label>
-            <Input
-              name={field.name}
-              type={field.type}
-              placeholder={field.placeholder}
-            />
+
+            {/* Conditional Rendering logic */}
+            {isPassword ? (
+              <PasswordInput
+                name={field.name}
+                placeholder={field.placeholder}
+              />
+            ) : (
+              <Input
+                name={field.name}
+                type={field.type}
+                placeholder={field.placeholder}
+              />
+            )}
+
             {errorMessage && <Field.ErrorText>{errorMessage}</Field.ErrorText>}
           </Field.Root>
         );

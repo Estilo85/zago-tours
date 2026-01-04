@@ -1,6 +1,6 @@
 'use client';
-import { Box, Heading, Text, Link as ChakraLink } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { AppLink } from '@/components/ui/AppLink';
+import { Box, Heading, Text } from '@chakra-ui/react';
 
 export function RegistrationHeader() {
   return (
@@ -14,11 +14,11 @@ export function RegistrationHeader() {
         Zago Tours
       </Heading>
       <Heading>Create account</Heading>
-      <Text>
+      <Text color='primary'>
         Already have an account?{' '}
-        <ChakraLink as={NextLink} href='/login' textDecor='underline'>
+        <AppLink href='/login' textDecor='underline'>
           Log in
-        </ChakraLink>{' '}
+        </AppLink>{' '}
       </Text>
     </Box>
   );

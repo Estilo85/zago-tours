@@ -93,9 +93,7 @@ export default function RegistrationForm({
             textAlign='center'
             mb={4}
           >
-            {selectedCategory === 'AGENT'
-              ? 'Complete your Agent details'
-              : `Registering as ${selectedCategory?.toLowerCase()}`}
+            {selectedCategory === 'AGENT' && 'Complete your Agent details'}
           </Text>
 
           <form onSubmit={handleSubmit}>

@@ -1,4 +1,9 @@
-import { AdventureLevel, AdventureStatus, AccessType } from '../enums';
+import {
+  AdventureLevel,
+  AdventureStatus,
+  AccessType,
+  MediaType,
+} from '../enums';
 
 export interface CreateAdventureDTO {
   title: string;
@@ -51,4 +56,17 @@ export interface AdventureFilterDTO {
   access?: AccessType;
   startDate?: Date;
   endDate?: Date;
+}
+
+export interface CreateGalleryDTO {
+  mediaUrl: string;
+  mediaType: MediaType;
+  altText?: string;
+  adventureId?: string;
+}
+
+export interface UpdateGalleryDTO {
+  mediaUrl?: string;
+  mediaType?: MediaType;
+  altText?: string;
 }

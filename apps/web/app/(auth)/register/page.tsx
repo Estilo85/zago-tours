@@ -2,10 +2,9 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import RegistrationForm from '@/components/auth/registration/register-form';
-import { PublicRole } from '@zagotours/types';
+import { RegistrableRole } from '@zagotours/types';
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { useRegistrationLogic } from '@/hooks/use-registration-logic';
-import Image from 'next/image';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 
 export default function Register() {
@@ -27,7 +26,7 @@ export default function Register() {
 
   //Handle Registration
   const handleRegistration = async (data: {
-    role: PublicRole | null;
+    role: RegistrableRole | null;
     [key: string]: any;
   }) => {
     setError(null);

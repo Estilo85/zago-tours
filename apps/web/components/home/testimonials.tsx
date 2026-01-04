@@ -7,9 +7,11 @@ import {
   Heading,
   Text,
   Stack,
+  Box,
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import { TestimonialCard } from '../ui/cards/testimonial-card';
+import { ResponsiveImage } from '../media/ResponsiveImage';
 
 const testimonials = [
   {
@@ -54,6 +56,8 @@ export const Testimonials = () => {
         mx='auto'
         gap='6'
         allowMouseDrag
+        slidesPerPage={3}
+        position='relative'
       >
         <Carousel.Control mb={6} justifyContent='flex-end' gap='3'>
           <Carousel.PrevTrigger asChild>
@@ -67,6 +71,20 @@ export const Testimonials = () => {
             </IconButton>
           </Carousel.PrevTrigger>
 
+          <Box
+            as='span'
+            width='fit-content'
+            position='absolute'
+            top='-15%'
+            right='30%'
+          >
+            <ResponsiveImage
+              src='/images/home/testimonial-icon.webp'
+              width='100px'
+              height='50px'
+              alt='testimonial-icon'
+            />
+          </Box>
           <Carousel.ItemGroup>
             {testimonials.map((item, index) => (
               <Carousel.Item key={index} index={index}>

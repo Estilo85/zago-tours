@@ -14,6 +14,7 @@ generator client {
 
 enum Role {
   SUPER_ADMIN
+  ADMIN
   AFFILIATE
   ADVENTURER
   INDEPENDENT_AGENT
@@ -69,15 +70,19 @@ model User {
   phone                 String?
   country               String?
   password              String
+   // Password Reset Fields
+  resetPasswordToken    String?           @unique
+  resetPasswordExpires  DateTime?
   role                  Role              @default(ADVENTURER)
   status                UserStatus        @default(ACTIVE)
   safetyAmbassador      Boolean           @default(false)
   referralCode          String            @unique
-  
   // Referral System (Self-relation)
   referredById          String?
   referrer              User?             @relation("UserReferrals", fields: [referredById], references: [id])
   referees              User[]            @relation("UserReferrals")
+  reviews               Review[]
+  adventureLikes        AdventureLike[]
   
   // Role Specific Profiles
   independentDetails    IndependentAgent?
@@ -148,13 +153,24 @@ model Adventure {
   days                       Int
   access                     AccessType       @default(LOCKED)
   lastSafetyCertDate         DateTime?
-  
+
+  likes                      AdventureLike[]
   itineraries                Itinerary[]
   gallery                    Gallery[]        // Linked Gallery items
   
   createdAt                  DateTime         @default(now())
   updatedAt                  DateTime         @updatedAt
   deletedAt                  DateTime?
+}
+
+model AdventureLike {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  adventureId String
+  adventure   Adventure @relation(fields: [adventureId], references: [id])
+
+  @@unique([userId, adventureId]) 
 }
 
 model Itinerary {
@@ -181,6 +197,24 @@ model Gallery {
   
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
+}
+
+// --- REVIEW MODELS ---
+model Review {
+  id           String     @id @default(uuid())
+  title        String?    // e.g., "Highly Recommended!"
+  content      String     @db.Text    
+  rating       Int        @default(5) 
+  isFeatured   Boolean    @default(false) 
+  
+  // Relations
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([userId])
 }
 
 // --- COMMUNITY MODELS ---

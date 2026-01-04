@@ -8,15 +8,14 @@ import {
   IconButton,
   CloseButton,
 } from '@chakra-ui/react';
-import { Link as ChakraLink } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
-import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from '@chakra-ui/react';
 import { navlinks } from '../nav.config';
 import { Logo } from '../logo';
 import { ActionButtons } from '../action-buttons';
+import { AppLink } from '@/components/ui/AppLink';
 
 export const MobileNav = () => {
   const pathname = usePathname();
@@ -64,16 +63,16 @@ export const MobileNav = () => {
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     {navlinks.map((link, index) => (
-                      <ChakraLink
+                      <AppLink
                         key={index}
-                        asChild
+                        href={link.href}
                         variant='plain'
                         fontWeight={isActive(link.href) ? 'bold' : 'normal'}
                         color={isActive(link.href) ? 'orange.500' : 'primary'}
                         onClick={() => setOpen(false)}
                       >
-                        <NextLink href={link.href}>{link.label}</NextLink>
-                      </ChakraLink>
+                        {link.label}
+                      </AppLink>
                     ))}
 
                     <ActionButtons />

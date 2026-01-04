@@ -53,3 +53,17 @@ export interface Gallery {
   createdAt: Date;
   deletedAt?: Date;
 }
+
+export interface AdventureLike {
+  id: string;
+  userId: string;
+  adventureId: string;
+}
+
+export interface DestinationCountry {
+  id: string;
+  name: string;
+  code?: string;
+  isActive: boolean;
+  createdAt: Date;
+}

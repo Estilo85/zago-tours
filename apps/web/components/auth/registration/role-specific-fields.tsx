@@ -5,13 +5,13 @@ import {
   Field,
   Textarea,
   createListCollection,
-  NativeSelect, // Cleaner version of the styled select
   Combobox,
   Select,
   Portal,
 } from '@chakra-ui/react';
-import { PublicRole } from '@zagotours/types';
+import { CustomerRole } from '@zagotours/types';
 import { FormErrors } from '@/lib/registration-utils';
+import { useMemo } from 'react';
 
 // 1. Extend the types
 type FieldType = 'text' | 'textarea' | 'select' | 'combo';
@@ -26,12 +26,11 @@ type FieldConfig = {
 };
 
 interface RoleSpecificFieldsProps {
-  role: PublicRole | null;
+  role: CustomerRole | null;
   errors?: FormErrors;
 }
 
-// 2. Updated Map with different types
-const roleFieldsMap: Record<PublicRole, FieldConfig[]> = {
+const roleFieldsMap: Record<CustomerRole, FieldConfig[]> = {
   AFFILIATE: [
     {
       label: 'Certifications',
@@ -45,7 +44,7 @@ const roleFieldsMap: Record<PublicRole, FieldConfig[]> = {
       name: 'country',
       isRequired: true,
       placeholder: 'Search and select country',
-      type: 'combo', // Combobox Example
+      type: 'combo',
       options: [
         { label: 'Nigeria', value: 'NG' },
         { label: 'United States', value: 'US' },
@@ -94,15 +93,27 @@ export const RoleSpecificFields = ({
 
   const fields = roleFieldsMap[role];
 
+  const collections = useMemo(() => {
+    const collectionsMap = new Map();
+
+    fields.forEach((field) => {
+      if (field.options) {
+        collectionsMap.set(
+          field.name,
+          createListCollection({ items: field.options })
+        );
+      }
+    });
+
+    return collectionsMap;
+  }, [fields]);
+
   return (
     <Fieldset.Root>
       <Fieldset.Content gap={4}>
         {fields.map((field) => {
           const errorMessage = errors?.[field.name];
-
-          const collection = field.options
-            ? createListCollection({ items: field.options })
-            : null;
+          const collection = collections.get(field.name);
 
           return (
             <Field.Root
@@ -129,7 +140,7 @@ export const RoleSpecificFields = ({
                   <Portal>
                     <Select.Positioner>
                       <Select.Content>
-                        {collection.items.map((opt) => (
+                        {collection.items.map((opt: any) => (
                           <Select.Item item={opt} key={opt.value}>
                             {opt.label}
                             <Select.ItemIndicator />
@@ -140,6 +151,7 @@ export const RoleSpecificFields = ({
                   </Portal>
                 </Select.Root>
               )}
+
               {/* COMBOBOX (Searchable) */}
               {field.type === 'combo' && collection && (
                 <Combobox.Root

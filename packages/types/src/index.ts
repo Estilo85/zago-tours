@@ -1,12 +1,16 @@
 // Enums
 export * from './enums';
 
+export { PUBLIC_ROLES_LIST, STAFF_ROLES, PARTNER_ROLES } from './dtos/auth.dto';
+
 // Entities
 export * from './entities/user.types';
 export * from './entities/adventure.types';
 export * from './entities/community.types';
 export * from './entities/event.types';
 export * from './entities/contract.types';
+export * from './entities/review.type';
+export * from './entities/platformSetting.type';
 
 // DTOs
 export * from './dtos/auth.dto';
@@ -14,6 +18,9 @@ export * from './dtos/user.dto';
 export * from './dtos/adventure.dto';
 export * from './dtos/community.dto';
 export * from './dtos/event.dto';
+export * from './dtos/review.dto';
+export * from './dtos/platformSetting.dto';
+export * from './dtos/tripcall.dto';
 
 // API
 export * from './api/requests';

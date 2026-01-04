@@ -1,29 +1,28 @@
 import { generateReferralCode } from 'src/shared/utils/nanoid';
 import { BcryptUtil } from '../../shared/utils/password';
+import { JwtUtil } from '../../shared/utils/jwt';
+import { EmailService } from '../../shared/services/email.service';
 import { AuthRepository } from './auth.repository';
-import { RegisterDTO, LoginDTO, UserResponse } from '@zagotours/types';
+import {
+  RegisterDTO,
+  LoginDTO,
+  UserResponse,
+  ResetPasswordDTO,
+  ROLE_PREFIXES,
+} from '@zagotours/types';
 
 export class AuthService {
   constructor(private authRepository: AuthRepository) {}
 
-  // =====REGISTER======
-
+  // ===== REGISTER ======
   async register(data: RegisterDTO): Promise<UserResponse> {
-    // 1. Basic validation
     const existingUser = await this.authRepository.findByEmail(data.email);
     if (existingUser) throw new Error('User already exists');
 
-    // 2. Generate the NEW referral code for this user
     const randomPart = generateReferralCode().toUpperCase();
-    let prefix = 'ADV';
-    if (data.role === 'AFFILIATE') prefix = 'AFF';
-    if (data.role === 'INDEPENDENT_AGENT') prefix = 'IND';
-    if (data.role === 'COOPERATE_AGENT') prefix = 'COR';
-    if (data.role === 'SUPER_ADMIN') prefix = 'SUP';
-
+    let prefix = ROLE_PREFIXES[data.role];
     const referralCode = `${prefix}-${randomPart}`;
 
-    // 3. Handle the incoming referral code (if someone invited them)
     let referredById: string | undefined;
     if (data.referralCode) {
       const normalizedInput = data.referralCode.trim().toUpperCase();
@@ -32,10 +31,8 @@ export class AuthService {
       referredById = referrer?.id;
     }
 
-    // 4. Hash the password
     const hashedPassword = await BcryptUtil.hash(data.password);
 
-    // 5. Prepare User Data
     const userData = {
       name: data.name,
       email: data.email,
@@ -47,7 +44,6 @@ export class AuthService {
       referredById,
     };
 
-    // 6. Prepare Profile Data
     const profileData: any = {
       howDidYouHear: data.howDidYouHear,
     };
@@ -62,7 +58,6 @@ export class AuthService {
       profileData.socialLinks = data.socialLinks || [];
     }
 
-    // 7. Save everything in one transaction
     const user = await this.authRepository.registerUserWithProfile(
       userData,
       data.role,
@@ -72,8 +67,7 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
-  // =====LOGIN======
-
+  // ===== LOGIN ======
   async login(data: LoginDTO): Promise<UserResponse> {
     const user = await this.authRepository.findByEmail(data.email);
 
@@ -85,16 +79,73 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
-  // =====CURRENT-USER======
-
+  // ===== CURRENT USER ======
   async getCurrentUser(userId: string): Promise<UserResponse> {
     const user = await this.authRepository.findById(userId);
     if (!user) throw new Error('User not found');
     return this.mapUserResponse(user);
   }
 
+  // ===== FORGOT PASSWORD ======
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    const user = await this.authRepository.findByEmail(email);
+
+    if (!user) {
+      return {
+        message: 'If that email exists, a reset link has been sent',
+      };
+    }
+
+    // Generate reset token (JWT)
+    const resetToken = JwtUtil.generateResetToken(user.id);
+
+    // Calculate expiry
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1);
+
+    // Save token to database
+    await this.authRepository.saveResetToken(user.id, resetToken, expiresAt);
+
+    // Send reset email
+    await EmailService.sendPasswordResetEmail(user.email, resetToken);
+
+    return {
+      message: 'If that email exists, a reset link has been sent',
+    };
+  }
+
+  // ===== RESET PASSWORD ======
+  async resetPassword(data: ResetPasswordDTO): Promise<{ message: string }> {
+    // Verify JWT token
+    const decoded = JwtUtil.verifyResetToken(data.token);
+    if (!decoded) {
+      throw new Error('Invalid or expired reset token');
+    }
+
+    // Find user by token (double check in database)
+    const user = await this.authRepository.findByResetToken(data.token);
+    if (!user) {
+      throw new Error('Invalid or expired reset token');
+    }
+
+    // Hash new password
+    const hashedPassword = await BcryptUtil.hash(data.newPassword);
+
+    // Update password
+    await this.authRepository.update(user.id, {
+      password: hashedPassword,
+    });
+
+    // Clear reset token
+    await this.authRepository.clearResetToken(user.id);
+
+    return { message: 'Password reset successful' };
+  }
+
+  // ===== HELPER ======
   private mapUserResponse(user: any): UserResponse {
-    const { password, ...safeUser } = user;
+    const { password, resetPasswordToken, resetPasswordExpires, ...safeUser } =
+      user;
     return safeUser;
   }
 }

@@ -2,7 +2,6 @@
 import {
   HStack,
   Icon,
-  IconButton,
   MenuContent,
   MenuRoot,
   MenuTrigger,
@@ -11,11 +10,11 @@ import {
   RadioGroup,
   Stack,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRoleStore } from '@/store/role-selector.store';
 import Button from '@/components/ui/button';
+import { AppLink } from '@/components/ui/AppLink';
 
 const menuList = [
   { label: 'Adventurer', value: 'ADVENTURER' },
@@ -50,7 +49,7 @@ export const ActionButtons = () => {
         textDecor='none'
         color='dark'
       >
-        <NextLink href='/login'>Login</NextLink>
+        <AppLink href='/login'>Login</AppLink>
       </Button>
 
       <MenuRoot>

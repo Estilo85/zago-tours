@@ -1,11 +1,10 @@
 'use client';
-import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
-import { Link as ChakraLink } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { Box, Flex, HStack } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { Logo } from '../logo';
 import { navlinks } from '../nav.config';
 import { ActionButtons } from '../action-buttons';
+import { AppLink } from '@/components/ui/AppLink';
 
 export const DesktopNav = () => {
   const pathname = usePathname();
@@ -30,17 +29,17 @@ export const DesktopNav = () => {
 
         <HStack gap={10}>
           {navlinks.map((link, index) => (
-            <ChakraLink
+            <AppLink
               key={index}
-              asChild
+              href={link.href}
               fontSize='sm'
               textTransform='uppercase'
               fontWeight={isActive(link.href) ? 'medium' : 'sm'}
               color={isActive(link.href) ? 'orange.500' : 'primary'}
               textDecor='none'
             >
-              <NextLink href={link.href}>{link.label}</NextLink>
-            </ChakraLink>
+              {link.label}
+            </AppLink>
           ))}
         </HStack>
 
