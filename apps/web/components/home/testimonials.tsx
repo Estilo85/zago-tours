@@ -8,6 +8,7 @@ import {
   Text,
   Stack,
   Box,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import { TestimonialCard } from '../ui/cards/testimonial-card';
@@ -38,6 +39,8 @@ const testimonials = [
 ];
 
 export const Testimonials = () => {
+  const slidesPerPage = useBreakpointValue({ base: 1, md: 3 }) ?? 1;
+
   return (
     <Container bg='surface' py={6} my={6}>
       <Stack mb={10}>
@@ -56,7 +59,7 @@ export const Testimonials = () => {
         mx='auto'
         gap='6'
         allowMouseDrag
-        slidesPerPage={3}
+        slidesPerPage={slidesPerPage}
         position='relative'
       >
         <Carousel.Control mb={6} justifyContent='flex-end' gap='3'>
