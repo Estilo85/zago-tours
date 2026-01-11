@@ -6,7 +6,7 @@ import { ResponsiveImage } from '../media/ResponsiveImage';
 import Button from '../ui/button';
 import { ArrowRight } from 'lucide-react';
 
-export const Banner = () => {
+export const HomeBanner = () => {
   return (
     <Box
       bg='primary'

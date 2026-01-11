@@ -1,5 +1,4 @@
 import {
-  Banner,
   DestinationMap,
   FeaturedAdventures,
   HowItWorks,
@@ -7,12 +6,13 @@ import {
   Testimonials,
   WhyChooseUs,
 } from '@/components/home';
+import { HomeBanner } from '@/components/home/banner';
 import { Stack } from '@chakra-ui/react';
 
 export default function Home() {
   return (
     <Stack gap={5} py={5}>
-      <Banner />
+      <HomeBanner />
       <StatsBanner />
       <HowItWorks />
       <WhyChooseUs />
