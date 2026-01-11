@@ -1,10 +1,10 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { errorHandler } from './shared/middleware/error-handler.middleware';
-import router from './routes';
-import { maintenanceMiddleware } from './shared/middleware/maintenance.middleware';
+import router from './src/routes';
+import { errorHandler } from './src/shared/middleware/error-handler.middleware';
+import { maintenanceMiddleware } from './src/shared/middleware/maintenance.middleware';
 
 export const createServer = (): Express => {
   const app = express();

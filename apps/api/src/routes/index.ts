@@ -1,18 +1,18 @@
 import { Router } from 'express';
-import { adventureRoutes } from 'src/modules/adventure/adventure.routes';
-import { authRoutes } from 'src/modules/auth/auth.routes';
-import { callbackRequestRoutes } from 'src/modules/callback-request/callback-request.routes';
-import { postRoutes } from 'src/modules/community/post/post.routes';
-import { contractRoutes } from 'src/modules/contract/contract.routes';
-import { destinationCountryRoutes } from 'src/modules/destination-country/destination-country.routes';
-import { eventRoutes } from 'src/modules/event/event.routes';
-import { galleryRoutes } from 'src/modules/gallery/gallery.routes';
-import { generalInquiryRoutes } from 'src/modules/general-enquiry/general-inquiry.routes';
-import { platformSettingsRoutes } from 'src/modules/platform-settings/platform-settings.routes';
-import { reviewRoutes } from 'src/modules/review/review.routes';
-import { tripPlanningCallRoutes } from 'src/modules/trip-planning-call/trip-planning-call.routes';
-import { tripRequestRoutes } from 'src/modules/trip-request/trip-request.routes';
-import { userRoutes } from 'src/modules/user/user.routes';
+import { authRoutes } from '../modules/auth/auth.routes';
+import { userRoutes } from '../modules/user/user.routes';
+import { adventureRoutes } from '../modules/adventure/adventure.routes';
+import { galleryRoutes } from '../modules/gallery/gallery.routes';
+import { reviewRoutes } from '../modules/review/review.routes';
+import { postRoutes } from '../modules/community/post/post.routes';
+import { eventRoutes } from '../modules/event/event.routes';
+import { tripRequestRoutes } from '../modules/trip-request/trip-request.routes';
+import { callbackRequestRoutes } from '../modules/callback-request/callback-request.routes';
+import { generalInquiryRoutes } from '../modules/general-enquiry/general-inquiry.routes';
+import { tripPlanningCallRoutes } from '../modules/trip-planning-call/trip-planning-call.routes';
+import { contractRoutes } from '../modules/contract/contract.routes';
+import { platformSettingsRoutes } from '../modules/platform-settings/platform-settings.routes';
+import { destinationCountryRoutes } from '../modules/destination-country/destination-country.routes';
 
 const router: Router = Router();
 
