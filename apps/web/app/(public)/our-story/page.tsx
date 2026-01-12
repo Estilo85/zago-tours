@@ -64,7 +64,6 @@ export default function OurStory() {
     <Box my={10} mx={{ base: '4', md: '10' }}>
       <Stack gap={20}>
         {' '}
-        {/* This applies gap between EVERY major section */}
         <OurStoryBanner />
         {/* Story Section */}
         <Stack textAlign='center' gap={8}>
