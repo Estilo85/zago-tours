@@ -39,12 +39,7 @@ export default function DashboardLayout({
           <Drawer.Backdrop />
           <Drawer.Positioner>
             <Drawer.Content p={6} bg='primary'>
-              <Drawer.CloseTrigger
-                asChild
-                // position='absolute'
-                // top={2}
-                // right={2}
-              >
+              <Drawer.CloseTrigger asChild>
                 <CloseButton size='md' />
               </Drawer.CloseTrigger>
               <Drawer.Body>

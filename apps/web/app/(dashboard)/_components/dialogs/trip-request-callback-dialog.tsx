@@ -154,18 +154,17 @@ export const TripRequestCallbackDialog = ({
                           <Select.Indicator />
                         </Select.IndicatorGroup>
                       </Select.Control>
-                      <Portal>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {timeSlots.items.map((timeSlot) => (
-                              <Select.Item item={timeSlot} key={timeSlot.value}>
-                                {timeSlot.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Portal>
+                      {/* REMOVED Portal - let it render in the Dialog */}
+                      <Select.Positioner>
+                        <Select.Content>
+                          {timeSlots.items.map((timeSlot) => (
+                            <Select.Item item={timeSlot} key={timeSlot.value}>
+                              {timeSlot.label}
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          ))}
+                        </Select.Content>
+                      </Select.Positioner>
                     </Select.Root>
                   </Stack>
                 </Stack>
