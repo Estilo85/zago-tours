@@ -57,7 +57,7 @@ export const Sidebar = ({
       <Box>
         <SectionHeading>General Setting</SectionHeading>
         <Stack gap={1}>
-          {MENU_CONFIG.common.settings.map((item) => (
+          {MENU_CONFIG.common.main.map((item) => (
             <NavItem key={item.href} item={item} />
           ))}
           {/* Inject Role Specific Links here if needed */}

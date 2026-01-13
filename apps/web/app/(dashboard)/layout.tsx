@@ -33,18 +33,19 @@ export default function DashboardLayout({
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
         placement='start'
+        size='xs'
       >
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner>
-            <Drawer.Content p={6} bg='white'>
+            <Drawer.Content p={6} bg='primary'>
               <Drawer.CloseTrigger
                 asChild
-                position='absolute'
-                top={2}
-                right={2}
+                // position='absolute'
+                // top={2}
+                // right={2}
               >
-                <CloseButton size='sm' />
+                <CloseButton size='md' />
               </Drawer.CloseTrigger>
               <Drawer.Body>
                 <Sidebar role={userRole} onClose={() => setOpen(false)} />
