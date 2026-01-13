@@ -1,4 +1,4 @@
-export { Banner } from './banner';
+export { HomeBanner } from './banner';
 export { DestinationMap } from './destination-map';
 export { FeaturedAdventures } from './featured-adventures';
 export { HowItWorks } from './how-it-works';
