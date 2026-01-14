@@ -6,7 +6,7 @@ import { PlatformSettingsRepository } from './platform-settings.repository';
 class SettingsCache {
   private cache: PlatformSettings | null = null;
   private lastUpdate: number = 0;
-  private readonly TTL = 5 * 60 * 1000; // 5 minutes
+  private readonly TTL = 5 * 60 * 1000;
 
   get(): PlatformSettings | null {
     if (!this.cache || Date.now() - this.lastUpdate > this.TTL) {

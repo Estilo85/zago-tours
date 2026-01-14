@@ -78,8 +78,12 @@ export class ContractService extends BaseService<
   async paginate(
     page: number,
     limit: number,
-    filters?: Prisma.ContractWhereInput
+    filters?: {
+      where?: Prisma.ContractWhereInput;
+      include?: Prisma.ContractInclude;
+      orderBy?: any;
+    }
   ) {
-    return this.contractRepo.paginateWithDetails(page, limit, filters);
+    return this.contractRepo.paginateWithDetails(page, limit, filters?.where);
   }
 }

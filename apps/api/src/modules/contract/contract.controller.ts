@@ -3,12 +3,22 @@ import { ContractService } from './contract.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, ContractStatus } from '@zagotours/database';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqParams,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
 
 export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  create = asyncHandler(
+    async (
+      req: TypedRequest<{}, { agreement?: string; documentUrl?: string }>,
+      res: Response
+    ) => {
       const { agreement, documentUrl } = req.body;
 
       if (!agreement || !documentUrl) {
@@ -31,45 +41,33 @@ export class ContractController {
         'Contract created successfully',
         201
       );
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  sign = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const contract = await this.contractService.signContract(
-        req.params.id,
-        req.userId!
-      );
+  sign = asyncHandler(async (req: TypedRequest<UuidParam>, res: Response) => {
+    const contract = await this.contractService.signContract(
+      req.params.id,
+      req.userId!
+    );
 
-      return ResponseUtil.success(
-        res,
-        contract,
-        'Contract signed successfully'
-      );
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
-    }
-  };
+    return ResponseUtil.success(res, contract, 'Contract signed successfully');
+  });
 
-  getMyContracts = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const contracts = await this.contractService.getByUser(req.userId!);
-      return ResponseUtil.success(res, contracts);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getMyContracts = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const contracts = await this.contractService.getByUser(req.userId!);
+    return ResponseUtil.success(res, contracts);
+  });
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        status?: string;
+        userId?: string;
+      }>,
+      res: Response
+    ) => {
       const { page = 1, limit = 10, status, userId } = req.query;
 
       const filters: Prisma.ContractWhereInput = {};
@@ -85,45 +83,25 @@ export class ContractController {
       const result = await this.contractService.paginate(
         Number(page),
         Number(limit),
-        filters
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getPending = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const contracts = await this.contractService.getPending();
-      return ResponseUtil.success(res, contracts);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getPending = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const contracts = await this.contractService.getPending();
+    return ResponseUtil.success(res, contracts);
+  });
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const contract = await this.contractService.getById(req.params.id);
-      return ResponseUtil.success(res, contract);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const contract = await this.contractService.getById(req.params.id);
+    return ResponseUtil.success(res, contract);
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.contractService.delete(req.params.id, true);
-      return ResponseUtil.success(res, null, 'Contract deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.contractService.delete(req.params.id, true);
+    return ResponseUtil.success(res, null, 'Contract deleted successfully');
+  });
 }

@@ -1,4 +1,4 @@
-import { Post, Prisma } from '@zagotours/database';
+import { Post, prisma, Prisma } from '@zagotours/database';
 import {
   BaseService,
   NotFoundException,
@@ -57,8 +57,16 @@ export class PostService extends BaseService<
   }
 
   // Paginate posts
-  async paginate(page: number, limit: number, filters?: Prisma.PostWhereInput) {
-    return this.postRepo.paginateWithDetails(page, limit, filters);
+  async paginate(
+    page: number,
+    limit: number,
+    options?: {
+      where?: Prisma.PostWhereInput;
+      include?: Prisma.PostInclude;
+      orderBy?: any;
+    }
+  ) {
+    return this.postRepo.paginateWithDetails(page, limit, options?.where);
   }
 
   // Toggle like
@@ -94,8 +102,9 @@ export class PostService extends BaseService<
   }
 
   // Delete comment
+
   async deleteComment(commentId: string, userId: string) {
-    const comment = await this.postRepo.modelDelegate.comment.findUnique({
+    const comment = await prisma.comment.findUnique({
       where: { id: commentId },
     });
 
@@ -109,10 +118,9 @@ export class PostService extends BaseService<
 
     return this.postRepo.deleteComment(commentId);
   }
-
   // Get comments
   async getComments(postId: string) {
-    await this.getById(postId); // Verify post exists
+    await this.getById(postId);
     return this.postRepo.getComments(postId);
   }
 

@@ -3,12 +3,21 @@ import { TripRequestService } from './trip-request.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqBody,
+  ReqParams,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { CreateTripRequestDTO } from '@zagotours/types';
+import { UuidParam } from 'src/common/validation/common.validation';
 
 export class TripRequestController {
   constructor(private readonly tripRequestService: TripRequestService) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  create = asyncHandler(
+    async (req: ReqBody<CreateTripRequestDTO>, res: Response) => {
       const { tripType, destination, date, preferences } = req.body;
 
       if (!tripType || !destination || !date) {
@@ -32,16 +41,21 @@ export class TripRequestController {
         'Trip request submitted successfully',
         201
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        tripType?: string;
+        destination?: string;
+        startDate?: string;
+        endDate?: string;
+      }>,
+      res: Response
+    ) => {
       const {
         page = 1,
         limit = 10,
@@ -78,45 +92,21 @@ export class TripRequestController {
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
+  );
+
+  getRecent = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const requests = await this.tripRequestService.getRecent();
+    return ResponseUtil.success(res, requests);
+  });
+
+  getById = async (req: ReqParams<UuidParam>, res: Response) => {
+    const request = await this.tripRequestService.getById(req.params.id);
+    return ResponseUtil.success(res, request);
   };
 
-  getRecent = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const requests = await this.tripRequestService.getRecent();
-      return ResponseUtil.success(res, requests);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const request = await this.tripRequestService.getById(req.params.id);
-      return ResponseUtil.success(res, request);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
-
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.tripRequestService.delete(req.params.id, true);
-      return ResponseUtil.success(
-        res,
-        null,
-        'Trip request deleted successfully'
-      );
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.tripRequestService.delete(req.params.id, true);
+    return ResponseUtil.success(res, null, 'Trip request deleted successfully');
+  });
 }

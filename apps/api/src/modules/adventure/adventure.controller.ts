@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { AdventureService } from './adventure.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { AdventureStatus, AdventureLevel } from '@zagotours/database';

@@ -1,12 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { DestinationCountryService } from './destination-country.service';
 import { ResponseUtil } from 'src/shared/utils/response';
+import {
+  ReqBody,
+  ReqParams,
+  ReqParamsBody,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 
 export class DestinationCountryController {
   constructor(private countryService: DestinationCountryService) {}
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (req: ReqQuery<{ active?: string }>, res: Response) => {
       const { active } = req.query;
 
       const countries =
@@ -15,62 +24,48 @@ export class DestinationCountryController {
           : await this.countryService.getAllCountries();
 
       return ResponseUtil.success(res, countries);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const country = await this.countryService.getById(id);
-      return ResponseUtil.success(res, country);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const country = await this.countryService.getById(req.params.id);
+    return ResponseUtil.success(res, country);
+  });
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const country = await this.countryService.createCountry(req.body);
-      return ResponseUtil.success(res, country, 'Country created', 201);
-    } catch (error) {
-      next(error);
-    }
-  };
+  create = asyncHandler(async (req: ReqBody<any>, res: Response) => {
+    const country = await this.countryService.create(req.body);
+    return ResponseUtil.success(res, country, 'Country created', 201);
+  });
 
-  update = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const country = await this.countryService.updateCountry(id, req.body);
+  update = asyncHandler(
+    async (req: ReqParamsBody<UuidParam, any>, res: Response) => {
+      const country = await this.countryService.update(req.params.id, req.body);
       return ResponseUtil.success(res, country, 'Country updated');
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  toggleActive = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
+  toggleActive = asyncHandler(
+    async (
+      req: ReqParamsBody<UuidParam, { isActive: boolean }>,
+      res: Response
+    ) => {
       const { isActive } = req.body;
-      await this.countryService.toggleActive(id, isActive);
+
+      if (typeof isActive !== 'boolean') {
+        return ResponseUtil.error(res, 'isActive is required', 400);
+      }
+
+      await this.countryService.toggleActive(req.params.id, isActive);
       return ResponseUtil.success(
         res,
         null,
         `Country ${isActive ? 'activated' : 'deactivated'}`
       );
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      await this.countryService.deleteCountry(id);
-      return ResponseUtil.success(res, null, 'Country deleted');
-    } catch (error) {
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.countryService.delete(req.params.id);
+    return ResponseUtil.success(res, null, 'Country deleted');
+  });
 }

@@ -1,13 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { GeneralInquiryService } from './general-inquiry.service';
 import { ResponseUtil } from 'src/shared/utils/response';
-import { NotFoundException } from 'src/common/service/base.service';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqBody,
+  ReqParams,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
+
+interface CreateInquiryDTO {
+  email: string;
+  message: string;
+  phone?: string;
+  address?: string;
+}
 
 export class GeneralInquiryController {
   constructor(private readonly inquiryService: GeneralInquiryService) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  create = asyncHandler(
+    async (req: ReqBody<CreateInquiryDTO>, res: Response) => {
       const { email, message, phone, address } = req.body;
 
       if (!email || !message) {
@@ -27,13 +41,11 @@ export class GeneralInquiryController {
         'Inquiry submitted successfully',
         201
       );
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (req: ReqQuery<{ page?: number; limit?: number }>, res: Response) => {
       const { page = 1, limit = 10 } = req.query;
 
       const result = await this.inquiryService.paginate(
@@ -43,41 +55,21 @@ export class GeneralInquiryController {
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getRecent = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const inquiries = await this.inquiryService.getRecent();
-      return ResponseUtil.success(res, inquiries);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getRecent = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const inquiries = await this.inquiryService.getRecent();
+    return ResponseUtil.success(res, inquiries);
+  });
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const inquiry = await this.inquiryService.getById(req.params.id);
-      return ResponseUtil.success(res, inquiry);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const inquiry = await this.inquiryService.getById(req.params.id);
+    return ResponseUtil.success(res, inquiry);
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.inquiryService.delete(req.params.id, true);
-      return ResponseUtil.success(res, null, 'Inquiry deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.inquiryService.delete(req.params.id, true);
+    return ResponseUtil.success(res, null, 'Inquiry deleted successfully');
+  });
 }

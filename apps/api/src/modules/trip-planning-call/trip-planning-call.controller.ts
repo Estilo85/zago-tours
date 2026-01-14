@@ -3,12 +3,21 @@ import { TripPlanningCallService } from './trip-planning-call.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, CallStatus } from '@zagotours/database';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqBody,
+  ReqParams,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { CreateTripPlanningCallDTO } from '@zagotours/types';
+import { UuidParam } from 'src/common/validation/common.validation';
 
 export class TripPlanningCallController {
   constructor(private readonly callService: TripPlanningCallService) {}
 
-  scheduleCall = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  scheduleCall = asyncHandler(
+    async (req: TypedRequest<{}, CreateTripPlanningCallDTO>, res: Response) => {
       const { agentId, startTime, endTime, meetingLink } = req.body;
 
       if (!agentId || !startTime) {
@@ -33,16 +42,14 @@ export class TripPlanningCallController {
         'Call scheduled successfully',
         201
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  rescheduleCall = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  rescheduleCall = asyncHandler(
+    async (
+      req: TypedRequest<UuidParam, { startTime?: string; endTime?: string }>,
+      res: Response
+    ) => {
       const { startTime, endTime } = req.body;
 
       if (!startTime) {
@@ -56,60 +63,35 @@ export class TripPlanningCallController {
       );
 
       return ResponseUtil.success(res, call, 'Call rescheduled successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  cancelCall = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  cancelCall = asyncHandler(
+    async (
+      req: TypedRequest<UuidParam, { reason?: string }>,
+      res: Response
+    ) => {
       const { reason } = req.body;
 
       const call = await this.callService.cancelCall(req.params.id, reason);
       return ResponseUtil.success(res, call, 'Call cancelled successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  markAsCompleted = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  markAsCompleted = asyncHandler(
+    async (req: ReqParams<UuidParam>, res: Response, next: NextFunction) => {
       const call = await this.callService.markAsCompleted(req.params.id);
       return ResponseUtil.success(res, call, 'Call marked as completed');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  getUpcoming = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const calls = await this.callService.getUpcoming(req.userId!);
-      return ResponseUtil.success(res, calls);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getUpcoming = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const calls = await this.callService.getUpcoming(req.userId!);
+    return ResponseUtil.success(res, calls);
+  });
 
-  getMyCalls = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getMyCalls = asyncHandler(
+    async (req: TypedRequest<{}, {}, { role?: string }>, res: Response) => {
       const { role } = req.query;
 
       let calls;
@@ -127,13 +109,20 @@ export class TripPlanningCallController {
       }
 
       return ResponseUtil.success(res, calls);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        status?: string;
+        startDate?: string;
+        endDate?: string;
+      }>,
+      res: Response
+    ) => {
       const { page = 1, limit = 10, status, startDate, endDate } = req.query;
 
       const filters: Prisma.TripPlanningCallWhereInput = {};
@@ -152,36 +141,20 @@ export class TripPlanningCallController {
       const result = await this.callService.paginate(
         Number(page),
         Number(limit),
-        filters
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const call = await this.callService.getById(req.params.id);
-      return ResponseUtil.success(res, call);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const call = await this.callService.getById(req.params.id);
+    return ResponseUtil.success(res, call);
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.callService.delete(req.params.id, true);
-      return ResponseUtil.success(res, null, 'Call deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.callService.delete(req.params.id, true);
+    return ResponseUtil.success(res, null, 'Call deleted successfully');
+  });
 }

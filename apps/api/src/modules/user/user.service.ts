@@ -35,92 +35,96 @@ export class UserService extends BaseService<
     return profile;
   }
 
-  async updateProfile(id: string, data: UpdateUserRequest) {
-    const {
-      independentDetails,
-      cooperateDetails,
-      affiliateDetails,
-      ...userData
-    } = data;
+  // async updateProfile(id: string, data: UpdateUserRequest) {
+  //   const {
+  //     independentDetails,
+  //     cooperateDetails,
+  //     affiliateDetails,
+  //     ...userData
+  //   } = data;
 
-    // Verify user exists
-    await this.getById(id);
+  //   // Verify user exists
+  //   await this.getById(id);
 
-    return prisma.$transaction(async (tx) => {
-      // Update user data
-      const updatedUser = await tx.user.update({
-        where: { id: id },
-        data: userData,
-      });
+  //   return prisma.$transaction(async (tx) => {
+  //     // Update user data
+  //     const updatedUser = await tx.user.update({
+  //       where: { id: id },
+  //       data: userData,
+  //     });
 
-      // Update independent agent details if provided
-      if (independentDetails) {
-        const existingIndependent = await tx.independentAgent.findUnique({
-          where: { id },
-        });
+  //     // Update independent agent details if provided
+  //     if (independentDetails) {
+  //       const existingIndependent = await tx.independentAgent.findUnique({
+  //         where: { id },
+  //       });
 
-        if (existingIndependent) {
-          await tx.independentAgent.update({
-            where: { id },
-            data: independentDetails,
-          });
-        } else {
-          await tx.independentAgent.create({
-            data: {
-              id,
-              ...independentDetails,
-            },
-          });
-        }
-      }
+  //       if (existingIndependent) {
+  //         await tx.independentAgent.update({
+  //           where: { id },
+  //           data: independentDetails,
+  //         });
+  //       } else {
+  //         await tx.independentAgent.create({
+  //           data: {
+  //             id,
+  //             userId: id, // Add this line
+  //             ...independentDetails,
+  //           },
+  //         });
+  //       }
+  //     }
 
-      // Update cooperate agent details if provided
-      if (cooperateDetails) {
-        const existingCooperate = await tx.cooperateAgent.findUnique({
-          where: { id },
-        });
+  //     // Update cooperate agent details if provided
+  //     if (cooperateDetails) {
+  //       const existingCooperate = await tx.cooperateAgent.findUnique({
+  //         where: { id },
+  //       });
 
-        if (existingCooperate) {
-          await tx.cooperateAgent.update({
-            where: { id },
-            data: cooperateDetails,
-          });
-        } else {
-          await tx.cooperateAgent.create({
-            data: {
-              id,
-              ...cooperateDetails,
-            },
-          });
-        }
-      }
+  //       if (existingCooperate) {
+  //         await tx.cooperateAgent.update({
+  //           where: { id },
+  //           data: cooperateDetails,
+  //         });
+  //       } else {
+  //         await tx.cooperateAgent.create({
+  //           data: {
+  //             id,
+  //             userId: id, // Add this line
+  //             ...cooperateDetails,
+  //           },
+  //         });
+  //       }
+  //     }
 
-      // Update affiliate details if provided
-      if (affiliateDetails) {
-        const existingAffiliate = await tx.affiliate.findUnique({
-          where: { id },
-        });
+  //     // Update affiliate details if provided
+  //     if (affiliateDetails) {
+  //       const existingAffiliate = await tx.affiliate.findUnique({
+  //         where: { id },
+  //       });
 
-        if (existingAffiliate) {
-          await tx.affiliate.update({
-            where: { id },
-            data: affiliateDetails,
-          });
-        } else {
-          await tx.affiliate.create({
-            data: {
-              id,
-              ...affiliateDetails,
-            },
-          });
-        }
-      }
+  //       if (existingAffiliate) {
+  //         await tx.affiliate.update({
+  //           where: { id },
+  //           data: affiliateDetails,
+  //         });
+  //       } else {
+  //         await tx.affiliate.create({
+  //           data: {
+  //             id,
+  //             userId: id,
+  //             ...affiliateDetails,
+  //           },
+  //         });
+  //       }
+  //     }
 
-      return updatedUser;
-    });
-  }
+  //     return updatedUser;
+  //   });
+  // }
 
   // Change password with validation
+
   async changePassword(id: string, oldPassword: string, newPassword: string) {
     const user = await this.getById(id);
 

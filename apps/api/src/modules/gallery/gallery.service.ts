@@ -1,6 +1,7 @@
 import { Gallery, Prisma, MediaType } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { GalleryRepository } from './gallery.repository';
+import { PaginationResult } from '@zagotours/types';
 
 export class GalleryService extends BaseService<
   Gallery,
@@ -53,8 +54,12 @@ export class GalleryService extends BaseService<
   async paginate(
     page: number,
     limit: number,
-    filters?: Prisma.GalleryWhereInput
-  ) {
-    return this.galleryRepo.paginateWithDetails(page, limit, filters);
+    options?: {
+      where?: Prisma.GalleryWhereInput;
+      include?: Prisma.GalleryInclude;
+      orderBy?: any;
+    }
+  ): Promise<PaginationResult<Gallery>> {
+    return this.galleryRepo.paginateWithDetails(page, limit, options?.where);
   }
 }

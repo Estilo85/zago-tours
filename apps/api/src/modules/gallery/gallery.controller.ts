@@ -1,14 +1,24 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { GalleryService } from './gallery.service';
 import { ResponseUtil } from 'src/shared/utils/response';
-import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, MediaType } from '@zagotours/database';
+import { ReqBody, ReqParams, ReqQuery } from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 
 export class GalleryController {
   constructor(private readonly galleryService: GalleryService) {}
 
-  upload = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  upload = asyncHandler(
+    async (
+      req: ReqBody<{
+        mediaUrl?: string;
+        mediaType?: string;
+        altText?: string;
+        adventureId?: string;
+      }>,
+      res: Response
+    ) => {
       const { mediaUrl, mediaType, altText, adventureId } = req.body;
 
       if (!mediaUrl || !mediaType) {
@@ -29,13 +39,20 @@ export class GalleryController {
         'Media uploaded successfully',
         201
       );
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        adventureId: string;
+        userId: string;
+        mediaType: string;
+      }>,
+      res: Response
+    ) => {
       const {
         page = 1,
         limit = 10,
@@ -61,36 +78,20 @@ export class GalleryController {
       const result = await this.galleryService.paginate(
         Number(page),
         Number(limit),
-        filters
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const media = await this.galleryService.getById(req.params.id);
-      return ResponseUtil.success(res, media);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const media = await this.galleryService.getById(req.params.id);
+    return ResponseUtil.success(res, media);
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.galleryService.delete(req.params.id);
-      return ResponseUtil.success(res, null, 'Media deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.galleryService.delete(req.params.id);
+    return ResponseUtil.success(res, null, 'Media deleted successfully');
+  });
 }

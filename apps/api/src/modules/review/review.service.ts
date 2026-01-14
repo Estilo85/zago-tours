@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from 'src/common/service/base.service';
 import { ReviewRepository } from './review.repository';
+import { PaginationResult } from '@zagotours/types';
 
 export class ReviewService extends BaseService<
   Review,
@@ -20,8 +21,10 @@ export class ReviewService extends BaseService<
 
   // Create review with validation
   override async create(data: Prisma.ReviewCreateInput): Promise<Review> {
-    // Validate rating
-    if (data?.rating < 1 || data?.rating > 5) {
+    if (
+      typeof data?.rating === 'number' &&
+      (data.rating < 1 || data.rating > 5)
+    ) {
       throw new Error('Rating must be between 1 and 5');
     }
 
@@ -62,8 +65,12 @@ export class ReviewService extends BaseService<
   async paginate(
     page: number,
     limit: number,
-    filters?: Prisma.ReviewWhereInput
-  ) {
-    return this.reviewRepo.paginateWithDetails(page, limit, filters);
+    options?: {
+      where?: Prisma.ReviewWhereInput;
+      include?: Prisma.ReviewInclude;
+      orderBy?: any;
+    }
+  ): Promise<PaginationResult<Review>> {
+    return this.reviewRepo.paginateWithDetails(page, limit, options?.where);
   }
 }

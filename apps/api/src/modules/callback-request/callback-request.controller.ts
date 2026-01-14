@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { CallbackRequestService } from './callback-request.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
+import { ReqParams } from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 
 export class CallbackRequestController {
   constructor(private readonly callbackService: CallbackRequestService) {}
@@ -62,27 +65,13 @@ export class CallbackRequestController {
     }
   };
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const request = await this.callbackService.getById(req.params.id);
-      return ResponseUtil.success(res, request);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const request = await this.callbackService.getById(req.params.id);
+    return ResponseUtil.success(res, request);
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.callbackService.delete(req.params.id, true); // Hard delete
-      return ResponseUtil.success(res, null, 'Request deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    await this.callbackService.delete(req.params.id, true); // Hard delete
+    return ResponseUtil.success(res, null, 'Request deleted successfully');
+  });
 }

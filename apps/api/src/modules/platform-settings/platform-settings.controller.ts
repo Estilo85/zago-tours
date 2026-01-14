@@ -1,21 +1,33 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { PlatformSettingsService } from './platform-settings.service';
 import { ResponseUtil } from 'src/shared/utils/response';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import { ReqBody, TypedRequest } from 'src/shared/types/express.types';
+
+interface UpdateSettingsDTO {
+  siteName?: string;
+  contactEmail?: string;
+  maintenance?: boolean;
+}
+
+interface SiteNameDTO {
+  siteName: string;
+}
+
+interface ContactEmailDTO {
+  contactEmail: string;
+}
 
 export class PlatformSettingsController {
   constructor(private readonly settingsService: PlatformSettingsService) {}
 
-  getSettings = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const settings = await this.settingsService.getSettings();
-      return ResponseUtil.success(res, settings);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getSettings = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const settings = await this.settingsService.getSettings();
+    return ResponseUtil.success(res, settings);
+  });
 
-  updateSettings = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  updateSettings = asyncHandler(
+    async (req: ReqBody<UpdateSettingsDTO>, res: Response) => {
       const { siteName, contactEmail, maintenance } = req.body;
 
       const data: any = {};
@@ -30,42 +42,23 @@ export class PlatformSettingsController {
         settings,
         'Settings updated successfully'
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  enableMaintenance = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const settings = await this.settingsService.enableMaintenance();
-      return ResponseUtil.success(res, settings, 'Maintenance mode enabled');
-    } catch (error) {
-      next(error);
-    }
-  };
+  enableMaintenance = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const settings = await this.settingsService.enableMaintenance();
+    return ResponseUtil.success(res, settings, 'Maintenance mode enabled');
+  });
 
-  disableMaintenance = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
+  disableMaintenance = asyncHandler(
+    async (req: TypedRequest, res: Response) => {
       const settings = await this.settingsService.disableMaintenance();
       return ResponseUtil.success(res, settings, 'Maintenance mode disabled');
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  updateSiteName = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  updateSiteName = asyncHandler(
+    async (req: ReqBody<SiteNameDTO>, res: Response) => {
       const { siteName } = req.body;
 
       if (!siteName) {
@@ -78,20 +71,11 @@ export class PlatformSettingsController {
         settings,
         'Site name updated successfully'
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  updateContactEmail = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
+  updateContactEmail = asyncHandler(
+    async (req: ReqBody<ContactEmailDTO>, res: Response) => {
       const { contactEmail } = req.body;
 
       if (!contactEmail) {
@@ -105,33 +89,16 @@ export class PlatformSettingsController {
         settings,
         'Contact email updated successfully'
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  checkMaintenance = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const isMaintenanceMode = await this.settingsService.isMaintenanceMode();
-      return ResponseUtil.success(res, { maintenance: isMaintenanceMode });
-    } catch (error) {
-      next(error);
-    }
-  };
+  checkMaintenance = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const isMaintenanceMode = await this.settingsService.isMaintenanceMode();
+    return ResponseUtil.success(res, { maintenance: isMaintenanceMode });
+  });
 
-  clearCache = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      this.settingsService.clearCache();
-      return ResponseUtil.success(res, null, 'Cache cleared successfully');
-    } catch (error) {
-      next(error);
-    }
-  };
+  clearCache = asyncHandler(async (req: TypedRequest, res: Response) => {
+    this.settingsService.clearCache();
+    return ResponseUtil.success(res, null, 'Cache cleared successfully');
+  });
 }

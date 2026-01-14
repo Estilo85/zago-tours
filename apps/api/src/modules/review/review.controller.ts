@@ -3,12 +3,22 @@ import { ReviewService } from './review.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqBody,
+  ReqParams,
+  ReqParamsBody,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { CreateReviewDto, UpdateReviewDTO } from '@zagotours/types';
+import { UuidParam } from 'src/common/validation/common.validation';
 
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  create = asyncHandler(
+    async (req: ReqBody<CreateReviewDto>, res: Response) => {
       const { title, content, rating } = req.body;
 
       if (!content || !rating) {
@@ -28,16 +38,20 @@ export class ReviewController {
         'Review created successfully',
         201
       );
-    } catch (error) {
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        rating?: number;
+        userId?: string;
+        featured?: string;
+      }>,
+      res: Response
+    ) => {
       const { page = 1, limit = 10, rating, userId, featured } = req.query;
 
       const filters: Prisma.ReviewWhereInput = {};
@@ -57,60 +71,37 @@ export class ReviewController {
       const result = await this.reviewService.paginate(
         Number(page),
         Number(limit),
-        filters
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getFeatured = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const reviews = await this.reviewService.getFeatured();
-      return ResponseUtil.success(res, reviews);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getFeatured = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const reviews = await this.reviewService.getFeatured();
+    return ResponseUtil.success(res, reviews);
+  });
 
-  getMyReviews = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getMyReviews = asyncHandler(
+    async (req: TypedRequest, res: Response, next: NextFunction) => {
       const reviews = await this.reviewService.getByUser(req.userId!);
       return ResponseUtil.success(res, reviews);
-    } catch (error) {
-      next(error);
     }
+  );
+
+  getAverageRating = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const result = await this.reviewService.getAverageRating();
+    return ResponseUtil.success(res, result);
+  });
+
+  getById = async (req: ReqParams<UuidParam>, res: Response) => {
+    const review = await this.reviewService.getById(req.params.id);
+    return ResponseUtil.success(res, review);
   };
 
-  getAverageRating = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const result = await this.reviewService.getAverageRating();
-      return ResponseUtil.success(res, result);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const review = await this.reviewService.getById(req.params.id);
-      return ResponseUtil.success(res, review);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
-
-  update = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  update = asyncHandler(
+    async (req: ReqParamsBody<UuidParam, UpdateReviewDTO>, res: Response) => {
       const review = await this.reviewService.getById(req.params.id);
 
       // Only allow user to update their own review
@@ -120,46 +111,29 @@ export class ReviewController {
 
       const updated = await this.reviewService.update(req.params.id, req.body);
       return ResponseUtil.success(res, updated, 'Review updated successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  toggleFeatured = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  toggleFeatured = asyncHandler(
+    async (req: ReqParams<UuidParam>, res: Response, next: NextFunction) => {
       const review = await this.reviewService.toggleFeatured(req.params.id);
       return ResponseUtil.success(
         res,
         review,
         `Review ${review.isFeatured ? 'featured' : 'unfeatured'} successfully`
       );
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const review = await this.reviewService.getById(req.params.id);
+  delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const review = await this.reviewService.getById(req.params.id);
 
-      // Only allow user to delete their own review (or admin)
-      if (review.userId !== req.userId && !req.role?.includes('ADMIN')) {
-        return ResponseUtil.error(res, 'Unauthorized', 403);
-      }
-
-      await this.reviewService.delete(req.params.id, true);
-      return ResponseUtil.success(res, null, 'Review deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
+    // Only allow user to delete their own review (or admin)
+    if (review.userId !== req.userId && !req.user?.role?.includes('ADMIN')) {
+      return ResponseUtil.error(res, 'Unauthorized', 403);
     }
-  };
+
+    await this.reviewService.delete(req.params.id, true);
+    return ResponseUtil.success(res, null, 'Review deleted successfully');
+  });
 }

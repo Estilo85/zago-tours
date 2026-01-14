@@ -3,12 +3,32 @@ import { EventService } from './event.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import {
+  ReqBody,
+  ReqParams,
+  ReqParamsBody,
+  ReqParamsQuery,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { UuidParam } from 'src/common/validation/common.validation';
+import { CreateEventDTO, UpdateEventDTO } from '@zagotours/types';
 
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{
+        page?: number;
+        limit?: number;
+        location?: string;
+        startDate?: string;
+        endDate?: string;
+      }>,
+      res: Response
+    ) => {
       const { page = 1, limit = 10, location, startDate, endDate } = req.query;
 
       const filters: Prisma.EventWhereInput = { deletedAt: null };
@@ -38,75 +58,41 @@ export class EventController {
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getUpcoming = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const events = await this.eventService.getUpcoming();
-      return ResponseUtil.success(res, events);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getUpcoming = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const events = await this.eventService.getUpcoming();
+    return ResponseUtil.success(res, events);
+  });
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      if (!id) {
-        return ResponseUtil.error(res, 'Id is required', 400);
-      }
-      const event = await this.eventService.getById(id);
+  getById = asyncHandler(
+    async (req: ReqParams<UuidParam>, res: Response, next: NextFunction) => {
+      const event = await this.eventService.getById(req.params.id);
       return ResponseUtil.success(res, event);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const event = await this.eventService.create(req.body);
-      return ResponseUtil.success(res, event, 'Event created', 201);
-    } catch (error) {
-      next(error);
-    }
-  };
+  create = asyncHandler(async (req: ReqBody<CreateEventDTO>, res: Response) => {
+    const event = await this.eventService.create(req.body);
+    return ResponseUtil.success(res, event, 'Event created', 201);
+  });
 
-  update = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      if (!id) {
-        return ResponseUtil.error(res, 'Id is required', 400);
-      }
-      const event = await this.eventService.update(id, req.body);
+  update = asyncHandler(
+    async (req: ReqParamsBody<UuidParam, UpdateEventDTO>, res: Response) => {
+      const event = await this.eventService.update(req.params.id, req.body);
       return ResponseUtil.success(res, event, 'Event updated');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      if (!id) {
-        return ResponseUtil.error(res, 'Id is required', 400);
-      }
-      const { hard } = req.query;
-      await this.eventService.delete(id, hard === 'true');
+  delete = asyncHandler(
+    async (
+      req: ReqParamsQuery<UuidParam, { hard?: string }>,
+      res: Response
+    ) => {
+      const isHard = req.query.hard === 'true';
+      await this.eventService.delete(req.params.id, isHard);
       return ResponseUtil.success(res, null, 'Event deleted');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 }

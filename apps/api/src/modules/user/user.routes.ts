@@ -12,7 +12,7 @@ const userController = new UserController(userService);
 
 // ===== USER PROFILE ROUTES (Authenticated Users) =====
 router.get('/profile', userController.getProfile);
-router.put('/profile', userController.updateProfile);
+// router.put('/profile', userController.updateProfile);
 router.get('/referrals', userController.getReferrals);
 
 // ===== ADMIN ROUTES (Admin Only) =====

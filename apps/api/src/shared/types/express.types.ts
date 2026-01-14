@@ -1,4 +1,12 @@
+import { Role } from '@zagotours/types';
 import { Request } from 'express';
+
+interface AuthUser {
+  id: string;
+  email: string;
+  role: Role;
+  name: string;
+}
 
 /**
  * @template TParams  - type for req.params
@@ -12,12 +20,7 @@ export type TypedRequest<TParams = {}, TBody = {}, TQuery = {}> = Request<
   TQuery
 > & {
   userId?: string;
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-    name: string;
-  };
+  user?: AuthUser;
 };
 
 /**

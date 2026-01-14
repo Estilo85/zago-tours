@@ -1,26 +1,30 @@
-import { DestinationCountry } from '@zagotours/database';
+import { DestinationCountry, Prisma } from '@zagotours/database';
 import { BaseRepository } from 'src/common/repository/base.repository';
 
-export class DestinationCountryRepository extends BaseRepository<DestinationCountry> {
-  constructor() {
-    super('destinationCountry');
-  }
+export class DestinationCountryRepository extends BaseRepository<
+  DestinationCountry,
+  Prisma.DestinationCountryWhereInput,
+  Prisma.DestinationCountryCreateInput,
+  Prisma.DestinationCountryUpdateInput
+  // Prisma.DestinationCountryInclude
+> {
+  protected readonly modelDelegate = this.prisma.destinationCountry;
 
   async findActive() {
-    return this.model.findMany({
+    return this.modelDelegate.findMany({
       where: { isActive: true },
       orderBy: { name: 'asc' },
     });
   }
 
   async findByCode(code: string) {
-    return this.model.findFirst({
+    return this.modelDelegate.findFirst({
       where: { code },
     });
   }
 
   async toggleActive(id: string, isActive: boolean) {
-    return this.model.update({
+    return this.modelDelegate.update({
       where: { id },
       data: { isActive },
     });

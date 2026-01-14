@@ -27,15 +27,15 @@ export class UserController {
     return ResponseUtil.success(res, profile);
   });
 
-  updateProfile = asyncHandler(
-    async (req: ReqBody<UpdateUserRequest>, res: Response) => {
-      const result = await this.userService.updateProfile(
-        req.userId!,
-        req.body
-      );
-      return ResponseUtil.success(res, result, 'Profile updated successfully');
-    }
-  );
+  // updateProfile = asyncHandler(
+  //   async (req: ReqBody<UpdateUserRequest>, res: Response) => {
+  //     const result = await this.userService.updateProfile(
+  //       req.userId!,
+  //       req.body
+  //     );
+  //     return ResponseUtil.success(res, result, 'Profile updated successfully');
+  //   }
+  // );
 
   getReferrals = asyncHandler(async (req: TypedRequest, res: Response) => {
     const referrals = await this.userService.getReferrals(req.userId!);

@@ -193,8 +193,12 @@ export class TripPlanningCallService extends BaseService<
   async paginate(
     page: number,
     limit: number,
-    filters?: Prisma.TripPlanningCallWhereInput
+    filters?: {
+      where?: Prisma.TripPlanningCallWhereInput;
+      include?: Prisma.TripPlanningCallInclude;
+      orderBy?: any;
+    }
   ) {
-    return this.callRepo.paginateWithDetails(page, limit, filters);
+    return this.callRepo.paginateWithDetails(page, limit, filters?.where);
   }
 }

@@ -3,12 +3,21 @@ import { PostService } from './post.service';
 import { ResponseUtil } from 'src/shared/utils/response';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, MediaType } from '@zagotours/database';
+import {
+  ReqBodyQuery,
+  ReqParams,
+  ReqQuery,
+  TypedRequest,
+} from 'src/shared/types/express.types';
+import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
+import { UuidParam } from 'src/common/validation/common.validation';
+import { CreatePostDTO } from '@zagotours/types';
 
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  create = asyncHandler(
+    async (req: TypedRequest<{}, CreatePostDTO>, res: Response) => {
       const { title, description, mediaUrl, mediaType } = req.body;
 
       if (!title || !description) {
@@ -27,13 +36,14 @@ export class PostController {
       });
 
       return ResponseUtil.success(res, post, 'Post created successfully', 201);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAll = asyncHandler(
+    async (
+      req: ReqQuery<{ page?: number; limit?: number; userId?: string }>,
+      res: Response
+    ) => {
       const { page = 1, limit = 10, userId } = req.query;
 
       const filters: Prisma.PostWhereInput = {};
@@ -45,81 +55,46 @@ export class PostController {
       const result = await this.postService.paginate(
         Number(page),
         Number(limit),
-        filters
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getFeed = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getFeed = asyncHandler(
+    async (req: TypedRequest, res: Response, next: NextFunction) => {
       const posts = await this.postService.getFeed(req.userId!);
       return ResponseUtil.success(res, posts);
-    } catch (error) {
-      next(error);
     }
-  };
+  );
 
-  getMyPosts = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const posts = await this.postService.getByUser(req.userId!);
-      return ResponseUtil.success(res, posts);
-    } catch (error) {
-      next(error);
-    }
-  };
+  getMyPosts = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const posts = await this.postService.getByUser(req.userId!);
+    return ResponseUtil.success(res, posts);
+  });
 
-  getById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const post = await this.postService.getPostWithDetails(req.params.id);
-      return ResponseUtil.success(res, post);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
-    }
-  };
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
+    const post = await this.postService.getPostWithDetails(req.params.id);
+    return ResponseUtil.success(res, post);
+  });
 
-  update = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const post = await this.postService.updatePost(
-        req.params.id,
-        req.userId!,
-        req.body
-      );
-      return ResponseUtil.success(res, post, 'Post updated successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error && error.message.includes('Unauthorized')) {
-        return ResponseUtil.error(res, error.message, 403);
-      }
-      next(error);
-    }
-  };
+  update = asyncHandler(async (req: TypedRequest<UuidParam>, res: Response) => {
+    const post = await this.postService.updatePost(
+      req.params.id,
+      req.userId!,
+      req.body
+    );
+    return ResponseUtil.success(res, post, 'Post updated successfully');
+  });
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.postService.deletePost(req.params.id, req.userId!);
-      return ResponseUtil.success(res, null, 'Post deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error && error.message.includes('Unauthorized')) {
-        return ResponseUtil.error(res, error.message, 403);
-      }
-      next(error);
-    }
-  };
+  delete = asyncHandler(async (req: TypedRequest<UuidParam>, res: Response) => {
+    await this.postService.deletePost(req.params.id, req.userId!);
+    return ResponseUtil.success(res, null, 'Post deleted successfully');
+  });
 
-  toggleLike = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  toggleLike = asyncHandler(
+    async (req: TypedRequest<UuidParam>, res: Response) => {
       const result = await this.postService.toggleLike(
         req.userId!,
         req.params.id
@@ -129,31 +104,24 @@ export class PostController {
         result,
         result.liked ? 'Post liked' : 'Post unliked'
       );
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  sharePost = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  sharePost = asyncHandler(
+    async (req: TypedRequest<UuidParam>, res: Response) => {
       const result = await this.postService.sharePost(
         req.userId!,
         req.params.id
       );
       return ResponseUtil.success(res, result, 'Post shared successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  addComment = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  addComment = asyncHandler(
+    async (
+      req: TypedRequest<UuidParam, { content?: string }>,
+      res: Response
+    ) => {
       const { content } = req.body;
 
       if (!content) {
@@ -172,41 +140,20 @@ export class PostController {
         'Comment added successfully',
         201
       );
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error) {
-        return ResponseUtil.error(res, error.message, 400);
-      }
-      next(error);
     }
-  };
+  );
 
-  getComments = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getComments = asyncHandler(
+    async (req: ReqParams<UuidParam>, res: Response) => {
       const comments = await this.postService.getComments(req.params.id);
       return ResponseUtil.success(res, comments);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      next(error);
     }
-  };
+  );
 
-  deleteComment = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await this.postService.deleteComment(req.params.commentId, req.userId!);
+  deleteComment = asyncHandler(
+    async (req: TypedRequest<UuidParam>, res: Response) => {
+      await this.postService.deleteComment(req.params.id, req.userId!);
       return ResponseUtil.success(res, null, 'Comment deleted successfully');
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return ResponseUtil.error(res, error.message, 404);
-      }
-      if (error instanceof Error && error.message.includes('Unauthorized')) {
-        return ResponseUtil.error(res, error.message, 403);
-      }
-      next(error);
     }
-  };
+  );
 }
