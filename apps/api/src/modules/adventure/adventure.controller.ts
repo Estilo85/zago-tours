@@ -1,8 +1,12 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AdventureService } from './adventure.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { AdventureStatus, AdventureLevel } from '@zagotours/database';
-import { CreateAdventureDTO, UpdateAdventureDTO } from '@zagotours/types';
+import {
+  AdventureListQueryDto,
+  CreateAdventureDto,
+  UpdateAdventureDto,
+} from '@zagotours/types';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
   ReqBody,
@@ -15,23 +19,35 @@ import {
   PaginationQuery,
   UuidParam,
 } from 'src/common/validation/common.validation';
+import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
 export class AdventureController {
   constructor(private readonly service: AdventureService) {}
 
   //==== CREATE NEW ADVENTURE ======
   create = asyncHandler(
-    async (req: ReqBody<CreateAdventureDTO>, res: Response) => {
-      const result = await this.service.create(req.body);
+    async (req: ReqBody<CreateAdventureDto>, res: Response) => {
+      const adventureData = req.body;
+
+      if (req.file) {
+        const uploadResult = await CloudinaryService.uploadFile(
+          req.file,
+          'adventure'
+        );
+        adventureData.mediaUrl = uploadResult.url;
+        adventureData.publicId = uploadResult.publicId;
+      }
+
+      const result = await this.service.create(adventureData);
       return ResponseUtil.success(res, result, 'Created', 201);
     }
   );
 
   //==== CREATE MULTIPLE ADVENTURES ======
   createBulk = asyncHandler(
-    async (req: ReqBody<CreateAdventureDTO[]>, res: Response) => {
+    async (req: ReqBody<CreateAdventureDto[]>, res: Response) => {
       const adventures = req.body;
-      // Validation: Ensure it's a non-empty array
+
       if (!Array.isArray(adventures) || adventures.length === 0) {
         return ResponseUtil.error(
           res,
@@ -39,6 +55,7 @@ export class AdventureController {
           400
         );
       }
+
       const result = await this.service.createBulk(adventures);
       return ResponseUtil.success(res, result, result.message, 201);
     }
@@ -47,31 +64,35 @@ export class AdventureController {
   //==== UPDATE AN ADVENTURE ======
   update = asyncHandler(
     async (
-      req: ReqParamsBody<UuidParam, UpdateAdventureDTO>,
+      req: ReqParamsBody<UuidParam, UpdateAdventureDto>,
       res: Response
     ) => {
-      const result = await this.service.update(req.params.id, req.body);
+      const adventureData = req.body;
+      const { id } = req.params;
+
+      const existingAdventure = await this.service.getById(id);
+
+      if (req.file) {
+        if (existingAdventure.publicId) {
+          await CloudinaryService.deleteFile(existingAdventure.publicId);
+        }
+
+        const uploadResult = await CloudinaryService.uploadFile(
+          req.file,
+          'adventure'
+        );
+        adventureData.mediaUrl = uploadResult.url;
+        adventureData.publicId = uploadResult.publicId;
+      }
+
+      const result = await this.service.update(id, adventureData);
       return ResponseUtil.success(res, result, 'Adventure updated');
     }
   );
 
   //==== GET ALL ADVENTURES ======
-
   getAll = asyncHandler(
-    async (
-      req: ReqQuery<
-        PaginationQuery & {
-          status?: AdventureStatus;
-          level?: AdventureLevel;
-          location: string;
-          search?: string;
-          tripType?: string;
-          maxPrice?: number;
-          minPrice?: number;
-        }
-      >,
-      res
-    ) => {
+    async (req: ReqQuery<AdventureListQueryDto>, res: Response) => {
       const {
         page = '1',
         limit = '10',
@@ -86,7 +107,6 @@ export class AdventureController {
 
       const where: any = { deletedAt: null };
 
-      // --- FILTERS ---
       if (status) where.status = status;
       if (level) where.level = level;
 
@@ -98,14 +118,12 @@ export class AdventureController {
         where.tripType = { contains: tripType, mode: 'insensitive' };
       }
 
-      // --- PRICE RANGE ---
       if (minPrice || maxPrice) {
         where.price = {};
         if (minPrice) where.price.gte = Number(minPrice);
         if (maxPrice) where.price.lte = Number(maxPrice);
       }
 
-      // --- GLOBAL SEARCH ---
       if (search) {
         where.OR = [
           { title: { contains: search, mode: 'insensitive' } },
@@ -133,17 +151,23 @@ export class AdventureController {
   delete = asyncHandler(
     async (req: ReqParamsQuery<UuidParam, { hard: string }>, res: Response) => {
       const isHard = req.query.hard === 'true';
+      const { id } = req.params;
 
-      await this.service.delete(req.params.id, isHard);
+      const adventure = await this.service.getById(id);
+
+      if (isHard && adventure.publicId) {
+        await CloudinaryService.deleteFile(adventure.publicId);
+      }
+
+      await this.service.delete(id, isHard);
       return ResponseUtil.success(res, null, 'Deleted');
     }
   );
 
-  //==== TOGGLING  ADVENTURE LIKE ======
+  //==== TOGGLING ADVENTURE LIKE ======
   toggleLike = asyncHandler(
     async (req: ReqParams<UuidParam>, res: Response) => {
       const result = await this.service.toggleLike(req.userId!, req.params.id);
-
       return ResponseUtil.success(res, result);
     }
   );

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { PlatformSettingsService } from 'src/modules/platform-settings/platform-settings.service';
 import { PlatformSettingsRepository } from 'src/modules/platform-settings/platform-settings.repository';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 
 const settingsRepo = new PlatformSettingsRepository();
 const settingsService = new PlatformSettingsService(settingsRepo);

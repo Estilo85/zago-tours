@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { EventRepository } from './event.repository';
 import { EventService } from './event.service';
 import { EventController } from './event.controller';
-import { Role } from '@zagotours/database';
+import { upload } from 'src/config/multer.config';
 
 const router: Router = Router();
 
@@ -16,10 +16,9 @@ router.get('/', eventController.getAll);
 router.get('/upcoming', eventController.getUpcoming);
 router.get('/:id', eventController.getById);
 
-router.post('/', eventController.create);
-
-router.patch('/:id', eventController.update);
-
+// Routes with file upload
+router.post('/', upload.single('media'), eventController.create);
+router.patch('/:id', upload.single('media'), eventController.update);
 router.delete('/:id', eventController.delete);
 
 export { router as eventRoutes };

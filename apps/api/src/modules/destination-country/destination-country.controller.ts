@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { DestinationCountryService } from './destination-country.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import {
   ReqBody,
   ReqParams,

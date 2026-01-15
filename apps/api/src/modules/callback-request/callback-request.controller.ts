@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { CallbackRequestService } from './callback-request.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { ReqParams } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';

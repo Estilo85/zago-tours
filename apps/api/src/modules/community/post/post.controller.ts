@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { PostService } from './post.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, MediaType } from '@zagotours/database';
 import {
@@ -11,13 +11,13 @@ import {
 } from 'src/shared/types/express.types';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import { UuidParam } from 'src/common/validation/common.validation';
-import { CreatePostDTO } from '@zagotours/types';
+import { CreatePostDto } from '@zagotours/types';
 
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   create = asyncHandler(
-    async (req: TypedRequest<{}, CreatePostDTO>, res: Response) => {
+    async (req: TypedRequest<{}, CreatePostDto>, res: Response) => {
       const { title, description, mediaUrl, mediaType } = req.body;
 
       if (!title || !description) {

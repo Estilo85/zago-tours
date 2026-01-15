@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { GeneralInquiryService } from './general-inquiry.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
   ReqBody,
@@ -9,19 +9,16 @@ import {
   TypedRequest,
 } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
-
-interface CreateInquiryDTO {
-  email: string;
-  message: string;
-  phone?: string;
-  address?: string;
-}
-
+import {
+  CreateGeneralInquiryDto,
+  GeneralInquiryListQueryDto,
+} from '@zagotours/types';
 export class GeneralInquiryController {
   constructor(private readonly inquiryService: GeneralInquiryService) {}
 
+  // POST / - Create a new inquiry
   create = asyncHandler(
-    async (req: ReqBody<CreateInquiryDTO>, res: Response) => {
+    async (req: ReqBody<CreateGeneralInquiryDto>, res: Response) => {
       const { email, message, phone, address } = req.body;
 
       if (!email || !message) {
@@ -44,32 +41,29 @@ export class GeneralInquiryController {
     }
   );
 
+  // GET / - Get all inquiries with pagination and filters
   getAll = asyncHandler(
-    async (req: ReqQuery<{ page?: number; limit?: number }>, res: Response) => {
-      const { page = 1, limit = 10 } = req.query;
-
-      const result = await this.inquiryService.paginate(
-        Number(page),
-        Number(limit),
-        { orderBy: { createdAt: 'desc' } }
-      );
-
+    async (req: ReqQuery<GeneralInquiryListQueryDto>, res: Response) => {
+      const result = await this.inquiryService.getAllInquiries(req.query);
       return ResponseUtil.paginated(res, result);
     }
   );
 
+  // GET /recent - Get recent inquiries
   getRecent = asyncHandler(async (req: TypedRequest, res: Response) => {
     const inquiries = await this.inquiryService.getRecent();
     return ResponseUtil.success(res, inquiries);
   });
 
+  // GET /:id - Get inquiry by ID
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const inquiry = await this.inquiryService.getById(req.params.id);
     return ResponseUtil.success(res, inquiry);
   });
 
+  // DELETE /:id - Delete inquiry
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
-    await this.inquiryService.delete(req.params.id, true);
+    await this.inquiryService.deleteInquiry(req.params.id);
     return ResponseUtil.success(res, null, 'Inquiry deleted successfully');
   });
 }

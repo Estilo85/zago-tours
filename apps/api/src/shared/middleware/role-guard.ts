@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Role } from '@zagotours/types';
-import { ResponseUtil } from '../utils/response';
+import { ResponseUtil } from '../utils/responseUtils';
 
 export const requireRole = (...roles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

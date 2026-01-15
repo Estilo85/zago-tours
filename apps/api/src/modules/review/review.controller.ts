@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ReviewService } from './review.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
@@ -11,7 +11,7 @@ import {
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
-import { CreateReviewDto, UpdateReviewDTO } from '@zagotours/types';
+import { CreateReviewDto, UpdateReviewDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
 
 export class ReviewController {
@@ -101,7 +101,7 @@ export class ReviewController {
   };
 
   update = asyncHandler(
-    async (req: ReqParamsBody<UuidParam, UpdateReviewDTO>, res: Response) => {
+    async (req: ReqParamsBody<UuidParam, UpdateReviewDto>, res: Response) => {
       const review = await this.reviewService.getById(req.params.id);
 
       // Only allow user to update their own review

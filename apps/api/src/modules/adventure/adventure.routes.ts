@@ -4,6 +4,7 @@ import { AdventureService } from './adventure.service';
 import { AdventureController } from './adventure.controller';
 import { validateRequest } from 'src/shared/middleware/validation.middleware';
 import { commonValidation } from 'src/common/validation/common.validation';
+import { upload } from 'src/config/multer.config';
 
 const router: Router = Router();
 const controller = new AdventureController(
@@ -11,14 +12,14 @@ const controller = new AdventureController(
 );
 
 router.get('/', controller.getAll);
-router.post('/', controller.create);
+router.post('/', upload.single('media'), controller.create);
 router.post('/bulk', controller.createBulk);
 
 router
   .route('/:id')
   .all(validateRequest({ params: commonValidation.uuidParam }))
   .get(controller.getById)
-  .patch(controller.update)
+  .patch(upload.single('media'), controller.update)
   .delete(controller.delete);
 
 router.post(

@@ -17,21 +17,19 @@ export class UserRepository extends BaseRepository<
     affiliateDetails: true,
   };
 
-  // Domain-specific queries
+  // Find user by email
   async findByEmail(email: string): Promise<User | null> {
     return this.findOne({ email }, this.profileInclude);
   }
 
+  // Get user with full profile
   async findWithProfile(userId: string): Promise<User | null> {
-    return this.findById(userId, {
-      ...this.profileInclude,
-      referrer: { select: { name: true, email: true } },
-      referees: { select: { id: true, name: true } },
-    });
+    return this.findById(userId, this.profileInclude);
   }
 
+  // Get user's referrals
   async findReferrals(userId: string) {
-    return prisma.user.findMany({
+    return this.modelDelegate.findMany({
       where: {
         referredById: userId,
         deletedAt: null,
@@ -40,10 +38,38 @@ export class UserRepository extends BaseRepository<
         id: true,
         name: true,
         email: true,
-        role: true,
+        status: true,
         createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  // Count user's referrals
+  async countReferrals(userId: string, activeOnly = false) {
+    return this.modelDelegate.count({
+      where: {
+        referredById: userId,
+        deletedAt: null,
+        ...(activeOnly && { status: 'ACTIVE' }),
+      },
+    });
+  }
+
+  // Get user stats
+  async getUserStats(userId: string) {
+    const [posts, reviews, likes, referrals] = await Promise.all([
+      prisma.post.count({ where: { userId, deletedAt: null } }),
+      prisma.review.count({ where: { userId } }),
+      prisma.adventureLike.count({ where: { userId } }),
+      this.countReferrals(userId),
+    ]);
+
+    return {
+      totalPosts: posts,
+      totalReviews: reviews,
+      totalAdventureLikes: likes,
+      totalReferrals: referrals,
+    };
   }
 }

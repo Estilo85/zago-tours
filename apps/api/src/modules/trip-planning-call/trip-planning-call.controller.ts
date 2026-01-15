@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { TripPlanningCallService } from './trip-planning-call.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, CallStatus } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
@@ -10,14 +10,14 @@ import {
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
-import { CreateTripPlanningCallDTO } from '@zagotours/types';
+import { CreateTripPlanningCallDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
 
 export class TripPlanningCallController {
   constructor(private readonly callService: TripPlanningCallService) {}
 
   scheduleCall = asyncHandler(
-    async (req: TypedRequest<{}, CreateTripPlanningCallDTO>, res: Response) => {
+    async (req: TypedRequest<{}, CreateTripPlanningCallDto>, res: Response) => {
       const { agentId, startTime, endTime, meetingLink } = req.body;
 
       if (!agentId || !startTime) {

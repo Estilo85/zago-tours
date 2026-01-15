@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.routes';
 import { userRoutes } from '../modules/user/user.routes';
 import { adventureRoutes } from '../modules/adventure/adventure.routes';
-import { galleryRoutes } from '../modules/gallery/gallery.routes';
+import { adventureGalleryRoutes } from '../modules/adventure-gallery/gallery.routes';
 import { reviewRoutes } from '../modules/review/review.routes';
 import { postRoutes } from '../modules/community/post/post.routes';
 import { eventRoutes } from '../modules/event/event.routes';
@@ -13,6 +13,7 @@ import { tripPlanningCallRoutes } from '../modules/trip-planning-call/trip-plann
 import { contractRoutes } from '../modules/contract/contract.routes';
 import { platformSettingsRoutes } from '../modules/platform-settings/platform-settings.routes';
 import { destinationCountryRoutes } from '../modules/destination-country/destination-country.routes';
+import { itineraryRoutes } from 'src/modules/itinerary/itinerary.routes';
 
 const router: Router = Router();
 
@@ -22,7 +23,8 @@ router.use('/api/users', userRoutes);
 
 // // Adventures
 router.use('/api/adventures', adventureRoutes);
-router.use('/api/gallery', galleryRoutes);
+router.use('/api/adventures', itineraryRoutes);
+router.use('/api/adventures', adventureGalleryRoutes);
 
 // // Reviews
 router.use('/api/reviews', reviewRoutes);

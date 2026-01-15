@@ -8,7 +8,8 @@ export interface Event {
   spotLeft: number;
   joinTill: Date;
   cancellationTerms: string;
-  mediaUrl?: string;
+  mediaUrl: string | null;
+  publicId: string | null;
   createdAt: Date;
-  deletedAt?: Date;
+  deletedAt: Date | null;
 }

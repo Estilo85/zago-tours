@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { TripRequestService } from './trip-request.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
@@ -10,14 +10,14 @@ import {
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
-import { CreateTripRequestDTO } from '@zagotours/types';
+import { CreateTripRequestDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
 
 export class TripRequestController {
   constructor(private readonly tripRequestService: TripRequestService) {}
 
   create = asyncHandler(
-    async (req: ReqBody<CreateTripRequestDTO>, res: Response) => {
+    async (req: ReqBody<CreateTripRequestDto>, res: Response) => {
       const { tripType, destination, date, preferences } = req.body;
 
       if (!tripType || !destination || !date) {

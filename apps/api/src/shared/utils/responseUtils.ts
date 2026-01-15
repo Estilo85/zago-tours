@@ -6,6 +6,7 @@ import {
 } from '@zagotours/types';
 
 export class ResponseUtil {
+  //===== SUCCESS RESPONSE ======
   static success<T>(
     res: Response,
     data: T,
@@ -20,6 +21,7 @@ export class ResponseUtil {
     return res.status(statusCode).json(response);
   }
 
+  //===== ERROR RESPONSE ======
   static error(
     res: Response,
     message: string,
@@ -34,6 +36,7 @@ export class ResponseUtil {
     return res.status(statusCode).json(response);
   }
 
+  //===== PAGINATION REPONSE ======
   static paginated<T>(
     res: Response,
     result: PaginationResult<T>,

@@ -30,8 +30,24 @@ export const ROLE_PREFIXES: Record<Role, string> = {
   [Role.SUPER_ADMIN]: 'SUP',
 };
 
-//RegisterDTO
-export interface RegisterDTO {
+export interface IndependentAgentDto {
+  certifications: string[];
+  howDidYouHear?: string;
+}
+
+export interface CooperateAgentDto {
+  companyName: string;
+  travelBusinessDescription: string;
+  howDidYouHear?: string;
+}
+
+export interface AffiliateDto {
+  communityBrand: string;
+  socialLinks: string[];
+  howDidYouHear?: string;
+}
+
+export interface RegisterDto {
   name: string;
   email: string;
   password: string;
@@ -39,16 +55,25 @@ export interface RegisterDTO {
   country?: string;
   role: RegistrableRole;
   referralCode?: string;
-  // Role specific fields
-  certifications?: string[];
-  companyName?: string;
-  travelBusinessDescription?: string;
-  communityBrand?: string;
-  socialLinks?: string[];
-  howDidYouHear?: string;
+  agentDetails?: IndependentAgentDto;
+  cooperateDetails?: CooperateAgentDto;
+  affiliateDetails?: AffiliateDto;
 }
 
-export interface LoginDTO {
+export interface UserResponse {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  country?: string;
+  role: RegistrableRole;
+  status: UserStatus;
+  safetyAmbassador: boolean;
+  referralCode: string;
+  createdAt: Date;
+}
+
+export interface LoginDto {
   email: string;
   password: string;
 }
@@ -58,24 +83,11 @@ export interface LoginResponse {
   token: string;
 }
 
-export interface UserResponse {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  country?: string;
-  role: Role;
-  status: UserStatus;
-  safetyAmbassador: boolean;
-  referralCode: string;
-  createdAt: Date;
-}
-
-export interface ResetPasswordDTO {
+export interface ResetPasswordDto {
   token: string;
   newPassword: string;
 }
 
-export interface ForgotPasswordDTO {
+export interface ForgotPasswordDto {
   email: string;
 }

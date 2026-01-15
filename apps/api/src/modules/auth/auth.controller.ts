@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { ResponseUtil } from '../../shared/utils/response';
+import { ResponseUtil } from '../../shared/utils/responseUtils';
 import {
-  RegisterDTO,
-  LoginDTO,
-  ResetPasswordDTO,
-  ForgotPasswordDTO,
+  RegisterDto,
+  LoginDto,
+  ResetPasswordDto,
+  ForgotPasswordDto,
 } from '@zagotours/types';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import { ReqBody, TypedRequest } from 'src/shared/types/express.types';
@@ -16,7 +16,7 @@ export class AuthController {
   /**
    * Register a new user and their specific profile
    */
-  register = asyncHandler(async (req: ReqBody<RegisterDTO>, res: Response) => {
+  register = asyncHandler(async (req: ReqBody<RegisterDto>, res: Response) => {
     const result = await this.authService.register(req.body);
     return ResponseUtil.success(res, result, 'Registration successful', 201);
   });
@@ -24,7 +24,7 @@ export class AuthController {
   /**
    * Authenticate user and return user data (safe)
    */
-  login = async (req: ReqBody<LoginDTO>, res: Response) => {
+  login = async (req: ReqBody<LoginDto>, res: Response) => {
     const result = await this.authService.login(req.body);
     return ResponseUtil.success(res, result, 'Login successful');
   };
@@ -41,7 +41,7 @@ export class AuthController {
    * Initiate password reset flow (sends email)
    */
   forgotPassword = asyncHandler(
-    async (req: ReqBody<ForgotPasswordDTO>, res: Response) => {
+    async (req: ReqBody<ForgotPasswordDto>, res: Response) => {
       const result = await this.authService.forgotPassword(req.body.email);
       return ResponseUtil.success(res, null, result.message);
     }
@@ -50,7 +50,7 @@ export class AuthController {
   /**
    * Reset password using a valid token
    */
-  resetPassword = async (req: ReqBody<ResetPasswordDTO>, res: Response) => {
+  resetPassword = async (req: ReqBody<ResetPasswordDto>, res: Response) => {
     const result = await this.authService.resetPassword(req.body);
     return ResponseUtil.success(res, null, result.message);
   };

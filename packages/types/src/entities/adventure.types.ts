@@ -4,6 +4,7 @@ import {
   AccessType,
   MediaType,
 } from '../enums';
+import { User } from './user.types';
 
 export interface Adventure {
   id: string;
@@ -15,18 +16,33 @@ export interface Adventure {
   tripType: string;
   safetyScore: number;
   rating: number;
-  certification?: string;
-  gear?: string;
+  certification: string | null;
+  gear: string | null;
   status: AdventureStatus;
-  mediaUrl?: string;
+  mediaUrl: string | null;
+  publicId: string | null;
   date: Date;
   description: string;
   days: number;
   access: AccessType;
-  lastSafetyCertDate?: Date;
+  lastSafetyCertDate: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt?: Date;
+  deletedAt: Date | null;
+}
+
+export interface AdventureWithRelations extends Adventure {
+  likes?: AdventureLike[];
+  itineraries?: Itinerary[];
+  gallery?: AdventureGallery[];
+}
+
+export interface AdventureLike {
+  id: string;
+  userId: string;
+  adventureId: string;
+  user?: User;
+  adventure?: Adventure;
 }
 
 export interface Itinerary {
@@ -35,35 +51,18 @@ export interface Itinerary {
   dayNumber: number;
   title: string;
   activityDetails: string;
-  imageUrl?: string;
+  imageUrl: string | null;
+  publicId: string | null;
 }
 
-export interface AdventureWithDetails extends Adventure {
-  itineraries: Itinerary[];
-  gallery: Gallery[];
-}
-
-export interface Gallery {
+export interface AdventureGallery {
   id: string;
   mediaUrl: string;
+  publicId: string | null;
   mediaType: MediaType;
-  altText?: string;
-  uploadedBy: string;
-  adventureId?: string;
-  createdAt: Date;
-  deletedAt?: Date;
-}
-
-export interface AdventureLike {
-  id: string;
-  userId: string;
+  altText: string | null;
+  order: number;
   adventureId: string;
-}
-
-export interface DestinationCountry {
-  id: string;
-  name: string;
-  code?: string;
-  isActive: boolean;
   createdAt: Date;
+  deletedAt: Date | null;
 }

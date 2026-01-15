@@ -4,76 +4,32 @@ import { JwtUtil } from '../../shared/utils/jwt';
 import { EmailService } from '../../shared/services/email.service';
 import { AuthRepository } from './auth.repository';
 import {
-  RegisterDTO,
-  LoginDTO,
+  RegisterDto,
+  LoginDto,
   UserResponse,
-  ResetPasswordDTO,
+  ResetPasswordDto,
   ROLE_PREFIXES,
 } from '@zagotours/types';
 import { Role } from '@zagotours/database';
 
 export class AuthService {
-  constructor(private authRepository: AuthRepository) {}
+  constructor(private readonly authRepository: AuthRepository) {}
 
-  // validation method
-  private validateRoleSpecificFields(data: RegisterDTO): void {
-    if (data.role === Role.INDEPENDENT_AGENT) {
-      if (!data.certifications || data.certifications.length === 0) {
-        throw new Error('Certifications are required for Independent Agents');
-      }
-    }
+  // ============================================
+  // REGISTRATION
+  // ============================================
 
-    if (data.role === Role.COOPERATE_AGENT) {
-      if (!data.companyName) {
-        throw new Error('Company name is required for Corporate Agents');
-      }
-      if (!data.travelBusinessDescription) {
-        throw new Error(
-          'Travel business description is required for Corporate Agents'
-        );
-      }
-    }
-
-    if (data.role === Role.AFFILIATE) {
-      if (!data.communityBrand) {
-        throw new Error('Community brand is required for Affiliates');
-      }
-    }
-  }
-
-  private extractProfileData(data: RegisterDTO) {
-    if (data.role === Role.INDEPENDENT_AGENT) {
-      return {
-        certifications: data.certifications || [],
-      };
-    }
-
-    if (data.role === Role.COOPERATE_AGENT) {
-      return {
-        companyName: data.companyName!,
-        travelBusinessDescription: data.travelBusinessDescription!,
-      };
-    }
-
-    if (data.role === Role.AFFILIATE) {
-      return {
-        communityBrand: data.communityBrand!,
-        socialLinks: data.socialLinks || [],
-      };
-    }
-
-    return {};
-  }
-
-  async register(data: RegisterDTO): Promise<UserResponse> {
+  async register(data: RegisterDto): Promise<UserResponse> {
     const existingUser = await this.authRepository.findByEmail(data.email);
-    if (existingUser) throw new Error('User already exists');
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
 
     this.validateRoleSpecificFields(data);
+
     const hashedPassword = await BcryptUtil.hash(data.password);
 
-    const prefix = ROLE_PREFIXES[data.role] || 'USR';
-    const referralCode = `${prefix}-${generateReferralCode().toUpperCase()}`;
+    const referralCode = await this.generateUniqueReferralCode(data.role);
 
     let referredById: string | undefined;
     if (data.referralCode) {
@@ -83,6 +39,7 @@ export class AuthService {
       referredById = referrer?.id;
     }
 
+    // 6. Prepare user data
     const userData = {
       name: data.name,
       email: data.email,
@@ -94,10 +51,7 @@ export class AuthService {
       referredById,
     };
 
-    const profileData = {
-      ...this.extractProfileData(data),
-      howDidYouHear: data.howDidYouHear,
-    };
+    const profileData = this.extractProfileData(data);
 
     const user = await this.authRepository.registerWithProfile(
       userData,
@@ -108,37 +62,60 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
-  async login(data: LoginDTO): Promise<UserResponse> {
+  // ============================================
+  // LOGIN
+  // ============================================
+
+  async login(data: LoginDto): Promise<UserResponse> {
     const user = await this.authRepository.findByEmail(data.email);
+
     if (!user || !(await BcryptUtil.compare(data.password, user.password))) {
       throw new Error('Invalid credentials');
     }
+
     return this.mapUserResponse(user);
   }
 
-  async forgotPassword(email: string) {
+  // ============================================
+  // FORGOT PASSWORD
+  // ============================================
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
     const user = await this.authRepository.findByEmail(email);
+
     if (user) {
       const resetToken = JwtUtil.generateResetToken(user.id);
       const expiresAt = new Date(Date.now() + 3600000); // 1 hour
+
       await this.authRepository.saveResetToken(user.id, resetToken, expiresAt);
       await EmailService.sendPasswordResetEmail(user.email, resetToken);
     }
+
     return { message: 'If that email exists, a reset link has been sent' };
   }
 
-  async resetPassword(data: ResetPasswordDTO) {
+  // ============================================
+  // PASSWORD RESET
+  // ============================================
+  async resetPassword(data: ResetPasswordDto): Promise<{ message: string }> {
     const decoded = JwtUtil.verifyResetToken(data.token);
     const user = await this.authRepository.findByResetToken(data.token);
 
-    if (!decoded || !user) throw new Error('Invalid or expired reset token');
+    if (!decoded || !user) {
+      throw new Error('Invalid or expired reset token');
+    }
 
     const hashedPassword = await BcryptUtil.hash(data.newPassword);
+
     await this.authRepository.update(user.id, { password: hashedPassword });
     await this.authRepository.clearResetToken(user.id);
 
     return { message: 'Password reset successful' };
   }
+
+  // ============================================
+  // USER MANAGEMENT
+  // ============================================
 
   async getCurrentUser(userId: string): Promise<UserResponse> {
     const user = await this.authRepository.findById(userId);
@@ -148,6 +125,83 @@ export class AuthService {
     }
 
     return this.mapUserResponse(user);
+  }
+
+  // ============================================
+  // PRIVATE HELPERS
+  // ============================================
+
+  private validateRoleSpecificFields(data: RegisterDto): void {
+    if (data.role === Role.INDEPENDENT_AGENT) {
+      if (!data.agentDetails || data.agentDetails.certifications.length === 0) {
+        throw new Error('Certifications are required for Independent Agents');
+      }
+    }
+
+    if (data.role === Role.COOPERATE_AGENT) {
+      if (!data.cooperateDetails?.companyName) {
+        throw new Error('Company name is required for Corporate Agents');
+      }
+      if (!data.cooperateDetails.travelBusinessDescription) {
+        throw new Error(
+          'Travel business description is required for Corporate Agents'
+        );
+      }
+    }
+
+    if (data.role === Role.AFFILIATE) {
+      if (!data.affiliateDetails?.communityBrand) {
+        throw new Error('Community brand is required for Affiliates');
+      }
+    }
+  }
+
+  private extractProfileData(data: RegisterDto): Record<string, any> {
+    if (data.role === Role.INDEPENDENT_AGENT && data.agentDetails) {
+      return {
+        certifications: data.agentDetails.certifications,
+        howDidYouHear: data.agentDetails?.howDidYouHear,
+      };
+    }
+
+    if (data.role === Role.COOPERATE_AGENT && data.cooperateDetails) {
+      return {
+        companyName: data.cooperateDetails.companyName,
+        travelBusinessDescription:
+          data.cooperateDetails.travelBusinessDescription,
+        howDidYouHear: data.cooperateDetails?.howDidYouHear,
+      };
+    }
+
+    if (data.role === Role.AFFILIATE && data.affiliateDetails) {
+      return {
+        communityBrand: data.affiliateDetails.communityBrand,
+        socialLinks: data.affiliateDetails.socialLinks,
+        howDidYouHear: data.affiliateDetails?.howDidYouHear,
+      };
+    }
+
+    return {};
+  }
+
+  private async generateUniqueReferralCode(role: Role): Promise<string> {
+    const prefix = ROLE_PREFIXES[role];
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts) {
+      const code = `${prefix}-${generateReferralCode().toUpperCase()}`;
+
+      const existing = await this.authRepository.findByReferralCode(code);
+
+      if (!existing) {
+        return code;
+      }
+
+      attempts++;
+    }
+
+    throw new Error('Failed to generate unique referral code');
   }
 
   private mapUserResponse(user: any): UserResponse {

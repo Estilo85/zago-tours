@@ -9,7 +9,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 // --- ENUMS ---
 
 enum Role {
@@ -70,7 +69,7 @@ model User {
   phone                 String?
   country               String?
   password              String
-   // Password Reset Fields
+  // Password Reset Fields
   resetPasswordToken    String?           @unique
   resetPasswordExpires  DateTime?
   role                  Role              @default(ADVENTURER)
@@ -94,7 +93,6 @@ model User {
   comments              Comment[]
   likes                 Like[]
   shares                Share[]
-  galleryUploads        Gallery[]
   contracts             Contract[]
 
   // Meeting Calls
@@ -103,14 +101,14 @@ model User {
   
   createdAt             DateTime          @default(now())
   updatedAt             DateTime          @updatedAt
-  deletedAt             DateTime?         // For Soft Delete
+  deletedAt             DateTime?
 }
 
 model IndependentAgent {
   id             String   @id @default(uuid())
   userId         String   @unique
   user           User     @relation(fields: [userId], references: [id])
-  certifications String[] // Handled as array of strings
+  certifications String[]
   howDidYouHear  String?
 }
 
@@ -147,7 +145,8 @@ model Adventure {
   certification              String?
   gear                       String?
   status                     AdventureStatus  @default(DRAFT)
-  mediaUrl                   String?          // Main Cover Image/Video
+  mediaUrl                   String?        
+  publicId                   String?        
   date                       DateTime
   description                String
   days                       Int
@@ -156,7 +155,7 @@ model Adventure {
 
   likes                      AdventureLike[]
   itineraries                Itinerary[]
-  gallery                    Gallery[]        // Linked Gallery items
+  gallery                    AdventureGallery[] 
   
   createdAt                  DateTime         @default(now())
   updatedAt                  DateTime         @updatedAt
@@ -176,38 +175,41 @@ model AdventureLike {
 model Itinerary {
   id              String    @id @default(uuid())
   adventureId     String
-  adventure       Adventure @relation(fields: [adventureId], references: [id])
+  adventure       Adventure @relation(fields: [adventureId], references: [id], onDelete: Cascade)
   dayNumber       Int
   title           String
   activityDetails String
   imageUrl        String?
+  publicId        String?  
+  
+  @@index([adventureId])
 }
 
-model Gallery {
+model AdventureGallery {
   id          String    @id @default(uuid())
   mediaUrl    String
+  publicId    String?   
   mediaType   MediaType @default(IMAGE)
   altText     String?
+  order       Int       @default(0) 
   
-  uploadedBy  String
-  user        User      @relation(fields: [uploadedBy], references: [id])
-  
-  adventureId String?
-  adventure   Adventure? @relation(fields: [adventureId], references: [id])
+  adventureId String
+  adventure   Adventure @relation(fields: [adventureId], references: [id], onDelete: Cascade)
   
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
+  
+  @@index([adventureId])
 }
 
 // --- REVIEW MODELS ---
 model Review {
   id           String     @id @default(uuid())
-  title        String?    // e.g., "Highly Recommended!"
+  title        String?
   content      String     @db.Text    
   rating       Int        @default(5) 
   isFeatured   Boolean    @default(false) 
   
-  // Relations
   userId       String
   user         User       @relation(fields: [userId], references: [id])
 
@@ -226,39 +228,49 @@ model Post {
   title       String
   description String
   mediaUrl    String?
+  publicId    String?   
   mediaType   MediaType @default(IMAGE)
   comments    Comment[]
   likes       Like[]
   shares      Share[]
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
+  
+  @@index([userId])
 }
 
 model Comment {
   id        String    @id @default(uuid())
   postId    String
-  post      Post      @relation(fields: [postId], references: [id])
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    String
   user      User      @relation(fields: [userId], references: [id])
   content   String
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+  
+  @@index([postId])
+  @@index([userId])
 }
 
 model Like {
   id     String @id @default(uuid())
   postId String
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId String
   user   User   @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, postId])
 }
 
 model Share {
   id     String @id @default(uuid())
   postId String
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId String
   user   User   @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, postId])
 }
 
 // --- FORM & SERVICE MODELS ---
@@ -274,6 +286,7 @@ model Event {
   joinTill          DateTime
   cancellationTerms String
   mediaUrl          String?
+  publicId          String?   
   createdAt         DateTime  @default(now())
   deletedAt         DateTime?
 }
@@ -312,8 +325,8 @@ model TripPlanningCall {
   agentId          String
   agent            User       @relation("AgentCalls", fields: [agentId], references: [id])
   
-  calendarEventId  String?    @unique // For Google/Outlook API
-  meetingLink      String?    // Meeting URL
+  calendarEventId  String?    @unique
+  meetingLink      String?
   startTime        DateTime   
   endTime          DateTime?  
   
@@ -330,6 +343,7 @@ model Contract {
   status       ContractStatus @default(NOT_SIGNED)
   signedAt     DateTime?
   documentUrl  String
+  publicId     String?        
   createdAt    DateTime       @default(now())
 }
 
@@ -346,7 +360,7 @@ model PlatformSettings {
 model DestinationCountry {
   id        String   @id @default(uuid())
   name      String   @unique
-  code      String?  // e.g., "NG", "KE"
+  code      String?
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 }

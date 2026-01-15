@@ -32,6 +32,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nanoid": "^5.1.6",
     "next-auth": "^4.24.13",
+    "resend": "^6.7.0",
     "zod": "^4.2.1"
   },
   "devDependencies": {

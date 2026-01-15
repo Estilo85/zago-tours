@@ -1,3 +1,5 @@
+import { PaginationMeta } from './pagination';
+
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
@@ -7,13 +9,9 @@ export interface ApiResponse<T = any> {
 
 export interface PaginatedResponse<T> {
   success: boolean;
+  message: string;
   data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: PaginationMeta;
 }
 
 export interface ErrorResponse {

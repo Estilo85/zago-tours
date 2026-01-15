@@ -1,5 +1,4 @@
 import { prisma, Prisma, Role, User } from '@zagotours/database';
-import { CustomerRole } from '@zagotours/types';
 import { BaseRepository } from 'src/common/repository/base.repository';
 
 export class AuthRepository extends BaseRepository<
@@ -11,15 +10,27 @@ export class AuthRepository extends BaseRepository<
 > {
   protected readonly modelDelegate = prisma.user;
 
-  async findByEmail(email: string) {
-    return this.modelDelegate.findUnique({ where: { email } });
+  //===== FIND BY UNIQUE EMAIL =======
+  async findByEmail(email: string): Promise<User | null> {
+    return this.modelDelegate.findUnique({
+      where: { email },
+      include: {
+        independentDetails: true,
+        cooperateDetails: true,
+        affiliateDetails: true,
+      },
+    });
   }
 
-  async findByReferralCode(code: string) {
-    return this.modelDelegate.findUnique({ where: { referralCode: code } });
+  //===== FIND BY UNIQUE REFERRAL-CODE =======
+  async findByReferralCode(code: string): Promise<User | null> {
+    return this.modelDelegate.findUnique({
+      where: { referralCode: code },
+    });
   }
 
-  async findByResetToken(token: string) {
+  //===== FIND BY UNIQUE RESET-TOKEN =======
+  async findByResetToken(token: string): Promise<User | null> {
     return this.modelDelegate.findFirst({
       where: {
         resetPasswordToken: token,
@@ -28,44 +39,93 @@ export class AuthRepository extends BaseRepository<
     });
   }
 
-  async saveResetToken(userId: string, token: string, expiresAt: Date) {
+  //===== SAVE RESET-TOKEN =======
+  async saveResetToken(
+    userId: string,
+    token: string,
+    expiresAt: Date
+  ): Promise<User> {
     return this.update(userId, {
       resetPasswordToken: token,
       resetPasswordExpires: expiresAt,
     });
   }
 
-  async clearResetToken(userId: string) {
+  //===== CLEAR RESET-TOKEN =======
+  async clearResetToken(userId: string): Promise<User> {
     return this.update(userId, {
       resetPasswordToken: null,
       resetPasswordExpires: null,
     });
   }
 
-  async registerWithProfile(
-    userData: any,
-    profileType: CustomerRole,
-    profileData: any
-  ) {
-    return prisma.$transaction(async (tx) => {
-      const user = await tx.user.create({ data: userData });
+  // ======= REGISTER USERS WITH ROLE-SPECIFIC PROFILE =======
 
-      const profileModels: Record<CustomerRole, any> = {
-        [Role.INDEPENDENT_AGENT]: tx.independentAgent,
-        [Role.COOPERATE_AGENT]: tx.cooperateAgent,
-        [Role.AFFILIATE]: tx.affiliate,
-        [Role.ADVENTURER]: null,
+  async registerWithProfile(
+    userData: Omit<
+      Prisma.UserCreateInput,
+      'independentDetails' | 'cooperateDetails' | 'affiliateDetails'
+    >,
+    role: Role,
+    profileData: Record<string, any>
+  ): Promise<User> {
+    return prisma.$transaction(async (tx) => {
+      // Create base user
+      const user = await tx.user.create({
+        data: userData,
+        include: {
+          independentDetails: true,
+          cooperateDetails: true,
+          affiliateDetails: true,
+        },
+      });
+
+      // Create role-specific profile
+      const profileCreators: Partial<Record<Role, () => Promise<any>>> = {
+        [Role.INDEPENDENT_AGENT]: () =>
+          tx.independentAgent.create({
+            data: {
+              userId: user.id,
+              certifications: profileData.certifications || [],
+              howDidYouHear: profileData.howDidYouHear,
+            },
+          }),
+
+        [Role.COOPERATE_AGENT]: () =>
+          tx.cooperateAgent.create({
+            data: {
+              userId: user.id,
+              companyName: profileData.companyName,
+              travelBusinessDescription: profileData.travelBusinessDescription,
+              howDidYouHear: profileData.howDidYouHear,
+            },
+          }),
+
+        [Role.AFFILIATE]: () =>
+          tx.affiliate.create({
+            data: {
+              userId: user.id,
+              communityBrand: profileData.communityBrand,
+              socialLinks: profileData.socialLinks || [],
+              howDidYouHear: profileData.howDidYouHear,
+            },
+          }),
       };
 
-      const targetModel = profileModels[profileType];
-
-      if (targetModel) {
-        await targetModel.create({
-          data: { ...profileData, userId: user.id },
-        });
+      const createProfile = profileCreators[role];
+      if (createProfile) {
+        await createProfile();
       }
 
-      return user;
+      // Fetch complete user with profile
+      return tx.user.findUniqueOrThrow({
+        where: { id: user.id },
+        include: {
+          independentDetails: true,
+          cooperateDetails: true,
+          affiliateDetails: true,
+        },
+      });
     });
   }
 }

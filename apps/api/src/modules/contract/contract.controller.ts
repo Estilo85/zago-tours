@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ContractService } from './contract.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, ContractStatus } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';

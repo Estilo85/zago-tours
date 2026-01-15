@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@zagotours/database';
-import { ResponseUtil } from '../utils/response';
+import { ResponseUtil } from '../utils/responseUtils';
 import { NotFoundException } from 'src/common/service/base.service';
 
 export const errorHandler = (

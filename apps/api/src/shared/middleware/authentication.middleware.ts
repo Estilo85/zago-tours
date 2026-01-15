@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { getToken } from 'next-auth/jwt';
-import { ResponseUtil } from '../utils/response';
+import { ResponseUtil } from '../utils/responseUtils';
 import { TypedRequest } from '../types/express.types';
 import { Role } from '@zagotours/types';
 

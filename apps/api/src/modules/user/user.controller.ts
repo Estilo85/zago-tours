@@ -1,115 +1,150 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { UserService } from './user.service';
-import { ResponseUtil } from 'src/shared/utils/response';
-import { Prisma, Role, UserStatus } from '@zagotours/database';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
+import { Role, UserStatus } from '@zagotours/database';
 import {
   ReqBody,
   ReqParams,
-  ReqParamsBody,
-  ReqParamsQuery,
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
-import { UpdateUserRequest } from '@zagotours/types';
 import {
-  PaginationQuery,
-  UuidParam,
-} from 'src/common/validation/common.validation';
+  UpdateProfileDto,
+  UpdateUserStatusDto,
+  PromoteToSafetyAmbassadorDto,
+} from '@zagotours/types';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // ===== USER PROFILE ENDPOINTS =====
+  // ============================================
+  // USER PROFILE ENDPOINTS
+  // ============================================
 
+  /**
+   * Get current user's profile
+   * GET /api/users/profile
+   */
   getProfile = asyncHandler(async (req: TypedRequest, res: Response) => {
     const profile = await this.userService.getProfile(req.userId!);
     return ResponseUtil.success(res, profile);
   });
 
-  // updateProfile = asyncHandler(
-  //   async (req: ReqBody<UpdateUserRequest>, res: Response) => {
-  //     const result = await this.userService.updateProfile(
-  //       req.userId!,
-  //       req.body
-  //     );
-  //     return ResponseUtil.success(res, result, 'Profile updated successfully');
-  //   }
-  // );
+  /**
+   * Update current user's profile
+   * PUT /api/users/profile
+   */
+  updateProfile = asyncHandler(
+    async (req: ReqBody<UpdateProfileDto>, res: Response) => {
+      const result = await this.userService.updateProfile(
+        req.userId!,
+        req.body
+      );
+      return ResponseUtil.success(res, result, 'Profile updated successfully');
+    }
+  );
 
-  getReferrals = asyncHandler(async (req: TypedRequest, res: Response) => {
-    const referrals = await this.userService.getReferrals(req.userId!);
-    return ResponseUtil.success(res, referrals);
+  /**
+   * Get current user's referral stats
+   * GET /api/users/referrals
+   */
+  getReferralStats = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const stats = await this.userService.getReferralStats(req.userId!);
+    return ResponseUtil.success(res, stats);
   });
 
-  // ===== ADMIN ENDPOINTS =====
+  // ============================================
+  // ADMIN ENDPOINTS
+  // ============================================
 
+  /**
+   * Get all users with pagination and filters (admin)
+   * GET /api/admin/users?page=1&limit=10&role=ADVENTURER&status=ACTIVE&search=john
+   */
   getAllUsers = asyncHandler(
     async (
-      req: ReqQuery<
-        PaginationQuery & { role?: Role; status?: UserStatus; search?: string }
-      >,
+      req: ReqQuery<{
+        page?: string;
+        limit?: string;
+        role?: Role;
+        status?: UserStatus;
+        search?: string;
+      }>,
       res: Response
     ) => {
-      const { page = 1, limit = 10, role, status, search } = req.query;
+      const { page = '1', limit = '10', role, status, search } = req.query;
 
-      const filters: Prisma.UserWhereInput = { deletedAt: null };
-
-      if (role) {
-        filters.role = role as Role;
-      }
-
-      if (status) {
-        filters.status = status as UserStatus;
-      }
-
-      if (search) {
-        filters.OR = [
-          { name: { contains: String(search), mode: 'insensitive' } },
-          { email: { contains: String(search), mode: 'insensitive' } },
-        ];
-      }
-
-      // Use base paginate with proper signature
-      const result = await this.userService.paginate(
-        Number(page),
-        Number(limit),
-        {
-          where: filters,
-          include: {
-            independentDetails: true,
-            cooperateDetails: true,
-            affiliateDetails: true,
-          },
-          orderBy: { createdAt: 'desc' },
-        }
-      );
+      const result = await this.userService.getAllUsers({
+        page: Number(page),
+        limit: Number(limit),
+        role,
+        status,
+        search,
+      });
 
       return ResponseUtil.paginated(res, result);
     }
   );
 
+  /**
+   * Get user by ID (admin)
+   * GET /api/admin/users/:id
+   */
   getUserById = asyncHandler(
-    async (req: ReqParams<UuidParam>, res: Response) => {
-      const user = await this.userService.getProfile(req.params.id);
+    async (req: ReqParams<{ id: string }>, res: Response) => {
+      const user = await this.userService.getUserById(req.params.id);
       return ResponseUtil.success(res, user);
     }
   );
 
-  updateUser = asyncHandler(
+  /**
+   * Update user status (admin)
+   * PATCH /api/admin/users/:id/status
+   */
+  updateUserStatus = asyncHandler(
     async (
-      req: ReqParamsBody<UuidParam, { name?: string; email?: string }>,
+      req: ReqParams<{ id: string }> & ReqBody<UpdateUserStatusDto>,
       res: Response
     ) => {
-      const user = await this.userService.update(req.params.id, req.body);
-      return ResponseUtil.success(res, user, 'User updated successfully');
+      const user = await this.userService.updateUserStatus(
+        req.params.id,
+        req.body
+      );
+      return ResponseUtil.success(
+        res,
+        user,
+        'User status updated successfully'
+      );
     }
   );
 
+  /**
+   * Promote user to safety ambassador (admin)
+   * PATCH /api/admin/users/safety-ambassador
+   */
+  promoteSafetyAmbassador = asyncHandler(
+    async (req: ReqBody<PromoteToSafetyAmbassadorDto>, res: Response) => {
+      const user = await this.userService.promoteSafetyAmbassador(req.body);
+      return ResponseUtil.success(
+        res,
+        user,
+        'Safety ambassador status updated successfully'
+      );
+    }
+  );
+
+  /**
+   * Delete user (admin)
+   * DELETE /api/admin/users/:id?hard=true
+   */
   deleteUser = asyncHandler(
-    async (req: ReqParamsQuery<UuidParam, { hard: string }>, res: Response) => {
+    async (
+      req: ReqParams<{ id: string }> & ReqQuery<{ hard?: string }>,
+      res: Response
+    ) => {
       const isHard = req.query.hard === 'true';
-      await this.userService.delete(req.params.id, isHard);
+      await this.userService.deleteUser(req.params.id, isHard);
       return ResponseUtil.success(res, null, 'User deleted successfully');
     }
   );

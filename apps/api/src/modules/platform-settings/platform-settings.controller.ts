@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { PlatformSettingsService } from './platform-settings.service';
-import { ResponseUtil } from 'src/shared/utils/response';
+import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import { ReqBody, TypedRequest } from 'src/shared/types/express.types';
 
