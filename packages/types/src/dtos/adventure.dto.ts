@@ -162,10 +162,12 @@ export interface AdventureGalleryResponseDto {
 
 export interface BulkUploadGalleryDto {
   adventureId: string;
+  mediaTypes?: MediaType[];
+  altTexts?: string[];
   media: {
     mediaUrl: string;
     publicId: string;
-    mediaType: MediaType;
+    mediaType?: MediaType;
     altText?: string;
   }[];
 }

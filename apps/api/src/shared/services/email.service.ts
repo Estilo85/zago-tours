@@ -1,7 +1,5 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export interface EmailOptions {
   to: string | string[];
   subject: string;
@@ -11,7 +9,6 @@ export interface EmailOptions {
 }
 
 let resendInstance: Resend | null = null;
-
 const getResendInstance = (): Resend => {
   if (!resendInstance) {
     const apiKey = process.env.RESEND_API_KEY;

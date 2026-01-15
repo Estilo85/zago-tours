@@ -13,6 +13,7 @@ import {
   UpdateAdventureGalleryDto,
   BulkUploadGalleryDto,
   ReorderGalleryDto,
+  MediaType,
 } from '@zagotours/types';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
@@ -39,7 +40,9 @@ export class AdventureGalleryController {
 
       const galleryData = {
         ...dto,
-        adventureId,
+        adventure: {
+          connect: { id: adventureId },
+        },
         mediaUrl: uploadResult.url,
         publicId: uploadResult.publicId,
       };
@@ -58,7 +61,7 @@ export class AdventureGalleryController {
     async (
       req: ReqParamsBody<
         { adventureId: string },
-        Omit<BulkUploadGalleryDto, 'media'>
+        Omit<BulkUploadGalleryDto, 'media'> // This now includes mediaTypes/altTexts
       >,
       res: Response
     ) => {
@@ -73,6 +76,7 @@ export class AdventureGalleryController {
         );
       }
 
+      // 1. Upload to Cloudinary
       const uploadPromises = files.map((file) =>
         CloudinaryService.uploadFile(file, 'adventure-gallery')
       );
@@ -81,12 +85,19 @@ export class AdventureGalleryController {
       const media = uploadResults.map((upload, index) => ({
         mediaUrl: upload.url,
         publicId: upload.publicId,
-        mediaType: req.body.mediaTypes?.[index] || 'IMAGE',
+        mediaType:
+          (req.body.mediaTypes?.[index] as MediaType) || MediaType.IMAGE,
         altText: req.body.altTexts?.[index],
       }));
 
+      // 3. Send to service
       const result = await this.service.bulkUpload({ adventureId, media });
-      return ResponseUtil.success(res, result, result.message, 201);
+      return ResponseUtil.success(
+        res,
+        result,
+        'Gallery updated successfully',
+        201
+      );
     }
   );
 

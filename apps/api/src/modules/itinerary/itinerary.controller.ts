@@ -40,7 +40,12 @@ export class ItineraryController {
         dto.publicId = uploadResult.publicId;
       }
 
-      const result = await this.service.create(dto);
+      const result = await this.service.create({
+        ...dto,
+        adventure: {
+          connect: { id: adventureId },
+        },
+      });
       return ResponseUtil.success(res, result, 'Itinerary created', 201);
     }
   );

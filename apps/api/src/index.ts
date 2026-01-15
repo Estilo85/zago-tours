@@ -1,8 +1,5 @@
-import { config } from 'dotenv';
+import 'dotenv/config';
 import { createServer } from './server';
-
-// Load environment
-config();
 
 const port = process.env.PORT || 3000;
 const server = createServer();

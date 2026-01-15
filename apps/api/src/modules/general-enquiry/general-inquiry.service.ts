@@ -1,7 +1,8 @@
 import { GeneralInquiry, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { GeneralInquiryRepository } from './general-inquiry.repository';
-import { GeneralInquiryListQueryDto } from '@zagotours/types';
+import { GeneralInquiryListQueryDto, PaginationResult } from '@zagotours/types';
+import { boolean } from 'zod';
 
 export class GeneralInquiryService extends BaseService<
   GeneralInquiry,
@@ -24,12 +25,10 @@ export class GeneralInquiryService extends BaseService<
     return inquiry;
   }
 
-  async getAllInquiries(query: GeneralInquiryListQueryDto): Promise<{
-    data: GeneralInquiry[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
+  // 1. Updated the Promise return type to include the nested 'pagination' object
+  async getAllInquiries(
+    query: GeneralInquiryListQueryDto
+  ): Promise<PaginationResult<GeneralInquiry>> {
     const {
       page = 1,
       limit = 10,
@@ -40,7 +39,6 @@ export class GeneralInquiryService extends BaseService<
 
     const where: Prisma.GeneralInquiryWhereInput = {};
 
-    // Apply search filter
     if (search) {
       where.OR = [
         { email: { contains: search, mode: 'insensitive' } },
@@ -55,14 +53,27 @@ export class GeneralInquiryService extends BaseService<
       orderBy: { [sortBy]: sortOrder },
     });
 
+    // Extract values with fallbacks
+    const data = result.items ?? result.data ?? [];
+    const total = (result.meta && result.meta.total) ?? result.total ?? 0;
+    const currentPage =
+      (result.meta && result.meta.page) ?? result.page ?? page;
+    const currentLimit =
+      (result.meta && result.meta.limit) ?? result.limit ?? limit;
+
+    // 2. Return the nested structure required by ResponseUtil.paginated
     return {
-      data: result.items ?? result.data ?? [],
-      total: (result.meta && result.meta.total) ?? result.total ?? 0,
-      page: (result.meta && result.meta.page) ?? result.page ?? page,
-      limit: (result.meta && result.meta.limit) ?? result.limit ?? limit,
+      data,
+      pagination: {
+        total,
+        page: currentPage,
+        limit: currentLimit,
+        totalPages: Math.ceil(total / currentLimit),
+        hasNext: false,
+        hasPrev: false,
+      },
     };
   }
-
   // Get recent inquiries
   async getRecent(): Promise<GeneralInquiry[]> {
     return this.inquiryRepo.findRecent();
