@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { Box, Field, Stack, Heading, Text } from '@chakra-ui/react';
 import { PasswordInput } from '@/components/ui/password-input';
-import { ResetPasswordDTO } from '@zagotours/types';
+import { ResetPasswordDto } from '@zagotours/types';
 import Button from '@/components/ui/button';
 
 interface ResetPasswordProps {
   token: string;
-  onSubmit: (data: ResetPasswordDTO) => void;
+  onSubmit: (data: ResetPasswordDto) => void;
   isLoading?: boolean;
 }
 
