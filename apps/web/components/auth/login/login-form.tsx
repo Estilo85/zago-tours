@@ -23,7 +23,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
-  const [formData, setFormData] = useState<LoginDTO>({
+  const [formData, setFormData] = useState<LoginDto>({
     email: '',
     password: '',
   });
