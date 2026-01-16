@@ -9,6 +9,7 @@ import {
   UserResponse,
   ResetPasswordDto,
   ROLE_PREFIXES,
+  UserProfileResponse,
 } from '@zagotours/types';
 import { Role } from '@zagotours/database';
 
@@ -28,7 +29,6 @@ export class AuthService {
     this.validateRoleSpecificFields(data);
 
     const hashedPassword = await BcryptUtil.hash(data.password);
-
     const referralCode = await this.generateUniqueReferralCode(data.role);
 
     let referredById: string | undefined;
@@ -39,7 +39,6 @@ export class AuthService {
       referredById = referrer?.id;
     }
 
-    // 6. Prepare user data
     const userData = {
       name: data.name,
       email: data.email,
@@ -63,7 +62,7 @@ export class AuthService {
   }
 
   // ============================================
-  // LOGIN
+  // LOGIN & AUTH
   // ============================================
 
   async login(data: LoginDto): Promise<UserResponse> {
@@ -76,8 +75,15 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
+  async getCurrentUser(userId: string): Promise<UserResponse> {
+    const user = await this.authRepository.findByEmail(userId); // Use findByEmail or findById
+    if (!user) throw new Error('User not found');
+
+    return this.mapUserResponse(user);
+  }
+
   // ============================================
-  // FORGOT PASSWORD
+  // PASSWORD RECOVERY
   // ============================================
 
   async forgotPassword(email: string): Promise<{ message: string }> {
@@ -94,9 +100,6 @@ export class AuthService {
     return { message: 'If that email exists, a reset link has been sent' };
   }
 
-  // ============================================
-  // PASSWORD RESET
-  // ============================================
   async resetPassword(data: ResetPasswordDto): Promise<{ message: string }> {
     const decoded = JwtUtil.verifyResetToken(data.token);
     const user = await this.authRepository.findByResetToken(data.token);
@@ -114,23 +117,40 @@ export class AuthService {
   }
 
   // ============================================
-  // USER MANAGEMENT
-  // ============================================
-
-  async getCurrentUser(userId: string): Promise<UserResponse> {
-    const user = await this.authRepository.findById(userId);
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return this.mapUserResponse(user);
-  }
-
-  // ============================================
   // PRIVATE HELPERS
   // ============================================
 
+  private mapUserResponse(user: any): UserResponse {
+    const {
+      password,
+      resetPasswordToken,
+      resetPasswordExpires,
+      independentDetails,
+      cooperateDetails,
+      affiliateDetails,
+      ...safeUser
+    } = user;
+
+    let profile: UserProfileResponse = null;
+
+    // Discriminated Union mapping
+    if (user.role === Role.INDEPENDENT_AGENT && independentDetails) {
+      profile = { ...independentDetails };
+    } else if (user.role === Role.COOPERATE_AGENT && cooperateDetails) {
+      profile = { ...cooperateDetails };
+    } else if (user.role === Role.AFFILIATE && affiliateDetails) {
+      profile = { ...affiliateDetails };
+    }
+
+    return {
+      ...safeUser,
+      profile,
+    };
+  }
+
+  // ============================================
+  // VALIDATE SPECIFIC ROLE
+  // ============================================
   private validateRoleSpecificFields(data: RegisterDto): void {
     if (data.role === Role.INDEPENDENT_AGENT) {
       if (!data.agentDetails || data.agentDetails.certifications.length === 0) {
@@ -142,11 +162,6 @@ export class AuthService {
       if (!data.cooperateDetails?.companyName) {
         throw new Error('Company name is required for Corporate Agents');
       }
-      if (!data.cooperateDetails.travelBusinessDescription) {
-        throw new Error(
-          'Travel business description is required for Corporate Agents'
-        );
-      }
     }
 
     if (data.role === Role.AFFILIATE) {
@@ -156,6 +171,9 @@ export class AuthService {
     }
   }
 
+  // ============================================
+  // EXTRACT PROFILE DATA
+  // ============================================
   private extractProfileData(data: RegisterDto): Record<string, any> {
     if (data.role === Role.INDEPENDENT_AGENT && data.agentDetails) {
       return {
@@ -163,7 +181,6 @@ export class AuthService {
         howDidYouHear: data.agentDetails?.howDidYouHear,
       };
     }
-
     if (data.role === Role.COOPERATE_AGENT && data.cooperateDetails) {
       return {
         companyName: data.cooperateDetails.companyName,
@@ -172,7 +189,6 @@ export class AuthService {
         howDidYouHear: data.cooperateDetails?.howDidYouHear,
       };
     }
-
     if (data.role === Role.AFFILIATE && data.affiliateDetails) {
       return {
         communityBrand: data.affiliateDetails.communityBrand,
@@ -180,33 +196,21 @@ export class AuthService {
         howDidYouHear: data.affiliateDetails?.howDidYouHear,
       };
     }
-
     return {};
   }
 
+  // ============================================
+  // GENERATE UNIQUE REFFERAL CODE
+  // ============================================
   private async generateUniqueReferralCode(role: Role): Promise<string> {
-    const prefix = ROLE_PREFIXES[role];
+    const prefix = ROLE_PREFIXES[role] || 'USR';
     let attempts = 0;
-    const maxAttempts = 5;
-
-    while (attempts < maxAttempts) {
+    while (attempts < 5) {
       const code = `${prefix}-${generateReferralCode().toUpperCase()}`;
-
       const existing = await this.authRepository.findByReferralCode(code);
-
-      if (!existing) {
-        return code;
-      }
-
+      if (!existing) return code;
       attempts++;
     }
-
     throw new Error('Failed to generate unique referral code');
-  }
-
-  private mapUserResponse(user: any): UserResponse {
-    const { password, resetPasswordToken, resetPasswordExpires, ...safeUser } =
-      user;
-    return safeUser;
   }
 }

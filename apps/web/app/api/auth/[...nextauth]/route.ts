@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         // Calling Backend Route
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -39,6 +39,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
@@ -46,6 +47,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.accessToken = token.accessToken;
       }
       return session;
     },

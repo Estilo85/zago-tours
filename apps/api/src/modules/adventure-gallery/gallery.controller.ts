@@ -61,7 +61,7 @@ export class AdventureGalleryController {
     async (
       req: ReqParamsBody<
         { adventureId: string },
-        Omit<BulkUploadGalleryDto, 'media'> // This now includes mediaTypes/altTexts
+        Omit<BulkUploadGalleryDto, 'media'>
       >,
       res: Response
     ) => {

@@ -2,21 +2,38 @@ import { z } from 'zod';
 import { Role } from '@zagotours/types';
 
 export const registerSchema = z.object({
-  body: z.object({
-    name: z.string().min(2).max(100),
-    email: z.email(),
-    role: z.enum(Role),
-    password: z.string().min(8),
-    phone: z.string().optional(),
-    country: z.string().optional(),
-    referralCode: z.string().optional(),
-    certifications: z.array(z.string()).optional(),
-    companyName: z.string().optional(),
-    travelBusinessDescription: z.string().optional(),
-    communityBrand: z.string().optional(),
-    socialLinks: z.array(z.string()).optional(),
-    howDidYouHear: z.string().optional(),
-  }),
+  name: z.string().min(2),
+  email: z.email(),
+  password: z.string().min(8),
+  role: z.enum(Role),
+  phone: z.string().optional(),
+  country: z.string().optional(),
+
+  // ✅ Add the nested objects to match your DTO and Postman
+  agentDetails: z
+    .object({
+      certifications: z
+        .array(z.string())
+        .min(1, 'At least one certification is required'),
+      howDidYouHear: z.string().optional(),
+    })
+    .optional(),
+
+  cooperateDetails: z
+    .object({
+      companyName: z.string(),
+      travelBusinessDescription: z.string(),
+      howDidYouHear: z.string().optional(),
+    })
+    .optional(),
+
+  affiliateDetails: z
+    .object({
+      communityBrand: z.string(),
+      socialLinks: z.array(z.string()).optional(),
+      howDidYouHear: z.string().optional(),
+    })
+    .optional(),
 });
 
 export const loginSchema = z.object({

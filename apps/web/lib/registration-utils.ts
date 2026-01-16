@@ -56,7 +56,6 @@ export const mapFormDataToDTO = (
     };
   }
 
-  // Remove any keys that are undefined so the API doesn't get undefined values
   const cleanPayload = Object.fromEntries(
     Object.entries(payload).filter(([_, v]) => v !== undefined && v !== '')
   ) as RegisterDto;

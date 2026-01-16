@@ -60,17 +60,26 @@ export interface RegisterDto {
   affiliateDetails?: AffiliateDto;
 }
 
+export type UserProfileResponse =
+  | (IndependentAgentDto & { type: Role.INDEPENDENT_AGENT })
+  | (CooperateAgentDto & { type: Role.COOPERATE_AGENT })
+  | (AffiliateDto & { type: Role.AFFILIATE })
+  | null;
+
 export interface UserResponse {
   id: string;
   name: string;
   email: string;
   phone?: string;
   country?: string;
-  role: RegistrableRole;
+  role: Role;
   status: UserStatus;
   safetyAmbassador: boolean;
   referralCode: string;
+  referredById: string | null;
   createdAt: Date;
+  updatedAt: Date;
+  profile: UserProfileResponse;
 }
 
 export interface LoginDto {
