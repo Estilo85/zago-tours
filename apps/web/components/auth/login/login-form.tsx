@@ -13,12 +13,12 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { PasswordInput } from '@/components/ui/password-input';
-import { LoginDTO } from '@zagotours/types';
+import { LoginDto } from '@zagotours/types';
 import Button from '@/components/ui/button';
 import { AppLink } from '@/components/ui/AppLink';
 
 interface LoginFormProps {
-  onSubmit: (data: LoginDTO) => void;
+  onSubmit: (data: LoginDto) => void;
   isLoading?: boolean;
 }
 
