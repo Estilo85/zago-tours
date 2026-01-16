@@ -23,15 +23,7 @@ router.post(
   authController.login
 );
 router.get('/me', authenticate, authController.getCurrentUser);
-router.post(
-  '/forgot-password',
-  //   validateRequest(forgotPasswordSchema),
-  authController.forgotPassword
-);
-router.post(
-  '/reset-password',
-  //   validateRequest(resetPasswordSchema),
-  authController.resetPassword
-);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password', authController.resetPassword);
 
 export { router as authRoutes };

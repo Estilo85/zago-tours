@@ -57,6 +57,10 @@ export class AuthService {
       data.role,
       profileData
     );
+    //Welcome Email
+    EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
+      console.error('Email background error:', err)
+    );
 
     return this.mapUserResponse(user);
   }
@@ -75,8 +79,11 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
+  // ============================================
+  // GET CURRENT USER
+  // ============================================
   async getCurrentUser(userId: string): Promise<UserResponse> {
-    const user = await this.authRepository.findByEmail(userId); // Use findByEmail or findById
+    const user = await this.authRepository.findByEmail(userId);
     if (!user) throw new Error('User not found');
 
     return this.mapUserResponse(user);
@@ -94,12 +101,17 @@ export class AuthService {
       const expiresAt = new Date(Date.now() + 3600000); // 1 hour
 
       await this.authRepository.saveResetToken(user.id, resetToken, expiresAt);
-      await EmailService.sendPasswordResetEmail(user.email, resetToken);
+      await EmailService.sendPasswordResetEmail(user.email, resetToken).catch(
+        (err) => console.error('Email background error:', err)
+      );
     }
 
     return { message: 'If that email exists, a reset link has been sent' };
   }
 
+  // ============================================
+  // RESET PASSWORD
+  // ============================================
   async resetPassword(data: ResetPasswordDto): Promise<{ message: string }> {
     const decoded = JwtUtil.verifyResetToken(data.token);
     const user = await this.authRepository.findByResetToken(data.token);
