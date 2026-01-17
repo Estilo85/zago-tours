@@ -11,6 +11,7 @@ export * from './entities/event.types';
 export * from './entities/form_&_services.types';
 export * from './entities/review.types';
 export * from './entities/settings.types';
+export * from './entities/dashboard.types';
 
 // DTOs
 export * from './dtos/auth.dto';

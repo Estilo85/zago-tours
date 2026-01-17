@@ -98,6 +98,7 @@ export class AdventureController {
         limit = '10',
         status,
         level,
+        access,
         location,
         search,
         tripType,
@@ -109,6 +110,7 @@ export class AdventureController {
 
       if (status) where.status = status;
       if (level) where.level = level;
+      if (access) where.access = access;
 
       if (location) {
         where.location = { contains: location, mode: 'insensitive' };

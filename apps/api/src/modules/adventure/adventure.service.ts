@@ -1,6 +1,7 @@
 import { Adventure, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { AdventureRepository } from './adventure.repository';
+import { AdventureStatsDto } from '@zagotours/types';
 
 export class AdventureService extends BaseService<
   Adventure,

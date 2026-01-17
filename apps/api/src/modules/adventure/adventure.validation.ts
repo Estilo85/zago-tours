@@ -19,3 +19,7 @@ export const createAdventureSchema = z.object({
 });
 
 export type CreateAdventureInput = z.infer<typeof createAdventureSchema>;
+export const bulkCreateAdventureSchema: z.ZodType<CreateAdventureInput[]> = z
+  .array(createAdventureSchema)
+  .min(1)
+  .max(100);

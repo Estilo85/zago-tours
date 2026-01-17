@@ -1,4 +1,10 @@
-import { Adventure, Prisma, prisma } from '@zagotours/database';
+import {
+  Adventure,
+  AdventureStatus,
+  Prisma,
+  prisma,
+} from '@zagotours/database';
+import { AdventureStatsDto } from '@zagotours/types';
 import { BaseRepository } from 'src/common/repository/base.repository';
 
 export class AdventureRepository extends BaseRepository<
@@ -25,6 +31,9 @@ export class AdventureRepository extends BaseRepository<
     });
   }
 
+  //==================
+  //
+  //==================
   async createMany(data: Prisma.AdventureCreateManyInput[]) {
     return this.modelDelegate.createMany({ data, skipDuplicates: true });
   }

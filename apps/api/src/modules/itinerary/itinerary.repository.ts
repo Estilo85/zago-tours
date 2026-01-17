@@ -27,10 +27,24 @@ export class ItineraryRepository extends BaseRepository<
 
   async updateWithImageCleanup(
     id: string,
-    data: Prisma.ItineraryUpdateInput,
-    oldPublicId?: string
+    data: Prisma.ItineraryUpdateInput
   ): Promise<Itinerary> {
-    // This allows atomic update with old image cleanup
     return this.modelDelegate.update({ where: { id }, data });
+  }
+
+  async replaceAdventureItineraries(
+    adventureId: string,
+    data: Prisma.ItineraryCreateManyInput[]
+  ) {
+    return prisma.$transaction(async (tx) => {
+      await tx.itinerary.deleteMany({
+        where: { adventureId },
+      });
+
+      return await tx.itinerary.createMany({
+        data,
+        skipDuplicates: true,
+      });
+    });
   }
 }

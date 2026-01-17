@@ -198,19 +198,19 @@ export interface AdventureLikeResponseDto {
 // ==================== ADVENTURE STATS DTOs ====================
 
 export interface AdventureStatsDto {
-  totalAdventures: number;
-  activeAdventures: number;
-  draftAdventures: number;
-  completedAdventures: number;
-  verifiedAdventures: number;
-  averageRating: number;
-  averageSafetyScore: number;
-  topLocations: {
-    location: string;
-    count: number;
-  }[];
-  topTripTypes: {
-    tripType: string;
-    count: number;
-  }[];
+  overview: {
+    total: number;
+    active: number;
+    verified: number;
+    growthRate: number;
+  };
+  metrics: {
+    averageRating: number;
+    averageSafetyScore: number;
+    completionRate: number;
+  };
+  distributions: {
+    byLocation: Array<{ location: string; count: number; percentage: number }>;
+    byLevel: Array<{ level: AdventureLevel; count: number }>;
+  };
 }

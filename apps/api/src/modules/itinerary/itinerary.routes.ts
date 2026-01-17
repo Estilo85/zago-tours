@@ -17,17 +17,12 @@ router.post(
   upload.single('image'),
   controller.create
 );
-
-// Bulk create itineraries (ADMIN only)
 router.post('/:adventureId/itineraries/bulk', controller.createBulk);
 
-// Get all itineraries for an adventure (Public)
 router.get('/:adventureId/itineraries', controller.getByAdventure);
 
-// Get single itinerary by ID
 router.get('/itineraries/:id', controller.getById);
 
-// Update itinerary (ADMIN only)
 router.put('/itineraries/:id', upload.single('image'), controller.update);
 
 router.delete('/itineraries/:id', controller.delete);

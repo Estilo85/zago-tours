@@ -1,21 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { TripPlanningCallService } from './trip-planning-call.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, CallStatus } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
-import {
-  ReqBody,
-  ReqParams,
-  ReqQuery,
-  TypedRequest,
-} from 'src/shared/types/express.types';
+import { ReqParams, TypedRequest } from 'src/shared/types/express.types';
 import { CreateTripPlanningCallDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
 
 export class TripPlanningCallController {
   constructor(private readonly callService: TripPlanningCallService) {}
 
+  /**
+   * Schedule a call (adventurer schedules with their referrer/agent)
+   */
   scheduleCall = asyncHandler(
     async (req: TypedRequest<{}, CreateTripPlanningCallDto>, res: Response) => {
       const { agentId, startTime, endTime, meetingLink } = req.body;
@@ -28,8 +25,7 @@ export class TripPlanningCallController {
         );
       }
 
-      const call = await this.callService.scheduleCall({
-        adventurerId: req.userId!,
+      const call = await this.callService.scheduleCall(req.userId!, {
         agentId,
         startTime: new Date(startTime),
         endTime: endTime ? new Date(endTime) : undefined,
@@ -45,6 +41,9 @@ export class TripPlanningCallController {
     }
   );
 
+  /**
+   * Reschedule a call
+   */
   rescheduleCall = asyncHandler(
     async (
       req: TypedRequest<UuidParam, { startTime?: string; endTime?: string }>,
@@ -66,6 +65,9 @@ export class TripPlanningCallController {
     }
   );
 
+  /**
+   * Cancel a call
+   */
   cancelCall = asyncHandler(
     async (
       req: TypedRequest<UuidParam, { reason?: string }>,
@@ -78,18 +80,27 @@ export class TripPlanningCallController {
     }
   );
 
+  /**
+   * Mark call as completed
+   */
   markAsCompleted = asyncHandler(
-    async (req: ReqParams<UuidParam>, res: Response, next: NextFunction) => {
+    async (req: ReqParams<UuidParam>, res: Response) => {
       const call = await this.callService.markAsCompleted(req.params.id);
       return ResponseUtil.success(res, call, 'Call marked as completed');
     }
   );
 
+  /**
+   * Get upcoming calls for current user
+   */
   getUpcoming = asyncHandler(async (req: TypedRequest, res: Response) => {
     const calls = await this.callService.getUpcoming(req.userId!);
     return ResponseUtil.success(res, calls);
   });
 
+  /**
+   * Get my calls (as adventurer or agent)
+   */
   getMyCalls = asyncHandler(
     async (req: TypedRequest<{}, {}, { role?: string }>, res: Response) => {
       const { role } = req.query;
@@ -112,15 +123,22 @@ export class TripPlanningCallController {
     }
   );
 
+  /**
+   * Get all calls (admin only - paginated)
+   */
   getAll = asyncHandler(
     async (
-      req: ReqQuery<{
-        page?: number;
-        limit?: number;
-        status?: string;
-        startDate?: string;
-        endDate?: string;
-      }>,
+      req: TypedRequest<
+        {},
+        {},
+        {
+          page?: number;
+          limit?: number;
+          status?: string;
+          startDate?: string;
+          endDate?: string;
+        }
+      >,
       res: Response
     ) => {
       const { page = 1, limit = 10, status, startDate, endDate } = req.query;
@@ -148,11 +166,17 @@ export class TripPlanningCallController {
     }
   );
 
+  /**
+   * Get call by ID
+   */
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const call = await this.callService.getById(req.params.id);
     return ResponseUtil.success(res, call);
   });
 
+  /**
+   * Delete call
+   */
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     await this.callService.delete(req.params.id, true);
     return ResponseUtil.success(res, null, 'Call deleted successfully');

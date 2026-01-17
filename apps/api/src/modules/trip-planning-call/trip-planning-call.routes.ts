@@ -6,26 +6,24 @@ import { TripPlanningCallController } from './trip-planning-call.controller';
 const router: Router = Router();
 
 // Initialize dependencies
-const callRepository = new TripPlanningCallRepository();
-const callService = new TripPlanningCallService(callRepository);
-const callController = new TripPlanningCallController(callService);
-
-// User routes (authenticated)
-router.post('/', callController.scheduleCall);
-router.get('/upcoming', callController.getUpcoming);
-router.get('/my-calls', callController.getMyCalls);
-router.get('/:id', callController.getById);
-router.patch('/:id/reschedule', callController.rescheduleCall);
-router.patch('/:id/cancel', callController.cancelCall);
-router.patch('/:id/complete', callController.markAsCompleted);
-
-// Admin routes
-router.get(
-  '/',
-
-  callController.getAll
+const tripPlanningCallRepository = new TripPlanningCallRepository();
+const tripPlanningCallService = new TripPlanningCallService(
+  tripPlanningCallRepository
+);
+const tripPlanningCallController = new TripPlanningCallController(
+  tripPlanningCallService
 );
 
-router.delete('/:id', callController.delete);
+router.post('/', tripPlanningCallController.scheduleCall);
+router.get('/upcoming', tripPlanningCallController.getUpcoming);
+router.get('/my-calls', tripPlanningCallController.getMyCalls);
+router.put('/:id/reschedule', tripPlanningCallController.rescheduleCall);
+router.put('/:id/cancel', tripPlanningCallController.cancelCall);
+router.put('/:id/complete', tripPlanningCallController.markAsCompleted);
+
+// Admin endpoints
+router.get('/', tripPlanningCallController.getAll);
+router.get('/:id', tripPlanningCallController.getById);
+router.delete('/:id', tripPlanningCallController.delete);
 
 export { router as tripPlanningCallRoutes };

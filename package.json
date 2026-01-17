@@ -25,7 +25,19 @@
   "pnpm": {
     "overrides": {
       "js-yaml": "^4.1.1"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "core-js",
+      "esbuild",
+      "msw"
+    ],
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "bcrypt",
+      "prisma",
+      "sharp"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx}": [

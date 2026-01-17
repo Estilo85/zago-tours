@@ -77,6 +77,8 @@ export interface UserResponse {
   safetyAmbassador: boolean;
   referralCode: string;
   referredById: string | null;
+  referralLink: string;
+  referralCount?: number;
   createdAt: Date;
   updatedAt: Date;
   profile: UserProfileResponse;

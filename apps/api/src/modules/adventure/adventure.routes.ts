@@ -5,25 +5,28 @@ import { AdventureController } from './adventure.controller';
 import { validateRequest } from 'src/shared/middleware/validation.middleware';
 import { commonValidation } from 'src/common/validation/common.validation';
 import { upload } from 'src/config/multer.config';
-import { createAdventureSchema } from './adventure.validation';
+import {
+  bulkCreateAdventureSchema,
+  createAdventureSchema,
+} from './adventure.validation';
 
 const router: Router = Router();
 const controller = new AdventureController(
   new AdventureService(new AdventureRepository())
 );
 
-router.get(
-  '/',
-
-  controller.getAll
-);
+router.get('/', controller.getAll);
 router.post(
   '/',
   upload.single('media'),
   validateRequest({ body: createAdventureSchema }),
   controller.create
 );
-router.post('/bulk', controller.createBulk);
+router.post(
+  '/bulk',
+  validateRequest({ body: bulkCreateAdventureSchema }),
+  controller.createBulk
+);
 
 router
   .route('/:id')

@@ -1,7 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { TripRequestService } from './trip-request.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
@@ -16,8 +15,12 @@ import { UuidParam } from 'src/common/validation/common.validation';
 export class TripRequestController {
   constructor(private readonly tripRequestService: TripRequestService) {}
 
+  /**
+   * Create a trip request (adventurer creates their own request)
+   * Automatically assigns to their referrer
+   */
   create = asyncHandler(
-    async (req: ReqBody<CreateTripRequestDto>, res: Response) => {
+    async (req: TypedRequest<{}, CreateTripRequestDto>, res: Response) => {
       const { tripType, destination, date, preferences } = req.body;
 
       if (!tripType || !destination || !date) {
@@ -28,12 +31,15 @@ export class TripRequestController {
         );
       }
 
-      const request = await this.tripRequestService.create({
-        tripType,
-        destination,
-        date: new Date(date),
-        preferences,
-      });
+      const request = await this.tripRequestService.createForAdventurer(
+        req.userId!,
+        {
+          tripType,
+          destination,
+          date: new Date(date),
+          preferences,
+        }
+      );
 
       return ResponseUtil.success(
         res,
@@ -44,6 +50,9 @@ export class TripRequestController {
     }
   );
 
+  /**
+   * Get all trip requests (admin only - should be protected by auth middleware)
+   */
   getAll = asyncHandler(
     async (
       req: ReqQuery<{
@@ -88,23 +97,50 @@ export class TripRequestController {
       const result = await this.tripRequestService.paginate(
         Number(page),
         Number(limit),
-        { where: filters, orderBy: { createdAt: 'desc' } }
+        { where: filters }
       );
 
       return ResponseUtil.paginated(res, result);
     }
   );
 
+  /**
+   * Get my trip requests (adventurer's own requests)
+   */
+  getMyRequests = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const requests = await this.tripRequestService.getByAdventurer(req.userId!);
+    return ResponseUtil.success(res, requests);
+  });
+
+  /**
+   * Get requests assigned to me (agent's assigned requests from their referrals)
+   */
+  getAssignedToMe = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const requests = await this.tripRequestService.getAssignedToAgent(
+      req.userId!
+    );
+    return ResponseUtil.success(res, requests);
+  });
+
+  /**
+   * Get recent requests
+   */
   getRecent = asyncHandler(async (req: TypedRequest, res: Response) => {
     const requests = await this.tripRequestService.getRecent();
     return ResponseUtil.success(res, requests);
   });
 
-  getById = async (req: ReqParams<UuidParam>, res: Response) => {
+  /**
+   * Get by ID
+   */
+  getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const request = await this.tripRequestService.getById(req.params.id);
     return ResponseUtil.success(res, request);
-  };
+  });
 
+  /**
+   * Delete request
+   */
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     await this.tripRequestService.delete(req.params.id, true);
     return ResponseUtil.success(res, null, 'Trip request deleted successfully');

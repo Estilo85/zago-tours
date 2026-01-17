@@ -1,15 +1,8 @@
-// ============================================
-// FILE: src/modules/itinerary/itinerary.controller.ts
-// ============================================
 import { Response } from 'express';
 import { ItineraryService } from './itinerary.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
-import {
-  ReqBody,
-  ReqParams,
-  ReqParamsBody,
-} from 'src/shared/types/express.types';
+import { ReqParams, ReqParamsBody } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
 import {
   CreateItineraryDto,
@@ -21,7 +14,9 @@ import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 export class ItineraryController {
   constructor(private readonly service: ItineraryService) {}
 
-  // POST /adventures/:adventureId/itineraries
+  //==============================
+  // CREATE SINGLE ITINERARY
+  //==============================
   create = asyncHandler(
     async (
       req: ReqParamsBody<{ adventureId: string }, CreateItineraryDto>,
@@ -50,7 +45,9 @@ export class ItineraryController {
     }
   );
 
-  // POST /adventures/:adventureId/itineraries/bulk
+  //==============================
+  // CREATE MULTIPLE ITINERARIES
+  //==============================
   createBulk = asyncHandler(
     async (
       req: ReqParamsBody<
@@ -70,7 +67,9 @@ export class ItineraryController {
     }
   );
 
-  // GET /adventures/:adventureId/itineraries
+  //=================================
+  // GET ITINERARY BY ADVENTURES
+  //=================================
   getByAdventure = asyncHandler(
     async (req: ReqParams<{ adventureId: string }>, res: Response) => {
       const itineraries = await this.service.getByAdventure(
@@ -80,13 +79,17 @@ export class ItineraryController {
     }
   );
 
-  // GET /itineraries/:id
+  //==============================
+  // GET ITINERARY BY ID
+  //==============================
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const itinerary = await this.service.getById(req.params.id);
     return ResponseUtil.success(res, itinerary);
   });
 
-  // PUT /itineraries/:id
+  //=====================
+  // UPDATE ITINERARY
+  //=====================
   update = asyncHandler(
     async (
       req: ReqParamsBody<UuidParam, UpdateItineraryDto>,
@@ -101,7 +104,9 @@ export class ItineraryController {
     }
   );
 
-  // DELETE /itineraries/:id
+  //==============================
+  // DELETE ITINERARY
+  //==============================
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     await this.service.deleteWithImage(req.params.id);
     return ResponseUtil.success(res, null, 'Itinerary deleted');

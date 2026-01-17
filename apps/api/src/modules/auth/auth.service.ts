@@ -143,6 +143,9 @@ export class AuthService {
       ...safeUser
     } = user;
 
+    //ReferralLink
+    const referralLink = `${process.env.FRONTEND_URL}/register?ref=${user.referralCode}`;
+
     let profile: UserProfileResponse = null;
 
     // Discriminated Union mapping
@@ -156,7 +159,9 @@ export class AuthService {
 
     return {
       ...safeUser,
+      referralLink,
       profile,
+      referralCount: user._count?.referees ?? 0,
     };
   }
 

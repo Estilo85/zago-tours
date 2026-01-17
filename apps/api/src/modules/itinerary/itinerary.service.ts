@@ -2,11 +2,7 @@ import { Itinerary, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { ItineraryRepository } from './itinerary.repository';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
-import {
-  CreateItineraryDto,
-  UpdateItineraryDto,
-  BulkCreateItinerariesDto,
-} from '@zagotours/types';
+import { UpdateItineraryDto, BulkCreateItinerariesDto } from '@zagotours/types';
 
 export class ItineraryService extends BaseService<
   Itinerary,
@@ -21,23 +17,36 @@ export class ItineraryService extends BaseService<
     super(itineraryRepo);
   }
 
+  //==========================
+  // CREATE BULK
+  //==========================
   async createBulk(dto: BulkCreateItinerariesDto) {
     const itineraries = dto.itineraries.map((item) => ({
       ...item,
       adventureId: dto.adventureId,
     }));
 
-    const result = await this.itineraryRepo.createMany(itineraries);
+    const result = await this.itineraryRepo.replaceAdventureItineraries(
+      dto.adventureId,
+      itineraries
+    );
+
     return {
       count: result.count,
-      message: `Created ${result.count} itineraries`,
+      message: `Successfully updated ${result.count} itinerary days.`,
     };
   }
 
+  //==========================
+  // GET BY ADVENTURE
+  //==========================
   async getByAdventure(adventureId: string): Promise<Itinerary[]> {
     return this.itineraryRepo.findByAdventure(adventureId);
   }
 
+  //==========================
+  // UPDATE
+  //==========================
   async updateWithImage(
     id: string,
     dto: UpdateItineraryDto,
@@ -64,6 +73,9 @@ export class ItineraryService extends BaseService<
     return this.itineraryRepo.update(id, updateData);
   }
 
+  //==========================
+  // DELETE
+  //==========================
   async deleteWithImage(id: string): Promise<void> {
     const itinerary = await this.getById(id);
 
