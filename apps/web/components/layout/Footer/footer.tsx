@@ -23,14 +23,7 @@ import {
   FaYoutube,
 } from 'react-icons/fa';
 import { Send } from 'lucide-react';
-
-const pages = [
-  { label: 'Home', href: '/' },
-  { label: 'Story', href: '#' },
-  { label: 'Adventure', href: '#' },
-  { label: 'Event', href: '#' },
-  { label: 'Community', href: '#' },
-];
+import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
 
 const support = [
   { label: 'Privacy Policy', href: '#' },
@@ -121,9 +114,6 @@ export const Footer = () => {
                 right='2px'
                 top='50%'
                 transform='translateY(-50%)'
-                // h='40px'
-                // w='40px'
-
                 size='sm'
                 borderRadius='50%'
                 colorPalette='red'
@@ -140,7 +130,7 @@ export const Footer = () => {
             <Text fontWeight='bold' mb={2} color='textInverse'>
               Pages
             </Text>
-            {pages.map((link, index) => (
+            {navlinks.map((link, index) => (
               <ChakraLink
                 key={index}
                 as={NextLink}

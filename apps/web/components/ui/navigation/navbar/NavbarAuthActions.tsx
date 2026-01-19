@@ -22,7 +22,7 @@ const menuList = [
   { label: 'Agent', value: 'AGENT' },
 ];
 
-export const AuthActions = () => {
+export const NavbarAuthActions = () => {
   const router = useRouter();
 
   // Store action

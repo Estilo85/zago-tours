@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
 import { Provider } from '@/components/ui/provider';
 import { Box, Flex } from '@chakra-ui/react';
-import { NavBar } from '@/components/layout/navbar/Navbar';
+import { Navbar } from '@/components/layout/navbar/Navbar';
 import { Footer } from '@/components/layout/footer/Footer';
 
 const geistSans = localFont({
@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           <Flex direction='column' minH='100dvh' overflowX='hidden'>
-            <NavBar />
+            <Navbar />
 
             <Box
               as='main'
