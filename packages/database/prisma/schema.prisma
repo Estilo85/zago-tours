@@ -67,6 +67,7 @@ model User {
   name                  String
   email                 String            @unique
   phone                 String?
+  image                 String?
   country               String?
   password              String
   // Password Reset Fields

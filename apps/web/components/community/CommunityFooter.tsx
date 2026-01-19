@@ -29,6 +29,8 @@ export default function CommunityFooter() {
         <ResponsiveImage
           src='/images/community/community-post-banner.webp'
           alt='community footer image'
+          loading='eager'
+          priority
         />
       </Box>
     </Stack>

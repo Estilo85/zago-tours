@@ -12,24 +12,16 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { LuHeart, LuMessageCircle, LuShare2 } from 'react-icons/lu';
-import { Post } from '@zagotours/types';
+import { PostResponseDto } from '@zagotours/types';
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { MoreVertical } from 'lucide-react';
 import Button from '../button/Button';
 
 interface PostCardProps {
-  post: Post;
-  userName: string;
-  userImage: string;
-  userCountry?: string;
+  post: PostResponseDto;
 }
 
-export const PostCard = ({
-  post,
-  userName,
-  userImage,
-  userCountry,
-}: PostCardProps) => {
+export const PostCard = ({ post }: PostCardProps) => {
   const [showFull, setShowFull] = useState(false);
   const maxLength = 150;
 
@@ -50,42 +42,39 @@ export const PostCard = ({
       borderWidth='1px'
       borderColor='gray.100'
     >
-      {/* 1. HEADER: User details & Title */}
       <Box p={4}>
         <Flex justify='space-between' align='start'>
           <Flex align='center' gap={3}>
-            <AvatarImage src={userImage} name={userName} />
+            <AvatarImage src={post.user.image} name={post.user.name} />
             <Box>
-              <Heading size='sm' fontWeight='bold'>
-                {userName}
+              <Heading size='sm' fontWeight='bold' color='gray.800'>
+                {post.user.name}
               </Heading>
               <Text fontSize='xs' color='gray.500'>
-                {userCountry ? `${userCountry} • ` : ''}
+                {post.user.country} •{' '}
                 {new Date(post.createdAt).toLocaleDateString()}
               </Text>
             </Box>
           </Flex>
-          <Button variant='ghost' aria-label='Menu' size='sm' p={2} minW='auto'>
-            <MoreVertical />
+          <Button variant='ghost' size='sm' p={2} minW='auto'>
+            <MoreVertical size={20} />
           </Button>
         </Flex>
 
-        {/* Post Title */}
-        <Heading size='md' mt={3} mb={1} color='gray.800'>
+        <Heading size='md' mt={4} mb={1} color='gray.800'>
           {post.title}
         </Heading>
       </Box>
 
-      {/* 2. MEDIA: Cloudinary Image or Video */}
+      {/* 2. MEDIA: Image or Video */}
       {post.mediaUrl && (
-        <Box bg='gray.50'>
+        <Box bg='black'>
           {post.mediaType === 'VIDEO' ? (
             <chakra.video
               src={post.mediaUrl}
               controls
               width='100%'
               maxH='450px'
-              style={{ objectFit: 'contain' }}
             />
           ) : (
             <Image
@@ -94,78 +83,59 @@ export const PostCard = ({
               width='100%'
               maxH='500px'
               objectFit='cover'
-              loading='lazy'
             />
           )}
         </Box>
       )}
 
-      {/* 3. BODY: Description with Read More */}
+      {/* 3. BODY: Description */}
       <Box px={4} py={3}>
         <Text fontSize='sm' color='gray.700' whiteSpace='pre-wrap'>
           {displayDescription}
           {isLong && (
-            <Button
-              size='sm'
-              variant='ghost'
-              color='primary.600'
+            <chakra.span
+              cursor='pointer'
+              color='blue.600'
+              fontWeight='bold'
               ml={2}
               onClick={() => setShowFull(!showFull)}
-              _hover={{ textDecoration: 'none', color: 'primary.700' }}
             >
               {showFull ? 'Show Less' : 'Read More'}
-            </Button>
+            </chakra.span>
           )}
         </Text>
       </Box>
 
-      {/* 4. FOOTER: Social Actions */}
       <Box px={2} py={2} borderTop='1px solid' borderColor='gray.50'>
         <HStack gap={1} width='100%'>
-          {/* Replace SocialButton with custom Button */}
           <Button
             variant='ghost'
             size='sm'
             flex={1}
-            display='flex'
-            alignItems='center'
             gap={2}
-            color='gray.600'
-            _hover={{ bg: 'gray.50', color: 'primary.600' }}
-            borderRadius='md'
+            color={post.isLikedByUser ? 'red.500' : 'gray.600'}
           >
-            <LuHeart size={18} />
-            <Text fontSize='sm'>Like</Text>
+            <LuHeart
+              fill={post.isLikedByUser ? 'currentColor' : 'none'}
+              size={18}
+            />
+            <Text fontSize='sm'>{post.stats.totalLikes}</Text>
           </Button>
 
-          <Button
-            variant='ghost'
-            size='sm'
-            flex={1}
-            display='flex'
-            alignItems='center'
-            gap={2}
-            color='gray.600'
-            _hover={{ bg: 'gray.50', color: 'primary.600' }}
-            borderRadius='md'
-          >
+          <Button variant='ghost' size='sm' flex={1} gap={2} color='gray.600'>
             <LuMessageCircle size={18} />
-            <Text fontSize='sm'>Comment</Text>
+            <Text fontSize='sm'>{post.stats.totalComments}</Text>
           </Button>
 
           <Button
             variant='ghost'
             size='sm'
             flex={1}
-            display='flex'
-            alignItems='center'
             gap={2}
-            color='gray.600'
-            _hover={{ bg: 'gray.50', color: 'primary.600' }}
-            borderRadius='md'
+            color={post.isSharedByUser ? 'blue.500' : 'gray.600'}
           >
             <LuShare2 size={18} />
-            <Text fontSize='sm'>Share</Text>
+            <Text fontSize='sm'>{post.stats.totalShares}</Text>
           </Button>
         </HStack>
       </Box>

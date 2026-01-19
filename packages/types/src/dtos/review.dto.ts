@@ -23,6 +23,7 @@ export interface ReviewResponseDto {
     id: string;
     name: string;
     country: string | null;
+    image: string | null;
   };
 }
 

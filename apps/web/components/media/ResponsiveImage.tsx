@@ -11,6 +11,7 @@ interface ResponsiveImageProps {
   borderRadius?: BoxProps['borderRadius'];
   boxShadow?: BoxProps['boxShadow'];
   priority?: boolean;
+  loading?: 'eager' | 'lazy';
   sizes?: string;
   containerProps?: BoxProps;
 }
@@ -23,17 +24,12 @@ export const ResponsiveImage = ({
   maxH,
   objectFit = 'cover',
   borderRadius = '2xl',
-  priority = true,
-  sizes = '100vw',
+  priority = false,
+  loading = 'lazy',
+  sizes,
   containerProps,
   boxShadow,
 }: ResponsiveImageProps) => {
-  // Calculate sizes based on width if not provided
-  const defaultSizes =
-    !sizes && typeof width === 'string' && width.includes('%')
-      ? `${width}`
-      : sizes || '100vw';
-
   return (
     <Box
       position='relative'
@@ -50,10 +46,9 @@ export const ResponsiveImage = ({
         alt={alt}
         fill
         priority={priority}
-        sizes={defaultSizes}
-        style={{
-          objectFit,
-        }}
+        loading={loading}
+        sizes={sizes}
+        style={{ objectFit }}
       />
     </Box>
   );

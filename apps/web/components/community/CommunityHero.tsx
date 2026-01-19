@@ -26,7 +26,7 @@ export const CommunityHero = () => {
         </Text>
 
         <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-          <NextLink href='/register'>
+          <NextLink href='/posts'>
             Join the community
             <Icon as={ArrowRight} ml={2} />
           </NextLink>

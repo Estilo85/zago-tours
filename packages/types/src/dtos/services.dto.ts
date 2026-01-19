@@ -42,6 +42,7 @@ export interface CallbackRequestResponseDto {
   id: string;
   name: string;
   email: string;
+  image: string;
   phone: string;
   bestTime: string;
   createdAt: Date;

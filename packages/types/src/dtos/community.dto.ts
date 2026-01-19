@@ -32,7 +32,8 @@ export interface PostResponseDto {
   user: {
     id: string;
     name: string;
-    role: string;
+    country: string;
+    image: string;
   };
   stats: {
     totalComments: number;

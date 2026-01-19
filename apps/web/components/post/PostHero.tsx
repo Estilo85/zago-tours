@@ -1,0 +1,66 @@
+import { AvatarImage } from '@/components/media/AvatarImage';
+import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+import { Heart } from 'lucide-react';
+import React from 'react';
+
+export default function PostHero() {
+  return (
+    <Box position='relative' w='full'>
+      {/* Cover Image */}
+      <Box
+        w='full'
+        h={{ base: '220px', md: '320px' }}
+        borderRadius='lg'
+        overflow='hidden'
+        position='relative'
+      >
+        <ResponsiveImage
+          src='/images/community/community-post-banner.webp'
+          alt='community banner'
+          sizes='100vw'
+        />
+      </Box>
+
+      <Flex
+        direction='row'
+        justify='center'
+        align='flex-end'
+        px={{ base: 4, md: 8 }}
+        position='relative'
+        // mt='-64px'
+        gap={6}
+        border='2px solid red'
+      >
+        <Box
+          border='4px solid white'
+          borderRadius='full'
+          alignSelf='flex-start'
+          mt='-50px'
+        >
+          <AvatarImage
+            src='/images/community/community-post-banner.webp'
+            name='profile image'
+            size='2xl'
+          />
+        </Box>
+
+        <VStack align='flex-start' spaceY={1} pb={2}>
+          <Heading
+            color='primary'
+            fontSize={{ base: 'md', md: 'xl' }}
+            display='flex'
+            alignItems='center'
+            gap={2}
+          >
+            Welcome to Zago Voice <Heart size={20} />
+          </Heading>
+          <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight='medium'>
+            Where trips and shared experiences shape better standards in
+            adventure tourism.
+          </Text>
+        </VStack>
+      </Flex>
+    </Box>
+  );
+}

@@ -71,6 +71,7 @@ export interface UserResponse {
   name: string;
   email: string;
   phone?: string;
+  image?: string;
   country?: string;
   role: Role;
   status: UserStatus;

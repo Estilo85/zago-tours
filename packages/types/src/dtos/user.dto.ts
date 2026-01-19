@@ -39,6 +39,7 @@ export interface UserProfileResponseDto {
   id: string;
   name: string;
   email: string;
+  image: string | null;
   phone: string | null;
   country: string | null;
   role: Role;
@@ -63,6 +64,7 @@ export interface ReferralStatsDto {
     id: string;
     name: string;
     email: string;
+    image: string;
     status: UserStatus;
     createdAt: Date;
   }[];
