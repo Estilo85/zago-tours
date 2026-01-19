@@ -10,7 +10,7 @@ interface SearchBarProps {
   width?: string | object;
 }
 
-export const CustomSearchBar = ({
+export const SearchBar = ({
   placeholder = 'Search...',
   onSearch,
   width = 'full',

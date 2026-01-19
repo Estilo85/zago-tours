@@ -1,7 +1,7 @@
 'use client';
 
 import { AvatarImage } from '@/components/media/AvatarImage';
-import { CustomSearchBar } from '@/components/ui/searchbar/CustomSearch';
+import { CustomSearchBar } from '@/components/ui/searchbar/Search';
 import Button from '@/components/ui/button/Button';
 import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
 import { LuMenu } from 'react-icons/lu';
