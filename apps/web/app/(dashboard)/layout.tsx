@@ -1,8 +1,8 @@
 'use client';
 import { Box, Flex, Drawer, Portal, CloseButton } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Sidebar } from './_components/sidebar';
-import { Navbar } from './_components/navbar';
+import { Navbar } from './_components/navbar/navbar';
+import { Sidebar } from './_components/sidebar/sidebar';
 
 export default function DashboardLayout({
   children,

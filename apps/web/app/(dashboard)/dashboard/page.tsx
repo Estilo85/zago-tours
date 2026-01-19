@@ -1,5 +1,5 @@
 import { Stack, Text, Box } from '@chakra-ui/react';
-import { DashboardStats } from '../_components/stat-card';
+import { DashboardStats } from '../_components/stats/stat-card';
 
 export default function DashboardPage() {
   return (
