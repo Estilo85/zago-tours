@@ -8,7 +8,6 @@ import {
   Flex,
   Text,
   Heading,
-  Button,
   Image,
   HStack,
 } from '@chakra-ui/react';
@@ -16,12 +15,12 @@ import { LuHeart, LuMessageCircle, LuShare2 } from 'react-icons/lu';
 import { Post } from '@zagotours/types';
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { MoreVertical } from 'lucide-react';
-import { SocialButton } from '@/components/ui/button/SocialButton';
+import Button from '../button/Button';
 
 interface PostCardProps {
   post: Post;
-  userName: string; // From relation
-  userImage: string; // From relation
+  userName: string;
+  userImage: string;
   userCountry?: string;
 }
 
@@ -34,7 +33,6 @@ export const PostCard = ({
   const [showFull, setShowFull] = useState(false);
   const maxLength = 150;
 
-  // Determine if content needs truncation
   const isLong = post.description.length > maxLength;
   const displayDescription =
     showFull || !isLong
@@ -109,6 +107,7 @@ export const PostCard = ({
           {isLong && (
             <Button
               size='sm'
+              variant='ghost'
               color='primary.600'
               ml={2}
               onClick={() => setShowFull(!showFull)}
@@ -123,9 +122,51 @@ export const PostCard = ({
       {/* 4. FOOTER: Social Actions */}
       <Box px={2} py={2} borderTop='1px solid' borderColor='gray.50'>
         <HStack gap={1} width='100%'>
-          <SocialButton icon={LuHeart} label='Like' />
-          <SocialButton icon={LuMessageCircle} label='Comment' />
-          <SocialButton icon={LuShare2} label='Share' />
+          {/* Replace SocialButton with custom Button */}
+          <Button
+            variant='ghost'
+            size='sm'
+            flex={1}
+            display='flex'
+            alignItems='center'
+            gap={2}
+            color='gray.600'
+            _hover={{ bg: 'gray.50', color: 'primary.600' }}
+            borderRadius='md'
+          >
+            <LuHeart size={18} />
+            <Text fontSize='sm'>Like</Text>
+          </Button>
+
+          <Button
+            variant='ghost'
+            size='sm'
+            flex={1}
+            display='flex'
+            alignItems='center'
+            gap={2}
+            color='gray.600'
+            _hover={{ bg: 'gray.50', color: 'primary.600' }}
+            borderRadius='md'
+          >
+            <LuMessageCircle size={18} />
+            <Text fontSize='sm'>Comment</Text>
+          </Button>
+
+          <Button
+            variant='ghost'
+            size='sm'
+            flex={1}
+            display='flex'
+            alignItems='center'
+            gap={2}
+            color='gray.600'
+            _hover={{ bg: 'gray.50', color: 'primary.600' }}
+            borderRadius='md'
+          >
+            <LuShare2 size={18} />
+            <Text fontSize='sm'>Share</Text>
+          </Button>
         </HStack>
       </Box>
     </Card.Root>

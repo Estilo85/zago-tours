@@ -38,7 +38,7 @@ const testimonials = [
   },
 ];
 
-export const Testimonials = () => {
+export function Testimonials() {
   const slidesPerPage = useBreakpointValue({ base: 1, md: 3 }) ?? 1;
 
   return (
@@ -116,4 +116,4 @@ export const Testimonials = () => {
       </Carousel.Root>
     </Container>
   );
-};
+}

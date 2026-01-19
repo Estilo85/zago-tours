@@ -31,7 +31,7 @@ const support = [
   { label: 'Safety Release Form', href: '#' },
 ];
 
-export const Footer = () => {
+export default function Footer() {
   return (
     <Box bg='primary' mt='auto' shadow='0 -10px 20px rgba(0,0,0,0.05)'>
       <Container maxW='1440px' p={{ base: 6, md: 10 }}>
@@ -188,4 +188,4 @@ export const Footer = () => {
       </Container>
     </Box>
   );
-};
+}

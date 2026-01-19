@@ -1,41 +1,10 @@
 'use client';
-import {
-  Box,
-  Text,
-  Stack,
-  Heading,
-  Flex,
-  Icon,
-  Separator,
-  HStack,
-  createListCollection,
-  Select,
-  Portal,
-  Center,
-} from '@chakra-ui/react';
+import { Box, Text, Stack, Heading, Icon } from '@chakra-ui/react';
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import NextLink from 'next/link';
 
 import Button from '../ui/button/Button';
-import { CustomSearchBar } from '../ui/searchbar/Search';
-
-// 1. Create your data collections
-const destinations = createListCollection({
-  items: [
-    { label: 'Lagos', value: 'lagos' },
-    { label: 'Abuja', value: 'abuja' },
-    { label: 'Port Harcourt', value: 'ph' },
-  ],
-});
-
-const dates = createListCollection({
-  items: [
-    { label: 'This Week', value: 'week' },
-    { label: 'This Month', value: 'month' },
-    { label: 'Next Month', value: 'next-month' },
-  ],
-});
 
 export const CommunityHero = () => {
   return (
