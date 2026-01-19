@@ -12,10 +12,10 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { PasswordInput } from '@/components/ui/password-input';
+import { PasswordInput } from '@/components/ui/form/password-input';
 import { LoginDto } from '@zagotours/types';
-import Button from '@/components/ui/button';
-import { AppLink } from '@/components/ui/AppLink';
+import Button from '@/components/ui/button/Button';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 interface LoginFormProps {
   onSubmit: (data: LoginDto) => void;

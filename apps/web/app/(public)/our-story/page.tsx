@@ -1,9 +1,10 @@
+'use client';
+
 import { StoryHero } from '@/components/our-story/StoryHero';
 import TransformationSection from '@/components/our-story/TransformationSection';
 import PurposeSection from '@/components/our-story/PurposeSection';
-import { ScrollProgressSteps } from '@/components/ui/scroll-progress-step';
+import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-step';
 import { Box, Center, Stack, Text } from '@chakra-ui/react';
-import React from 'react';
 
 const mySteps = [
   {

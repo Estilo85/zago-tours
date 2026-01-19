@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Box, VStack, Text } from '@chakra-ui/react';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/Button';
 import { useRegistrationLogic } from '@/hooks/use-registration-logic';
 import { mapFormDataToDTO, FormErrors } from '@/lib/registration-utils';
 

@@ -12,10 +12,10 @@ import { Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from '@chakra-ui/react';
+import { Logo } from '../../../ui/logo/Logo';
+import { AppLink } from '@/components/ui/link/AppLink';
 import { navlinks } from '../nav.config';
-import { Logo } from '../Logo';
-import { ActionButtons } from '../ActionButtons';
-import { AppLink } from '@/components/ui/AppLink';
+import { AuthActions } from '../AuthActions';
 
 export const MobileNav = () => {
   const pathname = usePathname();
@@ -75,7 +75,7 @@ export const MobileNav = () => {
                       </AppLink>
                     ))}
 
-                    <ActionButtons />
+                    <AuthActions />
                   </VStack>
                 </Drawer.Body>
                 <Drawer.CloseTrigger asChild>

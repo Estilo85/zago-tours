@@ -1,5 +1,5 @@
 'use client';
-import { AppLink } from '@/components/ui/AppLink';
+import { AppLink } from '@/components/ui/link/AppLink';
 import { Box, Heading, Text } from '@chakra-ui/react';
 
 export function RegistrationHeader() {

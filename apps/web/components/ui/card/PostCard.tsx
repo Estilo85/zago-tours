@@ -16,7 +16,7 @@ import { LuHeart, LuMessageCircle, LuShare2 } from 'react-icons/lu';
 import { Post } from '@zagotours/types';
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { MoreVertical } from 'lucide-react';
-import { SocialButton } from '@/components/ui/SocialButton';
+import { SocialButton } from '@/components/ui/button/SocialButton';
 
 interface PostCardProps {
   post: Post;

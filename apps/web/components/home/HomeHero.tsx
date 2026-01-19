@@ -3,7 +3,7 @@
 import { Box, Center, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { ResponsiveImage } from '../media/ResponsiveImage';
-import Button from '../ui/button';
+import Button from '../ui/button/Button';
 import { ArrowRight } from 'lucide-react';
 
 export const HomeHero = () => {

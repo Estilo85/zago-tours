@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
-import Button from '../ui/button';
+import Button from '../ui/button/Button';
 import { ResponsiveImage } from '../media/ResponsiveImage';
 
 export default function CommunityFooter() {

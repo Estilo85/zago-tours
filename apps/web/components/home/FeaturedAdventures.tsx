@@ -8,7 +8,7 @@ import {
   AdventureStatus,
   AccessType,
 } from '@zagotours/types';
-import Button from '../ui/button';
+import Button from '../ui/button/Button';
 import { Grip } from 'lucide-react';
 
 export const DUMMY_ADVENTURES: Adventure[] = [

@@ -3,7 +3,7 @@ import { Stack, Text, HStack, Icon, Box } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { LuLogOut } from 'react-icons/lu';
 import { MENU_CONFIG } from '../_config/menu-config';
-import { AppLink } from '@/components/ui/AppLink';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 export const Sidebar = ({
   role,
@@ -64,7 +64,7 @@ export const Sidebar = ({
           {MENU_CONFIG.roles[role as keyof typeof MENU_CONFIG.roles]?.map(
             (item) => (
               <NavItem key={item.href} item={item} />
-            )
+            ),
           )}
         </Stack>
 

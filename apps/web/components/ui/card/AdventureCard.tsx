@@ -13,7 +13,7 @@ import {
 import { CheckCircleIcon } from 'lucide-react';
 import { ResponsiveImage } from '../../media/ResponsiveImage';
 import { Adventure } from '@zagotours/types';
-import Button from '../button';
+import Button from '../button/Button';
 
 const AdventureCard = ({ adventure }: { adventure: Adventure }) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;

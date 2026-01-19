@@ -8,7 +8,7 @@ import {
   createListCollection,
 } from '@chakra-ui/react';
 import { Input, Stack } from '@chakra-ui/react';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/Button';
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { PhoneInput } from 'react-international-phone';

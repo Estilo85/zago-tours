@@ -24,7 +24,7 @@ import {
   LuTrendingUp,
   LuHeart,
 } from 'react-icons/lu';
-import { ScrollProgressSteps } from '../ui/scroll-progress-step';
+import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 
 interface AdventureDetailProps {
   adventure: AdventureWithRelations;

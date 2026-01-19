@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Box, Field, Input, Stack, Heading, Text } from '@chakra-ui/react';
-import Button from '@/components/ui/button';
-import { AppLink } from '@/components/ui/AppLink';
+import Button from '@/components/ui/button/Button';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 interface ForgotPasswordProps {
   onSubmit: (email: string) => void;

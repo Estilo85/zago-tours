@@ -2,7 +2,7 @@
 
 import { Dialog, Flex, Icon, IconButton, Portal, Text } from '@chakra-ui/react';
 import { Input, Textarea, Stack } from '@chakra-ui/react';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/Button';
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
@@ -23,7 +23,7 @@ export const TripRequestDialog = ({
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

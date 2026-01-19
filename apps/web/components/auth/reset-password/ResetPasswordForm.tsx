@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Box, Field, Stack, Heading, Text } from '@chakra-ui/react';
-import { PasswordInput } from '@/components/ui/password-input';
+import { PasswordInput } from '@/components/ui/form/password-input';
 import { ResetPasswordDto } from '@zagotours/types';
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/Button';
 
 interface ResetPasswordProps {
   token: string;

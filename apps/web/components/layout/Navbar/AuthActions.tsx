@@ -13,8 +13,8 @@ import {
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRoleStore } from '@/store/role-selector.store';
-import Button from '@/components/ui/button';
-import { AppLink } from '@/components/ui/AppLink';
+import Button from '@/components/ui/button/Button';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 const menuList = [
   { label: 'Adventurer', value: 'ADVENTURER' },
@@ -22,7 +22,7 @@ const menuList = [
   { label: 'Agent', value: 'AGENT' },
 ];
 
-export const ActionButtons = () => {
+export const AuthActions = () => {
   const router = useRouter();
 
   // Store action

@@ -1,10 +1,10 @@
 'use client';
 import { Box, Flex, HStack } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
-import { Logo } from '../Logo';
+import { Logo } from '../../../ui/logo/Logo';
+import { AppLink } from '@/components/ui/link/AppLink';
 import { navlinks } from '../nav.config';
-import { ActionButtons } from '../ActionButtons';
-import { AppLink } from '@/components/ui/AppLink';
+import { AuthActions } from '../AuthActions';
 
 export const DesktopNav = () => {
   const pathname = usePathname();
@@ -43,7 +43,7 @@ export const DesktopNav = () => {
           ))}
         </HStack>
 
-        <ActionButtons />
+        <AuthActions />
       </Flex>
     </Box>
   );
