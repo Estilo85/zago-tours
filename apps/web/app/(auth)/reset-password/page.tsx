@@ -1,6 +1,6 @@
 'use client';
 
-import { ResetPasswordForm } from '@/components/auth/reset-password/reset-password-form';
+import { ResetPasswordForm } from '@/components/auth/reset-password/ResetPasswordForm';
 import React from 'react';
 
 const ResetPassword = () => {

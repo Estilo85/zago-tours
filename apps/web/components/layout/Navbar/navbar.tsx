@@ -1,7 +1,7 @@
 'use client';
 
-import { DesktopNav } from './Desktop/desktop-nav';
-import { MobileNav } from './Mobile/mobile-nav';
+import { DesktopNav } from './Desktop/DesktopNav';
+import { MobileNav } from './Mobile/MobileNav';
 
 export const NavBar = () => {
   return (

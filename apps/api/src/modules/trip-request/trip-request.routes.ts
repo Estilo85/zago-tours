@@ -12,19 +12,16 @@ const tripRequestService = new TripRequestService(tripRequestRepository);
 const tripRequestController = new TripRequestController(tripRequestService);
 
 // Public/Adventurer endpoints
-router.post('/trip-requests', tripRequestController.create);
-router.get('/trip-requests/my-requests', tripRequestController.getMyRequests);
+router.post('/', tripRequestController.create);
+router.get('/my-requests', tripRequestController.getMyRequests);
 
 // Agent endpoints
-router.get(
-  '/trip-requests/assigned-to-me',
-  tripRequestController.getAssignedToMe
-);
+router.get('/assigned-to-me', tripRequestController.getAssignedToMe);
 
 // Admin endpoints
-router.get('/trip-requests', tripRequestController.getAll);
-router.get('/trip-requests/recent', tripRequestController.getRecent);
-router.get('/trip-requests/:id', tripRequestController.getById);
-router.delete('/trip-requests/:id', tripRequestController.delete);
+router.get('/', tripRequestController.getAll);
+router.get('/recent', tripRequestController.getRecent);
+router.get('/:id', tripRequestController.getById);
+router.delete('/:id', tripRequestController.delete);
 
 export { router as tripRequestRoutes };

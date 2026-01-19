@@ -3,8 +3,8 @@ import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
 import { Provider } from '@/components/ui/provider';
 import { Box, Flex } from '@chakra-ui/react';
-import { NavBar } from '@/components/layout/Navbar/navbar';
-import { Footer } from '@/components/layout/Footer/footer';
+import { NavBar } from '@/components/layout/Navbar/Navbar';
+import { Footer } from '@/components/layout/Footer/Footer';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

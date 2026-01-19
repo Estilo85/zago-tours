@@ -1,6 +1,6 @@
-import { OurStoryBanner } from '@/components/our-story/banner';
-import OutdatedOutstanding from '@/components/our-story/outdated-outstanding';
-import WhyWeDoThis from '@/components/our-story/why-we-do-this';
+import { StoryHero } from '@/components/our-story/StoryHero';
+import TransformationSection from '@/components/our-story/TransformationSection';
+import PurposeSection from '@/components/our-story/PurposeSection';
 import { ScrollProgressSteps } from '@/components/ui/scroll-progress-step';
 import { Box, Center, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
@@ -64,7 +64,7 @@ export default function OurStory() {
     <Box my={10} mx={{ base: '4', md: '10' }}>
       <Stack gap={20}>
         {' '}
-        <OurStoryBanner />
+        <StoryHero />
         {/* Story Section */}
         <Stack textAlign='center' gap={8}>
           <Center>
@@ -87,8 +87,8 @@ export default function OurStory() {
           </Text>
           <ScrollProgressSteps items={mySteps} />
         </Stack>
-        <OutdatedOutstanding />
-        <WhyWeDoThis />
+        <TransformationSection />
+        <PurposeSection />
       </Stack>
     </Box>
   );

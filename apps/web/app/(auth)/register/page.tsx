@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import RegistrationForm from '@/components/auth/registration/form/register-form';
+import RegistrationForm from '@/components/auth/registration/form/RegistrationForm';
 import { RegistrableRole } from '@zagotours/types';
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { useRegistrationLogic } from '@/hooks/use-registration-logic';

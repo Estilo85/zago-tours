@@ -11,7 +11,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
-import { TestimonialCard } from '../ui/cards/testimonial-card';
+import { TestimonialCard } from '../ui/card/TestimonialCard';
 import { ResponsiveImage } from '../media/ResponsiveImage';
 
 const testimonials = [
@@ -52,7 +52,7 @@ export const Testimonials = () => {
         >
           They Love Zago
         </Heading>
-        <Text>  What travelers are saying about our partners  </Text>
+        <Text>What travelers are saying about our partners</Text>
       </Stack>
       <Carousel.Root
         slideCount={testimonials.length}

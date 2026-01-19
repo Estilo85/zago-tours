@@ -1,6 +1,6 @@
 'use client';
 
-import { ForgotPasswordForm } from '@/components/auth/forgot-password/forgot-password-form';
+import { ForgotPasswordForm } from '@/components/auth/forgot-password/ForgotPasswordForm';
 import React from 'react';
 
 const ForgotPassword = () => {

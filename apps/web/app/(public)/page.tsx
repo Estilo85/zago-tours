@@ -1,24 +1,22 @@
-import {
-  DestinationMap,
-  FeaturedAdventures,
-  HowItWorks,
-  StatsBanner,
-  Testimonials,
-  WhyChooseUs,
-} from '@/components/home';
-import { HomeBanner } from '@/components/home/banner';
+import { Benefits } from '@/components/home/Benefits';
+import { DestinationCountries } from '@/components/home/DestinationCountries';
+import { FeaturedAdventures } from '@/components/home/FeaturedAdventures';
+import { HomeHero } from '@/components/home/HomeHero';
+import { HowItWorks } from '@/components/home/HowItWorks';
+import { StatsHero } from '@/components/home/StatsHero';
+import { Testimonials } from '@/components/home/Testimonials';
 import { Stack } from '@chakra-ui/react';
 
 export default function Home() {
   return (
     <Stack gap={5} py={5}>
-      <HomeBanner />
-      <StatsBanner />
+      <HomeHero />
+      <StatsHero />
       <HowItWorks />
-      <WhyChooseUs />
+      <Benefits />
       <FeaturedAdventures />
       <Testimonials />
-      <DestinationMap />
+      <DestinationCountries />
     </Stack>
   );
 }
