@@ -14,9 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { ArrowRight } from 'lucide-react';
 import NextLink from 'next/link';
-
 import Button from '../ui/button/Button';
-import { CustomSearchBar } from '../ui/searchbar/Search';
+import { SearchBar } from '../ui/searchbar/Search';
 
 // 1. Create your data collections
 const destinations = createListCollection({
@@ -194,7 +193,7 @@ export const AdventureHero = () => {
 
             {/* RIGHT SIDE: Custom Search Bar */}
             <Box width={{ base: 'full', md: 'auto' }}>
-              <CustomSearchBar
+              <SearchBar
                 placeholder='Search destinations...'
                 width={{ base: 'full', md: '320px' }}
               />

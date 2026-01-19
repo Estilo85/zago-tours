@@ -9,13 +9,11 @@ import {
   Heading,
   Text,
   VStack,
-  Link as ChakraLink,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
-import { PasswordInput } from '@/components/ui/form/password-input';
 import { LoginDto } from '@zagotours/types';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
+import { PasswordInput } from '@/components/ui/input/password-input';
 
 interface LoginFormProps {
   onSubmit: (data: LoginDto) => void;

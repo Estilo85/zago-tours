@@ -1,6 +1,6 @@
 'use client';
+import { PasswordInput } from '@/components/ui/input/password-input';
 import { Input, Textarea, Field, Checkbox } from '@chakra-ui/react';
-import { PasswordInput } from '@/components/ui/form/password-input';
 import Select from 'react-select';
 
 export function FormField({
