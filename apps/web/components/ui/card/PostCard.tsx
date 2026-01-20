@@ -82,7 +82,9 @@ export const PostCard = ({ post }: PostCardProps) => {
                 {post.user.name}
               </Heading>
               <Text fontSize='xs' color='gray.500' fontWeight='medium'>
-                {post.user.country} •{' '}
+                {post.user.country} | {post.title}
+              </Text>
+              <Text fontSize='xs' color='gray.500' fontWeight='medium'>
                 {new Date(post.createdAt).toLocaleDateString(undefined, {
                   month: 'short',
                   day: 'numeric',

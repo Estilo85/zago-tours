@@ -22,17 +22,17 @@ export const EventHero = () => {
         pb={{ base: 0, md: '250px' }}
       >
         <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
-          Show Up Excited, Return <br /> Home Your Best Self.
+          Adventure Starts <br /> With Knowledge
         </Heading>
 
         <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          You take adventure seriously. <br /> We take your safety even more
-          seriously.
+          Join live sessions designed to make every future trip <br />
+          smarter, safer, and more connected.
         </Text>
 
         <Button asChild bg='secondary' color='dark' fontWeight='bold'>
           <NextLink href='/register'>
-            Join Us
+            Join event
             <Icon as={ArrowRight} ml={2} />
           </NextLink>
         </Button>

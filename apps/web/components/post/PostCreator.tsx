@@ -24,8 +24,6 @@ export function PostCreator({
       boxShadow='sm'
     >
       <Flex gap={3} align='center'>
-        <AvatarImage name={userName} src={userImage || ''} size='sm' />
-
         {/* Trigger 1: The Input Box */}
         <CreatePostModal userName={userName}>
           <Box
@@ -42,43 +40,37 @@ export function PostCreator({
             </Text>
           </Box>
         </CreatePostModal>
-      </Flex>
 
-      <HStack
-        mt={4}
-        pt={3}
-        borderTop='1px solid'
-        borderColor='gray.50'
-        justify='space-between'
-      >
-        <HStack gap={4}>
-          {/* Trigger 2: Photo Icon */}
-          <CreatePostModal userName={userName}>
-            <Box cursor='pointer'>
-              <ActionButton
-                icon={<ImageIcon size={18} color='#3b82f6' />}
-                label='Photo'
-              />
-            </Box>
-          </CreatePostModal>
+        <HStack borderTop='1px solid' borderColor='gray.50' align='center'>
+          <HStack gap={4}>
+            {/* Trigger 2: Photo Icon */}
+            <CreatePostModal userName={userName}>
+              <Box cursor='pointer'>
+                <ActionButton
+                  icon={<ImageIcon size={18} color='#3b82f6' />}
+                  label='Photo'
+                />
+              </Box>
+            </CreatePostModal>
 
-          {/* Trigger 3: Video Icon */}
+            {/* Trigger 3: Video Icon */}
+            <CreatePostModal userName={userName}>
+              <Box cursor='pointer'>
+                <ActionButton
+                  icon={<Video size={18} color='#10b981' />}
+                  label='Video'
+                />
+              </Box>
+            </CreatePostModal>
+          </HStack>
+
           <CreatePostModal userName={userName}>
-            <Box cursor='pointer'>
-              <ActionButton
-                icon={<Video size={18} color='#10b981' />}
-                label='Video'
-              />
-            </Box>
+            <Button size='sm' colorScheme='primary' px={6} borderRadius='full'>
+              Post
+            </Button>
           </CreatePostModal>
         </HStack>
-
-        <CreatePostModal userName={userName}>
-          <Button size='sm' colorScheme='primary' px={6} borderRadius='full'>
-            Post
-          </Button>
-        </CreatePostModal>
-      </HStack>
+      </Flex>
     </Box>
   );
 }

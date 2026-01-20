@@ -86,7 +86,6 @@ export class EventController {
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const event = await this.eventService.getById(req.params.id);
 
-    // Optional: Add computed fields
     const enrichedEvent = {
       ...event,
       isExpired: new Date() > new Date(event.joinTill),

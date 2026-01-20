@@ -5,7 +5,7 @@ import { AvatarImage } from '@/components/media/AvatarImage';
 import Button from '@/components/ui/button/Button';
 import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
 import { LuMenu } from 'react-icons/lu';
-import { SearchBar } from '@/components/ui/searchbar/Search';
+import { SearchBar } from '@/components/ui/search/Search';
 import { TripRequestDialog } from '../dialogs/trip-request-dialog';
 import { TripRequestCallbackDialog } from '../dialogs/trip-request-callback-dialog';
 

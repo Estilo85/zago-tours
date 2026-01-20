@@ -1,10 +1,10 @@
 'use client';
 
 import { Box, Flex, Field, Text } from '@chakra-ui/react';
-import { MapPin, Tag, User, LucideIcon } from 'lucide-react';
+import { MapPin, Tag, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { PostResponseDto } from '@zagotours/types';
-import { SearchBar } from '../ui/searchbar/Search';
+import { SearchBar } from '../ui/search/Search';
 import { SelectInput } from '../ui/input/SelectInput';
 
 interface FilterProps {
@@ -33,31 +33,6 @@ export function PostFilterBar({
     onFilterResults(filtered);
   }, [searchQuery, selectedTitle, location, posts]);
 
-  // Helper component to keep the UI clean
-  const FilterField = ({
-    label,
-    icon: Icon,
-    children,
-  }: {
-    label: string;
-    icon: LucideIcon;
-    children: React.ReactNode;
-  }) => (
-    <Field.Root>
-      <Field.Label
-        fontSize='xs'
-        fontWeight='bold'
-        display='flex'
-        alignItems='center'
-        gap={1}
-        mb={0}
-      >
-        <Icon size={14} /> {label}
-      </Field.Label>
-      {children}
-    </Field.Root>
-  );
-
   return (
     <Box
       w='full'
@@ -71,16 +46,37 @@ export function PostFilterBar({
       <Flex gap={6} align='flex-end' wrap={{ base: 'wrap', md: 'nowrap' }}>
         {/* Username */}
         <Box flex={1}>
-          <FilterField label='Username' icon={User}>
-            <Text fontSize='xs' fontWeight='medium' py={1}>
+          <Field.Root>
+            <Field.Label fontSize='xs' fontWeight='bold' mb={0}>
+              Username
+            </Field.Label>
+            <Text
+              display='flex'
+              alignItems='center'
+              gap={1}
+              fontSize='xs'
+              fontWeight='medium'
+              py={1}
+            >
+              <User size={14} />
               {userName || 'Guest'}
             </Text>
-          </FilterField>
+          </Field.Root>
         </Box>
 
         {/* Location */}
         <Box flex={1}>
-          <FilterField label='Location' icon={MapPin}>
+          <Field.Root>
+            <Field.Label
+              fontSize='xs'
+              fontWeight='bold'
+              display='flex'
+              alignItems='center'
+              gap={1}
+              mb={0}
+            >
+              <MapPin size={14} /> Location
+            </Field.Label>
             <SelectInput
               value={location}
               onChange={setLocation}
@@ -90,12 +86,22 @@ export function PostFilterBar({
                 { label: 'New York', value: 'ny' },
               ]}
             />
-          </FilterField>
+          </Field.Root>
         </Box>
 
         {/* Interest */}
         <Box flex={1}>
-          <FilterField label='Interest' icon={Tag}>
+          <Field.Root>
+            <Field.Label
+              fontSize='xs'
+              fontWeight='bold'
+              display='flex'
+              alignItems='center'
+              gap={1}
+              mb={0}
+            >
+              <Tag size={14} /> Interest
+            </Field.Label>
             <SelectInput
               value={selectedTitle}
               onChange={setSelectedTitle}
@@ -105,7 +111,7 @@ export function PostFilterBar({
                 value: title,
               }))}
             />
-          </FilterField>
+          </Field.Root>
         </Box>
 
         {/* Search */}

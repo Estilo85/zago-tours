@@ -35,6 +35,7 @@ export interface EventResponseDto {
   description: string;
   location: string;
   createdBy: string;
+  isSignature: boolean;
   spotLeft: number;
   joinTill: Date;
   cancellationTerms: string;

@@ -301,6 +301,7 @@ model Event {
   createdBy         String
   spotLeft          Int
   joinTill          DateTime
+  isSignature       Boolean @default(false)
   cancellationTerms String
   registrations     EventRegistration[]
   mediaUrl          String?

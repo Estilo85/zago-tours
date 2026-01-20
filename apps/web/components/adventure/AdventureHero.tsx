@@ -15,7 +15,7 @@ import {
 import { ArrowRight } from 'lucide-react';
 import NextLink from 'next/link';
 import Button from '../ui/button/Button';
-import { SearchBar } from '../ui/searchbar/Search';
+import { SearchBar } from '../ui/search/Search';
 
 // 1. Create your data collections
 const destinations = createListCollection({
