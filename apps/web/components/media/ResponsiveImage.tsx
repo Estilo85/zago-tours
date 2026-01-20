@@ -26,7 +26,7 @@ export const ResponsiveImage = ({
   borderRadius = '2xl',
   priority = false,
   loading = 'lazy',
-  sizes,
+  sizes = '(max-width: 768px) 100vw, 50vw',
   containerProps,
   boxShadow,
 }: ResponsiveImageProps) => {

@@ -1,6 +1,9 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+'use client';
+import { Box, Icon, Stack, Text } from '@chakra-ui/react';
 import Button from '../ui/button/Button';
 import { ResponsiveImage } from '../media/ResponsiveImage';
+import { ArrowRight } from 'lucide-react';
+import { AppLink } from '../ui/link/AppLink';
 
 export default function CommunityFooter() {
   return (
@@ -14,8 +17,11 @@ export default function CommunityFooter() {
         after you arrive, you belong here.
       </Text>
 
-      <Button bg='primary' color='white'>
-        Join the community
+      <Button asChild bg='primary' color='white'>
+        <AppLink href='/posts'>
+          Join the community
+          <Icon as={ArrowRight} ml={2} />
+        </AppLink>
       </Button>
 
       {/* Image container */}

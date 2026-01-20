@@ -1,7 +1,7 @@
 'use client';
 
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { Box, Text, Stack, Heading, Card, CardBody } from '@chakra-ui/react';
+import { Box, Stack, Heading, Card, CardBody } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface ImageCardProps {
@@ -49,9 +49,9 @@ export const DynamicImageCard = ({
               {title}
             </Heading>
           )}
-          <Text color='gray.600' fontSize='sm' lineHeight='tall'>
+          <Box color='gray.600' fontSize='sm' lineHeight='tall'>
             {description}
-          </Text>
+          </Box>
         </Stack>
       </CardBody>
     </Card.Root>

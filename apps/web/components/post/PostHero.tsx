@@ -19,6 +19,7 @@ export default function PostHero() {
           src='/images/community/community-post-banner.webp'
           alt='community banner'
           sizes='100vw'
+          loading='eager'
         />
       </Box>
 

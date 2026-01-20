@@ -1,25 +1,48 @@
 'use client';
 
-import { Flex, Input, Box, IconButton } from '@chakra-ui/react';
+import { Flex, Input, Box, IconButton, InputProps } from '@chakra-ui/react';
 import { LuSearch, LuX } from 'react-icons/lu';
 import { useState } from 'react';
 
-interface SearchBarProps {
+interface SearchBarProps extends Omit<InputProps, 'onChange' | 'width'> {
   placeholder?: string;
   onSearch?: (value: string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
   width?: string | object;
 }
 
 export const SearchBar = ({
   placeholder = 'Search...',
   onSearch,
+  onChange,
+  value: externalValue,
   width = 'full',
+  ...props
 }: SearchBarProps) => {
-  const [value, setValue] = useState('');
+  const [localValue, setLocalValue] = useState('');
+
+  // Use external value if provided, otherwise use local state
+  const isControlled = externalValue !== undefined;
+  const value = isControlled ? externalValue : localValue;
 
   const handleClear = () => {
-    setValue('');
-    if (onSearch) onSearch('');
+    if (isControlled) {
+      onSearch?.('');
+      // Trigger a fake event if onChange is required
+    } else {
+      setLocalValue('');
+      onSearch?.('');
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (!isControlled) {
+      setLocalValue(newValue);
+    }
+    onChange?.(e);
+    onSearch?.(newValue);
   };
 
   return (
@@ -34,29 +57,21 @@ export const SearchBar = ({
         _focusWithin={{
           borderColor: 'primary',
           bg: 'white',
-          ring: '0.5px',
-          ringColor: 'primary',
+          boxShadow: '0 0 0 1px var(--chakra-colors-primary)',
         }}
         transition='all 0.2s'
       >
-        {/* Search Icon */}
         <LuSearch color='gray' size='18px' />
-
         <Input
+          {...props}
           value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            onSearch?.(e.target.value);
-          }}
+          onChange={handleChange}
           placeholder={placeholder}
           px={3}
           fontSize='md'
           border='none'
           outline='none'
-          _focus={{
-            boxShadow: 'none',
-            border: 'none',
-          }}
+          _focus={{ boxShadow: 'none' }}
           _placeholder={{ color: 'gray.500' }}
           bg='transparent'
         />

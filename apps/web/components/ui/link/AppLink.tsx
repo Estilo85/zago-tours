@@ -14,7 +14,7 @@ export const AppLink = ({ href, children, ...props }: AppLinkProps) => {
     <ChakraLink
       as={NextLink}
       href={href}
-      textDecor='underline'
+      textDecor='none'
       _hover={{ textDecor: 'none' }}
       _focus={{ boxShadow: 'none', outline: 'none' }}
       {...props}

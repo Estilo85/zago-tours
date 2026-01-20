@@ -2,9 +2,8 @@
 import { Box, Text, Stack, Heading, Icon } from '@chakra-ui/react';
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import NextLink from 'next/link';
-
 import Button from '../ui/button/Button';
+import { AppLink } from '../ui/link/AppLink';
 
 export const CommunityHero = () => {
   return (
@@ -25,11 +24,11 @@ export const CommunityHero = () => {
           connect, and travel smarter.
         </Text>
 
-        <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-          <NextLink href='/posts'>
+        <Button asChild bg='secondary' color='dark'>
+          <AppLink href='/posts'>
             Join the community
             <Icon as={ArrowRight} ml={2} />
-          </NextLink>
+          </AppLink>
         </Button>
       </Stack>
     </Box>

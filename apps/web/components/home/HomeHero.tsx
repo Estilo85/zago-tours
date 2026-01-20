@@ -64,6 +64,7 @@ export const HomeHero = () => {
             src='/images/home/banner.webp'
             alt='home page banner image'
             width='100%'
+            loading='eager'
             height={{ base: '250px', md: '400px' }}
             borderRadius='2xl'
             boxShadow='2xl'
