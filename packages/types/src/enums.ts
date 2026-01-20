@@ -41,6 +41,12 @@ export enum ContractStatus {
   NOT_SIGNED = 'NOT_SIGNED',
 }
 
+export enum EventStatus {
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
+  ATTENDED = 'ATTENDED',
+}
+
 export enum MediaType {
   IMAGE = 'IMAGE',
   VIDEO = 'VIDEO',

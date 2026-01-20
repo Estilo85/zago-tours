@@ -60,6 +60,13 @@ enum MediaType {
   DOCUMENT
 }
 
+enum EventStatus {
+  CONFIRMED
+  CANCELLED
+  ATTENDED
+}
+
+
 // --- USER MODELS ---
 
 model User {
@@ -96,7 +103,7 @@ model User {
   likes                 Like[]
   shares                Share[]
   contracts             Contract[]
-
+  eventRegistrations    EventRegistration[]
   // Meeting Calls
   plannedCalls          TripPlanningCall[] @relation("AdventurerCalls")
   agentCalls            TripPlanningCall[] @relation("AgentCalls")
@@ -295,11 +302,29 @@ model Event {
   spotLeft          Int
   joinTill          DateTime
   cancellationTerms String
+  registrations     EventRegistration[]
   mediaUrl          String?
   publicId          String?   
   createdAt         DateTime  @default(now())
   deletedAt         DateTime?
 }
+
+// 3. Create the new Registration model
+model EventRegistration {
+  id          String             @id @default(uuid())
+  eventId     String
+  event       Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User               @relation(fields: [userId], references: [id])
+  
+  status      EventStatus @default(CONFIRMED)
+  createdAt   DateTime           @default(now())
+
+  @@unique([userId, eventId]) // Prevents double booking
+  @@index([eventId])
+  @@index([userId])
+}
+
 
 model TripRequest {
   id              String   @id @default(uuid())

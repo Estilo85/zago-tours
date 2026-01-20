@@ -1,22 +1,20 @@
 'use client';
 
-import { Box, NativeSelect, Flex, Field, VStack, Text } from '@chakra-ui/react';
-import { MapPin, Search, Tag, User } from 'lucide-react';
+import { Box, Flex, Field, Text } from '@chakra-ui/react';
+import { MapPin, Tag, User, LucideIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { PostResponseDto } from '@zagotours/types';
 import { SearchBar } from '../ui/searchbar/Search';
-import { AvatarImage } from '../media/AvatarImage';
+import { SelectInput } from '../ui/input/SelectInput';
 
 interface FilterProps {
   posts: PostResponseDto[];
   userName?: string;
-  userImage?: string;
   onFilterResults: (filtered: PostResponseDto[]) => void;
 }
 
 export function PostFilterBar({
   posts,
-  userImage,
   userName,
   onFilterResults,
 }: FilterProps) {
@@ -35,6 +33,31 @@ export function PostFilterBar({
     onFilterResults(filtered);
   }, [searchQuery, selectedTitle, location, posts]);
 
+  // Helper component to keep the UI clean
+  const FilterField = ({
+    label,
+    icon: Icon,
+    children,
+  }: {
+    label: string;
+    icon: LucideIcon;
+    children: React.ReactNode;
+  }) => (
+    <Field.Root>
+      <Field.Label
+        fontSize='xs'
+        fontWeight='bold'
+        display='flex'
+        alignItems='center'
+        gap={1}
+        mb={0}
+      >
+        <Icon size={14} /> {label}
+      </Field.Label>
+      {children}
+    </Field.Root>
+  );
+
   return (
     <Box
       w='full'
@@ -43,98 +66,56 @@ export function PostFilterBar({
       borderRadius='xl'
       borderWidth='1px'
       borderColor='gray.100'
-      mb={4}
+      my={6}
     >
       <Flex gap={6} align='flex-end' wrap={{ base: 'wrap', md: 'nowrap' }}>
-        {/* 1. User Info */}
-        <VStack align='center' minW='100px' gap={1}>
-          <Text
-            fontSize='xs'
-            fontWeight='bold'
-            color='gray.700'
-            textAlign='center'
-          >
-            Username
-          </Text>
-          <Flex align='center'>
-            <User size={14} />
-            <Text
-              fontSize='xs'
-              fontWeight='bold'
-              color='gray.700'
-              textAlign='center'
-            >
-              {userName}
+        {/* Username */}
+        <Box flex={1}>
+          <FilterField label='Username' icon={User}>
+            <Text fontSize='xs' fontWeight='medium' py={1}>
+              {userName || 'Guest'}
             </Text>
-          </Flex>
-        </VStack>
+          </FilterField>
+        </Box>
 
-        {/* 2. Location Select */}
-        <Field.Root flex={1}>
-          <Field.Label
-            fontSize='xs'
-            fontWeight='bold'
-            display='flex'
-            alignItems='center'
-            gap={1}
-          >
-            <MapPin size={14} /> Location
-          </Field.Label>
-          <NativeSelect.Root size='sm'>
-            <NativeSelect.Field
+        {/* Location */}
+        <Box flex={1}>
+          <FilterField label='Location' icon={MapPin}>
+            <SelectInput
               value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            >
-              <option value=''>All Locations</option>
-              <option value='london'>London</option>
-              <option value='ny'>New York</option>
-            </NativeSelect.Field>
-          </NativeSelect.Root>
-        </Field.Root>
+              onChange={setLocation}
+              placeholder='All Locations'
+              options={[
+                { label: 'London', value: 'london' },
+                { label: 'New York', value: 'ny' },
+              ]}
+            />
+          </FilterField>
+        </Box>
 
-        {/* 3. Title Select */}
-        <Field.Root flex={1}>
-          <Field.Label
-            fontSize='xs'
-            fontWeight='bold'
-            display='flex'
-            alignItems='center'
-            gap={1}
-          >
-            <Tag size={14} /> Interest
-          </Field.Label>
-          <NativeSelect.Root size='sm'>
-            <NativeSelect.Field
+        {/* Interest */}
+        <Box flex={1}>
+          <FilterField label='Interest' icon={Tag}>
+            <SelectInput
               value={selectedTitle}
-              onChange={(e) => setSelectedTitle(e.target.value)}
-            >
-              <option value=''>All Titles</option>
-              {/* Unique titles from your post data */}
-              {[...new Set(posts.map((p) => p.title))].map((title) => (
-                <option key={title} value={title}>
-                  {title}
-                </option>
-              ))}
-            </NativeSelect.Field>
-          </NativeSelect.Root>
-        </Field.Root>
-        <Field.Root flex={2}>
-          <Field.Label
-            fontSize='xs'
-            fontWeight='bold'
-            mb={2}
-            display='flex'
-            alignItems='center'
-            gap={1}
-          >
-            <Search size={14} /> Search
-          </Field.Label>
+              onChange={setSelectedTitle}
+              placeholder='All Titles'
+              options={[...new Set(posts.map((p) => p.title))].map((title) => ({
+                label: title,
+                value: title,
+              }))}
+            />
+          </FilterField>
+        </Box>
+
+        {/* Search */}
+        <Box flex={2}>
           <SearchBar
             placeholder='Search stories...'
             value={searchQuery}
             onSearch={(val) => setSearchQuery(val)}
           />
-        </Field.Root>
+        </Box>
       </Flex>
     </Box>
   );

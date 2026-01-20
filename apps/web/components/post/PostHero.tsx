@@ -11,7 +11,6 @@ export default function PostHero() {
       <Box
         w='full'
         h={{ base: '220px', md: '320px' }}
-        borderRadius='lg'
         overflow='hidden'
         position='relative'
       >
@@ -20,11 +19,12 @@ export default function PostHero() {
           alt='community banner'
           sizes='100vw'
           loading='eager'
+          borderRadius='none'
         />
       </Box>
 
       <Flex
-        direction='row'
+        direction={{ base: 'column', md: 'row' }}
         justify='center'
         align='flex-end'
         px={{ base: 4, md: 8 }}
@@ -54,7 +54,7 @@ export default function PostHero() {
             alignItems='center'
             gap={2}
           >
-            Welcome to Zago Voice <Heart size={20} />
+            Welcome to Zago Voice <Heart size={32} fill='full' />
           </Heading>
           <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight='medium'>
             Where trips and shared experiences shape better standards in

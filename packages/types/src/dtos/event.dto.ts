@@ -1,5 +1,7 @@
 // ==================== EVENT DTOs ====================
 
+import { EventStatus } from '../enums';
+
 export interface CreateEventDto {
   title: string;
   date: Date | string;
@@ -39,10 +41,11 @@ export interface EventResponseDto {
   mediaUrl: string | null;
   publicId: string | null;
   createdAt: Date;
+
   isExpired?: boolean;
   isFull?: boolean;
+  hasJoined?: boolean;
 }
-
 export interface EventListQueryDto {
   page?: number;
   limit?: number;
@@ -52,6 +55,29 @@ export interface EventListQueryDto {
   hasSpots?: boolean;
   sortBy?: 'date' | 'createdAt' | 'spotLeft';
   sortOrder?: 'asc' | 'desc';
+}
+
+export interface JoinEventDto {
+  notes?: string;
+}
+
+export interface EventRegistrationResponseDto {
+  id: string;
+  eventId: string;
+  userId: string;
+  status: EventStatus;
+  createdAt: Date;
+  event?: {
+    title: string;
+    date: Date;
+    location: string;
+    mediaUrl: string | null;
+  };
+}
+
+export interface MyBookingsQueryDto {
+  status?: EventStatus;
+  upcomingOnly?: boolean;
 }
 
 export interface EventStatsDto {
