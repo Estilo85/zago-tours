@@ -118,7 +118,7 @@ export function PostFilterBar({
         <Box flex={2}>
           <SearchBar
             placeholder='Search stories...'
-            value={searchQuery}
+            // value={searchQuery}
             onSearch={(val) => setSearchQuery(val)}
           />
         </Box>

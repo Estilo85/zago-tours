@@ -1,6 +1,8 @@
+'use client';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { Text, Stack, HStack, Badge, Card } from '@chakra-ui/react';
+import { Text, Stack, HStack, Badge, Card, Box, Flex } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
+import { Calendar, Timer } from 'lucide-react';
 
 interface EventCardProps {
   event: EventResponseDto;
@@ -9,37 +11,46 @@ interface EventCardProps {
 export const EventCard = ({ event }: EventCardProps) => {
   return (
     <Card.Root
-      maxW='280px'
-      w='full'
-      h='350px'
+      maxW={{ base: '100%', md: '650px' }}
+      variant='elevated'
+      px={3}
+      pt={3}
+      bg='white'
       overflow='hidden'
-      _hover={{ boxShadow: 'md' }}
-      transition='all 0.2s'
-      borderRadius='3xl'
+      borderWidth='1px'
+      borderColor='gray.100'
+      boxShadow='0 2px 12px rgba(0, 0, 0, 0.05)'
+      transition='transform 0.2s ease'
+      _hover={{ transform: { md: 'translateY(-2px)' } }}
     >
-      {/* 1. Image at the top */}
       <ResponsiveImage
         src={event.mediaUrl as string}
         alt={event.title}
         height='200px'
         objectFit='cover'
+        borderRadius='none'
       />
 
       <Card.Body gap='3'>
-        {/* 2. Full Date and Time (Flexed) */}
         <HStack
           justify='space-between'
           fontSize='xs'
           fontWeight='bold'
           color='blue.600'
         >
-          <Text>{event.date.toLocaleDateString()}</Text>
-          <Text>
-            {event.date.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </Text>
+          <Flex align='center' gap={2}>
+            <Calendar size={12} />{' '}
+            <Text>{event.date.toLocaleDateString()}</Text>
+          </Flex>
+          <Flex align='center' gap={2}>
+            <Timer size={12} />
+            <Text>
+              {event.date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
+          </Flex>
         </HStack>
 
         {/* 3. Title */}
