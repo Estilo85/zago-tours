@@ -66,6 +66,30 @@ enum EventStatus {
   ATTENDED
 }
 
+enum TripType {
+  HIKING
+  TREKKING
+  SAFARI
+  WATER_SPORTS
+  WINTER_SPORTS
+  CULTURAL
+  WELLNESS
+  PHOTOGRAPHY
+  VOLUNTEERING
+  EXPEDITION
+  ROAD_TRIP
+  BACKPACKING
+  EXTREME_SPORTS
+  WILDLIFE
+  URBAN_EXPLORATION
+  CYCLING
+  CLIMBING
+  DIVING
+  SURFING
+  KAYAKING
+  OTHER
+}
+
 
 // --- USER MODELS ---
 
@@ -156,7 +180,7 @@ model Adventure {
   price                      Decimal
   location                   String
   level                      AdventureLevel
-  tripType                   String
+  tripType                   TripType
   safetyScore                Int              @default(0)
   rating                     Float            @default(0.0)
   certification              String?
@@ -335,7 +359,7 @@ model TripRequest {
   assignedAgentId String?
   assignedAgent   User?    @relation("AgentTripRequests", fields: [assignedAgentId], references: [id])
   
-  tripType        String
+  tripType        TripType
   destination     String
   date            DateTime
   preferences     String?

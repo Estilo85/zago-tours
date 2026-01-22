@@ -3,15 +3,15 @@ import { TripTypeCard } from '../ui/card/TripTypeCard';
 
 export default function TripTypeSection() {
   const tripTypes = [
-    { name: 'Hiking', count: 12, image: '/hiking.jpg' },
-    { name: 'Safari', count: 5, image: '/safari.jpg' },
-    { name: 'Beach', count: 8, image: '/beach.jpg' },
-    { name: 'Hiking', count: 12, image: '/hiking.jpg' },
-    { name: 'Safari', count: 5, image: '/safari.jpg' },
-    { name: 'Beach', count: 8, image: '/beach.jpg' },
-    { name: 'Hiking', count: 12, image: '/hiking.jpg' },
-    { name: 'Safari', count: 5, image: '/safari.jpg' },
-    { name: 'Beach', count: 8, image: '/beach.jpg' },
+    { name: 'Hiking', count: 12, image: '/images/events/pricing-plan.webp' },
+    { name: 'Safari', count: 5, image: '/images/events/pricing-plan.webp' },
+    { name: 'Beach', count: 8, image: '/images/events/pricing-plan.webp' },
+    { name: 'Hiking', count: 12, image: '/images/events/pricing-plan.webp' },
+    { name: 'Safari', count: 5, image: '/images/events/pricing-plan.webp' },
+    { name: 'Beach', count: 8, image: '/images/events/pricing-plan.webp' },
+    { name: 'Hiking', count: 12, image: '/images/events/pricing-plan.webp' },
+    { name: 'Safari', count: 5, image: '/images/events/pricing-plan.webp' },
+    { name: 'Beach', count: 8, image: '/images/events/pricing-plan.webp' },
   ];
 
   return (

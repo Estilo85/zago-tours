@@ -9,157 +9,206 @@ export const API_ENDPOINTS = {
   AUTH: {
     REGISTER: buildUrl('/auth/register'),
     LOGIN: buildUrl('/auth/login'),
+    ME: buildUrl('/auth/me'),
     FORGOT_PASSWORD: buildUrl('/auth/forgot-password'),
     RESET_PASSWORD: buildUrl('/auth/reset-password'),
-    VERIFY_EMAIL: buildUrl('/auth/verify-email'),
   },
 
   // Users
   USERS: {
+    // User Profile Routes
     PROFILE: buildUrl('/users/profile'),
-    CHANGE_PASSWORD: buildUrl('/users/change-password'),
+    UPDATE_PROFILE: buildUrl('/users/profile'),
     REFERRALS: buildUrl('/users/referrals'),
-    AGENT_DETAILS: buildUrl('/users/agent-details'),
-    AFFILIATE_DETAILS: buildUrl('/users/affiliate-details'),
+
+    // Admin Routes
+    LIST: buildUrl('/users'),
+    BY_ID: (id: string) => buildUrl(`/users/${id}`),
+    UPDATE_STATUS: (id: string) => buildUrl(`/users/${id}/status`),
+    PROMOTE_SAFETY_AMBASSADOR: buildUrl('/users/safety-ambassador'),
+    DELETE: (id: string) => buildUrl(`/users/${id}`),
   },
 
-  // Adventures (with helper functions for dynamic URLs)
+  // Adventures
   ADVENTURES: {
-    list: buildUrl('/adventures'),
-    featured: buildUrl('/adventures/featured'),
-    byId: (id: string) => buildUrl(`/adventures/${id}`),
-    create: buildUrl('/adventures'),
-    update: (id: string) => buildUrl(`/adventures/${id}`),
-    delete: (id: string) => buildUrl(`/adventures/${id}`),
-    like: (id: string) => buildUrl(`/adventures/${id}/like`),
-    unlike: (id: string) => buildUrl(`/adventures/${id}/like`),
+    LIST: buildUrl('/adventures'),
+    CREATE: buildUrl('/adventures'),
+    BULK_CREATE: buildUrl('/adventures/bulk'),
+    BY_ID: (id: string) => buildUrl(`/adventures/${id}`),
+    UPDATE: (id: string) => buildUrl(`/adventures/${id}`),
+    DELETE: (id: string) => buildUrl(`/adventures/${id}`),
+    TOGGLE_LIKE: (id: string) => buildUrl(`/adventures/${id}/toggle-like`),
 
-    // Nested resources
-    itineraries: {
-      list: (adventureId: string) =>
+    // Itineraries (nested under adventures)
+    ITINERARIES: {
+      LIST: (adventureId: string) =>
         buildUrl(`/adventures/${adventureId}/itineraries`),
-      create: (adventureId: string) =>
+      CREATE: (adventureId: string) =>
         buildUrl(`/adventures/${adventureId}/itineraries`),
-      update: (adventureId: string, itineraryId: string) =>
-        buildUrl(`/adventures/${adventureId}/itineraries/${itineraryId}`),
-      delete: (adventureId: string, itineraryId: string) =>
-        buildUrl(`/adventures/${adventureId}/itineraries/${itineraryId}`),
+      BULK_CREATE: (adventureId: string) =>
+        buildUrl(`/adventures/${adventureId}/itineraries/bulk`),
+      BY_ID: (itineraryId: string) =>
+        buildUrl(`/adventures/itineraries/${itineraryId}`),
+      UPDATE: (itineraryId: string) =>
+        buildUrl(`/adventures/itineraries/${itineraryId}`),
+      DELETE: (itineraryId: string) =>
+        buildUrl(`/adventures/itineraries/${itineraryId}`),
     },
 
-    gallery: {
-      list: (adventureId: string) =>
+    // Gallery (nested under adventures)
+    GALLERY: {
+      LIST: (adventureId: string) =>
         buildUrl(`/adventures/${adventureId}/gallery`),
-      create: (adventureId: string) =>
+      CREATE: (adventureId: string) =>
         buildUrl(`/adventures/${adventureId}/gallery`),
-      delete: (adventureId: string, galleryId: string) =>
-        buildUrl(`/adventures/${adventureId}/gallery/${galleryId}`),
+      BULK_UPLOAD: (adventureId: string) =>
+        buildUrl(`/adventures/${adventureId}/gallery/bulk`),
+      BY_ID: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
+      UPDATE: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
+      REORDER: buildUrl('/gallery/reorder'),
+      DELETE: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
     },
   },
 
   // Posts
   POSTS: {
-    list: buildUrl('/posts'),
-    byId: (id: string) => buildUrl(`/posts/${id}`),
-    create: buildUrl('/posts'),
-    update: (id: string) => buildUrl(`/posts/${id}`),
-    delete: (id: string) => buildUrl(`/posts/${id}`),
-    like: (postId: string) => buildUrl(`/posts/${postId}/like`),
-    share: (postId: string) => buildUrl(`/posts/${postId}/share`),
+    LIST: buildUrl('/posts'),
+    BY_ID: (id: string) => buildUrl(`/posts/${id}`),
+    CREATE: buildUrl('/posts'),
+    UPDATE: (id: string) => buildUrl(`/posts/${id}`),
+    DELETE: (id: string) => buildUrl(`/posts/${id}`),
+    MY_POSTS: buildUrl('/posts/my/posts'),
+    FEED: buildUrl('/posts/feed/my-feed'),
 
-    comments: {
-      list: (postId: string) => buildUrl(`/posts/${postId}/comments`),
-      create: (postId: string) => buildUrl(`/posts/${postId}/comments`),
-      update: (commentId: string) => buildUrl(`/comments/${commentId}`),
-      delete: (commentId: string) => buildUrl(`/comments/${commentId}`),
+    // Social interactions
+    TOGGLE_LIKE: (postId: string) => buildUrl(`/posts/${postId}/like`),
+    SHARE: (postId: string) => buildUrl(`/posts/${postId}/share`),
+
+    // Comments
+    COMMENTS: {
+      LIST: (postId: string) => buildUrl(`/posts/${postId}/comments`),
+      CREATE: (postId: string) => buildUrl(`/posts/${postId}/comments`),
+      DELETE: (postId: string, commentId: string) =>
+        buildUrl(`/posts/${postId}/comments/${commentId}`),
     },
   },
 
   // Reviews
   REVIEWS: {
-    list: buildUrl('/reviews'),
-    featured: buildUrl('/reviews/featured'),
-    byId: (id: string) => buildUrl(`/reviews/${id}`),
-    create: buildUrl('/reviews'),
-    update: (id: string) => buildUrl(`/reviews/${id}`),
-    delete: (id: string) => buildUrl(`/reviews/${id}`),
+    LIST: buildUrl('/reviews'),
+    FEATURED: buildUrl('/reviews/featured'),
+    AVERAGE_RATING: buildUrl('/reviews/average-rating'),
+    BY_ID: (id: string) => buildUrl(`/reviews/${id}`),
+    CREATE: buildUrl('/reviews'),
+    MY_REVIEWS: buildUrl('/reviews/my/reviews'),
+    UPDATE: (id: string) => buildUrl(`/reviews/${id}`),
+    DELETE: (id: string) => buildUrl(`/reviews/${id}`),
+    TOGGLE_FEATURED: (id: string) => buildUrl(`/reviews/${id}/toggle-featured`),
   },
 
   // Events
   EVENTS: {
-    list: buildUrl('/events'),
-    byId: (id: string) => buildUrl(`/events/${id}`),
-    create: buildUrl('/events'),
-    update: (id: string) => buildUrl(`/events/${id}`),
-    delete: (id: string) => buildUrl(`/events/${id}`),
+    LIST: buildUrl('/events'),
+    UPCOMING: buildUrl('/events/upcoming'),
+    BY_ID: (id: string) => buildUrl(`/events/${id}`),
+    CREATE: buildUrl('/events'),
+    UPDATE: (id: string) => buildUrl(`/events/${id}`),
+    DELETE: (id: string) => buildUrl(`/events/${id}`),
+    MY_BOOKINGS: buildUrl('/events/me/bookings'),
+    JOIN: (id: string) => buildUrl(`/events/${id}/join`),
+    CANCEL_REGISTRATION: (id: string) => buildUrl(`/events/${id}/cancel`),
+    ADMIN_STATS: buildUrl('/events/admin/stats'),
   },
 
-  // Services
-  SERVICES: {
-    tripRequests: buildUrl('/trip-requests'),
-    callbackRequests: buildUrl('/callback-requests'),
-    inquiries: buildUrl('/inquiries'),
-
-    planningCalls: {
-      list: buildUrl('/planning-calls'),
-      byId: (id: string) => buildUrl(`/planning-calls/${id}`),
-      create: buildUrl('/planning-calls'),
-      update: (id: string) => buildUrl(`/planning-calls/${id}`),
-      delete: (id: string) => buildUrl(`/planning-calls/${id}`),
-    },
-
-    contracts: {
-      list: buildUrl('/contracts'),
-      byId: (id: string) => buildUrl(`/contracts/${id}`),
-      sign: (id: string) => buildUrl(`/contracts/${id}/sign`),
-    },
+  // Trip Requests
+  TRIP_REQUESTS: {
+    CREATE: buildUrl('/trip-requests'),
+    MY_REQUESTS: buildUrl('/trip-requests/my-requests'),
+    ASSIGNED_TO_ME: buildUrl('/trip-requests/assigned-to-me'),
+    LIST: buildUrl('/trip-requests'),
+    RECENT: buildUrl('/trip-requests/recent'),
+    BY_ID: (id: string) => buildUrl(`/trip-requests/${id}`),
+    DELETE: (id: string) => buildUrl(`/trip-requests/${id}`),
   },
 
-  // Admin
-  ADMIN: {
-    users: {
-      list: buildUrl('/admin/users'),
-      byId: (id: string) => buildUrl(`/admin/users/${id}`),
-      updateStatus: (id: string) => buildUrl(`/admin/users/${id}/status`),
-      updateRole: (id: string) => buildUrl(`/admin/users/${id}/role`),
-      delete: (id: string) => buildUrl(`/admin/users/${id}`),
-    },
+  // Callback Requests
+  CALLBACK_REQUESTS: {
+    CREATE: buildUrl('/callback-requests'),
+    MY_REQUESTS: buildUrl('/callback-requests/my-requests'),
+    ASSIGNED_TO_ME: buildUrl('/callback-requests/assigned-to-me'),
+    LIST: buildUrl('/callback-requests'),
+    PENDING: buildUrl('/callback-requests/pending'),
+    BY_ID: (id: string) => buildUrl(`/callback-requests/${id}`),
+    DELETE: (id: string) => buildUrl(`/callback-requests/${id}`),
+  },
 
-    adventures: {
-      list: buildUrl('/admin/adventures'),
-      verify: (id: string) => buildUrl(`/admin/adventures/${id}/verify`),
-      safetyScore: (id: string) =>
-        buildUrl(`/admin/adventures/${id}/safety-score`),
-    },
+  // General Inquiries
+  INQUIRIES: {
+    CREATE: buildUrl('/inquiries'),
+    LIST: buildUrl('/inquiries'),
+    RECENT: buildUrl('/inquiries/recent'),
+    BY_ID: (id: string) => buildUrl(`/inquiries/${id}`),
+    DELETE: (id: string) => buildUrl(`/inquiries/${id}`),
+  },
 
-    reviews: {
-      list: buildUrl('/admin/reviews'),
-      feature: (id: string) => buildUrl(`/admin/reviews/${id}/feature`),
-      delete: (id: string) => buildUrl(`/admin/reviews/${id}`),
-    },
+  // Trip Planning Calls
+  PLANNING_CALLS: {
+    SCHEDULE: buildUrl('/planning-calls'),
+    UPCOMING: buildUrl('/planning-calls/upcoming'),
+    MY_CALLS: buildUrl('/planning-calls/my-calls'),
+    RESCHEDULE: (id: string) => buildUrl(`/planning-calls/${id}/reschedule`),
+    CANCEL: (id: string) => buildUrl(`/planning-calls/${id}/cancel`),
+    COMPLETE: (id: string) => buildUrl(`/planning-calls/${id}/complete`),
+    LIST: buildUrl('/planning-calls'),
+    BY_ID: (id: string) => buildUrl(`/planning-calls/${id}`),
+    DELETE: (id: string) => buildUrl(`/planning-calls/${id}`),
+  },
 
-    moderation: {
-      deletePost: (id: string) => buildUrl(`/admin/posts/${id}`),
-      deleteComment: (id: string) => buildUrl(`/admin/comments/${id}`),
-    },
+  // Contracts
+  CONTRACTS: {
+    CREATE: buildUrl('/contracts'),
+    MY_CONTRACTS: buildUrl('/contracts/my-contracts'),
+    BY_ID: (id: string) => buildUrl(`/contracts/${id}`),
+    SIGN: (id: string) => buildUrl(`/contracts/${id}/sign`),
+    LIST: buildUrl('/contracts'),
+    PENDING: buildUrl('/contracts/pending/list'),
+    DELETE: (id: string) => buildUrl(`/contracts/${id}`),
+  },
 
-    settings: {
-      get: buildUrl('/admin/settings'),
-      update: buildUrl('/admin/settings'),
-    },
+  // Agent Assignment
+  AGENTS: {
+    AVAILABLE: buildUrl('/agents/available'),
+    VALIDATE: (id: string) => buildUrl(`/agents/${id}/validate`),
+    ASSIGNMENT_STATS: buildUrl('/agents/assignment-stats'),
+    TEST_AUTO_ASSIGN: buildUrl('/agents/test-auto-assign'),
+  },
 
-    countries: {
-      list: buildUrl('/admin/countries'),
-      byId: (id: string) => buildUrl(`/admin/countries/${id}`),
-      create: buildUrl('/admin/countries'),
-      update: (id: string) => buildUrl(`/admin/countries/${id}`),
-      delete: (id: string) => buildUrl(`/admin/countries/${id}`),
-    },
+  // Dashboard
+  DASHBOARD: {
+    STATS: buildUrl('/dashboard/stats'),
+  },
 
-    analytics: {
-      dashboard: buildUrl('/admin/analytics/dashboard'),
-      users: buildUrl('/admin/analytics/users'),
-      adventures: buildUrl('/admin/analytics/adventures'),
-    },
+  // Destination Countries
+  COUNTRIES: {
+    LIST: buildUrl('/countries'),
+    BY_ID: (id: string) => buildUrl(`/countries/${id}`),
+    CREATE: buildUrl('/countries'),
+    UPDATE: (id: string) => buildUrl(`/countries/${id}`),
+    TOGGLE_ACTIVE: (id: string) => buildUrl(`/countries/${id}/toggle-active`),
+    DELETE: (id: string) => buildUrl(`/countries/${id}`),
+  },
+
+  // Platform Settings
+  SETTINGS: {
+    PUBLIC: buildUrl('/settings/public'),
+    MAINTENANCE_CHECK: buildUrl('/settings/maintenance-check'),
+    GET: buildUrl('/settings'),
+    UPDATE: buildUrl('/settings'),
+    UPDATE_SITE_NAME: buildUrl('/settings/site-name'),
+    UPDATE_CONTACT_EMAIL: buildUrl('/settings/contact-email'),
+    ENABLE_MAINTENANCE: buildUrl('/settings/maintenance/enable'),
+    DISABLE_MAINTENANCE: buildUrl('/settings/maintenance/disable'),
+    CLEAR_CACHE: buildUrl('/settings/cache/clear'),
   },
 } as const;
 
