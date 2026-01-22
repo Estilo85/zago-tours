@@ -14,20 +14,23 @@ import { LoginDto } from '@zagotours/types';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { PasswordInput } from '@/components/ui/input/password-input';
+import { useAuth } from '@/hooks/queries/auth';
 
-interface LoginFormProps {
-  onSubmit: (data: LoginDto) => void;
-  isLoading?: boolean;
-}
-
-export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
+export function LoginForm() {
   const [formData, setFormData] = useState<LoginDto>({
     email: '',
     password: '',
   });
 
+  const { login, isLoggingIn } = useAuth();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login(formData);
   };
 
   return (
@@ -55,21 +58,18 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           </Text>
         </Stack>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit(formData);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <Stack gap={4}>
             <Field.Root>
               <Field.Label>Email</Field.Label>
               <Input
                 name='email'
                 type='email'
+                required
                 value={formData.email}
                 onChange={handleChange}
                 placeholder='email@example.com'
+                disabled={isLoggingIn}
               />
             </Field.Root>
 
@@ -77,15 +77,24 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               <Field.Label>Password</Field.Label>
               <PasswordInput
                 name='password'
+                required
                 value={formData.password}
                 onChange={handleChange}
                 placeholder='********'
+                disabled={isLoggingIn}
               />
             </Field.Root>
 
-            <Button type='submit' loading={isLoading} bg='primary' width='full'>
+            <Button
+              type='submit'
+              bg='primary'
+              width='full'
+              loading={isLoggingIn}
+              disabled={isLoggingIn}
+            >
               Sign In
             </Button>
+
             <Text textAlign='center'>
               <AppLink href='/forgot-password' color='primary'>
                 Forgot password ?

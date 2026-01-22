@@ -44,7 +44,7 @@ export class AuthController {
     async (req: ReqBody<ForgotPasswordDto>, res: Response) => {
       const result = await this.authService.forgotPassword(req.body.email);
       return ResponseUtil.success(res, null, result.message);
-    }
+    },
   );
 
   /**

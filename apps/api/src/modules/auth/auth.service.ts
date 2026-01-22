@@ -31,12 +31,32 @@ export class AuthService {
     const hashedPassword = await BcryptUtil.hash(data.password);
     const referralCode = await this.generateUniqueReferralCode(data.role);
 
-    let referredById: string | undefined;
+    // let referredById: string | undefined;
+
+    // if (data.referralCode) {
+    //   const referrer = await this.authRepository.findByReferralCode(
+    //     data.referralCode.trim().toUpperCase(),
+    //   );
+    //   referredById = referrer?.id;
+    // }
+
+    // BEFORE:
+    // let referredById: string | undefined;
+
+    // AFTER (Fix):
+    let referredById: string | null = null; // Default to null
+
     if (data.referralCode) {
       const referrer = await this.authRepository.findByReferralCode(
-        data.referralCode.trim().toUpperCase()
+        data.referralCode.trim().toUpperCase(),
       );
-      referredById = referrer?.id;
+
+      if (referrer) {
+        referredById = referrer.id;
+        console.log(`Referral match found! Referrer: ${referrer.name}`);
+      } else {
+        console.log('No referrer found for code:', data.referralCode);
+      }
     }
 
     const userData = {
@@ -55,11 +75,11 @@ export class AuthService {
     const user = await this.authRepository.registerWithProfile(
       userData,
       data.role,
-      profileData
+      profileData,
     );
     //Welcome Email
     EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
-      console.error('Email background error:', err)
+      console.error('Email background error:', err),
     );
 
     return this.mapUserResponse(user);
@@ -83,7 +103,7 @@ export class AuthService {
   // GET CURRENT USER
   // ============================================
   async getCurrentUser(userId: string): Promise<UserResponse> {
-    const user = await this.authRepository.findByEmail(userId);
+    const user = await this.authRepository.findById(userId);
     if (!user) throw new Error('User not found');
 
     return this.mapUserResponse(user);
@@ -102,7 +122,7 @@ export class AuthService {
 
       await this.authRepository.saveResetToken(user.id, resetToken, expiresAt);
       await EmailService.sendPasswordResetEmail(user.email, resetToken).catch(
-        (err) => console.error('Email background error:', err)
+        (err) => console.error('Email background error:', err),
       );
     }
 

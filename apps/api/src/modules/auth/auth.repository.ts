@@ -43,7 +43,7 @@ export class AuthRepository extends BaseRepository<
   async saveResetToken(
     userId: string,
     token: string,
-    expiresAt: Date
+    expiresAt: Date,
   ): Promise<User> {
     return this.update(userId, {
       resetPasswordToken: token,
@@ -67,7 +67,7 @@ export class AuthRepository extends BaseRepository<
       'independentDetails' | 'cooperateDetails' | 'affiliateDetails'
     >,
     role: Role,
-    profileData: Record<string, any>
+    profileData: Record<string, any>,
   ): Promise<User> {
     return prisma.$transaction(async (tx) => {
       // Create base user
@@ -124,6 +124,9 @@ export class AuthRepository extends BaseRepository<
           independentDetails: true,
           cooperateDetails: true,
           affiliateDetails: true,
+          _count: {
+            select: { referees: true },
+          },
         },
       });
     });
