@@ -4,58 +4,92 @@ import { StoryHero } from '@/components/our-story/StoryHero';
 import TransformationSection from '@/components/our-story/TransformationSection';
 import PurposeSection from '@/components/our-story/PurposeSection';
 import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-step';
-import { Box, Center, Stack, Text } from '@chakra-ui/react';
 
-const mySteps = [
+import { Box, Heading, Text, Stack, Image, Center } from '@chakra-ui/react';
+import React from 'react';
+import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+
+export const mySteps = [
   {
     content: (
-      <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
-        facere quasi natus fuga, alias sint consectetur sapiente autem impedit
-        ad dolore beatae magnam totam vitae iure ipsam. Eligendi inventore
-        porro, excepturi dolores nesciunt nulla animi explicabo iure temporibus,
-        perferendis ad. Labore, magni earum ea eligendi laborum nostrum soluta
-        cum suscipit facere explicabo aperiam, sint aliquid blanditiis, sequi
-        incidunt! Maiores nisi unde asperiores sit quidem minima earum eveniet
-        error ullam harum atque ad, fugit nam in autem eum fugiat maxime, ea ut
-        adipisci placeat! Doloremque odit dicta quae saepe culpa accusamus
-        perferendis eos nisi, mollitia iste tenetur blanditiis, cupiditate
-        voluptatem laboriosam ratione. Laboriosam sit adipisci ad doloribus
-        impedit at, tempora odio quibusdam, cumque vero, esse cupiditate rem sed
-      </h1>
+      <Box>
+        <Stack
+          gap={4}
+          border='1px solid'
+          borderColor='gray.200'
+          borderRadius='2xl'
+          p={{ base: 6, md: 10 }}
+          bg='white'
+          shadow='sm'
+          mb={10}
+        >
+          <Heading
+            size={{ base: 'xl', md: '2xl' }}
+            color='primary'
+            textAlign='left'
+          >
+            Hi, I’m Esther 👋
+          </Heading>
+          <Text fontSize='lg' lineHeight={{ base: 'tall', md: 'taller' }}>
+            Good to have you here. Welcome to the Zago side. Before Zago Tours,
+            I ran Zippa Marketing, connecting thousands of travel professionals
+            across 70+ countries. I was the person people called when things
+            went wrong: a traveler in trouble, an operator panicking, a trip
+            that suddenly felt unsafe.
+          </Text>
+        </Stack>
+        <ResponsiveImage
+          src='/images/events/esther-picture.webp'
+          alt='Esther'
+          borderRadius='xl'
+          height='300px'
+        />
+      </Box>
     ),
   },
   {
     content: (
-      <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi eaque
-        hic dolore dolorem nobis provident eius, qui itaque modi, aliquid
-        corporis quo dicta tempore esse ratione numquam quia quod quibusdam sit
-        accusantium quidem molestiae? Repellendus sequi suscipit dolore facere
-        ullam? Libero quibusdam natus exercitationem officia quam ducimus
-        nesciunt. Maiores incidunt eos asperiores eius odit exercitationem
-        dignissimos doloribus, officiis recusandae sapiente cumque. Quibusdam
-        quam, dignissimos architecto sunt est unde veritatis, distinctio iste
-        iusto modi voluptate. Nam at deleniti, maxime quisquam nulla iure dolor
-        deserunt, perspiciatis excepturi corporis dolorum mollitia aut ea quos
-        minima eligendi eos tenetur facilis error? Dignissimos exercitationem
-        rerum, reiciendis odit sunt repellendus voluptatum dolor velit vitae
-        dolores, fugit, eum aliquam blanditiis aut? Nihil iste magni deserunt ab
-        expedita magnam eligendi maiores laboriosam nobis, quaerat, blanditiis
-      </h1>
+      <Box
+        border='1px solid'
+        borderColor='gray.200'
+        borderRadius='2xl'
+        p={{ base: 6, md: 10 }}
+        bg='white'
+        shadow='sm'
+      >
+        <Text fontSize='lg' lineHeight={{ base: 'tall', md: 'taller' }}>
+          I would help fix the situation quietly… but deep down, I knew these
+          incidents weren’t random. Then came the moment that changed me.
+          Someone shared a story in our community—an adventure traveler whose
+          adventure ended in a tragedy that should never have happened. They
+          asked for my thoughts, and I couldn’t look away. I needed to
+          understand “why.” My research uncovered a truth the industry doesn’t
+          talk about enough: Adventure travel is growing fast, but safety hasn’t
+          grown with it.
+        </Text>
+      </Box>
     ),
   },
   {
     content: (
-      <h1>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam
-        reiciendis quas ullam amet quibusdam ea enim hic, quae temporibus esse
-        quos. Amet id voluptatum ex repudiandae nulla, quisquam consectetur
-        adipisci molestias! Voluptatem, mollitia! Iure, ullam esse cumque soluta
-        quas explicabo laboriosam autem ad voluptate ex nam recusandae, est
-        itaque non eveniet porro consequatur nulla adipisci ducimus iste ipsa
-        reprehenderit deserunt voluptate! Quos repellat, perferendis vitae,
-      </h1>
+      <Box
+        border='1px solid'
+        borderColor='gray.200'
+        borderRadius='2xl'
+        p={{ base: 6, md: 10 }}
+        bg='white'
+        shadow='sm'
+      >
+        <Text fontSize='lg' lineHeight={{ base: 'tall', md: 'taller' }}>
+          Young explorers are stepping into the world with courage and
+          curiosity, but too often, without protection or trust. That didn’t sit
+          right with me. And I could no longer pretend it wasn’t happening. So I
+          started Zago Tours. A place where freedom and safety can finally
+          coexist. Where every adventure is verified. Where travelers feel
+          excited, not anxious. Because the world deserves better adventures.
+          And young travelers deserve to come home safely, every single time.
+        </Text>
+      </Box>
     ),
   },
 ];

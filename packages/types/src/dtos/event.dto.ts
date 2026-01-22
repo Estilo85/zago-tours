@@ -42,11 +42,18 @@ export interface EventResponseDto {
   mediaUrl: string | null;
   publicId: string | null;
   createdAt: Date;
-
+  registrations?: {
+    user: {
+      id: string;
+      name: string;
+      image: string | null;
+    };
+  }[];
   isExpired?: boolean;
   isFull?: boolean;
   hasJoined?: boolean;
 }
+
 export interface EventListQueryDto {
   page?: number;
   limit?: number;

@@ -30,6 +30,37 @@ export const mockEvents: EventResponseDto[] = [
     createdAt: new Date(),
     isFull: false,
     hasJoined: true,
+    // Added user data for avatars
+    registrations: [
+      {
+        user: {
+          id: 'u1',
+          name: 'Alice Johnson',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+      {
+        user: {
+          id: 'u2',
+          name: 'Bob Smith',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+      {
+        user: {
+          id: 'u3',
+          name: 'Charlie Brown',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+      {
+        user: {
+          id: 'u4',
+          name: 'Diana Prince',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+    ],
   },
   {
     id: '2',
@@ -47,6 +78,23 @@ export const mockEvents: EventResponseDto[] = [
     createdAt: new Date(),
     isFull: true,
     hasJoined: false,
+    // Two users registered
+    registrations: [
+      {
+        user: {
+          id: 'u5',
+          name: 'Eve Adams',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+      {
+        user: {
+          id: 'u6',
+          name: 'Frank Miller',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+    ],
   },
   {
     id: '3',
@@ -64,6 +112,16 @@ export const mockEvents: EventResponseDto[] = [
     createdAt: new Date(),
     isExpired: true,
     hasJoined: false,
+    // One user registered
+    registrations: [
+      {
+        user: {
+          id: 'u7',
+          name: 'Grace Hopper',
+          image: '/images/home/home-hero-advisor-3.webp',
+        },
+      },
+    ],
   },
 ];
 

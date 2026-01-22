@@ -18,6 +18,20 @@ export class EventRepository extends BaseRepository<
         date: { gte: new Date() },
       },
       orderBy: { date: 'asc' },
+      include: {
+        registrations: {
+          take: 5,
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 

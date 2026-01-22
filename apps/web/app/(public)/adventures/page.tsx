@@ -1,4 +1,5 @@
 import { AdventureHero } from '@/components/adventure/AdventureHero';
+import FormSection from '@/components/adventure/FormSection';
 import TripTypeSection from '@/components/adventure/TripTypeSection';
 import VerifiedAdventureSection from '@/components/adventure/VerifiedAdventureSection';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
@@ -7,7 +8,7 @@ import React from 'react';
 
 export default function Adventures() {
   return (
-    <Box>
+    <Box mb={10}>
       <AdventureHero />
       <TripTypeSection />
       <Box>
@@ -17,6 +18,17 @@ export default function Adventures() {
         />
       </Box>
       <VerifiedAdventureSection />
+      <Box width='full' my={10}>
+        <ResponsiveImage
+          src='/images/adventures/adventure-section.webp'
+          alt='price plan image'
+          height='500px'
+          objectFit='cover'
+          borderRadius='none'
+        />
+      </Box>
+
+      <FormSection />
     </Box>
   );
 }

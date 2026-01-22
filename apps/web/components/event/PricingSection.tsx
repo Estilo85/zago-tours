@@ -36,20 +36,20 @@ export const PricingSection = () => {
       </Stack>
       <SimpleGrid columns={{ base: 1, md: 3 }} gap={10}>
         <PricingCard
-          title='Basic'
+          title='Explorer'
           buttonText='Get started'
           price='$0'
           features={['1 Project', 'Basic Analytics', 'Community Support']}
         />
         <PricingCard
-          title='Pro'
+          title='Adventurer Plus'
           buttonText='Sign up now'
           price='$29'
           isActive={true}
           features={['Unlimited Projects', 'Advanced AI', 'Priority Support']}
         />
         <PricingCard
-          title='Enterprise'
+          title='Global Guardians'
           buttonText='Sign up now'
           price='$99'
           features={['Custom Solutions', 'Dedicated Manager', 'SLA Guarantee']}

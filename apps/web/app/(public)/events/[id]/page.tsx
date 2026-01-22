@@ -1,3 +1,7 @@
+import { EventDetailPage } from '@/components/event/EventDetail';
+import { mockEvents } from '@/components/event/EventSection';
+import { notFound } from 'next/navigation';
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -5,10 +9,11 @@ interface PageProps {
 export default async function EventDetails({ params }: PageProps) {
   const { id } = await params;
 
-  return (
-    <div>
-      <h1>Adventure Detail</h1>
-      <p>Viewing adventure: {id}</p>
-    </div>
-  );
+  const event = Array.isArray(mockEvents)
+    ? mockEvents.find((e) => e.id === id)
+    : null;
+
+  if (!event) notFound();
+
+  return <EventDetailPage event={event} />;
 }

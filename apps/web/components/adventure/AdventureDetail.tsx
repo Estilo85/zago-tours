@@ -30,7 +30,9 @@ interface AdventureDetailProps {
   adventure: AdventureWithRelations;
 }
 
-export default function AdventureDetail({ adventure }: AdventureDetailProps) {
+export default function AdventureDetailPage({
+  adventure,
+}: AdventureDetailProps) {
   const hasDiscount = false;
   const discountPrice = adventure.price * 0.9;
 

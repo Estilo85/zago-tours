@@ -65,6 +65,16 @@ export class EventController {
         {
           where: filters,
           orderBy: { [String(sortBy)]: String(sortOrder) },
+          include: {
+            registrations: {
+              take: 5,
+              include: {
+                user: {
+                  select: { id: true, name: true, image: true },
+                },
+              },
+            },
+          },
         },
       );
 

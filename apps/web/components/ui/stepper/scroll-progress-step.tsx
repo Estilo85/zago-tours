@@ -21,7 +21,6 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = Number(entry.target.getAttribute('data-step-index'));
-            console.log('Current Active Step:', index);
             setActiveStep(index);
           }
         });
@@ -29,7 +28,7 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
       {
         threshold: 0.3,
         rootMargin: '-5% 0px -45% 0px',
-      }
+      },
     );
 
     contentRefs.current.forEach((ref) => {
@@ -40,9 +39,14 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
   }, [items]);
 
   return (
-    <Flex gap={{ base: '6', md: '10' }} direction='row' alignItems='stretch'>
+    <Flex
+      gap={{ base: '6', md: '10' }}
+      direction='row'
+      alignItems='stretch'
+      justify='center'
+    >
       {/* LEFT SIDE: Indicators */}
-      <Box>
+      <Box flexShrink={0}>
         <Steps.Root
           orientation='vertical'
           step={activeStep}
@@ -53,7 +57,6 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
               <Steps.Item
                 index={index}
                 key={index}
-                // minHeight='60vh'
                 data-active={activeStep === index ? '' : undefined}
               >
                 <Steps.Trigger>
@@ -80,14 +83,16 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
       </Box>
 
       {/* RIGHT SIDE: Content */}
-      <Box flex='1'>
+      <Box flex='1' overflow='hidden' maxW={{ base: '100%', md: '600px' }}>
         {items.map((item, index) => (
           <Box
             key={index}
             ref={(el: any) => (contentRefs.current[index] = el)}
             data-step-index={index}
-            minHeight='50vh'
-            pt='2'
+            minHeight='60vh'
+            mb={index < items.length - 1 ? 8 : 0}
+            display='flex'
+            alignItems='center'
           >
             {item.content}
           </Box>
