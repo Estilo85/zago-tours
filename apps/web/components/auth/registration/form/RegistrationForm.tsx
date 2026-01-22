@@ -1,24 +1,25 @@
 'use client';
-import { useState } from 'react';
-import { Box, VStack, Text } from '@chakra-ui/react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Box, VStack } from '@chakra-ui/react';
 import Button from '@/components/ui/button/Button';
 import { useRegistrationLogic } from '@/hooks/use-registration-logic';
-import { mapFormDataToDTO, FormErrors } from '@/lib/registration-utils';
-
-// Sub-components
-import { AgentTypeSelector } from '../AgentTypeSelector';
+import {
+  RegistrationFormData,
+  registrationSchema,
+} from '@/app/validations/auth-validation';
+import { useEffect } from 'react';
 import { RegistrationHeader } from '../RegistrationHeader';
-import { FormField } from './FormField';
-import { validateRegistration } from '@/lib/validate-registration';
-import { Role } from '@zagotours/types';
+import { AgentTypeSelector } from '../AgentTypeSelector';
+import { IdentitySection } from './IdentitySection';
 import { DynamicRoleSection } from './DynamicRoleSection';
 import { SecuritySection } from './SecuritySection';
-import { IdentitySection } from './IdentitySection';
+import { RegisterDto, RegistrableRole, Role } from '@zagotours/types';
+import { useAuth } from '@/hooks/queries/auth';
 
-export default function RegistrationForm({
-  onSubmit,
-  error: serverError,
-}: any) {
+export default function RegistrationForm() {
+  const { register, isRegistering } = useAuth();
+
   const {
     selectedCategory,
     selectedAgentType,
@@ -26,39 +27,61 @@ export default function RegistrationForm({
     handleAgentTypeSelect,
   } = useRegistrationLogic();
 
-  const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
+  const methods = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      role: finalRole || undefined,
+      safetyAmbassador: false,
+      certifications: [],
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
-  //  Dynamic Labels
-  const labels = {
-    fullName: finalRole === Role.COOPERATE_AGENT ? 'Company Name' : 'Full Name',
-    email:
-      finalRole === Role.COOPERATE_AGENT ? 'Contact Email' : 'Email address',
-    description:
-      finalRole === Role.AFFILIATE
-        ? 'Marketing Experience'
-        : 'Business Description',
-    placeholder:
-      finalRole === Role.COOPERATE_AGENT
-        ? 'Enter registered company name'
-        : 'Enter your full name',
-  };
+  useEffect(() => {
+    if (finalRole) {
+      methods.setValue('role', finalRole, { shouldValidate: true });
+    }
+  }, [finalRole, methods]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFieldErrors({});
+  const onFormSubmit = (data: RegistrationFormData) => {
+    const payload: RegisterDto = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      phone: data.phone,
+      country: data.country,
+      role: data.role as RegistrableRole,
+      referralCode: data.referralCode,
+    };
 
-    const formData = new FormData(e.currentTarget);
-    const errors = validateRegistration(formData, finalRole);
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      return;
+    // Add nested details based on role
+    if (data.role === Role.INDEPENDENT_AGENT) {
+      payload.agentDetails = {
+        certifications: data.certifications,
+        howDidYouHear: data.howDidYouHear,
+      };
     }
 
-    if (!finalRole) return;
-    const payload = mapFormDataToDTO(formData, finalRole);
+    if (data.role === Role.COOPERATE_AGENT) {
+      payload.cooperateDetails = {
+        companyName: data.name,
+        travelBusinessDescription: data.business_description!,
+        howDidYouHear: data.howDidYouHear,
+      };
+    }
 
-    if (onSubmit) await onSubmit(payload);
+    if (data.role === Role.AFFILIATE) {
+      payload.affiliateDetails = {
+        communityBrand: data.community!,
+        socialLinks: data.website_link ? [data.website_link] : [],
+        howDidYouHear: data.howDidYouHear,
+      };
+    }
+
+    register(payload); // Call the register function from useAuth
   };
 
   return (
@@ -67,65 +90,37 @@ export default function RegistrationForm({
       p={7}
       borderRadius='lg'
       boxShadow='sm'
-      width={{ base: '100%', md: 'md' }}
-      minH={{ base: 'fit-content', md: '570px' }}
-      maxH={{ base: 'fit-content', md: '570px' }}
+      width='md'
+      maxH='570px'
       overflowY='auto'
-      scrollbar='hidden'
     >
-      <VStack align='stretch' gap={4}>
-        <RegistrationHeader />
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onFormSubmit)}>
+          <VStack align='stretch' gap={4}>
+            <RegistrationHeader />
 
-        {/* Global Error Display */}
-        {(serverError || fieldErrors.general) && (
-          <Box
-            p={3}
-            bg='red.50'
-            color='red.600'
-            borderRadius='md'
-            border='1px solid'
-          >
-            <Text fontSize='sm'>{serverError || fieldErrors.general}</Text>
-          </Box>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <VStack gap={3} align='stretch'>
-            {/*  AGENT SWITCHER (Nested between fields) */}
             {selectedCategory === 'AGENT' && (
-              <Box my={2}>
-                <Text fontSize='xs' fontWeight='bold' mb={2} color='gray.500'>
-                  AGENT TYPE
-                </Text>
-                <AgentTypeSelector
-                  selectedAgentType={selectedAgentType}
-                  onAgentTypeChange={handleAgentTypeSelect}
-                />
-              </Box>
+              <AgentTypeSelector
+                selectedAgentType={selectedAgentType}
+                onAgentTypeChange={handleAgentTypeSelect}
+              />
             )}
 
-            <IdentitySection
-              finalRole={finalRole}
-              labels={labels}
-              errors={fieldErrors}
-            />
+            <IdentitySection finalRole={finalRole} />
+            <DynamicRoleSection finalRole={finalRole} />
+            <SecuritySection finalRole={finalRole} />
 
-            <DynamicRoleSection finalRole={finalRole} errors={fieldErrors} />
-
-            <SecuritySection finalRole={finalRole} errors={fieldErrors} />
             <Button
               type='submit'
-              colorPalette='primary'
-              size='lg'
-              mt={2}
               bg='primary'
               width='100%'
+              loading={isRegistering} // Use isRegistering instead
             >
               Create Account
             </Button>
           </VStack>
         </form>
-      </VStack>
+      </FormProvider>
     </Box>
   );
 }

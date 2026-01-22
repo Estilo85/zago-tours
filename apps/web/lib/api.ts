@@ -14,7 +14,7 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
     headers.set('Authorization', `Bearer ${session.accessToken}`);
   }
 
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const res = await fetch(`${endpoint}`, {
     ...options,
     headers,
   });

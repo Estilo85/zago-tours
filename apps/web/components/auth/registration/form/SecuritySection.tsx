@@ -1,29 +1,54 @@
+import { useFormContext, Controller } from 'react-hook-form';
 import { Role } from '@zagotours/types';
 import { FormField } from './FormField';
 
-export function SecuritySection({ finalRole, errors }: any) {
+export function SecuritySection({ finalRole }: any) {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <>
-      <FormField
+      <Controller
         name='password'
-        label='Password'
-        type='password'
-        error={errors.password}
+        control={control}
+        render={({ field }) => (
+          <FormField
+            {...field}
+            label='Password'
+            type='password'
+            error={errors.password?.message}
+          />
+        )}
       />
-      <FormField
+      <Controller
         name='confirmPassword'
-        label='Confirm Password'
-        type='password'
-        error={errors.confirmPassword}
+        control={control}
+        render={({ field }) => (
+          <FormField
+            {...field}
+            label='Confirm Password'
+            type='password'
+            error={errors.confirmPassword?.message}
+          />
+        )}
       />
 
       {finalRole === Role.ADVENTURER && (
-        <FormField
-          name='subscribe'
-          label='Become a safety ambassador'
-          type='checkbox'
+        <Controller
+          name='safetyAmbassador'
+          control={control}
+          render={({ field }) => (
+            <FormField
+              {...field}
+              label='Become a safety ambassador'
+              type='checkbox'
+            />
+          )}
         />
       )}
+      {/* ... and so on for checkbox */}
     </>
   );
 }

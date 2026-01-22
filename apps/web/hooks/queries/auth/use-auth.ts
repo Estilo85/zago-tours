@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signIn, signOut } from 'next-auth/react';
+import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toaster } from '@/components/ui/toaster';
 import { LoginDto, RegisterDto } from '@zagotours/types';
@@ -7,32 +7,7 @@ import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { authKeys } from './query-keys';
 import { Role } from '@zagotours/types';
-
-// Add this helper function
-function getRedirectUrlByRole(role: Role): string {
-  switch (role) {
-    case Role.SUPER_ADMIN:
-      return '/super-admin/dashboard';
-
-    case Role.ADMIN:
-      return '/admin/dashboard';
-
-    case Role.AFFILIATE:
-      return '/affiliate/dashboard';
-
-    case Role.ADVENTURER:
-      return '/adventurer/bookings';
-
-    case Role.INDEPENDENT_AGENT:
-      return '/agent/dashboard';
-
-    case Role.COOPERATE_AGENT:
-      return '/agent/dashboard';
-
-    default:
-      return '/dashboard'; // Fallback
-  }
-}
+import { getRedirectUrlByRole } from '@/lib/auth-redirect';
 
 // ============================================
 // LOGIN, REGISTER, AND LOGOUT
@@ -61,25 +36,28 @@ export function useAuth() {
       return result;
     },
     onSuccess: async () => {
-      toaster.create({
-        title: 'Welcome back!',
-        description: 'Login successful',
-        type: 'success',
-      });
+      //  Fetch the LATEST session data
+      const session = await getSession();
+      const userRole = session?.user?.role as Role;
 
-      // Invalidate queries to refresh user data across the app
-      queryClient.invalidateQueries({ queryKey: authKeys.session() });
-      queryClient.invalidateQueries({ queryKey: authKeys.profile() });
+      await queryClient.invalidateQueries({ queryKey: authKeys.session() });
+      await queryClient.invalidateQueries({ queryKey: authKeys.profile() });
 
-      router.push('/dashboard');
+      if (userRole) {
+        const destination = getRedirectUrlByRole(userRole);
+
+        toaster.create({
+          title: 'Welcome back!',
+          description: `Logged in as ${userRole}`,
+          type: 'success',
+        });
+
+        router.push(destination);
+      } else {
+        router.push('/dashboard');
+      }
+
       router.refresh();
-    },
-    onError: (error: any) => {
-      toaster.create({
-        title: 'Login Failed',
-        description: error.message || 'Invalid email or password',
-        type: 'error',
-      });
     },
   });
 
@@ -124,6 +102,7 @@ export function useAuth() {
     login: loginMutation.mutate,
     isLoggingIn: loginMutation.isPending,
     register: registerMutation.mutate,
+
     isRegistering: registerMutation.isPending,
     logout: handleLogout,
   };

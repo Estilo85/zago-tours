@@ -1,47 +1,99 @@
+'use client';
+
+import { useFormContext, Controller } from 'react-hook-form';
 import { Role } from '@zagotours/types';
 import { FormField } from './FormField';
 
-export function DynamicRoleSection({ finalRole, errors }: any) {
+const certificationOptions = [
+  { value: 'IATA', label: 'IATA' },
+  { value: 'CLIA', label: 'CLIA' },
+  { value: 'LOCAL_LICENSE', label: 'Local License' },
+];
+
+export function DynamicRoleSection({ finalRole }: { finalRole: Role | null }) {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
   switch (finalRole) {
     case Role.COOPERATE_AGENT:
       return (
-        <FormField
+        <Controller
           name='business_description'
-          label='Tell us about your travel business'
-          type='textarea'
-          error={errors.business_description}
+          control={control}
+          render={({ field }) => (
+            <FormField
+              {...field}
+              label='Tell us about your travel business'
+              type='textarea'
+              placeholder='Describe your company services...'
+              error={errors.business_description?.message}
+            />
+          )}
         />
       );
+
     case Role.INDEPENDENT_AGENT:
       return (
-        <FormField
+        <Controller
           name='certifications'
-          label='Certifications'
-          type='combo'
-          placeholder='e.g. IATA, Local License'
-          error={errors.certifications}
+          control={control}
+          render={({ field }) => (
+            <FormField
+              {...field}
+              label='Certifications'
+              type='combo'
+              options={certificationOptions}
+              placeholder='e.g. IATA, Local License'
+              error={errors.certifications?.message}
+            />
+          )}
         />
       );
+
     case Role.AFFILIATE:
       return (
         <>
-          <FormField
+          <Controller
             name='find_us'
-            label='How did you hear about us?'
-            error={errors.find_us}
+            control={control}
+            render={({ field }) => (
+              <FormField
+                {...field}
+                label='How did you hear about us?'
+                placeholder='Social media, friend, etc.'
+                error={errors.find_us?.message}
+              />
+            )}
           />
-          <FormField
+          <Controller
             name='community'
-            label='Community/Brand/Host agency name'
-            error={errors.community}
+            control={control}
+            render={({ field }) => (
+              <FormField
+                {...field}
+                label='Community/Brand/Host agency name'
+                placeholder='Enter organization name'
+                error={errors.community?.message}
+              />
+            )}
           />
-          <FormField
+          <Controller
             name='website_link'
-            label='Website/Social Link'
-            error={errors.website_link}
+            control={control}
+            render={({ field }) => (
+              <FormField
+                {...field}
+                label='Website/Social Link'
+                placeholder='https://...'
+                error={errors.website_link?.message}
+              />
+            )}
           />
         </>
       );
+
     default:
       return null;
   }

@@ -7,7 +7,7 @@ import {
   TextareaProps,
   Field,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 type SharedChangeEvent = React.ChangeEvent<
   HTMLInputElement | HTMLTextAreaElement
@@ -23,52 +23,67 @@ interface FormInputProps extends Omit<InputProps & TextareaProps, 'onChange'> {
   value?: string;
 }
 
-export const FormInput = ({
-  label,
-  helperText,
-  errorText,
-  isTextArea = false,
-  rows = 4,
-  onChange,
-  value,
-  ...props
-}: FormInputProps) => {
-  return (
-    <Field.Root invalid={!!errorText} w='full'>
-      {label && (
-        <Field.Label fontWeight='bold' fontSize='sm' mb={1}>
-          {label}
-        </Field.Label>
-      )}
+// Wrapping with forwardRef allows RHF to "touch" the DOM element
+export const FormInput = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  FormInputProps
+>(
+  (
+    {
+      label,
+      helperText,
+      errorText,
+      isTextArea = false,
+      rows = 4,
+      onChange,
+      value,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <Field.Root invalid={!!errorText} w='full'>
+        {label && (
+          <Field.Label fontWeight='bold' fontSize='sm' mb={1}>
+            {label}
+          </Field.Label>
+        )}
 
-      {isTextArea ? (
-        <Textarea
-          {...props}
-          value={value}
-          onChange={onChange as React.ChangeEventHandler<HTMLTextAreaElement>}
-          rows={rows}
-          focusRingColor='primary'
-          borderRadius='xl'
-          bg='white'
-        />
-      ) : (
-        <Input
-          {...props}
-          value={value}
-          onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
-          focusRingColor='primary'
-          borderRadius='xl'
-          bg='white'
-          _placeholder={{ color: 'gray.400', fontSize: 'sm' }}
-        />
-      )}
+        {isTextArea ? (
+          <Textarea
+            {...props}
+            ref={ref as React.Ref<HTMLTextAreaElement>} // Attach the ref
+            value={value}
+            onChange={onChange}
+            rows={rows}
+            focusRingColor='primary'
+            borderRadius='xl'
+            bg='white'
+          />
+        ) : (
+          <Input
+            {...props}
+            ref={ref as React.Ref<HTMLInputElement>} // Attach the ref
+            value={value}
+            onChange={onChange}
+            focusRingColor='primary'
+            borderRadius='xl'
+            bg='white'
+            _placeholder={{ color: 'gray.400', fontSize: 'sm' }}
+          />
+        )}
 
-      {errorText && (
-        <Field.ErrorText fontSize='xs'>{errorText}</Field.ErrorText>
-      )}
-      {helperText && !errorText && (
-        <Field.HelperText fontSize='xs'>{helperText}</Field.HelperText>
-      )}
-    </Field.Root>
-  );
-};
+        {errorText && (
+          <Field.ErrorText fontSize='xs' color='red.500'>
+            {errorText}
+          </Field.ErrorText>
+        )}
+        {helperText && !errorText && (
+          <Field.HelperText fontSize='xs'>{helperText}</Field.HelperText>
+        )}
+      </Field.Root>
+    );
+  },
+);
+
+FormInput.displayName = 'FormInput';
