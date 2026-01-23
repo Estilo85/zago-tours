@@ -22,33 +22,21 @@ export class UserController {
   // USER PROFILE ENDPOINTS
   // ============================================
 
-  /**
-   * Get current user's profile
-   * GET /api/users/profile
-   */
   getProfile = asyncHandler(async (req: TypedRequest, res: Response) => {
     const profile = await this.userService.getProfile(req.userId!);
     return ResponseUtil.success(res, profile);
   });
 
-  /**
-   * Update current user's profile
-   * PUT /api/users/profile
-   */
   updateProfile = asyncHandler(
     async (req: ReqBody<UpdateProfileDto>, res: Response) => {
       const result = await this.userService.updateProfile(
         req.userId!,
-        req.body
+        req.body,
       );
       return ResponseUtil.success(res, result, 'Profile updated successfully');
-    }
+    },
   );
 
-  /**
-   * Get current user's referral stats
-   * GET /api/users/referrals
-   */
   getReferralStats = asyncHandler(async (req: TypedRequest, res: Response) => {
     const stats = await this.userService.getReferralStats(req.userId!);
     return ResponseUtil.success(res, stats);
@@ -58,10 +46,6 @@ export class UserController {
   // ADMIN ENDPOINTS
   // ============================================
 
-  /**
-   * Get all users with pagination and filters (admin)
-   * GET /api/admin/users?page=1&limit=10&role=ADVENTURER&status=ACTIVE&search=john
-   */
   getAllUsers = asyncHandler(
     async (
       req: ReqQuery<{
@@ -71,7 +55,7 @@ export class UserController {
         status?: UserStatus;
         search?: string;
       }>,
-      res: Response
+      res: Response,
     ) => {
       const { page = '1', limit = '10', role, status, search } = req.query;
 
@@ -84,7 +68,7 @@ export class UserController {
       });
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   /**
@@ -95,7 +79,7 @@ export class UserController {
     async (req: ReqParams<{ id: string }>, res: Response) => {
       const user = await this.userService.getUserById(req.params.id);
       return ResponseUtil.success(res, user);
-    }
+    },
   );
 
   /**
@@ -105,18 +89,18 @@ export class UserController {
   updateUserStatus = asyncHandler(
     async (
       req: ReqParams<{ id: string }> & ReqBody<UpdateUserStatusDto>,
-      res: Response
+      res: Response,
     ) => {
       const user = await this.userService.updateUserStatus(
         req.params.id,
-        req.body
+        req.body,
       );
       return ResponseUtil.success(
         res,
         user,
-        'User status updated successfully'
+        'User status updated successfully',
       );
-    }
+    },
   );
 
   /**
@@ -129,9 +113,9 @@ export class UserController {
       return ResponseUtil.success(
         res,
         user,
-        'Safety ambassador status updated successfully'
+        'Safety ambassador status updated successfully',
       );
-    }
+    },
   );
 
   /**
@@ -141,11 +125,11 @@ export class UserController {
   deleteUser = asyncHandler(
     async (
       req: ReqParams<{ id: string }> & ReqQuery<{ hard?: string }>,
-      res: Response
+      res: Response,
     ) => {
       const isHard = req.query.hard === 'true';
       await this.userService.deleteUser(req.params.id, isHard);
       return ResponseUtil.success(res, null, 'User deleted successfully');
-    }
+    },
   );
 }

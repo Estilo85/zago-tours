@@ -20,7 +20,62 @@ export class AuthService {
   // REGISTRATION
   // ============================================
 
+  // async register(data: RegisterDto): Promise<UserResponse> {
+  //   const existingUser = await this.authRepository.findByEmail(data.email);
+  //   if (existingUser) {
+  //     throw new Error('User already exists');
+  //   }
+
+  //   this.validateRoleSpecificFields(data);
+
+  //   const hashedPassword = await BcryptUtil.hash(data.password);
+  //   const referralCode = await this.generateUniqueReferralCode(data.role);
+
+  //   let referredById: string | null = null;
+
+  //   if (data.referralCode) {
+  //     const referrer = await this.authRepository.findByReferralCode(
+  //       data.referralCode.trim().toUpperCase(),
+  //     );
+
+  //     if (referrer) {
+  //       referredById = referrer.id;
+  //       console.log(`Referral match found! Referrer: ${referrer.name}`);
+  //     } else {
+  //       console.log('No referrer found for code:', data.referralCode);
+  //     }
+  //   }
+
+  //   const userData = {
+  //     name: data.name,
+  //     email: data.email,
+  //     password: hashedPassword,
+  //     phone: data.phone,
+  //     country: data.country,
+  //     role: data.role,
+  //     referralCode,
+  //     referredById,
+  //   };
+
+  //   const profileData = this.extractProfileData(data);
+
+  //   const user = await this.authRepository.registerWithProfile(
+  //     userData,
+  //     data.role,
+  //     profileData,
+  //   );
+  //   //Welcome Email
+  //   EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
+  //     console.error('Email background error:', err),
+  //   );
+
+  //   return this.mapUserResponse(user);
+  // }
+
   async register(data: RegisterDto): Promise<UserResponse> {
+    console.log('=== REGISTRATION DEBUG ===');
+    console.log('1. Incoming data:', JSON.stringify(data, null, 2));
+
     const existingUser = await this.authRepository.findByEmail(data.email);
     if (existingUser) {
       throw new Error('User already exists');
@@ -31,32 +86,35 @@ export class AuthService {
     const hashedPassword = await BcryptUtil.hash(data.password);
     const referralCode = await this.generateUniqueReferralCode(data.role);
 
-    // let referredById: string | undefined;
-
-    // if (data.referralCode) {
-    //   const referrer = await this.authRepository.findByReferralCode(
-    //     data.referralCode.trim().toUpperCase(),
-    //   );
-    //   referredById = referrer?.id;
-    // }
-
-    // BEFORE:
-    // let referredById: string | undefined;
-
-    // AFTER (Fix):
-    let referredById: string | null = null; // Default to null
+    let referredById: string | null = null;
 
     if (data.referralCode) {
-      const referrer = await this.authRepository.findByReferralCode(
-        data.referralCode.trim().toUpperCase(),
+      const trimmedCode = data.referralCode.trim().toUpperCase();
+      console.log('2. Looking for referral code:', trimmedCode);
+
+      const referrer =
+        await this.authRepository.findByReferralCode(trimmedCode);
+
+      console.log(
+        '3. Referrer found:',
+        referrer
+          ? {
+              id: referrer.id,
+              name: referrer.name,
+              email: referrer.email,
+              referralCode: referrer.referralCode,
+            }
+          : 'NULL - NO REFERRER FOUND',
       );
 
       if (referrer) {
         referredById = referrer.id;
-        console.log(`Referral match found! Referrer: ${referrer.name}`);
+        console.log('4. ✅ Setting referredById to:', referredById);
       } else {
-        console.log('No referrer found for code:', data.referralCode);
+        console.log('4. ❌ No referrer found, referredById remains null');
       }
+    } else {
+      console.log('2. ❌ No referral code provided in request');
     }
 
     const userData = {
@@ -70,6 +128,11 @@ export class AuthService {
       referredById,
     };
 
+    console.log('5. Final userData being passed to repository:', {
+      ...userData,
+      password: '[HIDDEN]',
+    });
+
     const profileData = this.extractProfileData(data);
 
     const user = await this.authRepository.registerWithProfile(
@@ -77,7 +140,11 @@ export class AuthService {
       data.role,
       profileData,
     );
-    //Welcome Email
+
+    console.log('6. User created with referredById:', user.referredById);
+    console.log('=== END DEBUG ===');
+
+    // Welcome Email
     EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
       console.error('Email background error:', err),
     );

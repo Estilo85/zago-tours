@@ -72,7 +72,7 @@ router.patch('/:id/status', authenticate, userController.updateUserStatus);
 router.patch(
   '/safety-ambassador',
   authenticate,
-  userController.promoteSafetyAmbassador
+  userController.promoteSafetyAmbassador,
 );
 
 /**

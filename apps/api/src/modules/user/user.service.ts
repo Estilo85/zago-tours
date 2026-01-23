@@ -46,6 +46,7 @@ export class UserService {
     if (!user) {
       throw new Error('User not found');
     }
+ 
 
     const { agentDetails, cooperateDetails, affiliateDetails, ...userData } =
       data;

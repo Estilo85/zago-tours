@@ -48,7 +48,6 @@ export function SecuritySection({ finalRole }: any) {
           )}
         />
       )}
-      {/* ... and so on for checkbox */}
     </>
   );
 }

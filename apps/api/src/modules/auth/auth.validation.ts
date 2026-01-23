@@ -8,8 +8,7 @@ export const registerSchema = z.object({
   role: z.enum(Role),
   phone: z.string().optional(),
   country: z.string().optional(),
-
-  // ✅ Add the nested objects to match your DTO and Postman
+  referralCode: z.string().optional(),
   agentDetails: z
     .object({
       certifications: z

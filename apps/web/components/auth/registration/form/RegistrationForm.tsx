@@ -30,16 +30,22 @@ export default function RegistrationForm() {
   const methods = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      role: finalRole || undefined,
-      safetyAmbassador: false,
-      certifications: [],
       name: '',
       email: '',
       password: '',
       confirmPassword: '',
+      phone: '',
+      country: '',
+      role: finalRole || undefined,
+      referralCode: '',
+      business_description: '',
+      certifications: [],
+      howDidYouHear: '',
+      community: '',
+      website_link: '',
+      safetyAmbassador: false,
     },
   });
-
   useEffect(() => {
     if (finalRole) {
       methods.setValue('role', finalRole, { shouldValidate: true });
