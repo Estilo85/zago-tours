@@ -18,6 +18,24 @@ export class AuthRepository extends BaseRepository<
         independentDetails: true,
         cooperateDetails: true,
         affiliateDetails: true,
+        _count: {
+          select: { referees: true },
+        },
+      },
+    });
+  }
+
+  //===== FIND BY ID (if you have this method) =======
+  async findById(id: string): Promise<User | null> {
+    return this.modelDelegate.findUnique({
+      where: { id },
+      include: {
+        independentDetails: true,
+        cooperateDetails: true,
+        affiliateDetails: true,
+        _count: {
+          select: { referees: true },
+        },
       },
     });
   }
@@ -61,103 +79,18 @@ export class AuthRepository extends BaseRepository<
 
   // ======= REGISTER USERS WITH ROLE-SPECIFIC PROFILE =======
 
-  // async registerWithProfile(
-  //   userData: Omit<
-  //     Prisma.UserCreateInput,
-  //     'independentDetails' | 'cooperateDetails' | 'affiliateDetails'
-  //   >,
-  //   role: Role,
-  //   profileData: Record<string, any>,
-  // ): Promise<User> {
-  //   return prisma.$transaction(async (tx) => {
-  //     // Create base user
-  //     const user = await tx.user.create({
-  //       data: userData,
-  //       include: {
-  //         independentDetails: true,
-  //         cooperateDetails: true,
-  //         affiliateDetails: true,
-  //       },
-  //     });
-
-  //     // Create role-specific profile
-  //     const profileCreators: Partial<Record<Role, () => Promise<any>>> = {
-  //       [Role.INDEPENDENT_AGENT]: () =>
-  //         tx.independentAgent.create({
-  //           data: {
-  //             userId: user.id,
-  //             certifications: profileData.certifications || [],
-  //             howDidYouHear: profileData.howDidYouHear,
-  //           },
-  //         }),
-
-  //       [Role.COOPERATE_AGENT]: () =>
-  //         tx.cooperateAgent.create({
-  //           data: {
-  //             userId: user.id,
-  //             companyName: profileData.companyName,
-  //             travelBusinessDescription: profileData.travelBusinessDescription,
-  //             howDidYouHear: profileData.howDidYouHear,
-  //           },
-  //         }),
-
-  //       [Role.AFFILIATE]: () =>
-  //         tx.affiliate.create({
-  //           data: {
-  //             userId: user.id,
-  //             communityBrand: profileData.communityBrand,
-  //             socialLinks: profileData.socialLinks || [],
-  //             howDidYouHear: profileData.howDidYouHear,
-  //           },
-  //         }),
-  //     };
-
-  //     const createProfile = profileCreators[role];
-  //     if (createProfile) {
-  //       await createProfile();
-  //     }
-
-  //     // Fetch complete user with profile
-  //     return tx.user.findUniqueOrThrow({
-  //       where: { id: user.id },
-  //       include: {
-  //         independentDetails: true,
-  //         cooperateDetails: true,
-  //         affiliateDetails: true,
-  //         _count: {
-  //           select: { referees: true },
-  //         },
-  //       },
-  //     });
-  //   });
-  // }
-
   async registerWithProfile(
     userData: Omit<
       Prisma.UserCreateInput,
-      | 'independentDetails'
-      | 'cooperateDetails'
-      | 'affiliateDetails'
-      | 'referrer'
-    > & { referredById?: string | null },
+      'independentDetails' | 'cooperateDetails' | 'affiliateDetails'
+    >,
     role: Role,
     profileData: Record<string, any>,
   ): Promise<User> {
     return prisma.$transaction(async (tx) => {
-      // Separate referredById from userData
-      const { referredById, ...baseUserData } = userData;
-
       // Create base user
       const user = await tx.user.create({
-        data: {
-          ...baseUserData,
-          // Use referrer relation if referredById exists
-          ...(referredById && {
-            referrer: {
-              connect: { id: referredById },
-            },
-          }),
-        },
+        data: userData,
         include: {
           independentDetails: true,
           cooperateDetails: true,
@@ -202,7 +135,7 @@ export class AuthRepository extends BaseRepository<
         await createProfile();
       }
 
-      // Fetch complete user with profile and referral count
+      // Fetch complete user with profile
       return tx.user.findUniqueOrThrow({
         where: { id: user.id },
         include: {

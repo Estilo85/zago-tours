@@ -2,7 +2,7 @@ import { Itinerary, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { ItineraryRepository } from './itinerary.repository';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
-import { UpdateItineraryDto, BulkCreateItinerariesDto } from '@zagotours/types';
+import { UpdateItineraryDto, CreateItineraryDto } from '@zagotours/types';
 
 export class ItineraryService extends BaseService<
   Itinerary,
@@ -20,20 +20,20 @@ export class ItineraryService extends BaseService<
   //==========================
   // CREATE BULK
   //==========================
-  async createBulk(dto: BulkCreateItinerariesDto) {
-    const itineraries = dto.itineraries.map((item) => ({
+  async createBulk(adventureId: string, itineraries: CreateItineraryDto[]) {
+    const itineraryData = itineraries.map((item) => ({
       ...item,
-      adventureId: dto.adventureId,
+      adventureId,
     }));
 
     const result = await this.itineraryRepo.replaceAdventureItineraries(
-      dto.adventureId,
-      itineraries
+      adventureId,
+      itineraryData,
     );
 
     return {
       count: result.count,
-      message: `Successfully updated ${result.count} itinerary days.`,
+      message: `Successfully created ${result.count} itinerary days.`,
     };
   }
 
@@ -50,7 +50,7 @@ export class ItineraryService extends BaseService<
   async updateWithImage(
     id: string,
     dto: UpdateItineraryDto,
-    file?: Express.Multer.File
+    file?: Express.Multer.File,
   ): Promise<Itinerary> {
     const existing = await this.getById(id);
     const updateData: Prisma.ItineraryUpdateInput = { ...dto };
@@ -64,7 +64,7 @@ export class ItineraryService extends BaseService<
 
       const uploadResult = await CloudinaryService.uploadFile(
         file,
-        'itinerary'
+        'itinerary',
       );
       updateData.imageUrl = uploadResult.url;
       updateData.publicId = uploadResult.publicId;

@@ -2,7 +2,7 @@ import { AdventureGallery, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { AdventureGalleryRepository } from './gallery.repository';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
-import { BulkUploadGalleryDto, ReorderGalleryDto } from '@zagotours/types';
+import { ReorderGalleryDto, MediaType } from '@zagotours/types';
 
 export class AdventureGalleryService extends BaseService<
   AdventureGallery,
@@ -17,16 +17,28 @@ export class AdventureGalleryService extends BaseService<
     super(galleryRepo);
   }
 
-  async bulkUpload(dto: BulkUploadGalleryDto) {
+  //==============================
+  // BULK UPLOAD
+  //==============================
+  async bulkUpload(
+    adventureId: string,
+    media: Array<{
+      mediaUrl: string;
+      publicId: string;
+      mediaType?: MediaType;
+      altText?: string;
+    }>,
+  ) {
     const items = await Promise.all(
-      dto.media.map(async (item, index) => {
-        const order = await this.galleryRepo.getNextOrder(dto.adventureId);
+      media.map(async (item, index) => {
+        const order = await this.galleryRepo.getNextOrder(adventureId);
         return {
           ...item,
-          adventureId: dto.adventureId,
+          mediaType: item.mediaType || MediaType.IMAGE,
+          adventureId,
           order: order + index,
         };
-      })
+      }),
     );
 
     const result = await this.galleryRepo.createMany(items);
@@ -36,17 +48,28 @@ export class AdventureGalleryService extends BaseService<
     };
   }
 
+  //==============================
+  // REORDER GALLERY
+  //==============================
   async reorder(dto: ReorderGalleryDto) {
     await Promise.all(
-      dto.items.map((item) => this.galleryRepo.updateOrder(item.id, item.order))
+      dto.items.map((item) =>
+        this.galleryRepo.updateOrder(item.id, item.order),
+      ),
     );
     return { message: 'Gallery reordered successfully' };
   }
 
+  //==============================
+  // GET BY ADVENTURE
+  //==============================
   async getByAdventure(adventureId: string): Promise<AdventureGallery[]> {
     return this.galleryRepo.findByAdventure(adventureId);
   }
 
+  //==============================
+  // DELETE WITH CLOUDINARY CLEANUP
+  //==============================
   async deleteWithMedia(id: string): Promise<void> {
     const item = await this.getById(id);
 

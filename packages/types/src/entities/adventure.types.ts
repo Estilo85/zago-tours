@@ -3,6 +3,7 @@ import {
   AdventureLevel,
   AccessType,
   MediaType,
+  TripType,
 } from '../enums';
 import { User } from './user.types';
 
@@ -13,7 +14,7 @@ export interface Adventure {
   price: number;
   location: string;
   level: AdventureLevel;
-  tripType: string;
+  tripType: TripType;
   safetyScore: number;
   rating: number;
   certification: string | null;

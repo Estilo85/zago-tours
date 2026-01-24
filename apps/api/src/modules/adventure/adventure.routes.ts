@@ -12,7 +12,7 @@ import {
 
 const router: Router = Router();
 const controller = new AdventureController(
-  new AdventureService(new AdventureRepository())
+  new AdventureService(new AdventureRepository()),
 );
 
 router.get('/', controller.getAll);
@@ -20,12 +20,13 @@ router.post(
   '/',
   upload.single('media'),
   validateRequest({ body: createAdventureSchema }),
-  controller.create
+  controller.create,
 );
+
 router.post(
   '/bulk',
   validateRequest({ body: bulkCreateAdventureSchema }),
-  controller.createBulk
+  controller.createBulk,
 );
 
 router
@@ -38,7 +39,7 @@ router
 router.post(
   '/:id/toggle-like',
   validateRequest({ params: commonValidation.uuidParam }),
-  controller.toggleLike
+  controller.toggleLike,
 );
 
 export { router as adventureRoutes };

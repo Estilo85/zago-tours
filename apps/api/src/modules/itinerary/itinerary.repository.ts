@@ -27,14 +27,14 @@ export class ItineraryRepository extends BaseRepository<
 
   async updateWithImageCleanup(
     id: string,
-    data: Prisma.ItineraryUpdateInput
+    data: Prisma.ItineraryUpdateInput,
   ): Promise<Itinerary> {
     return this.modelDelegate.update({ where: { id }, data });
   }
 
   async replaceAdventureItineraries(
     adventureId: string,
-    data: Prisma.ItineraryCreateManyInput[]
+    data: Prisma.ItineraryCreateManyInput[],
   ) {
     return prisma.$transaction(async (tx) => {
       await tx.itinerary.deleteMany({

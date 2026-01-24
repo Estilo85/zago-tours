@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { LuLogOut } from 'react-icons/lu';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { MENU_CONFIG } from '../../_config/menu-config';
+import { useAuth } from '@/hooks/queries/auth';
 
 export const Sidebar = ({
   role,
@@ -13,6 +14,7 @@ export const Sidebar = ({
   onClose?: () => void;
 }) => {
   const pathname = usePathname();
+  const { logout } = useAuth();
 
   //==== NAVITEM ====
   const NavItem = ({ item }: any) => {
@@ -83,6 +85,10 @@ export const Sidebar = ({
           color='red.500'
           _hover={{ bg: 'red.50' }}
           borderRadius='md'
+          onClick={() => {
+            if (onClose) onClose();
+            logout();
+          }}
         >
           <Icon as={LuLogOut} />
           <Text fontSize='sm' fontWeight='bold'>

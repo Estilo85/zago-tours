@@ -3,6 +3,8 @@ import { Box, Flex, Drawer, Portal, CloseButton } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
+import { UserRole } from './_config/menu-config';
+import { useAuthSession } from '@/hooks/queries/auth';
 
 export default function DashboardLayout({
   children,
@@ -10,7 +12,21 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const userRole = 'super-admin';
+  const { user, isLoading, isAuthenticated } = useAuthSession();
+
+  if (isLoading) {
+    return (
+      <Flex h='100vh' align='center' justify='center'>
+        Loading Session...
+      </Flex>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
+
+  const userRole = user.role as UserRole;
 
   return (
     <Flex h='100vh' bg='gray.50' overflow='hidden'>
@@ -28,7 +44,7 @@ export default function DashboardLayout({
         <Sidebar role={userRole} />
       </Box>
 
-      {/* MOBILE DRAWER (Chakra v3 Pattern) */}
+      {/* MOBILE DRAWER */}
       <Drawer.Root
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
@@ -53,7 +69,6 @@ export default function DashboardLayout({
       {/* MAIN CONTENT */}
       <Flex direction='column' flex='1' overflow='hidden'>
         <Navbar onOpen={() => setOpen(true)} />
-
         <Box p={{ base: 4, md: 8 }} overflowY='auto' flex='1'>
           {children}
         </Box>

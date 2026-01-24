@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AdventureService } from './adventure.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { AdventureStatus, AdventureLevel } from '@zagotours/database';
 import {
   AdventureListQueryDto,
   CreateAdventureDto,
@@ -15,10 +14,7 @@ import {
   ReqParamsQuery,
   ReqQuery,
 } from 'src/shared/types/express.types';
-import {
-  PaginationQuery,
-  UuidParam,
-} from 'src/common/validation/common.validation';
+import { UuidParam } from 'src/common/validation/common.validation';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
 export class AdventureController {
@@ -32,7 +28,7 @@ export class AdventureController {
       if (req.file) {
         const uploadResult = await CloudinaryService.uploadFile(
           req.file,
-          'adventure'
+          'adventure',
         );
         adventureData.mediaUrl = uploadResult.url;
         adventureData.publicId = uploadResult.publicId;
@@ -40,7 +36,7 @@ export class AdventureController {
 
       const result = await this.service.create(adventureData);
       return ResponseUtil.success(res, result, 'Created', 201);
-    }
+    },
   );
 
   //==== CREATE MULTIPLE ADVENTURES ======
@@ -52,20 +48,20 @@ export class AdventureController {
         return ResponseUtil.error(
           res,
           'A non-empty array of adventures is required',
-          400
+          400,
         );
       }
 
       const result = await this.service.createBulk(adventures);
       return ResponseUtil.success(res, result, result.message, 201);
-    }
+    },
   );
 
   //==== UPDATE AN ADVENTURE ======
   update = asyncHandler(
     async (
       req: ReqParamsBody<UuidParam, UpdateAdventureDto>,
-      res: Response
+      res: Response,
     ) => {
       const adventureData = req.body;
       const { id } = req.params;
@@ -79,7 +75,7 @@ export class AdventureController {
 
         const uploadResult = await CloudinaryService.uploadFile(
           req.file,
-          'adventure'
+          'adventure',
         );
         adventureData.mediaUrl = uploadResult.url;
         adventureData.publicId = uploadResult.publicId;
@@ -87,7 +83,7 @@ export class AdventureController {
 
       const result = await this.service.update(id, adventureData);
       return ResponseUtil.success(res, result, 'Adventure updated');
-    }
+    },
   );
 
   //==== GET ALL ADVENTURES ======
@@ -108,16 +104,13 @@ export class AdventureController {
 
       const where: any = { deletedAt: null };
 
-      if (status) where.status = status;
-      if (level) where.level = level;
-      if (access) where.access = access;
+      if (status) where.status = status.toUpperCase();
+      if (level) where.level = level.toUpperCase();
+      if (access) where.access = access.toUpperCase();
+      if (tripType) where.tripType = tripType.toUpperCase();
 
       if (location) {
         where.location = { contains: location, mode: 'insensitive' };
-      }
-
-      if (tripType) {
-        where.tripType = { contains: tripType, mode: 'insensitive' };
       }
 
       if (minPrice || maxPrice) {
@@ -130,7 +123,9 @@ export class AdventureController {
         where.OR = [
           { title: { contains: search, mode: 'insensitive' } },
           { description: { contains: search, mode: 'insensitive' } },
-          { tripType: { contains: search, mode: 'insensitive' } },
+          { location: { contains: search, mode: 'insensitive' } },
+          { certification: { contains: search, mode: 'insensitive' } },
+          { gear: { contains: search, mode: 'insensitive' } },
         ];
       }
 
@@ -140,7 +135,7 @@ export class AdventureController {
       });
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   //==== GET ADVENTURE BY ID ======
@@ -163,7 +158,7 @@ export class AdventureController {
 
       await this.service.delete(id, isHard);
       return ResponseUtil.success(res, null, 'Deleted');
-    }
+    },
   );
 
   //==== TOGGLING ADVENTURE LIKE ======
@@ -171,6 +166,6 @@ export class AdventureController {
     async (req: ReqParams<UuidParam>, res: Response) => {
       const result = await this.service.toggleLike(req.userId!, req.params.id);
       return ResponseUtil.success(res, result);
-    }
+    },
   );
 }

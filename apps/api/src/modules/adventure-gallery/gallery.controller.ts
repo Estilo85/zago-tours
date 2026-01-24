@@ -9,7 +9,6 @@ import {
 } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
 import {
-  CreateAdventureGalleryDto,
   UpdateAdventureGalleryDto,
   BulkUploadGalleryDto,
   ReorderGalleryDto,
@@ -20,50 +19,13 @@ import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 export class AdventureGalleryController {
   constructor(private readonly service: AdventureGalleryService) {}
 
-  create = asyncHandler(
-    async (
-      req: ReqParamsBody<{ adventureId: string }, CreateAdventureGalleryDto>,
-      res: Response
-    ) => {
-      const { adventureId } = req.params;
-      const dto = req.body;
-
-      if (!req.file) {
-        return ResponseUtil.error(res, 'Media file is required', 400);
-      }
-
-      // Upload to Cloudinary
-      const uploadResult = await CloudinaryService.uploadFile(
-        req.file,
-        'adventure-gallery'
-      );
-
-      const galleryData = {
-        ...dto,
-        adventure: {
-          connect: { id: adventureId },
-        },
-        mediaUrl: uploadResult.url,
-        publicId: uploadResult.publicId,
-      };
-
-      const result = await this.service.create(galleryData);
-      return ResponseUtil.success(
-        res,
-        result,
-        'Media uploaded successfully',
-        201
-      );
-    }
-  );
-
+  //==============================
+  // BULK UPLOAD GALLERY (ONLY ENDPOINT FOR UPLOAD)
+  //==============================
   bulkUpload = asyncHandler(
     async (
-      req: ReqParamsBody<
-        { adventureId: string },
-        Omit<BulkUploadGalleryDto, 'media'>
-      >,
-      res: Response
+      req: ReqParamsBody<{ adventureId: string }, BulkUploadGalleryDto>,
+      res: Response,
     ) => {
       const { adventureId } = req.params;
       const files = req.files as Express.Multer.File[];
@@ -72,16 +34,17 @@ export class AdventureGalleryController {
         return ResponseUtil.error(
           res,
           'At least one media file is required',
-          400
+          400,
         );
       }
 
-      // 1. Upload to Cloudinary
+      // Upload all files to Cloudinary
       const uploadPromises = files.map((file) =>
-        CloudinaryService.uploadFile(file, 'adventure-gallery')
+        CloudinaryService.uploadFile(file, 'adventure-gallery'),
       );
       const uploadResults = await Promise.all(uploadPromises);
 
+      // Map upload results with metadata
       const media = uploadResults.map((upload, index) => ({
         mediaUrl: upload.url,
         publicId: upload.publicId,
@@ -90,73 +53,62 @@ export class AdventureGalleryController {
         altText: req.body.altTexts?.[index],
       }));
 
-      // 3. Send to service
-      const result = await this.service.bulkUpload({ adventureId, media });
+      const result = await this.service.bulkUpload(adventureId, media);
       return ResponseUtil.success(
         res,
         result,
         'Gallery updated successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
-  // GET /adventures/:adventureId/gallery
+  //==============================
+  // GET GALLERY BY ADVENTURE
+  //==============================
   getByAdventure = asyncHandler(
     async (req: ReqParams<{ adventureId: string }>, res: Response) => {
       const gallery = await this.service.getByAdventure(req.params.adventureId);
       return ResponseUtil.success(res, gallery);
-    }
+    },
   );
 
-  // GET /gallery/:id
+  //==============================
+  // GET SINGLE GALLERY ITEM BY ID
+  //==============================
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const item = await this.service.getById(req.params.id);
     return ResponseUtil.success(res, item);
   });
 
-  // PUT /gallery/:id (update metadata only - altText, order)
+  //==============================
+  // UPDATE GALLERY ITEM METADATA
+  //==============================
   update = asyncHandler(
     async (
       req: ReqParamsBody<UuidParam, UpdateAdventureGalleryDto>,
-      res: Response
+      res: Response,
     ) => {
       const result = await this.service.update(req.params.id, req.body);
       return ResponseUtil.success(res, result, 'Gallery item updated');
-    }
+    },
   );
 
-  // PUT /gallery/reorder (bulk reorder)
+  //==============================
+  // REORDER GALLERY ITEMS
+  //==============================
   reorder = asyncHandler(
     async (req: ReqBody<ReorderGalleryDto>, res: Response) => {
       const result = await this.service.reorder(req.body);
       return ResponseUtil.success(res, result, result.message);
-    }
+    },
   );
 
-  // DELETE /gallery/:id (soft delete with Cloudinary cleanup)
+  //==============================
+  // DELETE GALLERY ITEM
+  //==============================
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     await this.service.deleteWithMedia(req.params.id);
     return ResponseUtil.success(res, null, 'Gallery item deleted');
   });
-
-  // DELETE /gallery/:id?hard=true (hard delete with Cloudinary cleanup)
-  hardDelete = asyncHandler(
-    async (req: ReqParams<UuidParam>, res: Response) => {
-      const item = await this.service.getById(req.params.id);
-
-      // Delete from Cloudinary
-      if (item.publicId) {
-        await CloudinaryService.deleteFile(item.publicId);
-      }
-
-      // Hard delete from database
-      await this.service.delete(req.params.id);
-      return ResponseUtil.success(
-        res,
-        null,
-        'Gallery item permanently deleted'
-      );
-    }
-  );
 }

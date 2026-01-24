@@ -1,3 +1,4 @@
+import { Role } from '@zagotours/types';
 import { BarChart, HelpCircle, PieChart } from 'lucide-react';
 import {
   LuLayoutDashboard,
@@ -87,9 +88,4 @@ export const MENU_CONFIG = {
   },
 };
 
-export type UserRole =
-  | 'super-admin'
-  | 'independent-agent'
-  | 'corporate-agent'
-  | 'adventurer'
-  | 'affiliate';
+export type UserRole = Role;

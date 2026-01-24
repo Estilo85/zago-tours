@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { AdventureGalleryController } from './gallery.controller';
 import { AdventureGalleryService } from './gallery.service';
 import { AdventureGalleryRepository } from './gallery.repository';
-import { Role } from '@zagotours/database';
 import { upload } from 'src/config/multer.config';
 
 const router = Router();
@@ -10,31 +9,25 @@ const repository = new AdventureGalleryRepository();
 const service = new AdventureGalleryService(repository);
 const controller = new AdventureGalleryController(service);
 
-// Create single gallery item (ADMIN only)
 router.post(
-  '/adventures/:adventureId/gallery',
-  upload.single('media'),
-  controller.create
-);
-
-// Bulk upload gallery items (ADMIN only)
-router.post(
-  '/adventures/:adventureId/gallery/bulk',
+  '/:adventureId/gallery/bulk',
   upload.array('media', 10),
-  controller.bulkUpload
+  controller.bulkUpload,
 );
 
-router.get('/adventures/:adventureId/gallery', controller.getByAdventure);
+// Get all gallery items for an adventure
+router.get('/:adventureId/gallery', controller.getByAdventure);
 
+// Get single gallery item
 router.get('/gallery/:id', controller.getById);
 
-// Update gallery item metadata (ADMIN only)
+// Update gallery item metadata (altText, order)
 router.put('/gallery/:id', controller.update);
 
-// Reorder gallery items (ADMIN only)
+// Reorder gallery items
 router.put('/gallery/reorder', controller.reorder);
 
-// Soft delete gallery item (ADMIN only)
+// Delete gallery item (with Cloudinary cleanup)
 router.delete('/gallery/:id', controller.delete);
 
 export { router as adventureGalleryRoutes };

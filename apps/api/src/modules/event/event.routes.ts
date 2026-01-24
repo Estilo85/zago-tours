@@ -13,6 +13,7 @@ const eventService = new EventService(eventRepository);
 const eventController = new EventController(eventService);
 
 // ========== PUBLIC ROUTES ==========
+router.post('/', upload.single('media'), eventController.create);
 router.get('/', eventController.getAll);
 router.get('/upcoming', eventController.getUpcoming);
 router.get('/:id', eventController.getById);
@@ -24,8 +25,6 @@ router.post('/:id/join', eventController.joinEvent);
 router.post('/:id/cancel', eventController.cancelRegistration);
 
 // ========== ADMIN ROUTES ==========
-
-router.post('/', upload.single('media'), eventController.create);
 router.patch('/:id', upload.single('media'), eventController.update);
 router.delete('/:id', eventController.delete);
 router.get('/admin/stats', eventController.getStats);

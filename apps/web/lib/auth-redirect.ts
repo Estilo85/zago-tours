@@ -3,22 +3,20 @@ import { Role } from '@zagotours/types';
 export function getRedirectUrlByRole(role: Role): string {
   switch (role) {
     case Role.SUPER_ADMIN:
-      return '/super-admin/dashboard';
-
     case Role.ADMIN:
-      return '/admin/dashboard';
-
-    case Role.AFFILIATE:
-      return '/affiliate/dashboard';
-
-    case Role.ADVENTURER:
-      return '/adventurer/dashboard';
+      return '/super-admin';
 
     case Role.INDEPENDENT_AGENT:
-      return '/agent/dashboard';
+      return '/independent-agent';
 
     case Role.COOPERATE_AGENT:
-      return '/agent/dashboard';
+      return '/corporate-agent';
+
+    case Role.ADVENTURER:
+      return '/adventurer';
+
+    case Role.AFFILIATE:
+      return '/affiliate';
 
     default:
       return '/dashboard';

@@ -3,6 +3,7 @@ import {
   AdventureStatus,
   AccessType,
   MediaType,
+  TripType,
 } from '../enums';
 
 // ==================== ADVENTURE DTOs ====================
@@ -12,7 +13,7 @@ export interface CreateAdventureDto {
   price: number;
   location: string;
   level: AdventureLevel;
-  tripType: string;
+  tripType: TripType;
   date: Date | string;
   description: string;
   days: number;
@@ -30,7 +31,7 @@ export interface UpdateAdventureDto {
   price?: number;
   location?: string;
   level?: AdventureLevel;
-  tripType?: string;
+  tripType?: TripType;
   date?: Date | string;
   description?: string;
   days?: number;
@@ -53,7 +54,7 @@ export interface AdventureResponseDto {
   price: number;
   location: string;
   level: AdventureLevel;
-  tripType: string;
+  tripType: TripType;
   safetyScore: number;
   rating: number;
   certification: string | null;
@@ -100,7 +101,6 @@ export interface AdventureListQueryDto {
 // ==================== ITINERARY DTOs ====================
 
 export interface CreateItineraryDto {
-  adventureId: string;
   dayNumber: number;
   title: string;
   activityDetails: string;
@@ -129,16 +129,12 @@ export interface ItineraryResponseDto {
 }
 
 export interface BulkCreateItinerariesDto {
-  adventureId: string;
-  itineraries: Omit<CreateItineraryDto, 'adventureId'>[];
+  itineraries: CreateItineraryDto[];
 }
 
 // ==================== ADVENTURE GALLERY DTOs ====================
 
 export interface CreateAdventureGalleryDto {
-  adventureId: string;
-  mediaUrl: string; // Cloudinary URL
-  publicId: string; // Cloudinary public ID
   mediaType: MediaType;
   altText?: string;
   order?: number;
@@ -161,15 +157,8 @@ export interface AdventureGalleryResponseDto {
 }
 
 export interface BulkUploadGalleryDto {
-  adventureId: string;
   mediaTypes?: MediaType[];
   altTexts?: string[];
-  media: {
-    mediaUrl: string;
-    publicId: string;
-    mediaType?: MediaType;
-    altText?: string;
-  }[];
 }
 
 export interface ReorderGalleryDto {
@@ -178,7 +167,6 @@ export interface ReorderGalleryDto {
     order: number;
   }[];
 }
-
 // ==================== ADVENTURE LIKE DTOs ====================
 
 export interface ToggleAdventureLikeDto {
