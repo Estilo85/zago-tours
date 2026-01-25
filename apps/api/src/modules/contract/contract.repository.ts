@@ -52,7 +52,7 @@ export class ContractRepository extends BaseRepository<
   async paginateWithDetails(
     page: number,
     limit: number,
-    filters?: Prisma.ContractWhereInput
+    filters?: Prisma.ContractWhereInput,
   ) {
     return this.paginate({
       page,

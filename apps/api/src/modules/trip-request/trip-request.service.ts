@@ -1,6 +1,8 @@
-import { TripRequest, Prisma, prisma } from '@zagotours/database';
+import { TripRequest, Prisma, prisma, TripType } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { TripRequestRepository } from './trip-request.repository';
+import { CreateTripRequestDto } from '@zagotours/types';
+import { EmailService } from 'src/shared/services/email.service';
 
 export class TripRequestService extends BaseService<
   TripRequest,
@@ -20,29 +22,37 @@ export class TripRequestService extends BaseService<
    */
   async createForAdventurer(
     adventurerId: string,
-    data: {
-      tripType: string;
-      destination: string;
-      date: Date;
-      preferences?: string;
-    }
+    data: CreateTripRequestDto,
   ): Promise<TripRequest> {
+    const tripDate = new Date(data.date);
+
     // Validate date is in the future
-    if (new Date(data.date) <= new Date()) {
+    if (tripDate <= new Date()) {
       throw new Error('Trip date must be in the future');
     }
-
     // Get adventurer to find their referrer
     const adventurer = await prisma.user.findUnique({
       where: { id: adventurerId },
-      select: { referredById: true },
+      select: {
+        referredById: true,
+        name: true,
+        email: true,
+        image: true,
+        referrer: {
+          // Add this to get agent details
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (!adventurer) {
       throw new Error('Adventurer not found');
     }
 
-    // Create request with auto-assignment to referrer
     const request = await this.create({
       adventurer: { connect: { id: adventurerId } },
       assignedAgent: adventurer.referredById
@@ -50,18 +60,28 @@ export class TripRequestService extends BaseService<
         : undefined,
       tripType: data.tripType,
       destination: data.destination,
-      date: data.date,
+      date: tripDate,
       preferences: data.preferences,
     });
 
-    // TODO: Send notification to assigned agent (if exists)
-    // if (adventurer.referredById) {
-    //   await EmailService.notifyAgentOfNewTripRequest(adventurer.referredById, request);
-    // }
+    if (adventurer.referrer) {
+      await EmailService.sendTripRequestNotification(
+        adventurer.referrer.email,
+        adventurer.referrer.name,
+        {
+          adventurerName: adventurer.name,
+          adventurerEmail: adventurer.email,
+          tripType: request.tripType,
+          destination: request.destination,
+          date: request.date,
+          preferences: request.preferences || 'None specified',
+          requestId: request.id,
+        },
+      );
+    }
 
     return request;
   }
-
   /**
    * Get requests assigned to an agent (from their referrals)
    */
@@ -79,7 +99,7 @@ export class TripRequestService extends BaseService<
   /**
    * Get by trip type
    */
-  async getByTripType(tripType: string): Promise<TripRequest[]> {
+  async getByTripType(tripType: TripType): Promise<TripRequest[]> {
     return this.tripRequestRepo.findByTripType(tripType);
   }
 
@@ -114,12 +134,12 @@ export class TripRequestService extends BaseService<
       where?: Prisma.TripRequestWhereInput;
       include?: Prisma.TripRequestInclude;
       orderBy?: any;
-    }
+    },
   ) {
     return this.tripRequestRepo.paginateWithDetails(
       page,
       limit,
-      filters?.where
+      filters?.where,
     );
   }
 }

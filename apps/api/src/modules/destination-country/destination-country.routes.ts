@@ -15,20 +15,9 @@ router.get('/:id', countryController.getById);
 
 // Admin Routes
 router.post('/', countryController.create);
-router.put(
-  '/:id',
-
-  countryController.update
-);
-router.patch(
-  '/:id/toggle-active',
-
-  countryController.toggleActive
-);
-router.delete(
-  '/:id',
-
-  countryController.delete
-);
+router.post('/bulk', countryController.createBulk);
+router.put('/:id', countryController.update);
+router.patch('/:id/toggle-active', countryController.toggleActive);
+router.delete('/:id', countryController.delete);
 
 export { router as destinationCountryRoutes };

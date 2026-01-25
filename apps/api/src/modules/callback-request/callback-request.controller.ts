@@ -19,7 +19,7 @@ export class CallbackRequestController {
    * If anonymous, create without assignment
    */
   create = asyncHandler(
-    async (req: TypedRequest<{}, CreateCallbackRequestDto>, res: Response) => {
+    async (req: ReqBody<CreateCallbackRequestDto>, res: Response) => {
       const { name, email, phone, bestTime } = req.body;
 
       // Validation
@@ -52,9 +52,9 @@ export class CallbackRequestController {
         res,
         request,
         'Callback request submitted successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   /**
@@ -67,7 +67,7 @@ export class CallbackRequestController {
         {},
         { page?: number; limit?: number; startDate?: string; endDate?: string }
       >,
-      res: Response
+      res: Response,
     ) => {
       const { page = 1, limit = 10, startDate, endDate } = req.query;
 
@@ -76,7 +76,7 @@ export class CallbackRequestController {
       if (startDate && endDate) {
         const requests = await this.callbackService.getByDateRange(
           new Date(String(startDate)),
-          new Date(String(endDate))
+          new Date(String(endDate)),
         );
         return ResponseUtil.success(res, requests);
       }
@@ -84,7 +84,7 @@ export class CallbackRequestController {
       result = await this.callbackService.paginate(Number(page), Number(limit));
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   /**

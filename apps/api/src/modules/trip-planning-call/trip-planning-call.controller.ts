@@ -21,7 +21,7 @@ export class TripPlanningCallController {
         return ResponseUtil.error(
           res,
           'Agent ID and start time are required',
-          400
+          400,
         );
       }
 
@@ -36,9 +36,9 @@ export class TripPlanningCallController {
         res,
         call,
         'Call scheduled successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   /**
@@ -47,7 +47,7 @@ export class TripPlanningCallController {
   rescheduleCall = asyncHandler(
     async (
       req: TypedRequest<UuidParam, { startTime?: string; endTime?: string }>,
-      res: Response
+      res: Response,
     ) => {
       const { startTime, endTime } = req.body;
 
@@ -58,11 +58,11 @@ export class TripPlanningCallController {
       const call = await this.callService.rescheduleCall(
         req.params.id,
         new Date(startTime),
-        endTime ? new Date(endTime) : undefined
+        endTime ? new Date(endTime) : undefined,
       );
 
       return ResponseUtil.success(res, call, 'Call rescheduled successfully');
-    }
+    },
   );
 
   /**
@@ -71,13 +71,13 @@ export class TripPlanningCallController {
   cancelCall = asyncHandler(
     async (
       req: TypedRequest<UuidParam, { reason?: string }>,
-      res: Response
+      res: Response,
     ) => {
       const { reason } = req.body;
 
       const call = await this.callService.cancelCall(req.params.id, reason);
       return ResponseUtil.success(res, call, 'Call cancelled successfully');
-    }
+    },
   );
 
   /**
@@ -87,7 +87,7 @@ export class TripPlanningCallController {
     async (req: ReqParams<UuidParam>, res: Response) => {
       const call = await this.callService.markAsCompleted(req.params.id);
       return ResponseUtil.success(res, call, 'Call marked as completed');
-    }
+    },
   );
 
   /**
@@ -120,7 +120,7 @@ export class TripPlanningCallController {
       }
 
       return ResponseUtil.success(res, calls);
-    }
+    },
   );
 
   /**
@@ -139,7 +139,7 @@ export class TripPlanningCallController {
           endDate?: string;
         }
       >,
-      res: Response
+      res: Response,
     ) => {
       const { page = 1, limit = 10, status, startDate, endDate } = req.query;
 
@@ -159,11 +159,11 @@ export class TripPlanningCallController {
       const result = await this.callService.paginate(
         Number(page),
         Number(limit),
-        { where: filters }
+        { where: filters },
       );
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   /**

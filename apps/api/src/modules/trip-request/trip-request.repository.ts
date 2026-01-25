@@ -1,4 +1,4 @@
-import { TripRequest, Prisma } from '@zagotours/database';
+import { TripRequest, Prisma, TripType } from '@zagotours/database';
 import { BaseRepository } from 'src/common/repository/base.repository';
 import { prisma } from '@zagotours/database';
 
@@ -49,7 +49,7 @@ export class TripRequestRepository extends BaseRepository<
   }
 
   // Get requests by trip type
-  async findByTripType(tripType: string): Promise<TripRequest[]> {
+  async findByTripType(tripType: TripType): Promise<TripRequest[]> {
     return this.findAll({
       where: { tripType },
       include: this.standardInclude,
@@ -74,7 +74,7 @@ export class TripRequestRepository extends BaseRepository<
   // Get requests by date range
   async findByDateRange(
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<TripRequest[]> {
     return this.findAll({
       where: {
@@ -104,7 +104,7 @@ export class TripRequestRepository extends BaseRepository<
   async paginateWithDetails(
     page: number,
     limit: number,
-    filters?: Prisma.TripRequestWhereInput
+    filters?: Prisma.TripRequestWhereInput,
   ) {
     return this.paginate({
       page,

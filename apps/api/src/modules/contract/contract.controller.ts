@@ -1,53 +1,67 @@
 import { Request, Response, NextFunction } from 'express';
 import { ContractService } from './contract.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma, ContractStatus } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
+  ReqBody,
   ReqParams,
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
+import { CreateContractDto } from '@zagotours/types';
+import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
 export class ContractController {
   constructor(private readonly contractService: ContractService) {}
 
   create = asyncHandler(
     async (
-      req: TypedRequest<{}, { agreement?: string; documentUrl?: string }>,
-      res: Response
+      req: ReqBody<CreateContractDto & { file?: Express.Multer.File }>,
+      res: Response,
     ) => {
-      const { agreement, documentUrl } = req.body;
+      const { agreement } = req.body;
+      const file = req.file;
 
-      if (!agreement || !documentUrl) {
-        return ResponseUtil.error(
-          res,
-          'Agreement and document URL are required',
-          400
-        );
+      // Get userId from authenticated user
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return ResponseUtil.error(res, 'User not authenticated', 401);
       }
 
+      if (!agreement) {
+        return ResponseUtil.error(res, 'Agreement is required', 400);
+      }
+
+      if (!file) {
+        return ResponseUtil.error(res, 'Contract document is required', 400);
+      }
+
+      // Upload to Cloudinary
+      const uploadResult = await CloudinaryService.uploadFile(file, 'contract');
+
       const contract = await this.contractService.createContract({
-        userId: req.userId!,
+        userId,
         agreement,
-        documentUrl,
+        documentUrl: uploadResult.url,
+        publicId: uploadResult.publicId,
       });
 
       return ResponseUtil.success(
         res,
         contract,
         'Contract created successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   sign = asyncHandler(async (req: TypedRequest<UuidParam>, res: Response) => {
     const contract = await this.contractService.signContract(
       req.params.id,
-      req.userId!
+      req.userId!,
     );
 
     return ResponseUtil.success(res, contract, 'Contract signed successfully');
@@ -66,7 +80,7 @@ export class ContractController {
         status?: string;
         userId?: string;
       }>,
-      res: Response
+      res: Response,
     ) => {
       const { page = 1, limit = 10, status, userId } = req.query;
 
@@ -83,11 +97,11 @@ export class ContractController {
       const result = await this.contractService.paginate(
         Number(page),
         Number(limit),
-        { where: filters }
+        { where: filters },
       );
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   getPending = asyncHandler(async (req: TypedRequest, res: Response) => {

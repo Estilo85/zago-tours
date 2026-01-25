@@ -51,7 +51,7 @@ export class CallbackRequestRepository extends BaseRepository<
   // Get requests by date range
   async findByDateRange(
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<CallbackRequest[]> {
     return this.findAll({
       where: {
@@ -82,7 +82,7 @@ export class CallbackRequestRepository extends BaseRepository<
   async paginateWithDetails(
     page: number,
     limit: number,
-    filters?: Prisma.CallbackRequestWhereInput
+    filters?: Prisma.CallbackRequestWhereInput,
   ) {
     return this.paginate({
       page,

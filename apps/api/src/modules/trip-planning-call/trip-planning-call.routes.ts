@@ -8,10 +8,10 @@ const router: Router = Router();
 // Initialize dependencies
 const tripPlanningCallRepository = new TripPlanningCallRepository();
 const tripPlanningCallService = new TripPlanningCallService(
-  tripPlanningCallRepository
+  tripPlanningCallRepository,
 );
 const tripPlanningCallController = new TripPlanningCallController(
-  tripPlanningCallService
+  tripPlanningCallService,
 );
 
 router.post('/', tripPlanningCallController.scheduleCall);

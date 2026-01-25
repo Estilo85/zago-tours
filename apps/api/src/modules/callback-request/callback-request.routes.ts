@@ -8,10 +8,10 @@ const router: Router = Router();
 // Initialize dependencies
 const callbackRequestRepository = new CallbackRequestRepository();
 const callbackRequestService = new CallbackRequestService(
-  callbackRequestRepository
+  callbackRequestRepository,
 );
 const callbackRequestController = new CallbackRequestController(
-  callbackRequestService
+  callbackRequestService,
 );
 
 router.post('/', callbackRequestController.create);

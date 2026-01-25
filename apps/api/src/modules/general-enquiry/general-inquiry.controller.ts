@@ -36,9 +36,9 @@ export class GeneralInquiryController {
         res,
         inquiry,
         'Inquiry submitted successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   // GET / - Get all inquiries with pagination and filters
@@ -46,7 +46,7 @@ export class GeneralInquiryController {
     async (req: ReqQuery<GeneralInquiryListQueryDto>, res: Response) => {
       const result = await this.inquiryService.getAllInquiries(req.query);
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   // GET /recent - Get recent inquiries

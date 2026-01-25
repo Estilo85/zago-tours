@@ -74,7 +74,7 @@ export class TripPlanningCallRepository extends BaseRepository<
   async findByDateRange(
     startDate: Date,
     endDate: Date,
-    userId?: string
+    userId?: string,
   ): Promise<TripPlanningCall[]> {
     const where: Prisma.TripPlanningCallWhereInput = {
       startTime: {
@@ -99,7 +99,7 @@ export class TripPlanningCallRepository extends BaseRepository<
     agentId: string,
     startTime: Date,
     endTime: Date,
-    excludeCallId?: string
+    excludeCallId?: string,
   ): Promise<boolean> {
     const where: Prisma.TripPlanningCallWhereInput = {
       agentId,
@@ -138,7 +138,7 @@ export class TripPlanningCallRepository extends BaseRepository<
   async paginateWithDetails(
     page: number,
     limit: number,
-    filters?: Prisma.TripPlanningCallWhereInput
+    filters?: Prisma.TripPlanningCallWhereInput,
   ) {
     return this.paginate({
       page,

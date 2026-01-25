@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { TripRequestService } from './trip-request.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { Prisma } from '@zagotours/database';
+import { Prisma, TripType } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
   ReqBody,
@@ -20,50 +20,45 @@ export class TripRequestController {
    * Automatically assigns to their referrer
    */
   create = asyncHandler(
-    async (req: TypedRequest<{}, CreateTripRequestDto>, res: Response) => {
-      const { tripType, destination, date, preferences } = req.body;
+    async (req: ReqBody<CreateTripRequestDto>, res: Response) => {
+      const dto: CreateTripRequestDto = req.body;
 
-      if (!tripType || !destination || !date) {
+      if (!dto.tripType || !dto.destination || !dto.date) {
         return ResponseUtil.error(
           res,
           'Trip type, destination, and date are required',
-          400
+          400,
         );
       }
 
       const request = await this.tripRequestService.createForAdventurer(
         req.userId!,
-        {
-          tripType,
-          destination,
-          date: new Date(date),
-          preferences,
-        }
+        dto,
       );
 
       return ResponseUtil.success(
         res,
         request,
         'Trip request submitted successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   /**
-   * Get all trip requests (admin only - should be protected by auth middleware)
+   * Get all trip requests
    */
   getAll = asyncHandler(
     async (
       req: ReqQuery<{
         page?: number;
         limit?: number;
-        tripType?: string;
+        tripType?: TripType;
         destination?: string;
         startDate?: string;
         endDate?: string;
       }>,
-      res: Response
+      res: Response,
     ) => {
       const {
         page = 1,
@@ -77,7 +72,7 @@ export class TripRequestController {
       const filters: Prisma.TripRequestWhereInput = {};
 
       if (tripType) {
-        filters.tripType = String(tripType);
+        filters.tripType = tripType;
       }
 
       if (destination) {
@@ -97,11 +92,11 @@ export class TripRequestController {
       const result = await this.tripRequestService.paginate(
         Number(page),
         Number(limit),
-        { where: filters }
+        { where: filters },
       );
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   /**
@@ -117,7 +112,7 @@ export class TripRequestController {
    */
   getAssignedToMe = asyncHandler(async (req: TypedRequest, res: Response) => {
     const requests = await this.tripRequestService.getAssignedToAgent(
-      req.userId!
+      req.userId!,
     );
     return ResponseUtil.success(res, requests);
   });

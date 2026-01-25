@@ -1,9 +1,7 @@
 import { Contract, Prisma, ContractStatus } from '@zagotours/database';
-import {
-  BaseService,
-  NotFoundException,
-} from 'src/common/service/base.service';
+import { BaseService } from 'src/common/service/base.service';
 import { ContractRepository } from './contract.repository';
+import { EmailService } from 'src/shared/services/email.service';
 
 export class ContractService extends BaseService<
   Contract,
@@ -23,18 +21,36 @@ export class ContractService extends BaseService<
     userId: string;
     agreement: string;
     documentUrl: string;
+    publicId: string;
   }): Promise<Contract> {
-    return this.create({
+    const contract = await this.create({
       user: { connect: { id: data.userId } },
       agreement: data.agreement,
       documentUrl: data.documentUrl,
+      publicId: data.publicId,
       status: ContractStatus.NOT_SIGNED,
     });
+
+    // Send notification email to user
+    const user = (await this.contractRepo.findById(contract.id, {
+      user: true,
+    })) as Contract & { user: { email: string; name: string } };
+
+    if (user) {
+      await EmailService.sendContractNotification(
+        user.user.email,
+        user.user.name,
+        data.documentUrl,
+      );
+    }
+
+    return contract;
   }
 
-  // Sign contract
   async signContract(contractId: string, userId: string): Promise<Contract> {
-    const contract = await this.getById(contractId);
+    const contract = await this.getById(contractId, {
+      user: true,
+    });
 
     // Verify ownership
     if (contract.userId !== userId) {
@@ -52,9 +68,26 @@ export class ContractService extends BaseService<
       signedAt: new Date(),
     });
 
-    // TODO: Send confirmation email
-    // TODO: Generate final signed PDF
-    // TODO: Store in secure location
+    // Fetch complete contract with user data for emails
+    const completeContract = (await this.getById(contractId, {
+      user: true,
+    })) as any;
+
+    // Send confirmation email to user
+    await EmailService.sendContractSignedConfirmation(
+      completeContract.user.email,
+      completeContract.user.name,
+      completeContract.documentUrl,
+    );
+
+    // Send notification to admin
+    await EmailService.sendContractSignedNotification({
+      userEmail: completeContract.user.email,
+      userName: completeContract.user.name,
+      contractId: completeContract.id,
+      signedAt: completeContract.signedAt!,
+      agreement: completeContract.agreement,
+    });
 
     return signed;
   }
@@ -82,7 +115,7 @@ export class ContractService extends BaseService<
       where?: Prisma.ContractWhereInput;
       include?: Prisma.ContractInclude;
       orderBy?: any;
-    }
+    },
   ) {
     return this.contractRepo.paginateWithDetails(page, limit, filters?.where);
   }

@@ -2,7 +2,7 @@ import { GeneralInquiry, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { GeneralInquiryRepository } from './general-inquiry.repository';
 import { GeneralInquiryListQueryDto, PaginationResult } from '@zagotours/types';
-import { boolean } from 'zod';
+import { EmailService } from 'src/shared/services/email.service';
 
 export class GeneralInquiryService extends BaseService<
   GeneralInquiry,
@@ -16,18 +16,30 @@ export class GeneralInquiryService extends BaseService<
     super(inquiryRepo);
   }
 
-  // Create a new inquiry
   override async create(
-    data: Prisma.GeneralInquiryCreateInput
+    data: Prisma.GeneralInquiryCreateInput,
   ): Promise<GeneralInquiry> {
     const inquiry = await super.create(data);
-    // TODO: Send email notification to admin
+
+    try {
+      await EmailService.sendAdminInquiryNotification({
+        email: data.email,
+        message: data.message,
+        phone: data.phone as string,
+        address: data.address as string,
+        createdAt: inquiry.createdAt,
+      });
+    } catch (error) {
+      console.error('Failed to send admin notification email:', error);
+      // Don't throw - inquiry was already saved successfully
+    }
+
     return inquiry;
   }
 
   // 1. Updated the Promise return type to include the nested 'pagination' object
   async getAllInquiries(
-    query: GeneralInquiryListQueryDto
+    query: GeneralInquiryListQueryDto,
   ): Promise<PaginationResult<GeneralInquiry>> {
     const {
       page = 1,

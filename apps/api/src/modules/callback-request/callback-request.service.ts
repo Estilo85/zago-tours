@@ -1,6 +1,8 @@
 import { CallbackRequest, Prisma, prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { CallbackRequestRepository } from './callback-request.repository';
+import { EmailService } from 'src/shared/services/email.service';
+import { CreateCallbackRequestDto } from '@zagotours/types';
 
 export class CallbackRequestService extends BaseService<
   CallbackRequest,
@@ -21,17 +23,21 @@ export class CallbackRequestService extends BaseService<
    */
   async createForAdventurer(
     adventurerId: string,
-    data: {
-      name: string;
-      email: string;
-      phone: string;
-      bestTime: string;
-    }
+    data: CreateCallbackRequestDto,
   ): Promise<CallbackRequest> {
     // Get adventurer to find their referrer
     const adventurer = await prisma.user.findUnique({
       where: { id: adventurerId },
-      select: { referredById: true },
+      select: {
+        referredById: true,
+        referrer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
 
     if (!adventurer) {
@@ -50,10 +56,21 @@ export class CallbackRequestService extends BaseService<
         : undefined,
     });
 
-    // TODO: Send notification to assigned agent (if exists)
-    // if (adventurer.referredById) {
-    //   await EmailService.notifyAgentOfNewCallback(adventurer.referredById, request);
-    // }
+    // Send notification to assigned agent
+    if (adventurer.referrer) {
+      await EmailService.sendCallbackRequestNotification(
+        adventurer.referrer.email,
+        adventurer.referrer.name,
+        {
+          requestorName: data.name,
+          requestorEmail: data.email,
+          requestorPhone: data.phone,
+          bestTime: data.bestTime,
+          requestId: request.id,
+          isRegisteredUser: true,
+        },
+      );
+    }
 
     return request;
   }
@@ -62,12 +79,9 @@ export class CallbackRequestService extends BaseService<
    * Create callback request from anonymous user (not logged in)
    * No assignment since there's no referrer
    */
-  async createAnonymous(data: {
-    name: string;
-    email: string;
-    phone: string;
-    bestTime: string;
-  }): Promise<CallbackRequest> {
+  async createAnonymous(
+    data: CreateCallbackRequestDto,
+  ): Promise<CallbackRequest> {
     const request = await this.create({
       name: data.name,
       email: data.email,
@@ -75,8 +89,15 @@ export class CallbackRequestService extends BaseService<
       bestTime: data.bestTime,
     });
 
-    // TODO: Send notification to admin
-    // await EmailService.notifyAdminOfAnonymousCallback(request);
+    // Send notification to admin for anonymous requests
+    await EmailService.sendAnonymousCallbackNotification({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      bestTime: data.bestTime,
+      requestId: request.id,
+      createdAt: request.createdAt,
+    });
 
     return request;
   }
@@ -100,7 +121,7 @@ export class CallbackRequestService extends BaseService<
    */
   async getByDateRange(
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<CallbackRequest[]> {
     return this.callbackRepo.findByDateRange(startDate, endDate);
   }
@@ -122,7 +143,7 @@ export class CallbackRequestService extends BaseService<
       where?: Prisma.CallbackRequestWhereInput;
       include?: Prisma.CallbackRequestInclude;
       orderBy?: any;
-    }
+    },
   ) {
     return this.callbackRepo.paginateWithDetails(page, limit, filters?.where);
   }

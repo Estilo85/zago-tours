@@ -7,6 +7,7 @@ import {
 import { BaseService } from 'src/common/service/base.service';
 import { TripPlanningCallRepository } from './trip-planning-call.repository';
 import { CalendarService } from 'src/shared/utils/calendar.service';
+import { EmailService } from 'src/shared/services/email.service';
 
 interface ScheduleCallDTO {
   agentId: string;
@@ -36,7 +37,7 @@ export class TripPlanningCallService extends BaseService<
    */
   async scheduleCall(
     adventurerId: string,
-    data: ScheduleCallDTO
+    data: ScheduleCallDTO,
   ): Promise<TripPlanningCall> {
     const { agentId, startTime, endTime, meetingLink } = data;
 
@@ -53,7 +54,7 @@ export class TripPlanningCallService extends BaseService<
     const hasConflict = await this.callRepo.hasConflict(
       agentId,
       new Date(startTime),
-      new Date(callEndTime)
+      new Date(callEndTime),
     );
 
     if (hasConflict) {
@@ -79,7 +80,7 @@ export class TripPlanningCallService extends BaseService<
     // Verify agent is the adventurer's referrer (optional security check)
     if (adventurer.referredById && adventurer.referredById !== agentId) {
       console.warn(
-        `Agent ${agentId} is not the referrer of adventurer ${adventurerId}`
+        `Agent ${agentId} is not the referrer of adventurer ${adventurerId}`,
       );
     }
 
@@ -98,9 +99,11 @@ export class TripPlanningCallService extends BaseService<
 
       calendarEventId = calendarEvent.id as string;
       googleMeetLink = calendarEvent.meetingLink as string;
+
+      console.log(`Calendar event created: ${calendarEventId}`);
     } catch (error) {
       console.error('Failed to create calendar event:', error);
-      // Continue without calendar event
+      // Continue without calendar event - call will still be created in DB
     }
 
     // Create the call in database
@@ -114,8 +117,27 @@ export class TripPlanningCallService extends BaseService<
       status: CallStatus.SCHEDULED,
     });
 
-    // TODO: Send confirmation emails
-    // await EmailService.sendCallConfirmation(adventurer.email, agent.email, call);
+    // Send confirmation emails to both adventurer and agent
+    try {
+      await Promise.all([
+        EmailService.sendCallConfirmation(adventurer.email, adventurer.name, {
+          agentName: agent.name,
+          startTime: new Date(startTime),
+          meetingLink: googleMeetLink || meetingLink,
+        }),
+        EmailService.sendAgentCallNotification(agent.email, agent.name, {
+          adventurerName: adventurer.name,
+          adventurerEmail: adventurer.email,
+          startTime: new Date(startTime),
+          endTime: new Date(callEndTime),
+          meetingLink: googleMeetLink || meetingLink,
+          callId: call.id,
+        }),
+      ]);
+    } catch (error) {
+      console.error('Failed to send confirmation emails:', error);
+      // Don't fail the request if emails fail
+    }
 
     return call;
   }
@@ -126,7 +148,7 @@ export class TripPlanningCallService extends BaseService<
   async rescheduleCall(
     callId: string,
     newStartTime: Date,
-    newEndTime?: Date
+    newEndTime?: Date,
   ): Promise<TripPlanningCall> {
     const call = await this.getById(callId);
 
@@ -147,7 +169,7 @@ export class TripPlanningCallService extends BaseService<
       call.agentId,
       new Date(newStartTime),
       new Date(callEndTime),
-      callId
+      callId,
     );
 
     if (hasConflict) {
@@ -157,8 +179,11 @@ export class TripPlanningCallService extends BaseService<
     // Update Google Calendar event if exists
     if (call.calendarEventId) {
       try {
-        // TODO: Implement calendar update
-        // await this.calendarService.updateEvent(call.calendarEventId, {...});
+        await this.calendarService.updateEvent(call.calendarEventId, {
+          startTime: new Date(newStartTime),
+          endTime: new Date(callEndTime),
+        });
+        console.log(`Calendar event updated: ${call.calendarEventId}`);
       } catch (error) {
         console.error('Failed to update calendar event:', error);
       }
@@ -170,7 +195,46 @@ export class TripPlanningCallService extends BaseService<
       endTime: new Date(callEndTime),
     });
 
-    // TODO: Send reschedule notifications
+    // Get user details for email
+    const [adventurer, agent] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: updated.adventurerId },
+        select: { name: true, email: true },
+      }),
+      prisma.user.findUnique({
+        where: { id: updated.agentId },
+        select: { name: true, email: true },
+      }),
+    ]);
+
+    if (adventurer && agent) {
+      try {
+        await Promise.all([
+          EmailService.sendCallRescheduledNotification(
+            adventurer.email,
+            adventurer.name,
+            {
+              agentName: agent.name,
+              oldStartTime: call.startTime,
+              newStartTime: new Date(newStartTime),
+              meetingLink: updated.meetingLink as string,
+            },
+          ),
+          EmailService.sendCallRescheduledNotification(
+            agent.email,
+            agent.name,
+            {
+              agentName: adventurer.name,
+              oldStartTime: call.startTime,
+              newStartTime: new Date(newStartTime),
+              meetingLink: updated.meetingLink as string,
+            },
+          ),
+        ]);
+      } catch (error) {
+        console.error('Failed to send reschedule emails:', error);
+      }
+    }
 
     return updated;
   }
@@ -188,8 +252,8 @@ export class TripPlanningCallService extends BaseService<
     // Delete Google Calendar event if exists
     if (call.calendarEventId) {
       try {
-        // TODO: Implement calendar deletion
-        // await this.calendarService.deleteEvent(call.calendarEventId);
+        await this.calendarService.deleteEvent(call.calendarEventId);
+        console.log(`Calendar event deleted: ${call.calendarEventId}`);
       } catch (error) {
         console.error('Failed to delete calendar event:', error);
       }
@@ -199,8 +263,40 @@ export class TripPlanningCallService extends BaseService<
       status: CallStatus.CANCELLED,
     });
 
-    // TODO: Send cancellation emails
-    // TODO: Log cancellation reason
+    // Get user details for cancellation email
+    const [adventurer, agent] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: call.adventurerId },
+        select: { name: true, email: true },
+      }),
+      prisma.user.findUnique({
+        where: { id: call.agentId },
+        select: { name: true, email: true },
+      }),
+    ]);
+
+    if (adventurer && agent) {
+      try {
+        await Promise.all([
+          EmailService.sendCallCancelledNotification(
+            adventurer.email,
+            adventurer.name,
+            {
+              agentName: agent.name,
+              startTime: call.startTime,
+              reason: reason || 'No reason provided',
+            },
+          ),
+          EmailService.sendCallCancelledNotification(agent.email, agent.name, {
+            agentName: adventurer.name,
+            startTime: call.startTime,
+            reason: reason || 'No reason provided',
+          }),
+        ]);
+      } catch (error) {
+        console.error('Failed to send cancellation emails:', error);
+      }
+    }
 
     return updated;
   }
@@ -271,7 +367,7 @@ export class TripPlanningCallService extends BaseService<
   async getByDateRange(
     startDate: Date,
     endDate: Date,
-    userId?: string
+    userId?: string,
   ): Promise<TripPlanningCall[]> {
     return this.callRepo.findByDateRange(startDate, endDate, userId);
   }
@@ -286,7 +382,7 @@ export class TripPlanningCallService extends BaseService<
       where?: Prisma.TripPlanningCallWhereInput;
       include?: Prisma.TripPlanningCallInclude;
       orderBy?: any;
-    }
+    },
   ) {
     return this.callRepo.paginateWithDetails(page, limit, filters?.where);
   }

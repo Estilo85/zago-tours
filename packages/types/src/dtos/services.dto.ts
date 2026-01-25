@@ -1,9 +1,9 @@
-import { CallStatus, ContractStatus } from '../enums';
+import { CallStatus, ContractStatus, TripType } from '../enums';
 
 // ==================== TRIP REQUEST DTOs ====================
 
 export interface CreateTripRequestDto {
-  tripType: string;
+  tripType: TripType;
   destination: string;
   date: Date | string;
   preferences?: string;
@@ -22,7 +22,7 @@ export interface TripRequestListQueryDto {
   page?: number;
   limit?: number;
   destination?: string;
-  tripType?: string;
+  tripType?: TripType;
   startDate?: Date | string;
   endDate?: Date | string;
   sortBy?: 'createdAt' | 'date';
@@ -147,10 +147,11 @@ export interface CompleteTripPlanningCallDto {
 // ==================== CONTRACT DTOs ====================
 
 export interface CreateContractDto {
+  userId: string;
   agreement: string;
   // Cloudinary document
-  documentUrl: string;
-  publicId: string;
+  documentUrl?: string;
+  publicId?: string;
 }
 
 export interface SignContractDto {

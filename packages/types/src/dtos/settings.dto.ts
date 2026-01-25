@@ -22,6 +22,10 @@ export interface CreateDestinationCountryDto {
   isActive?: boolean;
 }
 
+export interface BulkCreateDestinationCountriesDto {
+  countries: CreateDestinationCountryDto[];
+}
+
 export interface UpdateDestinationCountryDto {
   name?: string;
   code?: string;

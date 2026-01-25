@@ -6,9 +6,15 @@ export class DestinationCountryRepository extends BaseRepository<
   Prisma.DestinationCountryWhereInput,
   Prisma.DestinationCountryCreateInput,
   Prisma.DestinationCountryUpdateInput
-  // Prisma.DestinationCountryInclude
 > {
   protected readonly modelDelegate = this.prisma.destinationCountry;
+
+  async createMany(data: Prisma.DestinationCountryCreateInput[]) {
+    return this.prisma.destinationCountry.createMany({
+      data,
+      skipDuplicates: true,
+    });
+  }
 
   async findActive() {
     return this.modelDelegate.findMany({

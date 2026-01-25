@@ -3,6 +3,7 @@ import { TripRequestRepository } from './trip-request.repository';
 import { TripRequestService } from './trip-request.service';
 import { TripRequestController } from './trip-request.controller';
 import { Role } from '@zagotours/database';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
 
 const router: Router = Router();
 
@@ -12,11 +13,15 @@ const tripRequestService = new TripRequestService(tripRequestRepository);
 const tripRequestController = new TripRequestController(tripRequestService);
 
 // Public/Adventurer endpoints
-router.post('/', tripRequestController.create);
-router.get('/my-requests', tripRequestController.getMyRequests);
+router.post('/', authenticate, tripRequestController.create);
+router.get('/my-requests', authenticate, tripRequestController.getMyRequests);
 
 // Agent endpoints
-router.get('/assigned-to-me', tripRequestController.getAssignedToMe);
+router.get(
+  '/assigned-to-me',
+  authenticate,
+  tripRequestController.getAssignedToMe,
+);
 
 // Admin endpoints
 router.get('/', tripRequestController.getAll);
