@@ -23,7 +23,7 @@ export class CloudinaryService {
 
   static async uploadFile(
     file: Express.Multer.File,
-    context: UploadContext
+    context: UploadContext,
   ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
@@ -43,7 +43,7 @@ export class CloudinaryService {
             publicId: result.public_id,
             mediaType: this.getMediaType(file.mimetype),
           });
-        }
+        },
       );
 
       uploadStream.end(file.buffer);
@@ -52,7 +52,7 @@ export class CloudinaryService {
 
   static async uploadMultiple(
     files: Express.Multer.File[],
-    context: UploadContext
+    context: UploadContext,
   ): Promise<UploadResult[]> {
     return Promise.all(files.map((file) => this.uploadFile(file, context)));
   }

@@ -38,6 +38,7 @@ export class UserRepository extends BaseRepository<
         id: true,
         name: true,
         email: true,
+        image: true,
         status: true,
         createdAt: true,
       },

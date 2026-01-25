@@ -18,6 +18,8 @@ router.post(
 // Get all gallery items for an adventure
 router.get('/:adventureId/gallery', controller.getByAdventure);
 
+router.put('/gallery/reorder', controller.reorder);
+
 // Get single gallery item
 router.get('/gallery/:id', controller.getById);
 
@@ -25,7 +27,6 @@ router.get('/gallery/:id', controller.getById);
 router.put('/gallery/:id', controller.update);
 
 // Reorder gallery items
-router.put('/gallery/reorder', controller.reorder);
 
 // Delete gallery item (with Cloudinary cleanup)
 router.delete('/gallery/:id', controller.delete);

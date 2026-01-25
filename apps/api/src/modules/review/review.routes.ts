@@ -3,6 +3,7 @@ import { ReviewRepository } from './review.repository';
 import { ReviewService } from './review.service';
 import { ReviewController } from './review.controller';
 import { Role } from '@zagotours/database';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
 
 const router: Router = Router();
 
@@ -18,10 +19,10 @@ router.get('/average-rating', reviewController.getAverageRating);
 router.get('/:id', reviewController.getById);
 
 // Authenticated routes
-router.post('/', reviewController.create);
-router.get('/my/reviews', reviewController.getMyReviews);
-router.put('/:id', reviewController.update);
-router.delete('/:id', reviewController.delete);
+router.post('/', authenticate, reviewController.create);
+router.get('/my/reviews', authenticate, reviewController.getMyReviews);
+router.put('/:id', authenticate, reviewController.update);
+router.delete('/:id', authenticate, reviewController.delete);
 
 // Admin routes
 router.patch('/:id/toggle-featured', reviewController.toggleFeatured);

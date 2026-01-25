@@ -19,6 +19,6 @@ export function getRedirectUrlByRole(role: Role): string {
       return '/affiliate';
 
     default:
-      return '/dashboard';
+      return '/';
   }
 }

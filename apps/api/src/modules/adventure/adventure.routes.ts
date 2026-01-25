@@ -9,6 +9,7 @@ import {
   bulkCreateAdventureSchema,
   createAdventureSchema,
 } from './adventure.validation';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
 
 const router: Router = Router();
 const controller = new AdventureController(
@@ -38,6 +39,7 @@ router
 
 router.post(
   '/:id/toggle-like',
+  authenticate,
   validateRequest({ params: commonValidation.uuidParam }),
   controller.toggleLike,
 );

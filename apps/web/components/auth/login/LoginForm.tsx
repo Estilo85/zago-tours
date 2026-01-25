@@ -6,11 +6,11 @@ import { Box, Stack, Heading, Text, VStack } from '@chakra-ui/react';
 import Button from '@/components/ui/button/Button';
 import { FormInput } from '@/components/ui/input/FormInput';
 import { PasswordInput } from '@/components/ui/input/password-input';
-import { useAuth } from '@/hooks/queries/auth';
 import { LoginFormData, loginSchema } from '@/app/validations/auth-validation';
+import { useAuth } from '@/hooks';
 
 export function LoginForm() {
-  const { login, isLoggingIn } = useAuth();
+  const { login, isLoggingIn, loginError } = useAuth();
 
   const {
     control,
@@ -21,7 +21,6 @@ export function LoginForm() {
     defaultValues: { email: '', password: '' },
   });
 
-  // The submit handler
   const onSubmit = (data: LoginFormData) => {
     login(data);
   };
@@ -33,8 +32,9 @@ export function LoginForm() {
       p={8}
       borderWidth={1}
       borderRadius='lg'
-      bg='textInverse'
+      bg='white'
       mx='auto'
+      boxShadow='sm'
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack gap={6} align='stretch'>
@@ -48,6 +48,24 @@ export function LoginForm() {
           </Stack>
 
           <Stack gap={4}>
+            {/* SERVER-SIDE ERROR DISPLAY */}
+            {loginError && (
+              <Box
+                p={3}
+                bg='red.50'
+                borderWidth={1}
+                borderColor='red.200'
+                borderRadius='md'
+              >
+                <Text color='red.700' fontSize='sm'>
+                  {loginError instanceof Error &&
+                  loginError.message === 'CredentialsSignin'
+                    ? 'Invalid email or password. Please try again.'
+                    : loginError.message}
+                </Text>
+              </Box>
+            )}
+
             <Controller
               name='email'
               control={control}
@@ -91,6 +109,7 @@ export function LoginForm() {
               width='full'
               bg='primary'
               color='white'
+              mt={2}
             >
               Sign In
             </Button>

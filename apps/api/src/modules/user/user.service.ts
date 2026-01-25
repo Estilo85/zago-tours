@@ -46,7 +46,6 @@ export class UserService {
     if (!user) {
       throw new Error('User not found');
     }
- 
 
     const { agentDetails, cooperateDetails, affiliateDetails, ...userData } =
       data;
@@ -131,6 +130,7 @@ export class UserService {
       id: r.id,
       name: r.name,
       email: r.email,
+      image: r.image as string,
       status:
         r.status as unknown as ReferralStatsDto['referrals'][number]['status'],
       createdAt: r.createdAt,
@@ -162,7 +162,7 @@ export class UserService {
 
     const where: Prisma.UserWhereInput = { deletedAt: null };
 
-    if (role) where.role = role;
+    if (role) where.role = role.toUpperCase() as Role;
     if (status) where.status = status;
     if (search) {
       where.OR = [
@@ -202,7 +202,7 @@ export class UserService {
    */
   async updateUserStatus(
     userId: string,
-    data: UpdateUserStatusDto
+    data: UpdateUserStatusDto,
   ): Promise<User> {
     return this.userRepository.update(userId, { status: data.status });
   }
@@ -211,10 +211,11 @@ export class UserService {
    * Promote to safety ambassador (admin)
    */
   async promoteSafetyAmbassador(
-    data: PromoteToSafetyAmbassadorDto
+    userId: string,
+    safetyAmbassador: boolean = true,
   ): Promise<User> {
-    return this.userRepository.update(data.userId, {
-      safetyAmbassador: data.safetyAmbassador,
+    return this.userRepository.update(userId, {
+      safetyAmbassador,
     });
   }
 

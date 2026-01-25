@@ -15,6 +15,17 @@ export async function proxy(request: NextRequest) {
 
   const role = token.role as Role;
 
+  // Define role home paths
+  const roleHomePaths: Record<string, string> = {
+    [Role.SUPER_ADMIN]: '/super-admin',
+    [Role.ADMIN]: '/super-admin',
+    [Role.INDEPENDENT_AGENT]: '/independent-agent',
+    [Role.COOPERATE_AGENT]: '/corporate-agent',
+    [Role.ADVENTURER]: '/adventurer',
+    [Role.AFFILIATE]: '/affiliate',
+  };
+
+  // Define which roles can access which routes
   const roleAccessMap: Record<string, Role[]> = {
     '/super-admin': [Role.SUPER_ADMIN, Role.ADMIN],
     '/independent-agent': [Role.INDEPENDENT_AGENT],
@@ -23,20 +34,7 @@ export async function proxy(request: NextRequest) {
     '/affiliate': [Role.AFFILIATE],
   };
 
-  if (path === '/dashboard') {
-    const roleHomePaths: Record<string, string> = {
-      [Role.SUPER_ADMIN]: '/super-admin',
-      [Role.ADMIN]: '/super-admin',
-      [Role.INDEPENDENT_AGENT]: '/independent-agent',
-      [Role.COOPERATE_AGENT]: '/corporate-agent',
-      [Role.ADVENTURER]: '/adventurer',
-      [Role.AFFILIATE]: '/affiliate',
-    };
-    return NextResponse.redirect(
-      new URL(roleHomePaths[role] || '/adventurer', request.url),
-    );
-  }
-
+  // Check if user is trying to access a restricted role-specific path
   const restrictedPath = Object.keys(roleAccessMap).find((prefix) =>
     path.startsWith(prefix),
   );
@@ -44,7 +42,10 @@ export async function proxy(request: NextRequest) {
   if (restrictedPath) {
     const allowedRoles = roleAccessMap[restrictedPath];
     if (!allowedRoles?.includes(role)) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      // Redirect unauthorized users to their own role dashboard
+      return NextResponse.redirect(
+        new URL(roleHomePaths[role] || '/adventurer', request.url),
+      );
     }
   }
 
@@ -53,7 +54,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
     '/super-admin/:path*',
     '/independent-agent/:path*',
     '/corporate-agent/:path*',

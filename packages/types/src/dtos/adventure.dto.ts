@@ -79,6 +79,7 @@ export interface AdventureResponseDto {
 export interface AdventureDetailResponseDto extends AdventureResponseDto {
   itineraries: ItineraryResponseDto[];
   gallery: AdventureGalleryResponseDto[];
+  likes: AdventureLikeResponseDto[];
   isLikedByUser?: boolean;
 }
 
@@ -180,6 +181,7 @@ export interface AdventureLikeResponseDto {
   user?: {
     id: string;
     name: string;
+    image: string;
   };
 }
 

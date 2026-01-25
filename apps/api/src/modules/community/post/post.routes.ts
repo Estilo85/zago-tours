@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { PostRepository } from './post.repository';
 import { PostService } from './post.service';
 import { PostController } from './post.controller';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { upload } from 'src/config/multer.config';
 
 const router: Router = Router();
 
@@ -10,26 +12,29 @@ const postRepository = new PostRepository();
 const postService = new PostService(postRepository);
 const postController = new PostController(postService);
 
-// Public routes
+// ==================== PUBLIC ROUTES ====================
 router.get('/', postController.getAll);
 router.get('/:id', postController.getById);
 router.get('/:id/comments', postController.getComments);
 
-// Authenticated routes
-router.post('/', postController.create);
-router.get('/feed/my-feed', postController.getFeed);
-router.get('/my/posts', postController.getMyPosts);
-router.put('/:id', postController.update);
-router.delete('/:id', postController.delete);
+// ==================== AUTHENTICATED ROUTES ====================
+// Feed & User Posts
+router.get('/feed/my-feed', authenticate, postController.getFeed);
+router.get('/my/posts', authenticate, postController.getMyPosts);
 
-// Social interactions
-router.post('/:id/like', postController.toggleLike);
-router.post('/:id/share', postController.sharePost);
-router.post('/:id/comments', postController.addComment);
+// CRUD Operations
+router.post('/', authenticate, upload.single('media'), postController.create);
+router.put('/:id', authenticate, upload.single('media'), postController.update);
+router.delete('/:id', authenticate, postController.delete);
+
+// Social Interactions
+router.post('/:id/like', authenticate, postController.toggleLike);
+router.post('/:id/share', authenticate, postController.toggleShare);
+router.post('/:id/comments', authenticate, postController.addComment);
 router.delete(
-  '/:id/comments/:commentId',
-
-  postController.deleteComment
+  '/comments/:commentId',
+  authenticate,
+  postController.deleteComment,
 );
 
 export { router as postRoutes };

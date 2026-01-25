@@ -24,6 +24,65 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   //==================
+  // ADMIN - CREATE EVENT
+  //==================
+  create = asyncHandler(async (req: ReqBody<CreateEventDto>, res: Response) => {
+    const eventData = req.body;
+
+    // Handle media upload
+    if (req.file) {
+      const uploadResult = await CloudinaryService.uploadFile(
+        req.file,
+        'event',
+      );
+      eventData.mediaUrl = uploadResult.url;
+      eventData.publicId = uploadResult.publicId;
+    }
+
+    const createData = {
+      ...eventData,
+      spotLeft: Number(eventData.spotLeft),
+      date: new Date(eventData.date),
+      joinTill: new Date(eventData.joinTill),
+      creator: {
+        connect: { id: req.userId },
+      },
+    };
+
+    const event = await this.eventService.create(createData);
+    return ResponseUtil.success(res, event, 'Event created', 201);
+  });
+
+  //==================
+  // ADMIN - UPDATE EVENT
+  //==================
+  update = asyncHandler(
+    async (req: ReqParamsBody<UuidParam, UpdateEventDto>, res: Response) => {
+      const eventData = req.body;
+      const { id } = req.params;
+
+      const existingEvent = await this.eventService.getById(id);
+
+      // Handle media replacement
+      if (req.file) {
+        if (existingEvent.publicId) {
+          await CloudinaryService.deleteFile(existingEvent.publicId);
+        }
+
+        const uploadResult = await CloudinaryService.uploadFile(
+          req.file,
+          'event',
+        );
+        eventData.mediaUrl = uploadResult.url;
+        eventData.publicId = uploadResult.publicId;
+      }
+
+      const event = await this.eventService.update(id, eventData);
+      return ResponseUtil.success(res, event, 'Event updated');
+    },
+  );
+
+  //==================
   // PUBLIC - GET ALL EVENTS
   //==================
   getAll = asyncHandler(
@@ -59,6 +118,7 @@ export class EventController {
         filters.spotLeft = { gt: 0 };
       }
 
+      // In EventController.getAll
       const result = await this.eventService.paginate(
         Number(page),
         Number(limit),
@@ -66,14 +126,17 @@ export class EventController {
           where: filters,
           orderBy: { [String(sortBy)]: String(sortOrder) },
           include: {
+            creator: {
+              // ADD THIS HERE
+              select: { id: true, name: true, image: true },
+            },
             registrations: {
               take: 5,
               include: {
-                user: {
-                  select: { id: true, name: true, image: true },
-                },
+                user: { select: { id: true, name: true, image: true } },
               },
             },
+            _count: { select: { registrations: true } },
           },
         },
       );
@@ -95,11 +158,22 @@ export class EventController {
   //==================
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const event = await this.eventService.getById(req.params.id);
+    const userId = req.userId;
+
+    let hasJoined = false;
+    if (userId) {
+      const registration = await this.eventService.checkUserRegistration(
+        userId,
+        req.params.id,
+      );
+      hasJoined = !!registration;
+    }
 
     const enrichedEvent = {
       ...event,
       isExpired: new Date() > new Date(event.joinTill),
       isFull: event.spotLeft <= 0,
+      hasJoined,
     };
 
     return ResponseUtil.success(res, enrichedEvent);
@@ -161,60 +235,6 @@ export class EventController {
       });
 
       return ResponseUtil.success(res, bookings);
-    },
-  );
-
-  //==================
-  // ADMIN - CREATE EVENT
-  //==================
-  create = asyncHandler(async (req: ReqBody<CreateEventDto>, res: Response) => {
-    const eventData = req.body;
-
-    // Handle media upload
-    if (req.file) {
-      const uploadResult = await CloudinaryService.uploadFile(
-        req.file,
-        'event',
-      );
-      eventData.mediaUrl = uploadResult.url;
-      eventData.publicId = uploadResult.publicId;
-    }
-
-    const createData = {
-      ...eventData,
-      createdBy: req.userId as string,
-    };
-
-    const event = await this.eventService.create(createData);
-    return ResponseUtil.success(res, event, 'Event created', 201);
-  });
-
-  //==================
-  // ADMIN - UPDATE EVENT
-  //==================
-  update = asyncHandler(
-    async (req: ReqParamsBody<UuidParam, UpdateEventDto>, res: Response) => {
-      const eventData = req.body;
-      const { id } = req.params;
-
-      const existingEvent = await this.eventService.getById(id);
-
-      // Handle media replacement
-      if (req.file) {
-        if (existingEvent.publicId) {
-          await CloudinaryService.deleteFile(existingEvent.publicId);
-        }
-
-        const uploadResult = await CloudinaryService.uploadFile(
-          req.file,
-          'event',
-        );
-        eventData.mediaUrl = uploadResult.url;
-        eventData.publicId = uploadResult.publicId;
-      }
-
-      const event = await this.eventService.update(id, eventData);
-      return ResponseUtil.success(res, event, 'Event updated');
     },
   );
 

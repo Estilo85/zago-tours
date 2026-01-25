@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ReviewService } from './review.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
-import { NotFoundException } from 'src/common/service/base.service';
 import { Prisma } from '@zagotours/database';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import {
@@ -36,9 +35,9 @@ export class ReviewController {
         res,
         review,
         'Review created successfully',
-        201
+        201,
       );
-    }
+    },
   );
 
   getAll = asyncHandler(
@@ -50,7 +49,7 @@ export class ReviewController {
         userId?: string;
         featured?: string;
       }>,
-      res: Response
+      res: Response,
     ) => {
       const { page = 1, limit = 10, rating, userId, featured } = req.query;
 
@@ -71,11 +70,11 @@ export class ReviewController {
       const result = await this.reviewService.paginate(
         Number(page),
         Number(limit),
-        { where: filters }
+        { where: filters },
       );
 
       return ResponseUtil.paginated(res, result);
-    }
+    },
   );
 
   getFeatured = asyncHandler(async (req: TypedRequest, res: Response) => {
@@ -87,7 +86,7 @@ export class ReviewController {
     async (req: TypedRequest, res: Response, next: NextFunction) => {
       const reviews = await this.reviewService.getByUser(req.userId!);
       return ResponseUtil.success(res, reviews);
-    }
+    },
   );
 
   getAverageRating = asyncHandler(async (req: TypedRequest, res: Response) => {
@@ -111,7 +110,7 @@ export class ReviewController {
 
       const updated = await this.reviewService.update(req.params.id, req.body);
       return ResponseUtil.success(res, updated, 'Review updated successfully');
-    }
+    },
   );
 
   toggleFeatured = asyncHandler(
@@ -120,9 +119,9 @@ export class ReviewController {
       return ResponseUtil.success(
         res,
         review,
-        `Review ${review.isFeatured ? 'featured' : 'unfeatured'} successfully`
+        `Review ${review.isFeatured ? 'featured' : 'unfeatured'} successfully`,
       );
-    }
+    },
   );
 
   delete = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {

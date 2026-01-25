@@ -5,6 +5,7 @@ import { Role, UserStatus } from '@zagotours/database';
 import {
   ReqBody,
   ReqParams,
+  ReqParamsBody,
   ReqQuery,
   TypedRequest,
 } from 'src/shared/types/express.types';
@@ -14,6 +15,7 @@ import {
   UpdateUserStatusDto,
   PromoteToSafetyAmbassadorDto,
 } from '@zagotours/types';
+import { UuidParam } from 'src/common/validation/common.validation';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -108,8 +110,14 @@ export class UserController {
    * PATCH /api/admin/users/safety-ambassador
    */
   promoteSafetyAmbassador = asyncHandler(
-    async (req: ReqBody<PromoteToSafetyAmbassadorDto>, res: Response) => {
-      const user = await this.userService.promoteSafetyAmbassador(req.body);
+    async (
+      req: ReqParamsBody<UuidParam, { safetyAmbassador?: boolean }>,
+      res: Response,
+    ) => {
+      const user = await this.userService.promoteSafetyAmbassador(
+        req.params.id,
+        req.body.safetyAmbassador ?? true,
+      );
       return ResponseUtil.success(
         res,
         user,

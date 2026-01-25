@@ -70,7 +70,7 @@ router.patch('/:id/status', authenticate, userController.updateUserStatus);
  * @access  Admin
  */
 router.patch(
-  '/safety-ambassador',
+  '/:id/safety-ambassador',
   authenticate,
   userController.promoteSafetyAmbassador,
 );

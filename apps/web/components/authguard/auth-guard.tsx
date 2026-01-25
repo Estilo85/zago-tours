@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Role } from '@zagotours/types';
-import { useAuthSession } from '@/hooks/queries/auth/use-auth-session';
-import { usePermissions } from '@/hooks/queries/auth/use-permissions';
+import { useAuthSession } from '@/hooks/api/use-auth-session';
+import { usePermissions } from '@/hooks/api/use-permissions';
 
 interface AuthGuardProps {
   children: React.ReactNode;

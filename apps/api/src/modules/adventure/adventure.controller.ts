@@ -141,6 +141,7 @@ export class AdventureController {
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const adventure = await this.service.getById(req.params.id);
+
     return ResponseUtil.success(res, adventure);
   });
 

@@ -7,9 +7,12 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
   const session = await getSession();
 
   const headers = new Headers(options.headers);
-  headers.set('Content-Type', 'application/json');
 
-  //Attach the token
+  if (!(options.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  // Attach the token
   if (session?.accessToken) {
     headers.set('Authorization', `Bearer ${session.accessToken}`);
   }
@@ -19,10 +22,11 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
     headers,
   });
 
-  const data = await res.json();
+  const isJson = res.headers.get('content-type')?.includes('application/json');
+  const data = isJson ? await res.json() : null;
 
   if (!res.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    throw new Error(data?.message || 'Something went wrong');
   }
 
   return data;

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import RegistrationForm from '@/components/auth/registration/form/RegistrationForm';
 import { RegistrableRole } from '@zagotours/types';
 import { Box, Container, Flex } from '@chakra-ui/react';
-import { useRegistrationLogic } from '@/hooks/use-registration-logic';
+import { useRegistrationLogic } from '@/hooks/settings/use-registration-logic';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 
 export default function Register() {

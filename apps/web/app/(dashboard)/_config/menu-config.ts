@@ -20,7 +20,6 @@ import {
 export const MENU_CONFIG = {
   common: {
     main: [
-      { label: 'Dashboard', icon: LuLayoutDashboard, href: '/dashboard' },
       { label: 'Events', icon: LuCalendar, href: '/event' },
       { label: 'Adventures', icon: LuMapPin, href: '/adventure' },
     ],

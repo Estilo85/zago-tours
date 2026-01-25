@@ -139,7 +139,9 @@ model User {
   //Callback request
   callbackRequests      CallbackRequest[]  @relation("AdventurerCallbacks")
   assignedCallbackRequests  CallbackRequest[]  @relation("AgentCallbacks")
-
+ 
+ //Event
+  events                  Event[]
   createdAt             DateTime          @default(now())
   updatedAt             DateTime          @updatedAt
   deletedAt             DateTime?
@@ -322,6 +324,7 @@ model Event {
   date              DateTime
   description       String
   location          String
+  creator           User     @relation(fields: [createdBy], references: [id])
   createdBy         String
   spotLeft          Int
   joinTill          DateTime

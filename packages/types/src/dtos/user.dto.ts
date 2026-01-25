@@ -4,6 +4,7 @@ export interface UpdateProfileDto {
   name?: string;
   phone?: string;
   country?: string;
+  image?: string;
   agentDetails?: UpdateIndependentAgentDto;
   cooperateDetails?: UpdateCooperateAgentDto;
   affiliateDetails?: UpdateAffiliateDto;
@@ -28,11 +29,6 @@ export interface UpdateAffiliateDto {
   communityBrand?: string;
   socialLinks?: string[];
   howDidYouHear?: string;
-}
-
-export interface PromoteToSafetyAmbassadorDto {
-  userId: string;
-  safetyAmbassador: boolean;
 }
 
 export interface UserProfileResponseDto {

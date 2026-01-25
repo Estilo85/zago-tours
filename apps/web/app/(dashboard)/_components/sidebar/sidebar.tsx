@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { LuLogOut } from 'react-icons/lu';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { MENU_CONFIG } from '../../_config/menu-config';
-import { useAuth } from '@/hooks/queries/auth';
+import { useAuth } from '@/hooks';
 
 export const Sidebar = ({
   role,

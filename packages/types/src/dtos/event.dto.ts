@@ -42,6 +42,11 @@ export interface EventResponseDto {
   mediaUrl: string | null;
   publicId: string | null;
   createdAt: Date;
+  creator?: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
   registrations?: {
     user: {
       id: string;

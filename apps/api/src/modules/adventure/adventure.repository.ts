@@ -18,12 +18,30 @@ export class AdventureRepository extends BaseRepository<
 
   private readonly standardInclude: Prisma.AdventureInclude = {
     itineraries: { orderBy: { dayNumber: 'asc' } },
-    _count: { select: { likes: true } },
+    gallery: { orderBy: { order: 'asc' } },
+    likes: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
+    },
+    _count: {
+      select: {
+        likes: true,
+        itineraries: true,
+        gallery: true,
+      },
+    },
   };
 
   async create(
     data: Prisma.AdventureCreateInput,
-    include?: Prisma.AdventureInclude
+    include?: Prisma.AdventureInclude,
   ): Promise<Adventure> {
     return this.modelDelegate.create({
       data,
@@ -41,7 +59,7 @@ export class AdventureRepository extends BaseRepository<
   async update(
     id: string,
     data: Prisma.AdventureUpdateInput,
-    include?: Prisma.AdventureInclude
+    include?: Prisma.AdventureInclude,
   ): Promise<Adventure> {
     return this.modelDelegate.update({
       where: { id },
@@ -52,7 +70,7 @@ export class AdventureRepository extends BaseRepository<
 
   async findById(
     id: string,
-    include?: Prisma.AdventureInclude
+    include?: Prisma.AdventureInclude,
   ): Promise<Adventure | null> {
     return super.findById(id, include || this.standardInclude);
   }
@@ -74,6 +92,19 @@ export class AdventureRepository extends BaseRepository<
 
   async createLike(userId: string, adventureId: string) {
     return prisma.adventureLike.create({ data: { userId, adventureId } });
+  }
+
+  async getAdventureWithLikers(id: string) {
+    return this.modelDelegate.findUnique({
+      where: { id },
+      include: {
+        likes: {
+          include: {
+            user: { select: { id: true, name: true, image: true } },
+          },
+        },
+      },
+    });
   }
 
   async deleteLike(id: string) {

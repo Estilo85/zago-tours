@@ -3,7 +3,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, VStack } from '@chakra-ui/react';
 import Button from '@/components/ui/button/Button';
-import { useRegistrationLogic } from '@/hooks/use-registration-logic';
+import { useRegistrationLogic } from '@/hooks/settings/use-registration-logic';
 import {
   RegistrationFormData,
   registrationSchema,

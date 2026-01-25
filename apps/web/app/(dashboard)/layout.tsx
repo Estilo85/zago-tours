@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
 import { UserRole } from './_config/menu-config';
-import { useAuthSession } from '@/hooks/queries/auth';
+import { useAuthSession } from '@/hooks';
 
 export default function DashboardLayout({
   children,
