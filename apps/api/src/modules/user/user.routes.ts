@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Role } from '@zagotours/database';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
-import { requireRole } from 'src/shared/middleware/role-guard';
+import { requireRole } from 'src/shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 

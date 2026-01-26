@@ -85,9 +85,14 @@ export interface GeneralInquiryListQueryDto {
 // ==================== TRIP PLANNING CALL DTOs ====================
 
 export interface CreateTripPlanningCallDto {
-  agentId: string;
   startTime: Date | string;
   endTime?: Date | string;
+  meetingLink?: string;
+}
+
+export interface ScheduleCallDto {
+  startTime: Date;
+  endTime?: Date;
   meetingLink?: string;
 }
 
@@ -181,24 +186,4 @@ export interface ContractListQueryDto {
   status?: ContractStatus;
   sortBy?: 'createdAt' | 'signedAt';
   sortOrder?: 'asc' | 'desc';
-}
-
-// ==================== SERVICES STATS DTOs ====================
-
-export interface ServicesStatsDto {
-  totalTripRequests: number;
-  totalCallbackRequests: number;
-  totalInquiries: number;
-  totalCalls: number;
-  totalContracts: number;
-  callStatusDistribution: {
-    scheduled: number;
-    completed: number;
-    cancelled: number;
-    expired: number;
-  };
-  contractStatusDistribution: {
-    signed: number;
-    notSigned: number;
-  };
 }

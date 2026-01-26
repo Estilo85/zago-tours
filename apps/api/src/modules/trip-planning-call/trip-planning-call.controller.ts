@@ -15,18 +15,13 @@ export class TripPlanningCallController {
    */
   scheduleCall = asyncHandler(
     async (req: TypedRequest<{}, CreateTripPlanningCallDto>, res: Response) => {
-      const { agentId, startTime, endTime, meetingLink } = req.body;
+      const { startTime, endTime, meetingLink } = req.body;
 
-      if (!agentId || !startTime) {
-        return ResponseUtil.error(
-          res,
-          'Agent ID and start time are required',
-          400,
-        );
+      if (!startTime) {
+        return ResponseUtil.error(res, 'Start time is required', 400);
       }
 
       const call = await this.callService.scheduleCall(req.userId!, {
-        agentId,
         startTime: new Date(startTime),
         endTime: endTime ? new Date(endTime) : undefined,
         meetingLink,

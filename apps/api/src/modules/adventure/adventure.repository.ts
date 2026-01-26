@@ -1,10 +1,4 @@
-import {
-  Adventure,
-  AdventureStatus,
-  Prisma,
-  prisma,
-} from '@zagotours/database';
-import { AdventureStatsDto } from '@zagotours/types';
+import { Adventure, Prisma, prisma } from '@zagotours/database';
 import { BaseRepository } from 'src/common/repository/base.repository';
 
 export class AdventureRepository extends BaseRepository<

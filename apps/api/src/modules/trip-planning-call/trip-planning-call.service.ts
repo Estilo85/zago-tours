@@ -8,13 +8,7 @@ import { BaseService } from 'src/common/service/base.service';
 import { TripPlanningCallRepository } from './trip-planning-call.repository';
 import { CalendarService } from 'src/shared/utils/calendar.service';
 import { EmailService } from 'src/shared/services/email.service';
-
-interface ScheduleCallDTO {
-  agentId: string;
-  startTime: Date;
-  endTime?: Date;
-  meetingLink?: string;
-}
+import { ScheduleCallDto } from '@zagotours/types';
 
 export class TripPlanningCallService extends BaseService<
   TripPlanningCall,
@@ -33,18 +27,49 @@ export class TripPlanningCallService extends BaseService<
 
   /**
    * Schedule a new call with Google Calendar integration
-   * Auto-assigns to adventurer's referrer if agentId matches
+   * Automatically assigns to adventurer's referrer
    */
   async scheduleCall(
     adventurerId: string,
-    data: ScheduleCallDTO,
+    data: ScheduleCallDto,
   ): Promise<TripPlanningCall> {
-    const { agentId, startTime, endTime, meetingLink } = data;
+    const { startTime, endTime, meetingLink } = data;
 
     // Validate start time is in the future
     if (new Date(startTime) <= new Date()) {
       throw new Error('Start time must be in the future');
     }
+
+    // Get adventurer to find their referrer (agent)
+    const adventurer = await prisma.user.findUnique({
+      where: { id: adventurerId },
+      select: {
+        name: true,
+        email: true,
+        referredById: true,
+        referrer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!adventurer) {
+      throw new Error('Adventurer not found');
+    }
+
+    // Check if adventurer has a referrer (agent)
+    if (!adventurer.referredById || !adventurer.referrer) {
+      throw new Error(
+        'You must be referred by an agent to schedule a trip planning call',
+      );
+    }
+
+    const agentId = adventurer.referredById;
+    const agent = adventurer.referrer;
 
     // Calculate end time if not provided (default 30 minutes)
     const callEndTime =
@@ -59,29 +84,6 @@ export class TripPlanningCallService extends BaseService<
 
     if (hasConflict) {
       throw new Error('Agent already has a call scheduled at this time');
-    }
-
-    // Get user details for calendar event
-    const [adventurer, agent] = await Promise.all([
-      prisma.user.findUnique({
-        where: { id: adventurerId },
-        select: { name: true, email: true, referredById: true },
-      }),
-      prisma.user.findUnique({
-        where: { id: agentId },
-        select: { name: true, email: true },
-      }),
-    ]);
-
-    if (!adventurer || !agent) {
-      throw new Error('User not found');
-    }
-
-    // Verify agent is the adventurer's referrer (optional security check)
-    if (adventurer.referredById && adventurer.referredById !== agentId) {
-      console.warn(
-        `Agent ${agentId} is not the referrer of adventurer ${adventurerId}`,
-      );
     }
 
     // Create Google Calendar event
@@ -141,7 +143,6 @@ export class TripPlanningCallService extends BaseService<
 
     return call;
   }
-
   /**
    * Reschedule a call
    */

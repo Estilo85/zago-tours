@@ -1,106 +1,116 @@
-import { prisma } from '@zagotours/database';
-import { GlobalDashboardStats, Role } from '@zagotours/types';
+import { Prisma } from '@zagotours/database';
+import {
+  Role,
+  CorporateAgentStats,
+  IndependentAgentStats,
+  AffiliateStats,
+  AdminStats,
+} from '@zagotours/types';
+import { BaseRepository } from 'src/common/repository/base.repository';
 
-export class DashboardRepository {
-  /**
-   * CORPORATE AGENT STATS
-   * Shows their assigned requests from referrals
-   */
-  async getCorporateStats(userId: string) {
-    const [adventures, tripRequests, callbacks, referrals] =
-      await prisma.$transaction([
-        prisma.adventure.count(), // All adventures (or filter by company if needed)
-        prisma.tripRequest.count({
-          where: { assignedAgentId: userId }, // Their assigned requests
+export class DashboardRepository extends BaseRepository<
+  Prisma.UserGetPayload<{}>,
+  Prisma.UserWhereInput,
+  Prisma.UserCreateInput,
+  Prisma.UserUpdateInput
+> {
+  // Point the delegate to user as the primary entity for dashboard stats
+  protected readonly modelDelegate = this.prisma.user;
+
+  // ==================== CORPORATE AGENT STATS ====================
+  async getCorporateAgentStats(userId: string): Promise<CorporateAgentStats> {
+    const [tripRequests, callbacks, referrals] = await this.prisma.$transaction(
+      [
+        this.prisma.tripRequest.count({
+          where: { assignedAgentId: userId },
         }),
-        prisma.callbackRequest.count({
-          where: { assignedAgentId: userId }, // Their assigned callbacks
+        this.prisma.callbackRequest.count({
+          where: { assignedAgentId: userId },
         }),
-        prisma.user.count({
-          where: { referredById: userId }, // Their referrals
+        this.prisma.user.count({
+          where: { referredById: userId },
         }),
-      ]);
+      ],
+    );
+
+    const pointsEarned = referrals * 100;
 
     return {
-      totalAdventures: adventures,
-      totalTripRequests: tripRequests,
-      totalCallbacks: callbacks,
-      totalReferrals: referrals,
+      assignedRequests: {
+        totalTripRequests: tripRequests,
+        totalCallbackRequests: callbacks,
+      },
+      referrals: {
+        total: referrals,
+        pointsEarned,
+      },
     };
   }
 
-  /**
-   * INDEPENDENT AGENT STATS
-   * Shows their calls, requests, and referrals
-   */
-  async getIndependentStats(userId: string) {
+  // ==================== INDEPENDENT AGENT STATS ====================
+  async getIndependentAgentStats(
+    userId: string,
+  ): Promise<IndependentAgentStats> {
     const [upcoming, completed, cancelled, callbacks, tripRequests, referrals] =
-      await prisma.$transaction([
-        prisma.tripPlanningCall.count({
+      await this.prisma.$transaction([
+        this.prisma.tripPlanningCall.count({
           where: { agentId: userId, status: 'SCHEDULED' },
         }),
-        prisma.tripPlanningCall.count({
+        this.prisma.tripPlanningCall.count({
           where: { agentId: userId, status: 'COMPLETED' },
         }),
-        prisma.tripPlanningCall.count({
+        this.prisma.tripPlanningCall.count({
           where: { agentId: userId, status: 'CANCELLED' },
         }),
-        prisma.callbackRequest.count({
+        this.prisma.callbackRequest.count({
           where: { assignedAgentId: userId },
         }),
-        prisma.tripRequest.count({
+        this.prisma.tripRequest.count({
           where: { assignedAgentId: userId },
         }),
-        prisma.user.count({
+        this.prisma.user.count({
           where: { referredById: userId },
         }),
       ]);
 
-    // Points calculation: 100 per referral, 50 per completed call
-    const pointsEarned = referrals * 100 + completed * 50;
+    const referralPoints = referrals * 100;
+    const callPoints = completed * 50;
 
     return {
-      upcomingCalls: upcoming,
-      completedCalls: completed,
-      cancelledCalls: cancelled,
-      totalCallbacks: callbacks,
-      totalTripRequests: tripRequests,
-      totalReferrals: referrals,
-      pointsEarned,
+      calls: {
+        upcomingCalls: upcoming,
+        completedCalls: completed,
+        cancelledCalls: cancelled,
+      },
+      assignedRequests: {
+        totalCallbackRequests: callbacks,
+        totalTripRequests: tripRequests,
+      },
+      referrals: {
+        total: referrals,
+        pointsEarned: referralPoints,
+      },
+      totalPointsEarned: referralPoints + callPoints,
     };
   }
 
-  /**
-   * AFFILIATE STATS
-   * Shows their referrals and breakdown by role
-   */
-  async getAffiliateStats(userId: string) {
+  // ==================== AFFILIATE STATS ====================
+  async getAffiliateStats(userId: string): Promise<AffiliateStats> {
     const [totalReferrals, activeReferrals, referralsByRole] =
-      await prisma.$transaction([
-        // Total referrals
-        prisma.user.count({
-          where: { referredById: userId },
+      await this.prisma.$transaction([
+        this.prisma.user.count({ where: { referredById: userId } }),
+        this.prisma.user.count({
+          where: { referredById: userId, status: 'ACTIVE' },
         }),
-
-        // Active referrals (not suspended)
-        prisma.user.count({
-          where: {
-            referredById: userId,
-            status: 'ACTIVE',
-          },
-        }),
-
-        // Referrals grouped by role
-        prisma.user.groupBy({
+        this.prisma.user.groupBy({
           by: ['role'],
           where: { referredById: userId },
           _count: { role: true },
-          orderBy: { role: 'asc' },
+          orderBy: { createdAt: 'desc' },
         }),
       ]);
 
-    // Build referral breakdown
-    const referralBreakdown = {
+    const breakdown = {
       adventurers: 0,
       independentAgents: 0,
       corporateAgents: 0,
@@ -108,44 +118,35 @@ export class DashboardRepository {
     };
 
     referralsByRole.forEach((group) => {
-      const count =
-        typeof group._count === 'object' &&
-        group._count &&
-        typeof group._count.role === 'number'
-          ? group._count.role
-          : 0;
+      const count = group._count.role;
       switch (group.role) {
         case Role.ADVENTURER:
-          referralBreakdown.adventurers = count;
+          breakdown.adventurers = count;
           break;
         case Role.INDEPENDENT_AGENT:
-          referralBreakdown.independentAgents = count;
+          breakdown.independentAgents = count;
           break;
         case Role.COOPERATE_AGENT:
-          referralBreakdown.corporateAgents = count;
+          breakdown.corporateAgents = count;
           break;
         case Role.AFFILIATE:
-          referralBreakdown.affiliates = count;
+          breakdown.affiliates = count;
           break;
       }
     });
 
-    // Points: 100 per referral
-    const pointsEarned = totalReferrals * 100;
-
     return {
-      totalReferrals,
-      activeReferrals,
-      pointsEarned,
-      referralBreakdown,
+      referrals: {
+        total: totalReferrals,
+        active: activeReferrals,
+        breakdown,
+      },
+      pointsEarned: totalReferrals * 100,
     };
   }
 
-  /**
-   * ADMIN/SUPER_ADMIN STATS
-   * Complete system overview
-   */
-  async getFullSystemStats(): Promise<GlobalDashboardStats> {
+  // ==================== ADMIN STATS ====================
+  async getAdminStats(): Promise<AdminStats> {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -162,6 +163,9 @@ export class DashboardRepository {
       verifiedAdventures,
       activeAdventures,
       avgPrice,
+      totalEvents,
+      upcomingEvents,
+      totalEventRegistrations,
       totalPosts,
       totalComments,
       totalReviews,
@@ -172,80 +176,50 @@ export class DashboardRepository {
       totalCallbackRequests,
       totalPlanningCalls,
       pendingCallbacks,
-    ] = await prisma.$transaction([
-      // Users
-      prisma.user.count(),
-      prisma.user.groupBy({
-        by: ['role'],
-        _count: { role: true },
-        orderBy: { role: 'asc' },
-      }),
-      prisma.user.count({
-        where: {
-          updatedAt: { gte: startOfToday },
-        },
-      }),
-      prisma.user.count({
-        where: {
-          createdAt: { gte: startOfMonth },
-        },
-      }),
-
-      // Adventures
-      prisma.adventure.count(),
-      prisma.adventure.count({ where: { isVerified: true } }),
-      prisma.adventure.count({ where: { status: 'ACTIVE' } }),
-      prisma.adventure.aggregate({
-        _avg: { price: true },
-      }),
-
-      // Community
-      prisma.post.count(),
-      prisma.comment.count(),
-      prisma.review.count(),
-      prisma.review.aggregate({
-        _avg: { rating: true },
-      }),
-
-      // Referrals
-      prisma.user.count({
-        where: { referredById: { not: null } },
-      }),
-      prisma.user.findMany({
+    ] = await this.prisma.$transaction([
+      this.prisma.user.count(),
+      this.prisma.user.groupBy({ by: ['role'], _count: { role: true } }),
+      this.prisma.user.count({ where: { updatedAt: { gte: startOfToday } } }),
+      this.prisma.user.count({ where: { createdAt: { gte: startOfMonth } } }),
+      this.prisma.adventure.count(),
+      this.prisma.adventure.count({ where: { isVerified: true } }),
+      this.prisma.adventure.count({ where: { status: 'ACTIVE' } }),
+      this.prisma.adventure.aggregate({ _avg: { price: true } }),
+      this.prisma.event.count(),
+      this.prisma.event.count({ where: { date: { gte: new Date() } } }),
+      this.prisma.eventRegistration.count(),
+      this.prisma.post.count(),
+      this.prisma.comment.count(),
+      this.prisma.review.count(),
+      this.prisma.review.aggregate({ _avg: { rating: true } }),
+      this.prisma.user.count({ where: { referredById: { not: null } } }),
+      this.prisma.user.findMany({
         select: {
           id: true,
           name: true,
           email: true,
           role: true,
           _count: {
-            select: { referees: true },
+            select: {
+              referees: true,
+              agentCalls: { where: { status: 'COMPLETED' } },
+            },
           },
         },
-        where: {
-          referees: {
-            some: {},
-          },
-        },
-        orderBy: {
-          referees: { _count: 'desc' },
-        },
-        take: 5,
+        where: { referees: { some: {} } },
+        orderBy: { referees: { _count: 'desc' } },
+        take: 10,
       }),
-
-      // Requests
-      prisma.tripRequest.count(),
-      prisma.callbackRequest.count(),
-      prisma.tripPlanningCall.count(),
-      prisma.callbackRequest.count({
+      this.prisma.tripRequest.count(),
+      this.prisma.callbackRequest.count(),
+      this.prisma.tripPlanningCall.count(),
+      this.prisma.callbackRequest.count({
         where: {
-          createdAt: {
-            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          },
+          createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
         },
       }),
     ]);
 
-    // Build byRole record
     const byRole: Record<Role, number> = {
       [Role.SUPER_ADMIN]: 0,
       [Role.ADMIN]: 0,
@@ -256,42 +230,41 @@ export class DashboardRepository {
     };
 
     usersByRole.forEach((group) => {
-      const count =
-        typeof group._count === 'object' &&
-        group._count &&
-        typeof group._count.role === 'number'
-          ? group._count.role
-          : 0;
-      byRole[group.role] = count;
+      byRole[group.role as Role] = group._count.role;
     });
 
     return {
-      users: {
-        total: totalUsers,
-        byRole,
-        activeToday,
-        newThisMonth,
-      },
+      users: { total: totalUsers, byRole, activeToday, newThisMonth },
       adventures: {
         total: totalAdventures,
         verified: verifiedAdventures,
+        active: activeAdventures,
         avgPrice: Number(avgPrice._avg.price) || 0,
-        activeAdventures,
+      },
+      events: {
+        total: totalEvents,
+        upcoming: upcomingEvents,
+        totalRegistrations: totalEventRegistrations,
       },
       community: {
         totalPosts,
+        totalComments,
         totalReviews,
         avgRating: Number(avgRating._avg.rating) || 0,
-        totalComments,
       },
       referrals: {
-        totalReferrals,
+        total: totalReferrals,
         topReferrers: topReferrers.map((user) => ({
           id: user.id,
           name: user.name,
           email: user.email,
-          role: user.role as unknown as Role,
+          role: user.role as Role,
           referralCount: user._count.referees,
+          pointsEarned:
+            user._count.referees * 100 +
+            (user.role === Role.INDEPENDENT_AGENT
+              ? user._count.agentCalls * 50
+              : 0),
         })),
       },
       requests: {
@@ -301,5 +274,60 @@ export class DashboardRepository {
         pendingCallbacks,
       },
     };
+  }
+
+  async getTopAgentsByPoints(limit: number = 10) {
+    const agents = await this.prisma.user.findMany({
+      where: { role: { in: [Role.INDEPENDENT_AGENT, Role.COOPERATE_AGENT] } },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        _count: {
+          select: {
+            referees: true,
+            agentCalls: { where: { status: 'COMPLETED' } },
+          },
+        },
+      },
+      take: limit * 2,
+    });
+
+    return agents
+      .map((agent) => ({
+        id: agent.id,
+        name: agent.name,
+        email: agent.email,
+        role: agent.role as Role,
+        pointsEarned:
+          agent._count.referees * 100 +
+          (agent.role === Role.INDEPENDENT_AGENT
+            ? agent._count.agentCalls * 50
+            : 0),
+      }))
+      .sort((a, b) => b.pointsEarned - a.pointsEarned)
+      .slice(0, limit);
+  }
+
+  async getTopAffiliatesByPoints(limit: number = 10) {
+    const affiliates = await this.prisma.user.findMany({
+      where: { role: Role.AFFILIATE },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        _count: { select: { referees: true } },
+      },
+      orderBy: { referees: { _count: 'desc' } },
+      take: limit,
+    });
+    return affiliates.map((a) => ({
+      id: a.id,
+      name: a.name,
+      email: a.email,
+      referralCount: a._count.referees,
+      pointsEarned: a._count.referees * 100,
+    }));
   }
 }

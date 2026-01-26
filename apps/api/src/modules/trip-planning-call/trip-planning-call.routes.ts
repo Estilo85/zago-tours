@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { TripPlanningCallRepository } from './trip-planning-call.repository';
 import { TripPlanningCallService } from './trip-planning-call.service';
 import { TripPlanningCallController } from './trip-planning-call.controller';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
 
 const router: Router = Router();
 
@@ -14,12 +15,16 @@ const tripPlanningCallController = new TripPlanningCallController(
   tripPlanningCallService,
 );
 
-router.post('/', tripPlanningCallController.scheduleCall);
+router.post('/', authenticate, tripPlanningCallController.scheduleCall);
 router.get('/upcoming', tripPlanningCallController.getUpcoming);
-router.get('/my-calls', tripPlanningCallController.getMyCalls);
+router.get('/my-calls', authenticate, tripPlanningCallController.getMyCalls);
 router.put('/:id/reschedule', tripPlanningCallController.rescheduleCall);
-router.put('/:id/cancel', tripPlanningCallController.cancelCall);
-router.put('/:id/complete', tripPlanningCallController.markAsCompleted);
+router.put('/:id/cancel', authenticate, tripPlanningCallController.cancelCall);
+router.put(
+  '/:id/complete',
+  authenticate,
+  tripPlanningCallController.markAsCompleted,
+);
 
 // Admin endpoints
 router.get('/', tripPlanningCallController.getAll);

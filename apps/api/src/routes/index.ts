@@ -14,6 +14,7 @@ import { contractRoutes } from '../modules/contract/contract.routes';
 import { platformSettingsRoutes } from '../modules/platform-settings/platform-settings.routes';
 import { destinationCountryRoutes } from '../modules/destination-country/destination-country.routes';
 import { itineraryRoutes } from 'src/modules/itinerary/itinerary.routes';
+import { dashboardRoute } from 'src/modules/dashboard/dashboard.routes';
 
 const router: Router = Router();
 
@@ -45,5 +46,8 @@ router.use('/api/contracts', contractRoutes);
 // // Settings
 router.use('/api/platform-settings', platformSettingsRoutes);
 router.use('/api/destination-countries', destinationCountryRoutes);
+
+//Statistics
+router.use('/api/dashboard', dashboardRoute);
 
 export default router;
