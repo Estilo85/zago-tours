@@ -10,11 +10,7 @@ import {
   TypedRequest,
 } from 'src/shared/types/express.types';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
-import {
-  UpdateProfileDto,
-  UpdateUserStatusDto,
-  PromoteToSafetyAmbassadorDto,
-} from '@zagotours/types';
+import { UpdateProfileDto, UpdateUserStatusDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
 
 export class UserController {

@@ -3,6 +3,8 @@ import { PlatformSettingsRepository } from './platform-settings.repository';
 import { PlatformSettingsService } from './platform-settings.service';
 import { PlatformSettingsController } from './platform-settings.controller';
 import { Role } from '@zagotours/database';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 
@@ -17,44 +19,51 @@ router.get('/maintenance-check', settingsController.checkMaintenance);
 // Admin-only routes
 router.get(
   '/',
-
-  settingsController.getSettings
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.getSettings,
 );
 
 router.put(
   '/',
-
-  settingsController.updateSettings
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.updateSettings,
 );
 
 router.patch(
   '/site-name',
-
-  settingsController.updateSiteName
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.updateSiteName,
 );
 
 router.patch(
   '/contact-email',
-
-  settingsController.updateContactEmail
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.updateContactEmail,
 );
 
 router.patch(
   '/maintenance/enable',
-
-  settingsController.enableMaintenance
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.enableMaintenance,
 );
 
 router.patch(
   '/maintenance/disable',
-
-  settingsController.disableMaintenance
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.disableMaintenance,
 );
 
 router.post(
   '/cache/clear',
-
-  settingsController.clearCache
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  settingsController.clearCache,
 );
 
 export { router as platformSettingsRoutes };

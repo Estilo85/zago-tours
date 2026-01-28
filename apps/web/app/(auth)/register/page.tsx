@@ -1,16 +1,11 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import RegistrationForm from '@/components/auth/registration/form/RegistrationForm';
-import { RegistrableRole } from '@zagotours/types';
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { useRegistrationLogic } from '@/hooks/settings/use-registration-logic';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 
 export default function Register() {
-  const router = useRouter();
   const { selectedCategory } = useRegistrationLogic();
-  const [error, setError] = useState<string | null>(null);
 
   //Display image base on role
   const getImageSource = () => {
@@ -22,15 +17,6 @@ export default function Register() {
       default:
         return '/images/forms/ind-agent-form-bg.webp';
     }
-  };
-
-  //Handle Registration
-  const handleRegistration = async (data: {
-    role: RegistrableRole | null;
-    [key: string]: any;
-  }) => {
-    setError(null);
-    router.push('/dashboard');
   };
 
   return (
@@ -61,8 +47,6 @@ export default function Register() {
             sizes='(max-width: 768px) 0vw, 490px'
             objectFit='cover'
           />
-
-          {/* Form positioned absolutely */}
         </Box>
         <Box
           position={{ base: 'relative', md: 'absolute' }}
@@ -73,7 +57,7 @@ export default function Register() {
           maxWidth={{ base: '500px', md: 'none' }}
           zIndex='1'
         >
-          <RegistrationForm onSubmit={handleRegistration} error={error} />
+          <RegistrationForm />
         </Box>
       </Flex>
     </Container>

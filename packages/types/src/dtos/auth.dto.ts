@@ -53,7 +53,7 @@ export interface RegisterDto {
   password: string;
   phone?: string;
   country?: string;
-  role: RegistrableRole;
+  role: CustomerRole;
   referralCode?: string;
   agentDetails?: IndependentAgentDto;
   cooperateDetails?: CooperateAgentDto;

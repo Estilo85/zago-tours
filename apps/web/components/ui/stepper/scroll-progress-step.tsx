@@ -4,7 +4,7 @@ import { Box, Flex, Steps } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
 interface StepItem {
-  content: React.ReactNode;
+  content?: React.ReactNode;
 }
 
 interface ScrollProgressStepsProps {

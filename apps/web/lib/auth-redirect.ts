@@ -4,7 +4,7 @@ export function getRedirectUrlByRole(role: Role): string {
   switch (role) {
     case Role.SUPER_ADMIN:
     case Role.ADMIN:
-      return '/super-admin';
+      return '/admin';
 
     case Role.INDEPENDENT_AGENT:
       return '/independent-agent';

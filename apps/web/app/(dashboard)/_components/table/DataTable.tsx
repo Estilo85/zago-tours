@@ -1,13 +1,15 @@
 import { Table } from '@chakra-ui/react';
+import React from 'react';
 
 interface Column<T> {
   label: string;
   key: keyof T;
+  render?: (value: T[keyof T], row: T) => React.ReactNode;
 }
 
 interface DataTableProps<T> {
-  columns: Column<T>[];
-  data: T[];
+  columns: readonly Column<T>[];
+  data: readonly T[];
 }
 
 export const DataTable = <T extends { id: string | number }>({
@@ -25,12 +27,15 @@ export const DataTable = <T extends { id: string | number }>({
           ))}
         </Table.Row>
       </Table.Header>
+
       <Table.Body>
         {data.map((item) => (
           <Table.Row key={item.id}>
             {columns.map((col) => (
               <Table.Cell key={String(col.key)}>
-                {item[col.key] as React.ReactNode}
+                {col.render
+                  ? col.render(item[col.key], item)
+                  : String(item[col.key])}
               </Table.Cell>
             ))}
           </Table.Row>

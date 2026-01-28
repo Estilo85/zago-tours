@@ -22,8 +22,7 @@ const AdventureCard = ({ adventure }: { adventure: Adventure }) => {
   return (
     <AppLink href={`/adventures/${adventure.id}`}>
       <Card.Root
-        maxW='280px'
-        w='full'
+        w={{ base: 'full', md: '280px' }}
         h='350px'
         overflow='hidden'
         _hover={{ boxShadow: 'md' }}
@@ -126,7 +125,7 @@ const AdventureCard = ({ adventure }: { adventure: Adventure }) => {
           >
             <Box>
               <Text as='span' fontSize='lg' fontWeight='bold' color='dark'>
-                ${adventure.price.toString()}
+                ${adventure.price}
               </Text>
               <Text as='span' color='gray.500' fontSize='xs'>
                 {' '}

@@ -25,6 +25,11 @@ export class DashboardService extends BaseService<
           role: role as any,
           stats: await this.repository.getCorporateAgentStats(userId),
         };
+      case Role.ADVENTURER:
+        return {
+          role: role as any,
+          stats: await this.repository.getAdventurerStats(userId),
+        };
       case Role.INDEPENDENT_AGENT:
         return {
           role: role as any,

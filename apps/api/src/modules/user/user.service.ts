@@ -4,7 +4,6 @@ import { UserRepository } from './user.repository';
 import {
   UpdateProfileDto,
   UpdateUserStatusDto,
-  PromoteToSafetyAmbassadorDto,
   UserProfileResponseDto,
   ReferralStatsDto,
 } from '@zagotours/types';

@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { PlatformSettingsService } from 'src/modules/platform-settings/platform-settings.service';
 import { PlatformSettingsRepository } from 'src/modules/platform-settings/platform-settings.repository';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
+import { TypedRequest } from '../types/express.types';
 
 const settingsRepo = new PlatformSettingsRepository();
 const settingsService = new PlatformSettingsService(settingsRepo);
@@ -15,14 +16,14 @@ const WHITELIST_PATHS = [
 ];
 
 export const maintenanceMiddleware = async (
-  req: Request,
+  req: TypedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     // Check if path is whitelisted
     const isWhitelisted = WHITELIST_PATHS.some((path) =>
-      req.path.startsWith(path)
+      req.path.startsWith(path),
     );
     if (isWhitelisted) {
       return next();
@@ -33,7 +34,7 @@ export const maintenanceMiddleware = async (
 
     if (isMaintenanceMode) {
       // Allow super admins to access during maintenance
-      if (req?.role === 'SUPER_ADMIN') {
+      if (req.user?.role === 'SUPER_ADMIN') {
         return next();
       }
 
@@ -41,7 +42,7 @@ export const maintenanceMiddleware = async (
       return ResponseUtil.error(
         res,
         'Site is currently under maintenance. Please try again later.',
-        503
+        503,
       );
     }
 

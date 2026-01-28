@@ -19,9 +19,21 @@ import { FeatureCard } from '../ui/card/FeatureCard';
 
 //advisor-images
 const advisors = [
-  { src: '/images/home/home-hero-advisor-1.webp', name: 'Belly' },
-  { src: '/images/home/home-hero-advisor-2.webp', name: 'Brand' },
-  { src: '/images/home/home-hero-advisor-3.webp', name: 'Brook' },
+  {
+    id: 'hero-advisor-1',
+    src: '/images/home/home-hero-advisor-1.webp',
+    name: 'Belly',
+  },
+  {
+    id: 'hero-advisor-2',
+    src: '/images/home/home-hero-advisor-2.webp',
+    name: 'Brand',
+  },
+  {
+    id: 'hero-advisor-3',
+    src: '/images/home/home-hero-advisor-3.webp',
+    name: 'Brook',
+  },
 ];
 
 //Card-data
@@ -153,10 +165,10 @@ export const HowItWorks = () => {
                   borderColor='primary'
                   borderRadius='full'
                 >
-                  <AvatarImage src={adv.src} name={adv.name} />
+                  <AvatarImage src={adv.src} name={adv.name} id={adv.id} />
                 </Box>
               ))}
-              <Avatar.Root bg='white' color='primary'>
+              <Avatar.Root id='hero-advisor-more' bg='white' color='primary'>
                 <Avatar.Fallback fontSize='xs'>+</Avatar.Fallback>
               </Avatar.Root>
             </AvatarGroup>

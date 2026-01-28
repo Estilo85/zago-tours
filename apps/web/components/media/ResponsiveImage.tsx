@@ -1,9 +1,9 @@
 'use client';
 import Image from 'next/image';
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box, BoxProps, Text } from '@chakra-ui/react';
 
 interface ResponsiveImageProps {
-  src: string;
+  src?: string; // Make optional
   alt: string;
   width?: BoxProps['width'];
   height?: BoxProps['height'];
@@ -15,6 +15,7 @@ interface ResponsiveImageProps {
   loading?: 'eager' | 'lazy';
   sizes?: string;
   containerProps?: BoxProps;
+  fallbackBg?: string;
 }
 
 export const ResponsiveImage = ({
@@ -30,7 +31,31 @@ export const ResponsiveImage = ({
   sizes = '(max-width: 768px) 100vw, 50vw',
   containerProps,
   boxShadow,
+  fallbackBg = 'gray.100',
 }: ResponsiveImageProps) => {
+  if (!src) {
+    return (
+      <Box
+        position='relative'
+        width={width}
+        height={height}
+        maxH={maxH}
+        borderRadius={borderRadius}
+        boxShadow={boxShadow}
+        overflow='hidden'
+        bg={fallbackBg}
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+        {...containerProps}
+      >
+        <Text color='gray.500' fontSize='sm' textAlign='center' px={4}>
+          No Image Available
+        </Text>
+      </Box>
+    );
+  }
+
   return (
     <Box
       position='relative'
@@ -50,6 +75,9 @@ export const ResponsiveImage = ({
         loading={loading}
         sizes={sizes}
         style={{ objectFit }}
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+        }}
       />
     </Box>
   );

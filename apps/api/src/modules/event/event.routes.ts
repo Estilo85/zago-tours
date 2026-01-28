@@ -5,6 +5,7 @@ import { EventController } from './event.controller';
 import { upload } from 'src/config/multer.config';
 import { Role } from '@zagotours/types';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 
@@ -13,8 +14,14 @@ const eventService = new EventService(eventRepository);
 const eventController = new EventController(eventService);
 
 // ========== PUBLIC ROUTES ==========
-router.post('/', authenticate, upload.single('media'), eventController.create);
-router.get('/', eventController.getAll);
+router.post(
+  '/',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  upload.single('media'),
+  eventController.create,
+);
+router.get('/', authenticate, eventController.getAll);
 router.get('/upcoming', authenticate, eventController.getUpcoming);
 router.get('/me/bookings', authenticate, eventController.getMyBookings);
 
@@ -28,10 +35,21 @@ router.post('/:id/cancel', authenticate, eventController.cancelRegistration);
 router.put(
   '/:id',
   authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   upload.single('media'),
   eventController.update,
 );
-router.delete('/:id', authenticate, eventController.delete);
-router.get('/admin/stats', authenticate, eventController.getStats);
+router.delete(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  eventController.delete,
+);
+router.get(
+  '/admin/stats',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  eventController.getStats,
+);
 
 export { router as eventRoutes };

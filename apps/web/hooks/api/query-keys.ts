@@ -124,6 +124,9 @@ export const agentKeys = {
 export const dashboardKeys = {
   all: ['dashboard'] as const,
   stats: () => [...dashboardKeys.all, 'stats'] as const,
+  leaderboard: () => [...dashboardKeys.all, 'leaderboard'] as const,
+  agentStats: (agentId: string) => [...dashboardKeys.all, 'agent', agentId] as const,
+  affiliateStats: (affiliateId: string) => [...dashboardKeys.all, 'affiliate', affiliateId] as const,
 };
 
 export const countryKeys = {
@@ -139,3 +142,6 @@ export const settingsKeys = {
   public: () => [...settingsKeys.all, 'public'] as const,
   detail: () => [...settingsKeys.all, 'detail'] as const,
 };
+
+
+

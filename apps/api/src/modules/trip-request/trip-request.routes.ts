@@ -4,6 +4,7 @@ import { TripRequestService } from './trip-request.service';
 import { TripRequestController } from './trip-request.controller';
 import { Role } from '@zagotours/database';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 
@@ -20,13 +21,35 @@ router.get('/my-requests', authenticate, tripRequestController.getMyRequests);
 router.get(
   '/assigned-to-me',
   authenticate,
+
+  authorizeRoles(Role.INDEPENDENT_AGENT, Role.COOPERATE_AGENT),
   tripRequestController.getAssignedToMe,
 );
 
 // Admin endpoints
-router.get('/', tripRequestController.getAll);
-router.get('/recent', tripRequestController.getRecent);
-router.get('/:id', tripRequestController.getById);
-router.delete('/:id', tripRequestController.delete);
+router.get(
+  '/',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  tripRequestController.getAll,
+);
+router.get(
+  '/recent',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  tripRequestController.getRecent,
+);
+router.get(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  tripRequestController.getById,
+);
+router.delete(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  tripRequestController.delete,
+);
 
 export { router as tripRequestRoutes };

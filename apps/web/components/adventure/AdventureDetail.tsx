@@ -15,7 +15,7 @@ import {
   HStack,
   IconButton,
 } from '@chakra-ui/react';
-import { AdventureWithRelations, Itinerary } from '@zagotours/types';
+import { Itinerary } from '@zagotours/types';
 import {
   LuShare2,
   LuStar,
@@ -25,14 +25,29 @@ import {
   LuHeart,
 } from 'react-icons/lu';
 import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
+import AdventureSkeleton from './AdevntureSkeleton';
+import { useAdventure } from '@/hooks';
+import { notFound } from 'next/navigation';
 
 interface AdventureDetailProps {
-  adventure: AdventureWithRelations;
+  adventureId: string;
 }
 
 export default function AdventureDetailPage({
-  adventure,
+  adventureId,
 }: AdventureDetailProps) {
+  const { data: adventure, isLoading, error } = useAdventure(adventureId);
+
+  console.log('Adventure data:', adventure); // Add this
+  console.log('Adventure title:', adventure?.title); // Add this
+
+  if (isLoading) {
+    return <AdventureSkeleton />;
+  }
+
+  if (error || !adventure) {
+    return notFound();
+  }
   const hasDiscount = false;
   const discountPrice = adventure.price * 0.9;
 

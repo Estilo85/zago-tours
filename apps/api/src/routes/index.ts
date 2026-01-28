@@ -37,7 +37,7 @@ router.use('/api/posts', postRoutes);
 router.use('/api/events', eventRoutes);
 router.use('/api/trip-requests', tripRequestRoutes);
 router.use('/api/callback-requests', callbackRequestRoutes);
-router.use('/api/general-inquiries', generalInquiryRoutes);
+router.use('/api/inquiries', generalInquiryRoutes);
 
 // // Calls & Contracts
 router.use('/api/trip-planning-calls', tripPlanningCallRoutes);

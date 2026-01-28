@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials),
-          }
+          },
         );
 
         const result = await res.json();

@@ -13,7 +13,19 @@ const dashboardController = new DashboardController(dashboardService);
 
 const router = Router();
 
-router.get('/stats', authenticate, dashboardController.getMyStats);
+router.get(
+  '/stats',
+  authenticate,
+  authorizeRoles(
+    Role.ADMIN,
+    Role.SUPER_ADMIN,
+    Role.ADVENTURER,
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.AFFILIATE,
+  ),
+  dashboardController.getMyStats,
+);
 
 router.get(
   '/leaderboard',

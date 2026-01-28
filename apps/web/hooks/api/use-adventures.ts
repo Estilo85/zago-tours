@@ -3,21 +3,46 @@ import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { adventureKeys } from './query-keys';
-import { ReorderGalleryDto } from '@zagotours/types';
+import {
+  AdventureDetailResponseDto,
+  AdventureListQueryDto,
+  PaginatedResponse,
+  ReorderGalleryDto,
+} from '@zagotours/types';
 
 // ============================================
 // ADVENTURE QUERIES
 // ============================================
 
-export function useAdventures(filters?: any) {
-  return useQuery({
+export function useAdventures(filters?: AdventureListQueryDto) {
+  return useQuery<PaginatedResponse<AdventureDetailResponseDto>>({
     queryKey: adventureKeys.list(filters),
-    queryFn: () => apiRequest(API_ENDPOINTS.ADVENTURES.LIST),
+    queryFn: () => {
+      let url = API_ENDPOINTS.ADVENTURES.LIST;
+
+      if (filters) {
+        const params = new URLSearchParams();
+
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            params.append(key, value.toString());
+          }
+        });
+
+        const queryString = params.toString();
+
+        if (queryString) {
+          url = `${url}?${queryString}`;
+        }
+      }
+
+      return apiRequest(url);
+    },
   });
 }
 
 export function useAdventure(id: string) {
-  return useQuery({
+  return useQuery<AdventureDetailResponseDto>({
     queryKey: adventureKeys.detail(id),
     queryFn: () => apiRequest(API_ENDPOINTS.ADVENTURES.BY_ID(id)),
     enabled: !!id,

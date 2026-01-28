@@ -1,6 +1,14 @@
 import { Role } from '@zagotours/types';
 import { z } from 'zod';
 
+// Helper to get valid customer role values for zod enum
+const customerRoleValues = [
+  Role.ADVENTURER,
+  Role.AFFILIATE,
+  Role.INDEPENDENT_AGENT,
+  Role.COOPERATE_AGENT,
+] as const;
+
 export const loginSchema = z.object({
   email: z.email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
@@ -16,11 +24,11 @@ export const registrationSchema = z
     confirmPassword: z.string(),
     phone: z.string().optional(),
     country: z.string().optional(),
-    role: z.enum(Role),
+    role: z.enum(customerRoleValues),
     referralCode: z.string().optional(),
 
     business_description: z.string().optional(),
-    certifications: z.array(z.string()).default([]),
+    certifications: z.array(z.string()).default([]).optional(),
     howDidYouHear: z.string().optional(),
     community: z.string().optional(),
     website_link: z.string().optional(),
@@ -68,4 +76,5 @@ export const registrationSchema = z
       }
     }
   });
+
 export type RegistrationFormData = z.infer<typeof registrationSchema>;

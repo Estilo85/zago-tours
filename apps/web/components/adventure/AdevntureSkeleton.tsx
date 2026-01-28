@@ -12,7 +12,7 @@ import {
   Separator,
 } from '@chakra-ui/react';
 
-export default function AdventureDetailSkeleton() {
+export default function AdventureSkeleton() {
   return (
     <Container maxW='container.md' py={10}>
       {/* 1. TOP STATS CARD SKELETON */}

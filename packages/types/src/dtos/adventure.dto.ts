@@ -69,10 +69,10 @@ export interface AdventureResponseDto {
   lastSafetyCertDate: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  stats?: {
-    totalLikes: number;
-    totalItineraries: number;
-    totalGalleryItems: number;
+  _count: {
+    likes: number;
+    itineraries: number;
+    gallery: number;
   };
 }
 

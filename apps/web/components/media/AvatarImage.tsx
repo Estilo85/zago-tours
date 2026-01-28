@@ -1,18 +1,30 @@
 import { Avatar } from '@chakra-ui/react';
+import { useMemo } from 'react';
 
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 interface AvatarImageProps {
-  src: string;
+  src?: string;
   name: string;
   size?: AvatarSize;
+  id?: string;
 }
 
-export const AvatarImage = ({ src, name, size = 'md' }: AvatarImageProps) => {
+export const AvatarImage = ({
+  src,
+  name,
+  size = 'md',
+  id,
+}: AvatarImageProps) => {
+  const stableId = useMemo(() => {
+    if (id) return id;
+    return `avatar-${name.toLowerCase().replace(/\s+/g, '-')}`;
+  }, [id, name]);
+
   return (
-    <Avatar.Root size={size}>
+    <Avatar.Root size={size} id={stableId}>
       <Avatar.Fallback name={name} />
-      <Avatar.Image src={src} />
+      {src && <Avatar.Image src={src} />}
     </Avatar.Root>
   );
 };

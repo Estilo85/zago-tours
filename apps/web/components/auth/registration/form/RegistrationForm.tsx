@@ -8,17 +8,19 @@ import {
   RegistrationFormData,
   registrationSchema,
 } from '@/app/validations/auth-validation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { RegistrationHeader } from '../RegistrationHeader';
 import { AgentTypeSelector } from '../AgentTypeSelector';
 import { IdentitySection } from './IdentitySection';
 import { DynamicRoleSection } from './DynamicRoleSection';
 import { SecuritySection } from './SecuritySection';
-import { RegisterDto, RegistrableRole, Role } from '@zagotours/types';
-import { useAuth } from '@/hooks/queries/auth';
+import { RegisterDto, CustomerRole, Role } from '@zagotours/types';
+import { useAuth } from '@/hooks';
+import { useSearchParams } from 'next/navigation';
 
-export default function RegistrationForm() {
+function RegistrationFormContent() {
   const { register, isRegistering } = useAuth();
+  const searchParams = useSearchParams();
 
   const {
     selectedCategory,
@@ -39,13 +41,22 @@ export default function RegistrationForm() {
       role: finalRole || undefined,
       referralCode: '',
       business_description: '',
-      certifications: [],
+      certifications: [] as string[],
       howDidYouHear: '',
       community: '',
       website_link: '',
       safetyAmbassador: false,
     },
   });
+
+  // Capture referral code from URL query
+  useEffect(() => {
+    const referralCode = searchParams.get('ref');
+    if (referralCode) {
+      methods.setValue('referralCode', referralCode, { shouldValidate: true });
+    }
+  }, [searchParams, methods]);
+
   useEffect(() => {
     if (finalRole) {
       methods.setValue('role', finalRole, { shouldValidate: true });
@@ -59,14 +70,14 @@ export default function RegistrationForm() {
       password: data.password,
       phone: data.phone,
       country: data.country,
-      role: data.role as RegistrableRole,
+      role: data.role as CustomerRole,
       referralCode: data.referralCode,
     };
 
     // Add nested details based on role
     if (data.role === Role.INDEPENDENT_AGENT) {
       payload.agentDetails = {
-        certifications: data.certifications,
+        certifications: data.certifications as string[],
         howDidYouHear: data.howDidYouHear,
       };
     }
@@ -87,7 +98,7 @@ export default function RegistrationForm() {
       };
     }
 
-    register(payload); // Call the register function from useAuth
+    register(payload);
   };
 
   return (
@@ -120,7 +131,7 @@ export default function RegistrationForm() {
               type='submit'
               bg='primary'
               width='100%'
-              loading={isRegistering} // Use isRegistering instead
+              loading={isRegistering}
             >
               Create Account
             </Button>
@@ -128,5 +139,29 @@ export default function RegistrationForm() {
         </form>
       </FormProvider>
     </Box>
+  );
+}
+
+export default function RegistrationForm() {
+  return (
+    <Suspense
+      fallback={
+        <Box
+          bg='white'
+          p={7}
+          borderRadius='lg'
+          boxShadow='sm'
+          width='md'
+          height='570px'
+          display='flex'
+          alignItems='center'
+          justifyContent='center'
+        >
+          Loading...
+        </Box>
+      }
+    >
+      <RegistrationFormContent />
+    </Suspense>
   );
 }

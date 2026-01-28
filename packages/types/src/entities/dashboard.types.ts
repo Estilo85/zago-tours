@@ -31,6 +31,34 @@ export interface ReferralBreakdown {
 
 // ==================== ROLE-SPECIFIC STATS ====================
 
+// Add to your dashboard.types.ts
+
+/**
+ * Dashboard statistics for Adventurers
+ * Shows their travel activity and engagement
+ */
+export interface AdventurerStats {
+  trips: {
+    upcomingEvents: number;
+    completedEvents: number;
+    totalBookings: number;
+  };
+  engagement: {
+    likedAdventures: number;
+    postsCreated: number;
+    reviewsWritten: number;
+  };
+  planning: {
+    scheduledCalls: number;
+    tripRequests: number;
+    callbackRequests: number;
+  };
+  referrals: {
+    total: number;
+    pointsEarned: number;
+  };
+}
+
 /**
  * Dashboard statistics for Corporate Agents
  * Shows assigned requests from referrals
@@ -126,7 +154,8 @@ export type DashboardStatsResponse =
   | { role: Role.COOPERATE_AGENT; stats: CorporateAgentStats }
   | { role: Role.INDEPENDENT_AGENT; stats: IndependentAgentStats }
   | { role: Role.AFFILIATE; stats: AffiliateStats }
-  | { role: Role.ADMIN | Role.SUPER_ADMIN; stats: AdminStats };
+  | { role: Role.ADMIN | Role.SUPER_ADMIN; stats: AdminStats }
+  | { role: Role.ADVENTURER; stats: AdventurerStats };
 
 // ==================== ANALYTICS DTOs (Optional - for future analytics endpoints) ====================
 

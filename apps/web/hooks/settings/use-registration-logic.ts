@@ -11,7 +11,7 @@ export function useRegistrationLogic() {
   const [selectedCategory, setSelectedCategory] =
     useState<RoleCategory>('ADVENTURER');
   const [selectedAgentType, setSelectedAgentType] = useState<AgentType>(
-    Role.INDEPENDENT_AGENT
+    Role.INDEPENDENT_AGENT,
   );
   const [finalRole, setFinalRole] = useState<CustomerRole | null>(null);
 

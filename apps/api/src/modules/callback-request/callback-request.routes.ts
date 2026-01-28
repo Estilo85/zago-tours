@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { CallbackRequestRepository } from './callback-request.repository';
 import { CallbackRequestService } from './callback-request.service';
 import { CallbackRequestController } from './callback-request.controller';
+import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
+import { Role } from '@zagotours/database';
 
 const router: Router = Router();
 
@@ -14,18 +17,48 @@ const callbackRequestController = new CallbackRequestController(
   callbackRequestService,
 );
 
-router.post('/', callbackRequestController.create);
+router.post('/', authenticate, callbackRequestController.create);
 
 // Adventurer endpoints
-router.get('/my-requests', callbackRequestController.getMyRequests);
+router.get(
+  '/my-requests',
+  authenticate,
+  authorizeRoles(Role.ADVENTURER),
+  callbackRequestController.getMyRequests,
+);
 
 // Agent endpoints
-router.get('/assigned-to-me', callbackRequestController.getAssignedToMe);
+router.get(
+  '/assigned-to-me',
+  authenticate,
+  authorizeRoles(Role.COOPERATE_AGENT, Role.INDEPENDENT_AGENT),
+  callbackRequestController.getAssignedToMe,
+);
 
 // Admin endpoints
-router.get('/', callbackRequestController.getAll);
-router.get('/pending', callbackRequestController.getPending);
-router.get('/:id', callbackRequestController.getById);
-router.delete('/:id', callbackRequestController.delete);
+router.get(
+  '/',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  callbackRequestController.getAll,
+);
+router.get(
+  '/pending',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  callbackRequestController.getPending,
+);
+router.get(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  callbackRequestController.getById,
+);
+router.delete(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  callbackRequestController.delete,
+);
 
 export { router as callbackRequestRoutes };

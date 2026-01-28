@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, Button, Box, Heading, VStack, Text } from '@chakra-ui/react';
 import { LuSend } from 'react-icons/lu';
 import { FormInput } from '../input/FormInput';
+import { useCreateInquiry } from '@/hooks';
 
 interface EnquiryFormValues {
   email: string;
@@ -11,25 +12,43 @@ interface EnquiryFormValues {
   message: string;
 }
 
-interface GeneralEnquiryFormProps {
-  values: EnquiryFormValues;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isLoading?: boolean;
-}
+export default function GeneralEnquiryForm() {
+  const enquiry = useCreateInquiry();
 
-export default function GeneralEnquiryForm({
-  values,
-  onChange,
-  onSubmit,
-  isLoading = false,
-}: GeneralEnquiryFormProps) {
+  const [values, setValues] = useState<EnquiryFormValues>({
+    email: '',
+    phone: '',
+    message: '',
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // basic safety check
+    if (!values.email || !values.message) return;
+
+    enquiry.mutate(values, {
+      onSuccess: () => {
+        setValues({
+          email: '',
+          phone: '',
+          message: '',
+        });
+      },
+    });
+  };
+
   return (
     <Box
       as='form'
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       w='full'
       maxW={{ base: '100%', md: '500px' }}
       mx='auto'
@@ -56,7 +75,7 @@ export default function GeneralEnquiryForm({
             type='email'
             placeholder='example@mail.com'
             value={values.email}
-            onChange={onChange}
+            onChange={handleChange}
             required
             helperText="We'll respond to this email."
           />
@@ -67,7 +86,7 @@ export default function GeneralEnquiryForm({
             type='tel'
             placeholder='+234...'
             value={values.phone}
-            onChange={onChange}
+            onChange={handleChange}
           />
 
           <FormInput
@@ -76,7 +95,7 @@ export default function GeneralEnquiryForm({
             name='message'
             placeholder='Tell us about your travel plans...'
             value={values.message}
-            onChange={onChange}
+            onChange={handleChange}
             required
             rows={5}
           />
@@ -88,7 +107,7 @@ export default function GeneralEnquiryForm({
           color='white'
           size='xl'
           width='full'
-          loading={isLoading}
+          loading={enquiry.isPending}
           borderRadius='2xl'
           fontSize='md'
           _hover={{ transform: 'translateY(-2px)', shadow: 'md' }}

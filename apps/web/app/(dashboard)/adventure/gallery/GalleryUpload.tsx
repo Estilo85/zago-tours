@@ -4,7 +4,6 @@ import { useBulkUploadGallery } from '@/hooks';
 
 export function GalleryUpload({ adventureId }: { adventureId: string }) {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
 
   const { mutate: uploadGallery, isPending } = useBulkUploadGallery();
 
@@ -12,11 +11,16 @@ export function GalleryUpload({ adventureId }: { adventureId: string }) {
     setSelectedFiles(e.target.files);
   };
 
-  const handleUpload = (files: File[]) => {
+  const handleUpload = () => {
+    if (!selectedFiles) return;
+
+    // Convert FileList to File array
+    const filesArray = Array.from(selectedFiles);
+
     uploadGallery({
-      adventureId: '123-abc',
-      files: files,
-      altTexts: files.map((f) => f.name),
+      adventureId: adventureId,
+      files: filesArray,
+      altTexts: filesArray.map((f) => f.name),
     });
   };
 
@@ -29,7 +33,7 @@ export function GalleryUpload({ adventureId }: { adventureId: string }) {
         onChange={handleFileChange}
       />
       <Button
-        loading={isUploading}
+        loading={isPending}
         onClick={handleUpload}
         disabled={!selectedFiles}
       >

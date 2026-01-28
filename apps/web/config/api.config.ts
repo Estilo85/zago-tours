@@ -186,6 +186,10 @@ export const API_ENDPOINTS = {
   // Dashboard
   DASHBOARD: {
     STATS: buildUrl('/dashboard/stats'),
+    LEADERBOARD: buildUrl('/dashboard/leaderboard'),
+    AGENT_STATS: (agentId: string) => buildUrl(`/dashboard/agent/${agentId}`),
+    AFFILIATE_STATS: (affiliateId: string) =>
+      buildUrl(`/dashboard/affiliate/${affiliateId}`),
   },
 
   // Destination Countries

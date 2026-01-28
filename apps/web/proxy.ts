@@ -1,12 +1,50 @@
+// app/middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { Role } from '@zagotours/types';
 
+// Role home paths
+const ROLE_HOME: Record<Role, string> = {
+  [Role.SUPER_ADMIN]: '/admin',
+  [Role.ADMIN]: '/admin',
+  [Role.INDEPENDENT_AGENT]: '/independent-agent',
+  [Role.COOPERATE_AGENT]: '/corporate-agent',
+  [Role.ADVENTURER]: '/adventurer',
+  [Role.AFFILIATE]: '/affiliate',
+};
+
+// Role-based access map
+const ROLE_ACCESS: Record<string, Role[]> = {
+  '/admin': [Role.SUPER_ADMIN, Role.ADMIN],
+  '/independent-agent': [Role.INDEPENDENT_AGENT],
+  '/corporate-agent': [Role.COOPERATE_AGENT],
+  '/adventurer': [Role.ADVENTURER],
+  '/affiliate': [Role.AFFILIATE],
+};
+
+// Routes that require authentication but are not role-specific
+const AUTH_REQUIRED_ROUTES = ['/events', '/community'];
+
+// Public routes (no auth needed)
+const PUBLIC_ROUTES = [
+  '/login',
+  '/register',
+  '/reset-password',
+  '/forgot-password',
+];
+
+// Middleware
 export async function proxy(request: NextRequest) {
-  const token = await getToken({ req: request });
   const path = request.nextUrl.pathname;
 
+  // Allow public routes
+  if (PUBLIC_ROUTES.some((p) => path.startsWith(p))) {
+    return NextResponse.next();
+  }
+
+  // Get token
+  const token = await getToken({ req: request });
   if (!token) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('callbackUrl', path);
@@ -15,49 +53,40 @@ export async function proxy(request: NextRequest) {
 
   const role = token.role as Role;
 
-  // Define role home paths
-  const roleHomePaths: Record<string, string> = {
-    [Role.SUPER_ADMIN]: '/super-admin',
-    [Role.ADMIN]: '/super-admin',
-    [Role.INDEPENDENT_AGENT]: '/independent-agent',
-    [Role.COOPERATE_AGENT]: '/corporate-agent',
-    [Role.ADVENTURER]: '/adventurer',
-    [Role.AFFILIATE]: '/affiliate',
-  };
-
-  // Define which roles can access which routes
-  const roleAccessMap: Record<string, Role[]> = {
-    '/super-admin': [Role.SUPER_ADMIN, Role.ADMIN],
-    '/independent-agent': [Role.INDEPENDENT_AGENT],
-    '/corporate-agent': [Role.COOPERATE_AGENT],
-    '/adventurer': [Role.ADVENTURER],
-    '/affiliate': [Role.AFFILIATE],
-  };
-
-  // Check if user is trying to access a restricted role-specific path
-  const restrictedPath = Object.keys(roleAccessMap).find((prefix) =>
+  //  Handle role-restricted routes
+  const matchedRoleRoute = Object.keys(ROLE_ACCESS).find((prefix) =>
     path.startsWith(prefix),
   );
 
-  if (restrictedPath) {
-    const allowedRoles = roleAccessMap[restrictedPath];
+  if (matchedRoleRoute) {
+    const allowedRoles = ROLE_ACCESS[matchedRoleRoute];
     if (!allowedRoles?.includes(role)) {
-      // Redirect unauthorized users to their own role dashboard
+      // Redirect unauthorized users to their dashboard
       return NextResponse.redirect(
-        new URL(roleHomePaths[role] || '/adventurer', request.url),
+        new URL(ROLE_HOME[role] || '/adventurer', request.url),
       );
     }
+    return NextResponse.next();
   }
 
+  //  Handle general auth-required routes
+  if (AUTH_REQUIRED_ROUTES.some((prefix) => path.startsWith(prefix))) {
+    return NextResponse.next();
+  }
+
+  // Everything else is public
   return NextResponse.next();
 }
 
+// Dashboard routes
 export const config = {
   matcher: [
-    '/super-admin/:path*',
+    '/admin/:path*',
     '/independent-agent/:path*',
     '/corporate-agent/:path*',
     '/adventurer/:path*',
     '/affiliate/:path*',
+    '/events/:path*',
+    '/community/:path*',
   ],
 };

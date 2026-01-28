@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Role } from '@zagotours/database';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
-import { requireRole } from 'src/shared/middleware/authorization.middleware';
+import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 
@@ -48,7 +48,12 @@ router.get('/referrals', authenticate, userController.getReferralStats);
  * @access  Admin
  * @query   page, limit, role, status, search
  */
-router.get('/', authenticate, userController.getAllUsers);
+router.get(
+  '/',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  userController.getAllUsers,
+);
 
 /**
  * @route   GET /api/users/:id
@@ -62,7 +67,12 @@ router.get('/:id', authenticate, userController.getUserById);
  * @desc    Update user status
  * @access  Admin
  */
-router.patch('/:id/status', authenticate, userController.updateUserStatus);
+router.patch(
+  '/:id/status',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  userController.updateUserStatus,
+);
 
 /**
  * @route   PATCH /api/users/safety-ambassador
@@ -71,7 +81,9 @@ router.patch('/:id/status', authenticate, userController.updateUserStatus);
  */
 router.patch(
   '/:id/safety-ambassador',
+
   authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   userController.promoteSafetyAmbassador,
 );
 
@@ -81,6 +93,11 @@ router.patch(
  * @access  Admin
  * @query   hard (optional)
  */
-router.delete('/:id', authenticate, userController.deleteUser);
+router.delete(
+  '/:id',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  userController.deleteUser,
+);
 
 export { router as userRoutes };

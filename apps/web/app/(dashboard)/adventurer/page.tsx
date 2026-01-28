@@ -1,15 +1,21 @@
-// app/(dashboard)/adventurer/page.tsx
+'use client';
 import { Stack, Text } from '@chakra-ui/react';
-import { DashboardStats } from '../_components/stats/stat-card';
+import { getAdventurerStatsConfig } from '../_components/stats/stat-configs';
+import { StatsGrid } from '../_components/stats/stat-card';
+import { useMyStats } from '@/hooks/api/use-dashboard';
 
 export default function AdventurerDashboard() {
+  const { data, isLoading } = useMyStats();
+
   return (
     <Stack gap={8}>
       <Text fontSize='2xl' fontWeight='bold'>
-        Welcome Adventurer!
+        Adventurer Dashboard
       </Text>
-      <DashboardStats />
-      {/* Add adventurer specific content */}
+      <StatsGrid
+        stats={data ? getAdventurerStatsConfig(data.stats) : []}
+        isLoading={isLoading}
+      />
     </Stack>
   );
 }

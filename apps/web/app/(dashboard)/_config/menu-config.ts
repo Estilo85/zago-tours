@@ -1,7 +1,6 @@
 import { Role } from '@zagotours/types';
 import { BarChart, HelpCircle, PieChart } from 'lucide-react';
 import {
-  LuLayoutDashboard,
   LuCalendar,
   LuMapPin,
   LuSettings,
@@ -12,10 +11,52 @@ import {
   LuBuilding2,
   LuTicket,
   LuDollarSign,
-  LuHeart,
   LuUserPlus,
+  LuPhone,
+  LuFileText,
+  LuStar,
+  LuMessagesSquare,
   LuClipboardList,
+  LuGlobe,
+  LuSignature,
 } from 'react-icons/lu';
+
+// Comprehensive admin menu items
+const adminMenuItems = [
+  { label: 'Dashboard', icon: LuShieldCheck, href: '/admin' },
+
+  // User Management
+  { label: 'Manage Users', icon: LuUsers, href: '/admin/users' },
+  { label: 'Manage Agents', icon: LuBriefcase, href: '/admin/agents' },
+  { label: 'Manage Affiliates', icon: LuUserPlus, href: '/admin/affiliates' },
+
+  // Content Management
+  { label: 'Manage Adventures', icon: LuMapPin, href: '/admin/adventures' },
+  { label: 'Manage Events', icon: LuCalendar, href: '/admin/events' },
+  { label: 'Manage Reviews', icon: LuStar, href: '/admin/reviews' },
+  { label: 'Community Posts', icon: LuMessagesSquare, href: '/admin/posts' },
+
+  // Requests & Planning
+  {
+    label: 'Trip Requests',
+    icon: LuClipboardList,
+    href: '/admin/trip-requests',
+  },
+  { label: 'Callback Requests', icon: LuPhone, href: '/admin/callbacks' },
+  { label: 'Planning Calls', icon: LuTicket, href: '/admin/planning-calls' },
+  { label: 'Inquiries', icon: LuFileText, href: '/admin/inquiries' },
+
+  // Business Management
+  { label: 'Contracts', icon: LuSignature, href: '/admin/contracts' },
+  { label: 'Destinations', icon: LuGlobe, href: '/admin/destinations' },
+
+  // Analytics & Reports
+  { label: 'System Analytics', icon: PieChart, href: '/admin/analytics' },
+  { label: 'Reports', icon: BarChart, href: '/admin/reports' },
+
+  // Settings
+  { label: 'Platform Settings', icon: LuSettings, href: '/admin/settings' },
+];
 
 export const MENU_CONFIG = {
   common: {
@@ -29,22 +70,10 @@ export const MENU_CONFIG = {
     ],
   },
   roles: {
-    'super-admin': [
-      { label: 'Admin Panel', icon: LuShieldCheck, href: '/super-admin' },
-      { label: 'Manage Users', icon: LuUsers, href: '/super-admin/users' },
-      {
-        label: 'Manage Agents',
-        icon: LuBriefcase,
-        href: '/super-admin/agents',
-      },
-      {
-        label: 'System Analytics',
-        icon: PieChart,
-        href: '/super-admin/analytics',
-      },
-    ],
-    'independent-agent': [
-      { label: 'My Dashboard', icon: LuBriefcase, href: '/independent-agent' },
+    [Role.SUPER_ADMIN]: adminMenuItems,
+    [Role.ADMIN]: adminMenuItems,
+    [Role.INDEPENDENT_AGENT]: [
+      { label: 'Dashboard', icon: LuBriefcase, href: '/independent-agent' },
       {
         label: 'My Bookings',
         icon: LuTicket,
@@ -56,8 +85,8 @@ export const MENU_CONFIG = {
         href: '/independent-agent/commissions',
       },
     ],
-    'corporate-agent': [
-      { label: 'My Dashboard', icon: LuBuilding2, href: '/corporate-agent' },
+    [Role.COOPERATE_AGENT]: [
+      { label: 'Dashboard', icon: LuBuilding2, href: '/corporate-agent' },
       {
         label: 'Team Management',
         icon: LuUsers,
@@ -70,17 +99,13 @@ export const MENU_CONFIG = {
       },
       { label: 'Reports', icon: BarChart, href: '/corporate-agent/reports' },
     ],
-    adventurer: [
-      { label: 'My Trips', icon: LuPlane, href: '/adventurer' },
-      { label: 'Wishlist', icon: LuHeart, href: '/adventurer/wishlist' },
-      {
-        label: 'My Bookings',
-        icon: LuClipboardList,
-        href: '/adventurer/bookings',
-      },
+    [Role.ADVENTURER]: [
+      { label: 'Dashboard', icon: LuPlane, href: '/adventurer' },
+      { label: 'Requests', icon: LuPhone, href: '/adventurer/trip-requests' },
+      { label: 'Callbacks', icon: LuPhone, href: '/adventurer/callbacks' },
     ],
-    affiliate: [
-      { label: 'My Dashboard', icon: LuDollarSign, href: '/affiliate' },
+    [Role.AFFILIATE]: [
+      { label: 'Dashboard', icon: LuDollarSign, href: '/affiliate' },
       { label: 'My Referrals', icon: LuUserPlus, href: '/affiliate/referrals' },
       { label: 'Earnings', icon: LuDollarSign, href: '/affiliate/earnings' },
     ],

@@ -29,7 +29,7 @@ export interface Adventure {
   lastSafetyCertDate: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
+  deletedAt?: Date | null;
 }
 
 export interface AdventureWithRelations extends Adventure {

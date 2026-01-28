@@ -22,9 +22,7 @@ export default function DashboardLayout({
     );
   }
 
-  if (!isAuthenticated || !user) {
-    return null;
-  }
+  if (!isAuthenticated || !user) return null;
 
   const userRole = user.role as UserRole;
 
@@ -33,13 +31,11 @@ export default function DashboardLayout({
       {/* DESKTOP SIDEBAR */}
       <Box
         w='280px'
-        h='full'
         bg='primary'
         color='white'
         borderRight='1px solid'
         borderColor='gray.200'
         display={{ base: 'none', md: 'block' }}
-        p={6}
       >
         <Sidebar role={userRole} />
       </Box>
@@ -54,11 +50,13 @@ export default function DashboardLayout({
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner>
-            <Drawer.Content p={6} bg='primary'>
+            <Drawer.Content bg='primary'>
               <Drawer.CloseTrigger asChild>
-                <CloseButton size='md' />
+                <CloseButton m={4} />
               </Drawer.CloseTrigger>
-              <Drawer.Body>
+
+              {/* Drawer handles scroll */}
+              <Drawer.Body p={0}>
                 <Sidebar role={userRole} onClose={() => setOpen(false)} />
               </Drawer.Body>
             </Drawer.Content>
@@ -69,7 +67,9 @@ export default function DashboardLayout({
       {/* MAIN CONTENT */}
       <Flex direction='column' flex='1' overflow='hidden'>
         <Navbar onOpen={() => setOpen(true)} />
-        <Box p={{ base: 4, md: 8 }} overflowY='auto' flex='1'>
+
+        {/* SINGLE SCROLL AREA */}
+        <Box flex='1' overflowY='auto' p={{ base: 4, md: 8 }}>
           {children}
         </Box>
       </Flex>

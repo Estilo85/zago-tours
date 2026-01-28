@@ -10,6 +10,8 @@ import {
   createAdventureSchema,
 } from './adventure.validation';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
+import { Role } from '@zagotours/database';
+import { authorizeRoles } from '../../shared/middleware/authorization.middleware';
 
 const router: Router = Router();
 const controller = new AdventureController(
@@ -19,6 +21,8 @@ const controller = new AdventureController(
 router.get('/', controller.getAll);
 router.post(
   '/',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   upload.single('media'),
   validateRequest({ body: createAdventureSchema }),
   controller.create,
@@ -26,6 +30,8 @@ router.post(
 
 router.post(
   '/bulk',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   validateRequest({ body: bulkCreateAdventureSchema }),
   controller.createBulk,
 );
@@ -34,8 +40,17 @@ router
   .route('/:id')
   .all(validateRequest({ params: commonValidation.uuidParam }))
   .get(controller.getById)
-  .patch(upload.single('media'), controller.update)
-  .delete(controller.delete);
+  .patch(
+    authenticate,
+    authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+    upload.single('media'),
+    controller.update,
+  )
+  .delete(
+    authenticate,
+    authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+    controller.delete,
+  );
 
 router.post(
   '/:id/toggle-like',

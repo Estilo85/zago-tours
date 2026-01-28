@@ -1,10 +1,9 @@
+// lib/api.ts
 import { getSession } from 'next-auth/react';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-
 export async function apiRequest(endpoint: string, options: RequestInit = {}) {
-  const session = await getSession();
+  // Only get session on client side
+  const session = typeof window !== 'undefined' ? await getSession() : null;
 
   const headers = new Headers(options.headers);
 
@@ -29,5 +28,5 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
     throw new Error(data?.message || 'Something went wrong');
   }
 
-  return data;
+  return data?.data || data;
 }
