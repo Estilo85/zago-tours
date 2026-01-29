@@ -69,20 +69,69 @@ export class AuthService {
     return this.mapUserResponse(user);
   }
 
- 
-
   // ============================================
   // LOGIN & AUTH
   // ============================================
 
-  async login(data: LoginDto): Promise<UserResponse> {
+  // auth.service.ts
+  async login(
+    data: LoginDto,
+  ): Promise<UserResponse & { accessToken: string; refreshToken: string }> {
     const user = await this.authRepository.findByEmail(data.email);
 
     if (!user || !(await BcryptUtil.compare(data.password, user.password))) {
       throw new Error('Invalid credentials');
     }
 
-    return this.mapUserResponse(user);
+    // Generate tokens
+    const accessToken = JwtUtil.generateAccessToken({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    });
+
+    const refreshToken = JwtUtil.generateRefreshToken({ sub: user.id });
+
+    return {
+      ...this.mapUserResponse(user),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  // ============================================
+  // REFRESH TOKEN
+  // ============================================
+  async refreshAccessToken(
+    refreshToken: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    // Verify refresh token
+    const decoded = JwtUtil.verifyRefreshToken(refreshToken);
+    if (!decoded) {
+      throw new Error('Invalid or expired refresh token');
+    }
+
+    // Get user from database
+    const user = await this.authRepository.findById(decoded.sub);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Generate new tokens
+    const newAccessToken = JwtUtil.generateAccessToken({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    });
+
+    const newRefreshToken = JwtUtil.generateRefreshToken({ sub: user.id });
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
   }
 
   // ============================================

@@ -1,4 +1,3 @@
-// lib/api.ts
 import { getSession } from 'next-auth/react';
 
 export async function apiRequest(endpoint: string, options: RequestInit = {}) {

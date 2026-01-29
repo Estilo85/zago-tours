@@ -1,5 +1,6 @@
+// authentication.middleware.ts
 import { Response, NextFunction } from 'express';
-import { getToken } from 'next-auth/jwt';
+import { JwtUtil } from '../utils/jwt';
 import { ResponseUtil } from '../utils/responseUtils';
 import { TypedRequest } from '../types/express.types';
 import { Role } from '@zagotours/types';
@@ -7,25 +8,32 @@ import { Role } from '@zagotours/types';
 export const authenticate = async (
   req: TypedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
-    if (!token) {
-      return ResponseUtil.error(res, 'Unauthorized: No session found', 401);
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader?.startsWith('Bearer ')) {
+      return ResponseUtil.error(res, 'Unauthorized: No token provided', 401);
     }
+
+    const token = authHeader.substring(7);
+
+    // Use your JwtUtil to verify
+    const decoded = JwtUtil.verifyAccessToken(token);
+
     req.user = {
-      id: token.sub!,
-      email: token.email!,
-      role: token.role as Role,
-      name: token.name!,
+      id: decoded.sub,
+      email: decoded.email,
+      role: decoded.role as Role,
+      name: decoded.name,
     };
-    req.userId = token.sub;
+    req.userId = decoded.sub;
+
     next();
   } catch (error) {
-    return ResponseUtil.error(res, 'Session expired or invalid', 401);
+    const message =
+      error instanceof Error ? error.message : 'Authentication failed';
+    return ResponseUtil.error(res, message, 401);
   }
 };

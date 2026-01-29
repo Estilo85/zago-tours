@@ -15,13 +15,15 @@ const authController = new AuthController(authService);
 router.post(
   '/register',
   validateRequest({ body: registerSchema }),
-  authController.register
+  authController.register,
 );
 router.post(
   '/login',
   validateRequest({ body: loginSchema }),
-  authController.login
+  authController.login,
 );
+// auth.routes.ts
+router.post('/refresh', authController.refreshToken);
 router.get('/me', authenticate, authController.getCurrentUser);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);

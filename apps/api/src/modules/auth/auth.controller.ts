@@ -29,6 +29,16 @@ export class AuthController {
     return ResponseUtil.success(res, result, 'Login successful');
   };
 
+  // Refresh token
+  refreshToken = asyncHandler(
+    async (req: ReqBody<{ refreshToken: string }>, res: Response) => {
+      const result = await this.authService.refreshAccessToken(
+        req.body.refreshToken,
+      );
+      return ResponseUtil.success(res, result, 'Token refreshed');
+    },
+  );
+
   /**
    * Fetch current authenticated user profile
    */

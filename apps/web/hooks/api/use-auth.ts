@@ -52,7 +52,7 @@ export function useAuth() {
 
         toaster.create({
           title: 'Welcome back!',
-          description: `Logged in as ${userRole}`,
+          description: `Logged in `,
           type: 'success',
         });
 

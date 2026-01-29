@@ -4,6 +4,7 @@ import { Role } from '@zagotours/types';
 declare module 'next-auth' {
   interface Session {
     accessToken?: string;
+    refreshToken?: string;
     user: {
       id: string;
       role: Role;
@@ -14,6 +15,7 @@ declare module 'next-auth' {
     id: string;
     role: Role;
     accessToken?: string;
+    refreshToken?: string;
   }
 }
 
@@ -22,5 +24,6 @@ declare module 'next-auth/jwt' {
     id: string;
     role: Role;
     accessToken?: string;
+    refreshToken?: string;
   }
 }

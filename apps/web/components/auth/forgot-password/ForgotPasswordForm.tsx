@@ -4,17 +4,16 @@ import { useState } from 'react';
 import { Box, Field, Input, Stack, Heading, Text } from '@chakra-ui/react';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
+import { usePassword } from '@/hooks';
 
-interface ForgotPasswordProps {
-  onSubmit: (email: string) => void;
-  isLoading?: boolean;
-}
-
-export function ForgotPasswordForm({
-  onSubmit,
-  isLoading,
-}: ForgotPasswordProps) {
+export function ForgotPasswordForm() {
   const [email, setEmail] = useState('');
+  const { sendResetLink, isSendingLink } = usePassword();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendResetLink({ email });
+  };
 
   return (
     <Box
@@ -41,12 +40,7 @@ export function ForgotPasswordForm({
           </Text>
         </Stack>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit(email);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <Stack gap={4}>
             <Field.Root>
               <Field.Label>Email Address</Field.Label>
@@ -55,10 +49,16 @@ export function ForgotPasswordForm({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder='email@example.com'
+                required
               />
             </Field.Root>
 
-            <Button type='submit' loading={isLoading} bg='primary' width='full'>
+            <Button
+              type='submit'
+              loading={isSendingLink}
+              bg='primary'
+              width='full'
+            >
               Send Reset Link
             </Button>
             <Text textAlign='center'>

@@ -6,7 +6,7 @@ import React from 'react';
 const ForgotPassword = () => {
   return (
     <div>
-      <ForgotPasswordForm onSubmit={() => {}} />
+      <ForgotPasswordForm />
     </div>
   );
 };

@@ -24,12 +24,10 @@ export default function Register() {
       maxW={{ base: '100%', md: 'container.xl' }}
       py={{ base: 0, md: 10 }}
       px={{ base: 0, md: 8 }}
+      display='flex'
+      justifyContent='center'
     >
-      <Flex
-        position='relative'
-        justify={{ base: 'normal', md: 'center' }}
-        mr={{ base: '0', md: '40' }}
-      >
+      <Flex position='relative' width='full' justify='center'>
         <Box
           width='700px'
           maxH='1200px'
