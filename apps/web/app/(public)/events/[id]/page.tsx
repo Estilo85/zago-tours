@@ -1,19 +1,52 @@
+'use client';
+
 import { EventDetailPage } from '@/components/event/EventDetail';
-import { mockEvents } from '@/components/event/EventSection';
-import { notFound } from 'next/navigation';
+import { useEvent } from '@/hooks';
+import { notFound, useParams } from 'next/navigation';
+import { Center, Spinner, VStack, Text, Container } from '@chakra-ui/react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+export default function EventDetails() {
+  const params = useParams();
+  const id = params?.id as string;
 
-export default async function EventDetails({ params }: PageProps) {
-  const { id } = await params;
+  const { data, isLoading, isError, error } = useEvent(id);
 
-  const event = Array.isArray(mockEvents)
-    ? mockEvents.find((e) => e.id === id)
-    : null;
+  // Loading state
+  if (isLoading) {
+    return (
+      <Container maxW='container.xl' py={10}>
+        <Center minH='60vh'>
+          <VStack spaceY={4}>
+            <Spinner size='xl' color='primary' width='4px' />
+            <Text color='gray.600'>Loading event details...</Text>
+          </VStack>
+        </Center>
+      </Container>
+    );
+  }
 
-  if (!event) notFound();
+  // Error state
+  if (isError) {
+    return (
+      <Container maxW='container.xl' py={10}>
+        <Center minH='60vh'>
+          <VStack spaceY={4}>
+            <Text color='red.500' fontSize='lg' fontWeight='semibold'>
+              Error loading event
+            </Text>
+            <Text color='gray.600'>
+              {error?.message || 'Something went wrong'}
+            </Text>
+          </VStack>
+        </Center>
+      </Container>
+    );
+  }
 
-  return <EventDetailPage event={event} />;
+  // Not found
+  if (!data?.data) {
+    notFound();
+  }
+
+  return <EventDetailPage event={data.data} />;
 }

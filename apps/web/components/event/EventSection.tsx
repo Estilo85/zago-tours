@@ -7,127 +7,67 @@ import {
   HStack,
   SimpleGrid,
   VStack,
+  Text,
+  Spinner,
+  Center,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { EventCard } from '../ui/card/EventCard';
 import { SelectInput } from '../ui/input/SelectInput';
-
-export const mockEvents: EventResponseDto[] = [
-  {
-    id: '1',
-    title: 'Global Tech Summit 2026',
-    date: new Date('2026-06-10T09:00:00'),
-    description: 'Join industry leaders for a deep dive into the future of AI.',
-    location: 'San Francisco, CA',
-    createdBy: 'Admin',
-    spotLeft: 15,
-    joinTill: new Date('2026-06-01T23:59:59'),
-    cancellationTerms: 'Full refund 48h before event.',
-    isSignature: true,
-    mediaUrl: '/images/adventures/adventure-section.webp',
-    publicId: 'tech_summit_01',
-    createdAt: new Date(),
-    isFull: false,
-    hasJoined: true,
-    // Added user data for avatars
-    registrations: [
-      {
-        user: {
-          id: 'u1',
-          name: 'Alice Johnson',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-      {
-        user: {
-          id: 'u2',
-          name: 'Bob Smith',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-      {
-        user: {
-          id: 'u3',
-          name: 'Charlie Brown',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-      {
-        user: {
-          id: 'u4',
-          name: 'Diana Prince',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-    ],
-  },
-  {
-    id: '2',
-    title: 'Rooftop Jazz Night',
-    date: new Date('2026-05-20T20:00:00'),
-    description: 'An evening of smooth jazz under the stars.',
-    location: 'New York, NY',
-    createdBy: 'Events Team',
-    spotLeft: 0,
-    isSignature: true,
-    joinTill: new Date('2026-05-18T12:00:00'),
-    cancellationTerms: 'Non-refundable.',
-    mediaUrl: '/images/adventures/adventure-section.webp',
-    publicId: 'jazz_night_02',
-    createdAt: new Date(),
-    isFull: true,
-    hasJoined: false,
-    // Two users registered
-    registrations: [
-      {
-        user: {
-          id: 'u5',
-          name: 'Eve Adams',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-      {
-        user: {
-          id: 'u6',
-          name: 'Frank Miller',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-    ],
-  },
-  {
-    id: '3',
-    title: 'Morning Yoga in the Park',
-    date: new Date('2025-01-10T07:30:00'),
-    description: 'Rejuvenate your body and mind with guided yoga.',
-    location: 'Austin, TX',
-    createdBy: 'Wellness Club',
-    spotLeft: 5,
-    isSignature: true,
-    joinTill: new Date('2025-01-09T18:00:00'),
-    cancellationTerms: 'Free cancellation.',
-    mediaUrl: '/images/adventures/adventure-section.webp',
-    publicId: 'yoga_03',
-    createdAt: new Date(),
-    isExpired: true,
-    hasJoined: false,
-    // One user registered
-    registrations: [
-      {
-        user: {
-          id: 'u7',
-          name: 'Grace Hopper',
-          image: '/images/home/home-hero-advisor-3.webp',
-        },
-      },
-    ],
-  },
-];
+import { useEvents } from '@/hooks';
 
 export default function EventSection() {
   // Shared width logic to ensure alignment
   const sectionWidth = { base: 'full', lg: '900px' };
+  const { data, isLoading, isError, error } = useEvents();
+
+  // Separate events into upcoming and past
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    if (!data?.data) {
+      return { upcomingEvents: [], pastEvents: [] };
+    }
+
+    const now = new Date();
+    const events: EventResponseDto[] = data.data;
+
+    const upcoming = events.filter((event) => new Date(event.date) >= now);
+    const past = events.filter((event) => new Date(event.date) < now);
+
+    return { upcomingEvents: upcoming, pastEvents: past };
+  }, [data]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <Container maxW='container.xl' py={10}>
+        <Center minH='400px'>
+          <VStack spaceY={4}>
+            <Spinner size='xl' color='primary' width='4px' />
+            <Text color='gray.600'>Loading events...</Text>
+          </VStack>
+        </Center>
+      </Container>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <Container maxW='container.xl' py={10}>
+        <Center minH='400px'>
+          <VStack spaceY={4}>
+            <Text color='red.500' fontSize='lg' fontWeight='semibold'>
+              Error loading events
+            </Text>
+            <Text color='gray.600'>
+              {error?.message || 'Something went wrong'}
+            </Text>
+          </VStack>
+        </Center>
+      </Container>
+    );
+  }
 
   return (
     <Container maxW='container.xl' py={10}>
@@ -172,17 +112,25 @@ export default function EventSection() {
             </HStack>
           </Flex>
 
-          <SimpleGrid
-            columns={{ base: 1, md: 3 }}
-            gap={6}
-            width={sectionWidth}
-            mx='auto'
-            justifyItems='center'
-          >
-            {mockEvents.map((event, idx) => (
-              <EventCard key={`upcoming-${idx}`} event={event} />
-            ))}
-          </SimpleGrid>
+          {upcomingEvents.length === 0 ? (
+            <Center width={sectionWidth} mx='auto' py={10}>
+              <Text color='gray.500' fontSize='lg'>
+                No upcoming events at the moment
+              </Text>
+            </Center>
+          ) : (
+            <SimpleGrid
+              columns={{ base: 1, md: 3 }}
+              gap={6}
+              width={sectionWidth}
+              mx='auto'
+              justifyItems='center'
+            >
+              {upcomingEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </SimpleGrid>
+          )}
         </Box>
 
         {/* --- PAST EVENTS SECTION --- */}
@@ -225,17 +173,25 @@ export default function EventSection() {
             </HStack>
           </Flex>
 
-          <SimpleGrid
-            columns={{ base: 1, md: 3 }}
-            gap={6}
-            width={sectionWidth}
-            mx='auto'
-            justifyItems='center'
-          >
-            {mockEvents.map((event, idx) => (
-              <EventCard key={`past-${idx}`} event={event} />
-            ))}
-          </SimpleGrid>
+          {pastEvents.length === 0 ? (
+            <Center width={sectionWidth} mx='auto' py={10}>
+              <Text color='gray.500' fontSize='lg'>
+                No past events to display
+              </Text>
+            </Center>
+          ) : (
+            <SimpleGrid
+              columns={{ base: 1, md: 3 }}
+              gap={6}
+              width={sectionWidth}
+              mx='auto'
+              justifyItems='center'
+            >
+              {pastEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </SimpleGrid>
+          )}
         </Box>
       </VStack>
     </Container>

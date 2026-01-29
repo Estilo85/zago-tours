@@ -2,12 +2,62 @@
 import { PostCreator } from '@/components/post/PostCreator';
 import { PostFilterBar } from '@/components/post/PostFilterBar';
 import PostHero from '@/components/post/PostHero';
-import PostSection, { DUMMY_POST } from '@/components/post/PostSection';
-import { Box, Flex } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import PostSection from '@/components/post/PostSection';
+import { useCurrentUser, usePosts } from '@/hooks';
+import { Box, Flex, Center, Spinner, VStack, Text } from '@chakra-ui/react';
+import React, { useState, useMemo } from 'react';
 
 export default function Post() {
-  const [displayPosts, setDisplayPosts] = useState(DUMMY_POST);
+  const { data, isLoading, isError, error } = usePosts();
+  const { data: userData } = useCurrentUser();
+  const [displayPosts, setDisplayPosts] = useState<any[]>([]);
+
+  const userName = userData?.data?.name || 'User';
+  // Extract posts from API response
+  const posts = useMemo(() => {
+    return data?.data || [];
+  }, [data]);
+
+  // Initialize displayPosts when posts are loaded
+  React.useEffect(() => {
+    if (posts.length > 0 && displayPosts.length === 0) {
+      setDisplayPosts(posts);
+    }
+  }, [posts, displayPosts.length]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <Box>
+        <PostHero />
+        <Center minH='60vh'>
+          <VStack spaceY={4}>
+            <Spinner size='xl' color='primary' width='4px' />
+            <Text color='gray.600'>Loading posts...</Text>
+          </VStack>
+        </Center>
+      </Box>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <Box>
+        <PostHero />
+        <Center minH='60vh'>
+          <VStack spaceY={4}>
+            <Text color='red.500' fontSize='lg' fontWeight='semibold'>
+              Error loading posts
+            </Text>
+            <Text color='gray.600'>
+              {error?.message || 'Something went wrong'}
+            </Text>
+          </VStack>
+        </Center>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -15,15 +65,23 @@ export default function Post() {
       <Flex direction='column' align='center' width='100%'>
         <Box width='100%' maxW='900px' px={4}>
           <PostFilterBar
-            posts={DUMMY_POST}
+            posts={posts}
             userName='ola'
             onFilterResults={(filtered) => setDisplayPosts(filtered)}
           />
 
-          <PostCreator userName='ola' />
+          <PostCreator userName={userName} />
 
           {/* Pass the filtered posts down to the section */}
-          <PostSection posts={displayPosts} />
+          {displayPosts.length === 0 ? (
+            <Center minH='300px'>
+              <Text color='gray.500' fontSize='lg'>
+                No posts found
+              </Text>
+            </Center>
+          ) : (
+            <PostSection posts={displayPosts} />
+          )}
         </Box>
       </Flex>
     </Box>

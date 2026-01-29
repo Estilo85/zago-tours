@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toaster } from '@/components/ui/toaster';
@@ -52,7 +52,7 @@ export function useAuth() {
 
         toaster.create({
           title: 'Welcome back!',
-          description: `Logged in `,
+          description: `Logged in`,
           type: 'success',
         });
 
@@ -179,4 +179,12 @@ export function usePassword() {
     isResetting: resetPassword.isPending,
     resetPasswordError: resetPassword.error,
   };
+}
+
+export function useCurrentUser() {
+  return useQuery({
+    queryKey: authKeys.profile(),
+    queryFn: () => apiRequest(API_ENDPOINTS.AUTH.ME),
+    staleTime: 5 * 60 * 1000,
+  });
 }
