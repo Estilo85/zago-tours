@@ -26,12 +26,25 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import Button from '../ui/button/Button';
+import { formatDate } from '@/utils/DateFormat';
+import { useCancelEventRegistration, useJoinEvent } from '@/hooks';
 
 interface EventDetailPageProps {
   event: EventResponseDto;
 }
 
 export const EventDetailPage = ({ event }: EventDetailPageProps) => {
+  const joinEvent = useJoinEvent();
+  const cancelRegistration = useCancelEventRegistration();
+
+  const handleJoinEvent = () => {
+    joinEvent.mutate(event.id);
+  };
+
+  const handleCancelRegistration = () => {
+    cancelRegistration.mutate(event.id);
+  };
+
   const attendees =
     event.registrations?.map((reg) => ({
       name: reg.user.name,
@@ -113,20 +126,11 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
               <Flex wrap='wrap' gap={8} py={2} color='gray.600'>
                 <HStack>
                   <Calendar size={20} color='var(--chakra-colors-primary)' />
-                  <Text fontWeight='semibold'>
-                    {event.date.toLocaleDateString(undefined, {
-                      dateStyle: 'full',
-                    })}
-                  </Text>
+                  <Text fontWeight='semibold'>{formatDate(event.date)}</Text>
                 </HStack>
                 <HStack>
                   <Timer size={20} color='var(--chakra-colors-primary)' />
-                  <Text fontWeight='semibold'>
-                    {event.date.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Text>
+                  <Text fontWeight='semibold'>{formatDate(event.date)}</Text>
                 </HStack>
                 <HStack>
                   <MapPin size={20} color='var(--chakra-colors-primary)' />
@@ -203,19 +207,33 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                       {event.spotLeft}
                     </Text>
                   </HStack>
-
                   <Button
                     size='lg'
                     width='full'
-                    disabled={event.isFull || event.isExpired}
+                    disabled={
+                      event.isFull ||
+                      event.isExpired ||
+                      joinEvent.isPending ||
+                      cancelRegistration.isPending
+                    }
                     py={7}
                     fontSize='md'
+                    onClick={
+                      event.hasJoined
+                        ? handleCancelRegistration
+                        : handleJoinEvent
+                    }
+                    loading={
+                      joinEvent.isPending || cancelRegistration.isPending
+                    }
                   >
-                    {event.hasJoined ? 'You are Registered' : 'Reserve My Spot'}
+                    {event.hasJoined
+                      ? 'Cancel Registration'
+                      : 'Reserve My Spot'}
                   </Button>
 
                   <Text fontSize='xs' textAlign='center' color='gray.400'>
-                    Deadline: {event.joinTill.toLocaleDateString()}
+                    Deadline: {formatDate(event.joinTill)}
                   </Text>
 
                   <Separator />

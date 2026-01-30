@@ -15,6 +15,7 @@ import {
 import { EventResponseDto } from '@zagotours/types';
 import { Calendar, Timer } from 'lucide-react';
 import { AppLink } from '../link/AppLink';
+import { formatDate } from '@/utils/DateFormat';
 
 interface EventCardProps {
   event: EventResponseDto;
@@ -37,6 +38,7 @@ export const EventCard = ({ event }: EventCardProps) => {
         overflow='hidden'
         borderWidth='1px'
         borderColor='gray.100'
+        borderRadius='xl'
         boxShadow='0 2px 12px rgba(0, 0, 0, 0.05)'
         transition='transform 0.2s ease'
         _hover={{ transform: { md: 'translateY(-2px)' } }}
@@ -57,17 +59,11 @@ export const EventCard = ({ event }: EventCardProps) => {
             color='blue.600'
           >
             <Flex align='center' gap={2}>
-              <Calendar size={12} />{' '}
-              <Text>{event.date.toLocaleDateString()}</Text>
+              <Calendar size={12} /> <Text>{formatDate(event.date)}</Text>
             </Flex>
             <Flex align='center' gap={2}>
               <Timer size={12} />
-              <Text>
-                {event.date.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </Text>
+              <Text>{formatDate(event.date)}</Text>
             </Flex>
           </HStack>
 

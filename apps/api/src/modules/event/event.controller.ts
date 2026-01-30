@@ -157,7 +157,10 @@ export class EventController {
   // PUBLIC - GET SINGLE EVENT
   //==================
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
-    const event = await this.eventService.getById(req.params.id);
+    const event = await this.eventService.getByIdWithDetails(req.params.id);
+    if (!event) {
+      throw new Error('Event not found');
+    }
     const userId = req.userId;
 
     let hasJoined = false;

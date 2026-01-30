@@ -38,6 +38,10 @@ export class EventRepository extends BaseRepository<
     });
   }
 
+  async findByIdWithDetails(id: string): Promise<Event | null> {
+    return this.findById(id, this.standardInclude);
+  }
+
   async findByLocation(location: string): Promise<Event[]> {
     return this.findAll({
       where: {

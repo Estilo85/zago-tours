@@ -31,6 +31,10 @@ export class EventService extends BaseService<
     return this.eventRepo.findWithAvailableSpots();
   }
 
+  async getByIdWithDetails(id: string) {
+    return this.eventRepo.findByIdWithDetails(id);
+  }
+
   // Registration logic
   async registerForEvent(eventId: string, userId: string) {
     return await prisma.$transaction(async (tx) => {
@@ -61,6 +65,12 @@ export class EventService extends BaseService<
         throw new Error('Registration deadline has passed');
       }
 
+      // 5. Decrement spots
+      await tx.event.update({
+        where: { id: eventId },
+        data: { spotLeft: { decrement: 1 } },
+      });
+
       // 4. Create registration
       const registration = await tx.eventRegistration.create({
         data: {
@@ -78,12 +88,6 @@ export class EventService extends BaseService<
             },
           },
         },
-      });
-
-      // 5. Decrement spots
-      await tx.event.update({
-        where: { id: eventId },
-        data: { spotLeft: { decrement: 1 } },
       });
 
       return registration;

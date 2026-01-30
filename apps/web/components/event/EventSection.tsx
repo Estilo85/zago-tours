@@ -8,7 +8,6 @@ import {
   SimpleGrid,
   VStack,
   Text,
-  Spinner,
   Center,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
@@ -16,13 +15,15 @@ import React, { useMemo } from 'react';
 import { EventCard } from '../ui/card/EventCard';
 import { SelectInput } from '../ui/input/SelectInput';
 import { useEvents } from '@/hooks';
+import { LoadingState } from '../ui/LoadingState';
+import { ErrorState } from '../ui/ErrorState';
 
 export default function EventSection() {
   // Shared width logic to ensure alignment
   const sectionWidth = { base: 'full', lg: '900px' };
   const { data, isLoading, isError, error } = useEvents();
 
-  // Separate events into upcoming and past
+  // Separate upcoming and past events
   const { upcomingEvents, pastEvents } = useMemo(() => {
     if (!data?.data) {
       return { upcomingEvents: [], pastEvents: [] };
@@ -37,37 +38,8 @@ export default function EventSection() {
     return { upcomingEvents: upcoming, pastEvents: past };
   }, [data]);
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <Container maxW='container.xl' py={10}>
-        <Center minH='400px'>
-          <VStack spaceY={4}>
-            <Spinner size='xl' color='primary' width='4px' />
-            <Text color='gray.600'>Loading events...</Text>
-          </VStack>
-        </Center>
-      </Container>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <Container maxW='container.xl' py={10}>
-        <Center minH='400px'>
-          <VStack spaceY={4}>
-            <Text color='red.500' fontSize='lg' fontWeight='semibold'>
-              Error loading events
-            </Text>
-            <Text color='gray.600'>
-              {error?.message || 'Something went wrong'}
-            </Text>
-          </VStack>
-        </Center>
-      </Container>
-    );
-  }
+  if (isLoading) return <LoadingState message='Loading events...' />;
+  if (isError) return <ErrorState message={error?.message} />;
 
   return (
     <Container maxW='container.xl' py={10}>

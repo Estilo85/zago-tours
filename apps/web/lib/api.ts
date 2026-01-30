@@ -26,6 +26,5 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
   if (!res.ok) {
     throw new Error(data?.message || 'Something went wrong');
   }
-
-  return data?.data || data;
+  return data;
 }

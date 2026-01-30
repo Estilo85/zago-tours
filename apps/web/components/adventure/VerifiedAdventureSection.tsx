@@ -9,12 +9,16 @@ import {
   Icon,
   Heading,
   Flex,
+  Text,
+  VStack,
+  Spinner,
 } from '@chakra-ui/react';
 import AdventureCard from '../ui/card/AdventureCard';
 import Button from '../ui/button/Button';
 import { Grip, Verified } from 'lucide-react';
 import { useAdventures } from '@/hooks';
 import { PaginationControl } from '../ui/pagination/PaginationControl';
+import { LoadingState } from '../ui/LoadingState';
 
 export default function VerifiedAdventureSection() {
   const [page, setPage] = useState(1);
@@ -33,7 +37,7 @@ export default function VerifiedAdventureSection() {
   return (
     <Container maxW='container.xl' justifyItems='center' mt={5}>
       {/* Loading */}
-      {isLoading && <Box>Loading adventures...</Box>}
+      {isLoading && <LoadingState message='Please wait...' />}
 
       {/* Empty */}
       {!isLoading && adventures.length === 0 && (

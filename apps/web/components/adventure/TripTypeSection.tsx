@@ -22,7 +22,7 @@ export default function TripTypeSection() {
         lineHeight='1.2'
         textAlign='center'
       >
-        Adventure
+        Adventures
       </Heading>
 
       <SimpleGrid
