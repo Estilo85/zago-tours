@@ -35,10 +35,10 @@ export interface PostResponseDto {
     country: string;
     image: string;
   };
-  stats: {
-    totalComments: number;
-    totalLikes: number;
-    totalShares: number;
+  _count: {
+    likes: number;
+    comments: number;
+    shares: number;
   };
   isLikedByUser?: boolean;
   isSharedByUser?: boolean;

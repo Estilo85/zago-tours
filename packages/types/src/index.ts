@@ -1,6 +1,9 @@
 // Enums
 export * from './enums';
 
+//Constants
+export * from './constants';
+
 export { PUBLIC_ROLES_LIST, STAFF_ROLES, PARTNER_ROLES } from './dtos/auth.dto';
 
 // Entities

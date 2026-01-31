@@ -6,7 +6,7 @@ import {
   Role,
   TripType,
   UserStatus,
-} from '@prisma/client';
+} from './enums';
 
 export const TripTypeLabels: Record<TripType, string> = {
   HIKING: 'Hiking',

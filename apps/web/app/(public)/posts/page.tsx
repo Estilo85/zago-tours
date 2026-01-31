@@ -3,6 +3,8 @@ import { PostCreator } from '@/components/post/PostCreator';
 import { PostFilterBar } from '@/components/post/PostFilterBar';
 import PostHero from '@/components/post/PostHero';
 import PostSection from '@/components/post/PostSection';
+import { ErrorState } from '@/components/ui/ErrorState';
+import { LoadingState } from '@/components/ui/LoadingState';
 import { useCurrentUser, usePosts } from '@/hooks';
 import { Box, Flex, Center, Spinner, VStack, Text } from '@chakra-ui/react';
 import React, { useState, useMemo } from 'react';
@@ -18,46 +20,22 @@ export default function Post() {
     return data?.data || [];
   }, [data]);
 
-  // Initialize displayPosts when posts are loaded
   React.useEffect(() => {
     if (posts.length > 0 && displayPosts.length === 0) {
       setDisplayPosts(posts);
     }
   }, [posts, displayPosts.length]);
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <Box>
-        <PostHero />
-        <Center minH='60vh'>
-          <VStack spaceY={4}>
-            <Spinner size='xl' color='primary' width='4px' />
-            <Text color='gray.600'>Loading posts...</Text>
-          </VStack>
-        </Center>
-      </Box>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <Box>
-        <PostHero />
-        <Center minH='60vh'>
-          <VStack spaceY={4}>
-            <Text color='red.500' fontSize='lg' fontWeight='semibold'>
-              Error loading posts
-            </Text>
-            <Text color='gray.600'>
-              {error?.message || 'Something went wrong'}
-            </Text>
-          </VStack>
-        </Center>
-      </Box>
-    );
-  }
+  if (isLoading) return;
+  <Box>
+    <PostHero />
+    <LoadingState message='Loading events...' />;
+  </Box>;
+  if (isError) return;
+  <Box>
+    <PostHero />
+    <ErrorState />;
+  </Box>;
 
   return (
     <Box>

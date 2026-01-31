@@ -10,13 +10,25 @@ import {
   Heading,
   Image,
   HStack,
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
 } from '@chakra-ui/react';
 import { LuHeart, LuMessageCircle, LuShare2 } from 'react-icons/lu';
 import { PostResponseDto } from '@zagotours/types';
 import { AvatarImage } from '@/components/media/AvatarImage';
-import { MoreVertical } from 'lucide-react';
+import { Edit, MoreVertical, Trash2 } from 'lucide-react';
 import Button from '../button/Button';
 import { CommentSection } from '@/components/post/CommentSection';
+import { formatDate } from '@/utils/DateFormat';
+import {
+  useDeletePost,
+  useSharePost,
+  useToggleLikePost,
+  useUpdatePost,
+} from '@/hooks';
+import { PostFormModal } from '../modal/PostFormModal';
 
 interface PostCardProps {
   post: PostResponseDto;
@@ -25,6 +37,11 @@ interface PostCardProps {
 export const PostCard = ({ post }: PostCardProps) => {
   const [showFull, setShowFull] = useState(false);
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+
+  const toggleLike = useToggleLikePost();
+  const sharePost = useSharePost();
+  const deletePost = useDeletePost();
+  const updatePost = useUpdatePost();
 
   //=========== SHORTEN DESCRIPTION LENGTH =============
   const maxLength = 150;
@@ -36,6 +53,10 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   //=====HANDLESHARE=======
   const handleShare = async () => {
+    // First, record the share in your DB
+    sharePost.mutate(post.id);
+
+    // Then, trigger native share
     const shareData = {
       title: post.title,
       text: `Check out this post by ${post.user.name} on Zago Voice`,
@@ -51,6 +72,16 @@ export const PostCard = ({ post }: PostCardProps) => {
     } else {
       navigator.clipboard.writeText(shareData.url);
       alert('Link copied to clipboard!');
+    }
+  };
+
+  const handleLike = () => {
+    toggleLike.mutate(post.id);
+  };
+
+  const handleDelete = () => {
+    if (confirm('Are you sure you want to delete this post?')) {
+      deletePost.mutate(post.id);
     }
   };
 
@@ -85,22 +116,51 @@ export const PostCard = ({ post }: PostCardProps) => {
                 {post.user.country} | {post.title}
               </Text>
               <Text fontSize='xs' color='gray.500' fontWeight='medium'>
-                {new Date(post.createdAt).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                })}
+                {formatDate(post.createdAt)}
               </Text>
             </Box>
           </Flex>
-          <Button
-            variant='ghost'
-            size='sm'
-            p={2}
-            minW='auto'
-            borderRadius='full'
-          >
-            <MoreVertical size={18} color='#718096' />
-          </Button>
+          <MenuRoot>
+            <MenuTrigger asChild>
+              <Button
+                variant='ghost'
+                size='sm'
+                p={2}
+                minW='auto'
+                borderRadius='full'
+              >
+                <MoreVertical size={18} color='#718096' />
+              </Button>
+            </MenuTrigger>
+            <MenuContent>
+              <MenuItem value='edit'>
+                <PostFormModal
+                  mode='edit'
+                  userName={post.user.name}
+                  initialData={{
+                    title: post.title,
+                    description: post.description,
+                    mediaUrl: post.mediaUrl || undefined,
+                  }}
+                  onSubmit={(formData) =>
+                    updatePost.mutate({ id: post.id, data: formData })
+                  }
+                  isLoading={updatePost.isPending}
+                >
+                  <Flex align='center' gap={2} width='100%'>
+                    <Edit size={16} />
+                    <Text>Edit Post</Text>
+                  </Flex>
+                </PostFormModal>
+              </MenuItem>
+              <MenuItem value='delete' onClick={handleDelete} color='red.600'>
+                <Flex align='center' gap={2}>
+                  <Trash2 size={16} />
+                  <Text>Delete Post</Text>
+                </Flex>
+              </MenuItem>
+            </MenuContent>
+          </MenuRoot>
         </Flex>
 
         {/* Post Title */}
@@ -177,6 +237,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             size='sm'
             flex={1}
             gap={2}
+            onClick={handleLike}
             color={post.isLikedByUser ? 'red.500' : 'gray.600'}
             _hover={{ bg: 'red.50', color: 'red.600' }}
           >
@@ -185,7 +246,7 @@ export const PostCard = ({ post }: PostCardProps) => {
               size={18}
             />
             <Text fontSize='sm' fontWeight='semibold'>
-              {post.stats.totalLikes}
+              {post._count.likes}
             </Text>
           </Button>
 
@@ -201,7 +262,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           >
             <LuMessageCircle size={18} />
             <Text fontSize='sm' fontWeight='semibold'>
-              {post.stats.totalComments}
+              {post._count.comments}
             </Text>
           </Button>
 
@@ -217,7 +278,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           >
             <LuShare2 size={18} />
             <Text fontSize='sm' fontWeight='semibold'>
-              {post.stats.totalShares}
+              {post._count.shares}
             </Text>
           </Button>
         </HStack>

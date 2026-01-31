@@ -11,57 +11,39 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { LuChevronRight } from 'react-icons/lu';
-
+import { AppLink } from '../link/AppLink';
 interface TripTypeCardProps {
   type: string;
-  count: number;
+  label: string;
+  count?: number;
   imageUrl?: string | null;
 }
 
-export const TripTypeCard = ({ type, count, imageUrl }: TripTypeCardProps) => {
+export const TripTypeCard = ({
+  type,
+  label,
+  count,
+  imageUrl,
+}: TripTypeCardProps) => {
   return (
-    <LinkBox
-      as='article'
-      p={4}
-      borderWidth='1px'
-      borderRadius='xl'
-      transition='all 0.2s'
-      width='100%'
-      maxW={{ base: '100%', md: '200px' }}
-      _hover={{
-        transform: 'translateY(-2px)',
-        boxShadow: 'md',
-        borderColor: 'primary.500',
-      }}
-      bg='white'
-    >
+    <LinkBox>
       <Flex align='center' justify='space-between'>
         <Flex align='center' gap={4}>
-          {/* Avatar for the Trip Type Image */}
-          <AvatarImage src={imageUrl || ''} name={type} />
+          <AvatarImage src={imageUrl || ''} name={label} />
 
           <VStack align='start' gap={0}>
-            <LinkOverlay
-              as={NextLink}
-              href={`/adventures?type=${type.toLowerCase()}`}
-            >
-              <Text fontWeight='bold' fontSize='lg' textTransform='capitalize'>
-                {type}
+            <AppLink href={`/adventures/tripType/${type}`}>
+              <Text fontWeight='bold' fontSize='lg'>
+                {label}
               </Text>
-            </LinkOverlay>
+            </AppLink>
             <Text fontSize='sm' color='gray.500'>
               {count} {count === 1 ? 'Tour' : 'Tours'}
             </Text>
           </VStack>
         </Flex>
 
-        {/* The Leading Arrow Icon */}
-        <Icon
-          as={LuChevronRight}
-          boxSize={5}
-          color='gray.400'
-          _groupHover={{ color: 'primary.500' }}
-        />
+        <Icon as={LuChevronRight} boxSize={5} color='gray.400' />
       </Flex>
     </LinkBox>
   );
