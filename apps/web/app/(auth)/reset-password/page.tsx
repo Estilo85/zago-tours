@@ -1,14 +1,13 @@
 'use client';
 
+import React, { Suspense } from 'react';
 import { ResetPasswordForm } from '@/components/auth/reset-password/ResetPasswordForm';
-import { Box } from '@chakra-ui/react';
-import React from 'react';
 
 const ResetPassword = () => {
   return (
-    <Box>
+    <Suspense fallback={<div>Loading...</div>}>
       <ResetPasswordForm />
-    </Box>
+    </Suspense>
   );
 };
 

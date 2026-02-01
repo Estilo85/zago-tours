@@ -6,7 +6,7 @@ import PostSection from '@/components/post/PostSection';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { useCurrentUser, usePosts } from '@/hooks';
-import { Box, Flex, Center, Spinner, VStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Center, Text } from '@chakra-ui/react';
 import React, { useState, useMemo } from 'react';
 
 export default function Post() {
