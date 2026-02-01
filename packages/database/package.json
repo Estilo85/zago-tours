@@ -12,6 +12,7 @@
     "schema": "prisma/schema.prisma"
   },
   "scripts": {
+    "build": "tsup src/client.ts --dts --format cjs",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
