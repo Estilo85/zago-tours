@@ -269,6 +269,9 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
     devDependencies:
+      '@types/node':
+        specifier: ^20.19.30
+        version: 20.19.30
       eslint:
         specifier: ^9.39.2
         version: 9.39.2
