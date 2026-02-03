@@ -2,6 +2,12 @@
   "name": "@zagotours/database",
   "version": "0.0.0",
   "private": true,
+  "files": [
+    "prisma/schema.prisma",
+    "prisma/migrations/**/*",
+    "src/**/*",
+    "dist/**/*"
+  ],
   "exports": {
     ".": {
       "types": "./src/client.ts",
