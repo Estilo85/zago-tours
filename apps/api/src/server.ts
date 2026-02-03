@@ -16,7 +16,7 @@ export const createServer = (): Express => {
       cors({
         origin: process.env.FRONTEND_URL || 'http://localhost:3000',
         credentials: true,
-      })
+      }),
     )
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
