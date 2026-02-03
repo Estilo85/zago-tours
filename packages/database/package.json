@@ -2,18 +2,19 @@
   "name": "@zagotours/database",
   "version": "0.0.0",
   "private": true,
-  "files": [
-    "prisma/schema.prisma",
-    "prisma/migrations/**/*",
-    "src/**/*",
-    "dist/**/*"
-  ],
+  "main": "./dist/client.js",
+  "types": "./dist/client.d.ts",
   "exports": {
     ".": {
-      "types": "./src/client.ts",
-      "default": "./src/client.ts"
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
     }
   },
+  "files": [
+    "dist",
+    "prisma/schema.prisma",
+    "prisma/migrations"
+  ],
   "prisma": {
     "schema": "prisma/schema.prisma"
   },
