@@ -7,7 +7,7 @@ import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
 import { LuMenu } from 'react-icons/lu';
 import { SearchBar } from '@/components/ui/search/Search';
 import { TripRequestDialog } from '../dialogs/trip-request-dialog';
-import { TripRequestCallbackDialog } from '../dialogs/trip-request-callback-dialog';
+import { useUserProfile } from '@/hooks';
 
 interface NavbarProps {
   onOpen: () => void;
@@ -15,7 +15,11 @@ interface NavbarProps {
 
 export const Navbar = ({ onOpen }: NavbarProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isCallBackDialogOpen, setIsCallbackDialogOpen] = useState(false);
+  const { data: userProfile } = useUserProfile();
+
+  const userData = userProfile?.data;
+  const userName = userData?.name || 'User';
+  const userImage = userData?.image;
 
   return (
     <>
@@ -46,24 +50,13 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
           <Button bg='primary' onClick={() => setIsDialogOpen(true)}>
             Request a trip
           </Button>
-          <Button bg='primary' onClick={() => setIsCallbackDialogOpen(true)}>
-            Request callback
-          </Button>
-          <AvatarImage
-            src='/images/home/home-why-choose-sect-3.webp'
-            name='profile image'
-          />
+          <AvatarImage src={userImage} name={userName} />
         </HStack>
       </Flex>
 
       <TripRequestDialog
         open={isDialogOpen}
         onOpenChange={(e) => setIsDialogOpen(e.open)}
-      />
-
-      <TripRequestCallbackDialog
-        open={isCallBackDialogOpen}
-        onOpenChange={(e) => setIsCallbackDialogOpen(e.open)}
       />
     </>
   );

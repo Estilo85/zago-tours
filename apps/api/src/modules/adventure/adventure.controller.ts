@@ -63,8 +63,23 @@ export class AdventureController {
       req: ReqParamsBody<UuidParam, UpdateAdventureDto>,
       res: Response,
     ) => {
-      const adventureData = req.body;
       const { id } = req.params;
+      const adventureData: UpdateAdventureDto = { ...req.body };
+
+      if (adventureData.price)
+        adventureData.price = Number(adventureData.price);
+      if (adventureData.days) adventureData.days = Number(adventureData.days);
+      if (adventureData.safetyScore)
+        adventureData.safetyScore = Number(adventureData.safetyScore);
+
+      if (adventureData.date) {
+        adventureData.date = new Date(adventureData.date);
+      }
+      if (adventureData.lastSafetyCertDate) {
+        adventureData.lastSafetyCertDate = new Date(
+          adventureData.lastSafetyCertDate,
+        );
+      }
 
       const existingAdventure = await this.service.getById(id);
 
@@ -141,7 +156,6 @@ export class AdventureController {
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const adventure = await this.service.getById(req.params.id);
-
     return ResponseUtil.success(res, adventure);
   });
 

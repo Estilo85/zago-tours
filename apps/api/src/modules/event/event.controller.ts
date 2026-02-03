@@ -29,7 +29,6 @@ export class EventController {
   create = asyncHandler(async (req: ReqBody<CreateEventDto>, res: Response) => {
     const eventData = req.body;
 
-    // Handle media upload
     if (req.file) {
       const uploadResult = await CloudinaryService.uploadFile(
         req.file,
@@ -41,15 +40,26 @@ export class EventController {
 
     const createData = {
       ...eventData,
-      spotLeft: Number(eventData.spotLeft),
-      date: new Date(eventData.date),
-      joinTill: new Date(eventData.joinTill),
+      spotLeft: eventData.spotLeft ? Number(eventData.spotLeft) : 0,
+
+      date: eventData.date ? new Date(eventData.date) : new Date(),
+      joinTill: eventData.joinTill ? new Date(eventData.joinTill) : new Date(),
+
+      isSignature: String(eventData.isSignature) === 'true',
+
       creator: {
         connect: { id: req.userId },
       },
     };
 
-    const event = await this.eventService.create(createData);
+    if (
+      isNaN(createData.date.getTime()) ||
+      isNaN(createData.joinTill.getTime())
+    ) {
+      throw new Error('One or more provided dates are invalid.');
+    }
+
+    const event = await this.eventService.create(createData as any);
     return ResponseUtil.success(res, event, 'Event created', 201);
   });
 
@@ -60,6 +70,13 @@ export class EventController {
     async (req: ReqParamsBody<UuidParam, UpdateEventDto>, res: Response) => {
       const eventData = req.body;
       const { id } = req.params;
+
+      if (eventData.spotLeft) eventData.spotLeft = Number(eventData.spotLeft);
+      if (eventData.date) eventData.date = new Date(eventData.date);
+      if (eventData.joinTill) eventData.joinTill = new Date(eventData.joinTill);
+      if (eventData.isSignature !== undefined) {
+        eventData.isSignature = String(eventData.isSignature) === 'true';
+      }
 
       const existingEvent = await this.eventService.getById(id);
 

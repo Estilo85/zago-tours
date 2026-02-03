@@ -5,6 +5,8 @@ import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
 import { UserRole } from './_config/menu-config';
 import { useAuthSession } from '@/hooks';
+import { LoadingState } from '@/components/ui/LoadingState';
+import { WelcomeBanner } from './_components/banner/WelcomeBanner';
 
 export default function DashboardLayout({
   children,
@@ -16,9 +18,28 @@ export default function DashboardLayout({
 
   if (isLoading) {
     return (
-      <Flex h='100vh' align='center' justify='center'>
-        Loading Session...
-      </Flex>
+      <LoadingState
+        message='Verifying your session...'
+        minHeight='100vh'
+        containerProps={{
+          maxW: 'full',
+          py: 0,
+          px: 0,
+        }}
+      />
+    );
+  }
+  if (isLoading) {
+    return (
+      <LoadingState
+        message='Verifying your session...'
+        minHeight='100vh'
+        containerProps={{
+          maxW: 'full',
+          py: 0,
+          px: 0,
+        }}
+      />
     );
   }
 
@@ -69,7 +90,14 @@ export default function DashboardLayout({
         <Navbar onOpen={() => setOpen(true)} />
 
         {/* SINGLE SCROLL AREA */}
-        <Box flex='1' overflowY='auto' p={{ base: 4, md: 8 }}>
+        <Box
+          flex='1'
+          overflowY='auto'
+          minH={{ base: '70vh', md: '75vh' }}
+          h='full'
+          p={{ base: 4, md: 8 }}
+        >
+          <WelcomeBanner />
           {children}
         </Box>
       </Flex>

@@ -17,19 +17,39 @@ const tripPlanningCallController = new TripPlanningCallController(
   tripPlanningCallService,
 );
 
-router.post('/', authenticate, tripPlanningCallController.scheduleCall);
-router.get('/upcoming', authenticate, tripPlanningCallController.getUpcoming);
-router.get('/my-calls', authenticate, tripPlanningCallController.getMyCalls);
-router.put('/:id/reschedule', tripPlanningCallController.rescheduleCall);
-router.put('/:id/cancel', authenticate, tripPlanningCallController.cancelCall);
-router.put(
-  '/:id/complete',
+router.post(
+  '/',
   authenticate,
-
-  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
-  tripPlanningCallController.markAsCompleted,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripPlanningCallController.scheduleCall,
 );
-
+router.get(
+  '/upcoming',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripPlanningCallController.getUpcoming,
+);
+router.get(
+  '/my-calls',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripPlanningCallController.getMyCalls,
+);
 // Admin endpoints
 router.get(
   '/',
@@ -37,6 +57,36 @@ router.get(
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   tripPlanningCallController.getAll,
 );
+
+router.put(
+  '/:id/reschedule',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripPlanningCallController.rescheduleCall,
+);
+router.put(
+  '/:id/cancel',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripPlanningCallController.cancelCall,
+);
+router.put(
+  '/:id/complete',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  tripPlanningCallController.markAsCompleted,
+);
+
 router.get(
   '/:id',
   authenticate,

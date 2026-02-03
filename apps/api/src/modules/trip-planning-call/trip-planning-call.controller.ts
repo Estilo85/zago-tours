@@ -96,27 +96,10 @@ export class TripPlanningCallController {
   /**
    * Get my calls (as adventurer or agent)
    */
-  getMyCalls = asyncHandler(
-    async (req: TypedRequest<{}, {}, { role?: string }>, res: Response) => {
-      const { role } = req.query;
-
-      let calls;
-      if (role === 'adventurer') {
-        calls = await this.callService.getByAdventurer(req.userId!);
-      } else if (role === 'agent') {
-        calls = await this.callService.getByAgent(req.userId!);
-      } else {
-        // Get both
-        const [adventurerCalls, agentCalls] = await Promise.all([
-          this.callService.getByAdventurer(req.userId!),
-          this.callService.getByAgent(req.userId!),
-        ]);
-        calls = [...adventurerCalls, ...agentCalls];
-      }
-
-      return ResponseUtil.success(res, calls);
-    },
-  );
+  getMyCalls = asyncHandler(async (req: TypedRequest, res: Response) => {
+    const calls = await this.callService.getByAdventurer(req.userId!);
+    return ResponseUtil.success(res, calls);
+  });
 
   /**
    * Get all calls (admin only - paginated)

@@ -12,10 +12,6 @@ export default function SuperAdminDashboard() {
 
   return (
     <Stack gap={8}>
-      <Text fontSize='2xl' fontWeight='bold'>
-        Admin Dashboard
-      </Text>
-
       {/* Stats Cards */}
       <StatsGrid
         stats={statsData ? getAdminStatsConfig(statsData.stats) : []}

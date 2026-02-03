@@ -1,25 +1,44 @@
 'use client';
 
-import { Dialog, Flex, Icon, IconButton, Portal, Text } from '@chakra-ui/react';
-import { Input, Textarea, Stack } from '@chakra-ui/react';
+import {
+  Dialog,
+  IconButton,
+  Portal,
+  Stack,
+  Select,
+  createListCollection,
+} from '@chakra-ui/react';
+import { Input, Textarea } from '@chakra-ui/react';
 import Button from '@/components/ui/button/Button';
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { useCreateTripRequest } from '@/hooks';
+import { TripType, TripTypeLabels } from '@zagotours/types';
 
 interface TripRequestDialogProps {
   open: boolean;
   onOpenChange: (details: { open: boolean }) => void;
 }
 
+// Create collection from TripTypeLabels
+const tripTypeCollection = createListCollection({
+  items: Object.entries(TripTypeLabels).map(([value, label]) => ({
+    label,
+    value,
+  })),
+});
+
 export const TripRequestDialog = ({
   open,
   onOpenChange,
 }: TripRequestDialogProps) => {
+  const { mutate: createTripRequest, isPending } = useCreateTripRequest();
+
   const [formData, setFormData] = useState({
     tripType: '',
     destination: '',
     date: '',
-    preference: '',
+    preferences: '',
   });
 
   const handleInputChange = (
@@ -31,27 +50,35 @@ export const TripRequestDialog = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Trip Request:', formData);
-    // Handle form submission here (API call, etc.)
 
-    // Reset form and close dialog
-    setFormData({
-      tripType: '',
-      destination: '',
-      date: '',
-      preference: '',
-    });
-
-    onOpenChange({ open: false });
+    createTripRequest(
+      {
+        tripType: formData.tripType as TripType,
+        destination: formData.destination,
+        date: formData.date,
+        preferences: formData.preferences || undefined,
+      },
+      {
+        onSuccess: () => {
+          // Reset form and close dialog
+          setFormData({
+            tripType: '',
+            destination: '',
+            date: '',
+            preferences: '',
+          });
+          onOpenChange({ open: false });
+        },
+      },
+    );
   };
 
   const handleCancel = () => {
-    // Reset form
     setFormData({
       tripType: '',
       destination: '',
       date: '',
-      preference: '',
+      preferences: '',
     });
   };
 
@@ -78,15 +105,37 @@ export const TripRequestDialog = ({
               <form onSubmit={handleSubmit} id='trip-request-form'>
                 <Stack gap={4}>
                   <Stack gap={2}>
-                    <label htmlFor='tripType'>Trip Type</label>
-                    <Input
-                      id='tripType'
-                      name='tripType'
-                      placeholder='e.g., Business, Leisure, Adventure'
-                      value={formData.tripType}
-                      onChange={handleInputChange}
+                    <Select.Root
+                      collection={tripTypeCollection}
+                      value={formData.tripType ? [formData.tripType] : []}
+                      onValueChange={(details) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          tripType: details.value[0] || '',
+                        }));
+                      }}
                       required
-                    />
+                    >
+                      <Select.Label>Trip Type</Select.Label>
+                      <Select.Control>
+                        <Select.Trigger>
+                          <Select.ValueText placeholder='Select trip type' />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                          <Select.Indicator />
+                        </Select.IndicatorGroup>
+                      </Select.Control>
+                      <Select.Positioner>
+                        <Select.Content>
+                          {tripTypeCollection.items.map((tripType) => (
+                            <Select.Item item={tripType} key={tripType.value}>
+                              {tripType.label}
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          ))}
+                        </Select.Content>
+                      </Select.Positioner>
+                    </Select.Root>
                   </Stack>
 
                   <Stack gap={2}>
@@ -114,12 +163,12 @@ export const TripRequestDialog = ({
                   </Stack>
 
                   <Stack gap={2}>
-                    <label htmlFor='preference'>Preferences</label>
+                    <label htmlFor='preferences'>Preferences</label>
                     <Textarea
-                      id='preference'
-                      name='preference'
+                      id='preferences'
+                      name='preferences'
                       placeholder='Any special requests or preferences?'
-                      value={formData.preference}
+                      value={formData.preferences}
                       onChange={handleInputChange}
                       rows={4}
                     />
@@ -131,7 +180,7 @@ export const TripRequestDialog = ({
             <Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <IconButton
-                  aria-label='Search database'
+                  aria-label='Close dialog'
                   variant='outline'
                   onClick={handleCancel}
                 >
@@ -144,8 +193,10 @@ export const TripRequestDialog = ({
                 bg='primary'
                 type='submit'
                 form='trip-request-form'
+                loading={isPending}
+                disabled={isPending}
               >
-                Submit Request
+                {isPending ? 'Submitting...' : 'Submit Request'}
               </Button>
             </Dialog.Footer>
           </Dialog.Content>

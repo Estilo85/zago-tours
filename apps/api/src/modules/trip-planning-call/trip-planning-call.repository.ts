@@ -20,14 +20,6 @@ export class TripPlanningCallRepository extends BaseRepository<
         phone: true,
       },
     },
-    agent: {
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-      },
-    },
   };
 
   // Get calls by adventurer
@@ -39,20 +31,10 @@ export class TripPlanningCallRepository extends BaseRepository<
     });
   }
 
-  // Get calls by agent
-  async findByAgent(agentId: string): Promise<TripPlanningCall[]> {
-    return this.findAll({
-      where: { agentId },
-      include: this.standardInclude,
-      orderBy: { startTime: 'desc' },
-    });
-  }
-
-  // Get upcoming calls
   async findUpcoming(userId: string): Promise<TripPlanningCall[]> {
     return this.findAll({
       where: {
-        OR: [{ adventurerId: userId }, { agentId: userId }],
+        adventurerId: userId,
         startTime: { gte: new Date() },
         status: CallStatus.SCHEDULED,
       },
@@ -96,13 +78,11 @@ export class TripPlanningCallRepository extends BaseRepository<
 
   // Check for scheduling conflicts
   async hasConflict(
-    agentId: string,
     startTime: Date,
     endTime: Date,
     excludeCallId?: string,
   ): Promise<boolean> {
     const where: Prisma.TripPlanningCallWhereInput = {
-      agentId,
       status: CallStatus.SCHEDULED,
       OR: [
         {

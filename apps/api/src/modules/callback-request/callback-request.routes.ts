@@ -17,13 +17,28 @@ const callbackRequestController = new CallbackRequestController(
   callbackRequestService,
 );
 
-router.post('/', authenticate, callbackRequestController.create);
+router.post(
+  '/',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  callbackRequestController.create,
+);
 
 // Adventurer endpoints
 router.get(
   '/my-requests',
   authenticate,
-  authorizeRoles(Role.ADVENTURER),
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
   callbackRequestController.getMyRequests,
 );
 

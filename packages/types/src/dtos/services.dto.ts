@@ -107,7 +107,7 @@ export interface UpdateTripPlanningCallDto {
 export interface TripPlanningCallResponseDto {
   id: string;
   adventurerId: string;
-  agentId: string;
+  agentId?: string;
   calendarEventId: string | null;
   meetingLink: string | null;
   startTime: Date;

@@ -13,10 +13,12 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
+import { useCreateCallbackRequest } from '@/hooks';
 
 interface TripRequestCallbackDialogProps {
   open: boolean;
   onOpenChange: (details: { open: boolean }) => void;
+  tripRequestId?: string;
 }
 
 const timeSlots = createListCollection({
@@ -31,7 +33,11 @@ const timeSlots = createListCollection({
 export const TripRequestCallbackDialog = ({
   open,
   onOpenChange,
+  tripRequestId,
 }: TripRequestCallbackDialogProps) => {
+  const { mutate: createCallbackRequest, isPending } =
+    useCreateCallbackRequest();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,17 +52,31 @@ export const TripRequestCallbackDialog = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Callback Request:', formData);
 
-    // Reset form and close dialog
-    setFormData({
-      name: '',
-      email: '',
-      phone: '+234',
-      bestTime: '',
+    const payload: any = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      bestTime: formData.bestTime,
+    };
+
+    // Include tripRequestId if provided
+    if (tripRequestId) {
+      payload.tripRequestId = tripRequestId;
+    }
+
+    createCallbackRequest(payload, {
+      onSuccess: () => {
+        // Reset form and close dialog
+        setFormData({
+          name: '',
+          email: '',
+          phone: '+234',
+          bestTime: '',
+        });
+        onOpenChange({ open: false });
+      },
     });
-
-    onOpenChange({ open: false });
   };
 
   const handleCancel = () => {
@@ -154,7 +174,6 @@ export const TripRequestCallbackDialog = ({
                           <Select.Indicator />
                         </Select.IndicatorGroup>
                       </Select.Control>
-                      {/* REMOVED Portal - let it render in the Dialog */}
                       <Select.Positioner>
                         <Select.Content>
                           {timeSlots.items.map((timeSlot) => (
@@ -188,8 +207,10 @@ export const TripRequestCallbackDialog = ({
                 bg='primary'
                 type='submit'
                 form='callback-request-form'
+                loading={isPending}
+                disabled={isPending}
               >
-                Submit Request
+                {isPending ? 'Submitting...' : 'Submit Request'}
               </Button>
             </Dialog.Footer>
           </Dialog.Content>

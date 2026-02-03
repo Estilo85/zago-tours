@@ -14,8 +14,28 @@ const tripRequestService = new TripRequestService(tripRequestRepository);
 const tripRequestController = new TripRequestController(tripRequestService);
 
 // Public/Adventurer endpoints
-router.post('/', authenticate, tripRequestController.create);
-router.get('/my-requests', authenticate, tripRequestController.getMyRequests);
+router.post(
+  '/',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripRequestController.create,
+);
+router.get(
+  '/my-requests',
+  authenticate,
+  authorizeRoles(
+    Role.INDEPENDENT_AGENT,
+    Role.COOPERATE_AGENT,
+    Role.ADVENTURER,
+    Role.AFFILIATE,
+  ),
+  tripRequestController.getMyRequests,
+);
 
 // Agent endpoints
 router.get(

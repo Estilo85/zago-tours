@@ -1,10 +1,10 @@
 import { Table } from '@chakra-ui/react';
 import React from 'react';
 
-interface Column<T> {
+export interface Column<T> {
   label: string;
   key: keyof T;
-  render?: (value: T[keyof T], row: T) => React.ReactNode;
+  render?: (value: any, row: T) => React.ReactNode;
 }
 
 interface DataTableProps<T> {
@@ -29,13 +29,13 @@ export const DataTable = <T extends { id: string | number }>({
       </Table.Header>
 
       <Table.Body>
-        {data.map((item) => (
-          <Table.Row key={item.id}>
+        {data.map((item, idx) => (
+          <Table.Row key={item.id || idx}>
             {columns.map((col) => (
               <Table.Cell key={String(col.key)}>
                 {col.render
                   ? col.render(item[col.key], item)
-                  : String(item[col.key])}
+                  : String(item[col.key] ?? '')}
               </Table.Cell>
             ))}
           </Table.Row>

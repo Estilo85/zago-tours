@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import { LuLogOut } from 'react-icons/lu';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { MENU_CONFIG } from '../../_config/menu-config';
-import { useAuth } from '@/hooks';
 
 export const Sidebar = ({
   role,
@@ -14,7 +13,6 @@ export const Sidebar = ({
   onClose?: () => void;
 }) => {
   const pathname = usePathname();
-  const { logout } = useAuth();
 
   // ==== NAV ITEM ====
   const NavItem = ({ item }: any) => {
@@ -80,26 +78,6 @@ export const Sidebar = ({
             <NavItem key={item.href} item={item} />
           ))}
         </Stack>
-      </Box>
-
-      {/* 🔽 FIXED LOGOUT */}
-      <Box p={3} borderTop='1px solid' borderColor='gray.200'>
-        <HStack
-          cursor='pointer'
-          color='red.500'
-          _hover={{ bg: 'red.50' }}
-          borderRadius='md'
-          p={3}
-          onClick={() => {
-            onClose?.();
-            logout();
-          }}
-        >
-          <Icon as={LuLogOut} />
-          <Text fontSize='sm' fontWeight='bold'>
-            Logout
-          </Text>
-        </HStack>
       </Box>
     </Stack>
   );

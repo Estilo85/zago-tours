@@ -42,7 +42,7 @@ export function useAdventures(filters?: AdventureListQueryDto) {
 }
 
 export function useAdventure(id: string) {
-  return useQuery<AdventureDetailResponseDto>({
+  return useQuery<{ data: AdventureDetailResponseDto }>({
     queryKey: adventureKeys.detail(id),
     queryFn: () => apiRequest(API_ENDPOINTS.ADVENTURES.BY_ID(id)),
     enabled: !!id,

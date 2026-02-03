@@ -8,6 +8,7 @@ export interface CreateEventDto {
   description: string;
   location: string;
   spotLeft: number;
+  isSignature: boolean;
   joinTill: Date | string;
   cancellationTerms: string;
   // Cloudinary media
@@ -19,6 +20,7 @@ export interface UpdateEventDto {
   title?: string;
   date?: Date | string;
   description?: string;
+  isSignature?: boolean;
   location?: string;
   spotLeft?: number;
   joinTill?: Date | string;

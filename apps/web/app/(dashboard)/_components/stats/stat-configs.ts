@@ -21,28 +21,28 @@ import { StatCardData } from './stat-card';
 export const getAdminStatsConfig = (data: AdminStats): StatCardData[] => [
   {
     label: 'Total Users',
-    value: data.users.total.toLocaleString(),
+    value: data?.users.total.toLocaleString(),
     icon: LuUsers,
   },
   {
     label: 'Total Adventures',
-    value: data.adventures.total.toLocaleString(),
+    value: data?.adventures.total.toLocaleString(),
     icon: LuPlaneTakeoff,
   },
   {
     label: 'Upcoming Events',
-    value: data.events.upcoming.toLocaleString(),
+    value: data?.events.upcoming.toLocaleString(),
     icon: LuCalendarCheck,
   },
   {
     label: 'Total Posts',
-    value: data.community.totalPosts.toLocaleString(),
+    value: data?.community.totalPosts.toLocaleString(),
     icon: LuFileText,
   },
   {
     label: 'Avg Rating',
-    value: data.community.avgRating?.toFixed(1) || '0.0',
-    trend: `${data.community.totalReviews} reviews`,
+    value: data?.community.avgRating?.toFixed(1) || '0.0',
+    trend: `${data?.community.totalReviews} reviews`,
     icon: LuStar,
   },
 ];
@@ -52,22 +52,22 @@ export const getCorporateAgentStatsConfig = (
 ): StatCardData[] => [
   {
     label: 'Trip Requests',
-    value: data.assignedRequests.totalTripRequests.toLocaleString(),
+    value: data?.assignedRequests?.totalTripRequests.toLocaleString(),
     icon: LuPlaneTakeoff,
   },
   {
     label: 'Callback Requests',
-    value: data.assignedRequests.totalCallbackRequests.toLocaleString(),
+    value: data?.assignedRequests?.totalCallbackRequests.toLocaleString(),
     icon: LuPhone,
   },
   {
     label: 'Total Referrals',
-    value: data.referrals.total.toLocaleString(),
+    value: data?.referrals.total.toLocaleString(),
     icon: LuUserPlus,
   },
   {
     label: 'Points Earned',
-    value: data.referrals.pointsEarned.toLocaleString(),
+    value: data?.referrals.pointsEarned.toLocaleString(),
     icon: LuStar,
   },
 ];

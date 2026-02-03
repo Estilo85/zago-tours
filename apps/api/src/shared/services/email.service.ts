@@ -39,7 +39,6 @@ export class EmailService {
         subject: options.subject,
         html: options.html,
         text: options.text,
-        // reply_to: options.replyTo,
       });
     } catch (error) {
       console.error('Failed to send email:', error);
@@ -228,53 +227,64 @@ export class EmailService {
   }
 
   /**
-   * Send trip planning call confirmation
+   * Send trip planning call confirmation (no agent assigned yet)
    */
   static async sendCallConfirmation(
     email: string,
     name: string,
     callDetails: {
-      agentName: string;
       startTime: Date;
       meetingLink?: string;
     },
   ): Promise<void> {
     const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; background-color: #f9fafb; }
-            .details { background-color: white; padding: 15px; margin: 20px 0; border-radius: 5px; }
-            .button { display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>Trip Planning Call Confirmed!</h1>
-            </div>
-            <div class="content">
-              <h2>Hi ${name},</h2>
-              <p>Your trip planning call has been scheduled!</p>
-              <div class="details">
-                <p><strong>Agent:</strong> ${callDetails.agentName}</p>
-                <p><strong>Date & Time:</strong> ${new Date(callDetails.startTime).toLocaleString()}</p>
-                ${callDetails.meetingLink ? `<p><strong>Meeting Link:</strong> <a href="${callDetails.meetingLink}">${callDetails.meetingLink}</a></p>` : ''}
-              </div>
-              ${callDetails.meetingLink ? `<a href="${callDetails.meetingLink}" class="button">Join Meeting</a>` : ''}
-            </div>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
+          .content { padding: 20px; background-color: #f9fafb; }
+          .details { background-color: white; padding: 15px; margin: 20px 0; border-radius: 5px; }
+          .info-box { background-color: #DBEAFE; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #3B82F6; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Trip Planning Call Request Received!</h1>
           </div>
-        </body>
-      </html>
-    `;
+          <div class="content">
+            <h2>Hi ${name},</h2>
+            <p>We've received your trip planning call request!</p>
+            
+            <div class="info-box">
+              <strong>What's Next?</strong>
+              <p>Our team will assign an agent to your call and send you their details shortly. You'll receive a confirmation email once an agent has been assigned.</p>
+            </div>
+            
+            <div class="details">
+              <p><strong>Requested Date & Time:</strong> ${new Date(
+                callDetails.startTime,
+              ).toLocaleString('en-US', {
+                dateStyle: 'full',
+                timeStyle: 'short',
+              })}</p>
+              ${callDetails.meetingLink ? `<p><strong>Meeting Link:</strong> <a href="${callDetails.meetingLink}">${callDetails.meetingLink}</a></p>` : ''}
+            </div>
+
+            <p style="margin-top: 20px;">We're excited to help plan your adventure!</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
 
     await this.sendEmail({
       to: email,
-      subject: 'Trip Planning Call Confirmed - Zagotours',
+      subject: 'Trip Planning Call Request Received - Zagotours',
       html,
     });
   }
@@ -662,6 +672,236 @@ export class EmailService {
   }
 
   /**
+   * Send admin notification for new trip planning call request
+   */
+  static async sendAdminNewCallRequest(callData: {
+    adventurerName: string;
+    adventurerEmail: string;
+    adventurerPhone?: string;
+    startTime: Date;
+    endTime: Date;
+    meetingLink?: string;
+    callId: string;
+    createdAt: Date;
+  }): Promise<void> {
+    const html = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #DC2626; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9fafb; }
+        .call-details { background-color: white; padding: 15px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #DC2626; }
+        .detail-row { padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        .detail-row:last-child { border-bottom: none; }
+        .label { font-weight: bold; color: #6b7280; display: inline-block; width: 150px; }
+        .value { color: #111827; }
+        .alert-box { background-color: #FEF2F2; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #DC2626; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #DC2626; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        .timestamp { color: #6b7280; font-size: 12px; text-align: center; margin-top: 20px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>🔔 New Trip Planning Call Request</h1>
+        </div>
+        <div class="content">
+          <div class="alert-box">
+            <strong>⚠️ Action Required:</strong> A new trip planning call has been requested. Please assign an agent.
+          </div>
+          
+          <div class="call-details">
+            <div class="detail-row">
+              <span class="label">Adventurer:</span>
+              <span class="value">${callData.adventurerName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email:</span>
+              <span class="value">${callData.adventurerEmail}</span>
+            </div>
+            ${
+              callData.adventurerPhone
+                ? `
+            <div class="detail-row">
+              <span class="label">Phone:</span>
+              <span class="value">${callData.adventurerPhone}</span>
+            </div>
+            `
+                : ''
+            }
+            <div class="detail-row">
+              <span class="label">Requested Start Time:</span>
+              <span class="value">${new Date(callData.startTime).toLocaleString(
+                'en-US',
+                {
+                  dateStyle: 'full',
+                  timeStyle: 'short',
+                },
+              )}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Duration:</span>
+              <span class="value">${Math.round((new Date(callData.endTime).getTime() - new Date(callData.startTime).getTime()) / (1000 * 60))} minutes</span>
+            </div>
+            ${
+              callData.meetingLink
+                ? `
+            <div class="detail-row">
+              <span class="label">Meeting Link:</span>
+              <span class="value"><a href="${callData.meetingLink}">${callData.meetingLink}</a></span>
+            </div>
+            `
+                : ''
+            }
+            <div class="detail-row">
+              <span class="label">Call ID:</span>
+              <span class="value">${callData.callId}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Submitted:</span>
+              <span class="value">${new Date(callData.createdAt).toLocaleString(
+                'en-US',
+                {
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                },
+              )}</span>
+            </div>
+          </div>
+
+          <a href="${process.env.ADMIN_URL || process.env.FRONTEND_URL}/admin/calls/${callData.callId}" class="button">Assign Agent</a>
+          
+          <div class="timestamp">
+            <p>This is an automated notification from Zagotours Admin System</p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+  `;
+
+    await this.sendEmail({
+      to: this.fromEmail,
+      subject: `New Call Request - ${callData.adventurerName} - Zagotours`,
+      html,
+    });
+  }
+
+  /**
+   * Send admin notification for new trip request
+   */
+  static async sendAdminNewTripRequest(requestData: {
+    adventurerName: string;
+    adventurerEmail: string;
+    tripType: string;
+    destination: string;
+    date: Date;
+    preferences?: string;
+    requestId: string;
+    createdAt: Date;
+  }): Promise<void> {
+    const html = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #DC2626; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9fafb; }
+        .request-details { background-color: white; padding: 15px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #DC2626; }
+        .detail-row { padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        .detail-row:last-child { border-bottom: none; }
+        .label { font-weight: bold; color: #6b7280; display: inline-block; width: 150px; }
+        .value { color: #111827; }
+        .alert-box { background-color: #FEF2F2; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #DC2626; }
+        .preferences-box { background-color: #fef3c7; padding: 15px; margin: 15px 0; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #DC2626; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        .timestamp { color: #6b7280; font-size: 12px; text-align: center; margin-top: 20px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>🔔 New Trip Request</h1>
+        </div>
+        <div class="content">
+          <div class="alert-box">
+            <strong>⚠️ Action Required:</strong> A new trip request has been submitted. Please assign an agent.
+          </div>
+          
+          <div class="request-details">
+            <div class="detail-row">
+              <span class="label">Adventurer:</span>
+              <span class="value">${requestData.adventurerName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email:</span>
+              <span class="value">${requestData.adventurerEmail}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Trip Type:</span>
+              <span class="value">${requestData.tripType}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Destination:</span>
+              <span class="value">${requestData.destination}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Preferred Date:</span>
+              <span class="value">${new Date(
+                requestData.date,
+              ).toLocaleDateString('en-US', {
+                dateStyle: 'long',
+              })}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Request ID:</span>
+              <span class="value">${requestData.requestId}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Submitted:</span>
+              <span class="value">${new Date(
+                requestData.createdAt,
+              ).toLocaleString('en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}</span>
+            </div>
+          </div>
+
+          ${
+            requestData.preferences
+              ? `
+          <h3>Trip Preferences:</h3>
+          <div class="preferences-box">
+            ${requestData.preferences}
+          </div>
+          `
+              : ''
+          }
+
+          <a href="${process.env.ADMIN_URL || process.env.FRONTEND_URL}/admin/trip-requests/${requestData.requestId}" class="button">Assign Agent</a>
+          
+          <div class="timestamp">
+            <p>This is an automated notification from Zagotours Admin System</p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+  `;
+
+    await this.sendEmail({
+      to: this.fromEmail,
+      subject: `New Trip Request - ${requestData.destination} - Zagotours`,
+      html,
+    });
+  }
+  /**
    * Send anonymous callback notification to admin
    */
   static async sendAnonymousCallbackNotification(callbackData: {
@@ -746,93 +986,6 @@ export class EmailService {
     await this.sendEmail({
       to: this.fromEmail,
       subject: `Unassigned Callback Request - ${callbackData.name}`,
-      html,
-    });
-  }
-
-  /**
-   * Send agent notification for new scheduled call
-   */
-  static async sendAgentCallNotification(
-    agentEmail: string,
-    agentName: string,
-    callData: {
-      adventurerName: string;
-      adventurerEmail: string;
-      startTime: Date;
-      endTime: Date;
-      meetingLink?: string;
-      callId: string;
-    },
-  ): Promise<void> {
-    const html = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background-color: #10B981; color: white; padding: 20px; text-align: center; }
-          .content { padding: 20px; background-color: #f9fafb; }
-          .call-details { background-color: white; padding: 15px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #10B981; }
-          .detail-row { padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
-          .detail-row:last-child { border-bottom: none; }
-          .label { font-weight: bold; color: #6b7280; display: inline-block; width: 130px; }
-          .value { color: #111827; }
-          .button { display: inline-block; padding: 12px 24px; background-color: #10B981; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-          .calendar-button { background-color: #4F46E5; margin-left: 10px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>📅 New Call Scheduled</h1>
-          </div>
-          <div class="content">
-            <h2>Hi ${agentName},</h2>
-            <p>A trip planning call has been scheduled with one of your clients!</p>
-            
-            <div class="call-details">
-              <div class="detail-row">
-                <span class="label">Client:</span>
-                <span class="value">${callData.adventurerName}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Email:</span>
-                <span class="value">${callData.adventurerEmail}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Start Time:</span>
-                <span class="value">${new Date(
-                  callData.startTime,
-                ).toLocaleString('en-US', {
-                  dateStyle: 'full',
-                  timeStyle: 'short',
-                })}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Duration:</span>
-                <span class="value">${Math.round((new Date(callData.endTime).getTime() - new Date(callData.startTime).getTime()) / (1000 * 60))} minutes</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Call ID:</span>
-                <span class="value">${callData.callId}</span>
-              </div>
-            </div>
-
-            ${callData.meetingLink ? `<a href="${callData.meetingLink}" class="button">Join Meeting</a>` : ''}
-            <a href="${process.env.FRONTEND_URL}/agent/calls/${callData.callId}" class="button calendar-button">View in Dashboard</a>
-            
-            <p style="margin-top: 20px;">The event has been added to your Google Calendar. Prepare to discuss ${callData.adventurerName}'s travel plans!</p>
-          </div>
-        </div>
-      </body>
-    </html>
-  `;
-
-    await this.sendEmail({
-      to: agentEmail,
-      subject: `New Call Scheduled - ${callData.adventurerName} - Zagotours`,
       html,
     });
   }

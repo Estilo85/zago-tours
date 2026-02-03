@@ -31,7 +31,7 @@ export interface GeneralInquiry {
 export interface TripPlanningCall {
   id: string;
   adventurerId: string;
-  agentId: string;
+  agentId?: string;
   calendarEventId: string | null;
   meetingLink: string | null;
   startTime: Date;

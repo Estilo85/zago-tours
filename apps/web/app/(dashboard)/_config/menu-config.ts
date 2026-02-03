@@ -75,34 +75,22 @@ export const MENU_CONFIG = {
     [Role.INDEPENDENT_AGENT]: [
       { label: 'Dashboard', icon: LuBriefcase, href: '/independent-agent' },
       {
-        label: 'My Bookings',
+        label: 'Media kit',
         icon: LuTicket,
-        href: '/independent-agent/bookings',
-      },
-      {
-        label: 'Commissions',
-        icon: LuDollarSign,
-        href: '/independent-agent/commissions',
+        href: '/independent-agent/media-kit',
       },
     ],
     [Role.COOPERATE_AGENT]: [
       { label: 'Dashboard', icon: LuBuilding2, href: '/corporate-agent' },
       {
-        label: 'Team Management',
+        label: 'Trip-request',
         icon: LuUsers,
-        href: '/corporate-agent/team',
+        href: '/corporate-agent/trip-request',
       },
-      {
-        label: 'Client Management',
-        icon: LuUserPlus,
-        href: '/corporate-agent/clients',
-      },
-      { label: 'Reports', icon: BarChart, href: '/corporate-agent/reports' },
     ],
     [Role.ADVENTURER]: [
       { label: 'Dashboard', icon: LuPlane, href: '/adventurer' },
       { label: 'Requests', icon: LuPhone, href: '/adventurer/trip-requests' },
-      { label: 'Callbacks', icon: LuPhone, href: '/adventurer/callbacks' },
     ],
     [Role.AFFILIATE]: [
       { label: 'Dashboard', icon: LuDollarSign, href: '/affiliate' },

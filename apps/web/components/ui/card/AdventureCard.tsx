@@ -16,7 +16,13 @@ import { Adventure } from '@zagotours/types';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
 
-const AdventureCard = ({ adventure }: { adventure: Adventure }) => {
+const AdventureCard = ({
+  adventure,
+  href,
+}: {
+  adventure: Adventure;
+  href?: string;
+}) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;
 
   return (

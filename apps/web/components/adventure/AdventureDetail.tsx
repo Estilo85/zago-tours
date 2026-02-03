@@ -28,6 +28,7 @@ import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 import AdventureSkeleton from './AdevntureSkeleton';
 import { useAdventure } from '@/hooks';
 import { notFound } from 'next/navigation';
+import { ErrorState } from '../ui/ErrorState';
 
 interface AdventureDetailProps {
   adventureId: string;
@@ -36,17 +37,16 @@ interface AdventureDetailProps {
 export default function AdventureDetailPage({
   adventureId,
 }: AdventureDetailProps) {
-  const { data: adventure, isLoading, error } = useAdventure(adventureId);
+  const { data: response, isLoading, error } = useAdventure(adventureId);
 
-  console.log('Adventure data:', adventure); // Add this
-  console.log('Adventure title:', adventure?.title); // Add this
+  const adventure = response?.data;
 
   if (isLoading) {
     return <AdventureSkeleton />;
   }
 
   if (error || !adventure) {
-    return notFound();
+    return <ErrorState />;
   }
   const hasDiscount = false;
   const discountPrice = adventure.price * 0.9;
