@@ -1,22 +1,7 @@
 'use client';
 import { useDashboardStats, usePermissions } from '@/hooks';
-import {
-  isAdminStats,
-  isAdventurerStats,
-  isAffiliateStats,
-  isCorporateAgentStats,
-  isIndependentAgentStats,
-  useLeaderboard,
-} from '@/hooks/api/use-dashboard';
-import {
-  Box,
-  Stack,
-  Text,
-  Heading,
-  Spinner,
-  Center,
-  Flex,
-} from '@chakra-ui/react';
+import { useLeaderboard } from '@/hooks/api/use-dashboard';
+import { Box, Stack, Text, Heading, Flex } from '@chakra-ui/react';
 import {
   getAdminStatsConfig,
   getAdventurerStatsConfig,
@@ -32,17 +17,10 @@ import { TripRequestsTable } from '../_components/table/TripRequestTable';
 
 export default function DashboardPage() {
   const { data: statsData, isLoading: statsLoading } = useDashboardStats();
+  const { isAnyAdmin, isCooperateAgent } = usePermissions();
+
   const { data: leaderboardData, isLoading: leaderboardLoading } =
-    useLeaderboard();
-  const {
-    isAdmin,
-    isAdventurer,
-    isAnyAdmin,
-    isAnyAgent,
-    isAffiliate,
-    isSuperAdmin,
-    isCooperateAgent,
-  } = usePermissions();
+    useLeaderboard(isAnyAdmin);
 
   if (statsLoading) {
     return (
@@ -79,30 +57,13 @@ export default function DashboardPage() {
     }
   };
 
-  const getRoleName = () => {
-    switch (statsData.role) {
-      case 'ADMIN':
-      case 'SUPER_ADMIN':
-        return 'Admin Dashboard';
-      case 'COOPERATE_AGENT':
-        return 'Corporate Agent Dashboard';
-      case 'INDEPENDENT_AGENT':
-        return 'Independent Agent Dashboard';
-      case 'AFFILIATE':
-        return 'Affiliate Dashboard';
-      case 'ADVENTURER':
-        return 'My Dashboard';
-      default:
-        return 'Dashboard';
-    }
-  };
-
   return (
     <Box p={6}>
       <Stack gap={8}>
         {/* Stats Grid */}
         <StatsGrid stats={getStatsConfig()} isLoading={statsLoading} />
 
+        {/* Corporate Agent Specific: Trip Requests Table */}
         {isCooperateAgent && (
           <>
             <TripRequestsTable />

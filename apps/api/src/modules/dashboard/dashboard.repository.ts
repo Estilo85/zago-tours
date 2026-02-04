@@ -20,127 +20,32 @@ export class DashboardRepository extends BaseRepository<
 
   // ==================== ADVENTURER STATS ====================
   async getAdventurerStats(userId: string): Promise<AdventurerStats> {
-    const [
-      upcomingEvents,
-      completedEvents,
-      totalBookings,
-      likedAdventures,
-      postsCreated,
-      reviewsWritten,
-      scheduledCalls,
-      tripRequests,
-      callbackRequests,
-      totalReferrals,
-      activeReferrals,
-    ] = await this.prisma.$transaction([
-      // Upcoming events
-      this.prisma.eventRegistration.count({
-        where: {
-          userId,
-          status: 'CONFIRMED',
-          event: { date: { gte: new Date() } },
-        },
-      }),
-      // Completed/attended events
-      this.prisma.eventRegistration.count({
-        where: {
-          userId,
-          status: 'ATTENDED',
-        },
-      }),
-      // Total bookings (all registrations)
-      this.prisma.eventRegistration.count({
-        where: { userId },
-      }),
-      // Liked adventures
-      this.prisma.adventureLike.count({
-        where: { userId },
-      }),
-      // Posts created
-      this.prisma.post.count({
-        where: { userId },
-      }),
-      // Reviews written
-      this.prisma.review.count({
-        where: { userId },
-      }),
-      // Scheduled calls (as adventurer)
-      this.prisma.tripPlanningCall.count({
-        where: {
-          adventurerId: userId,
-          status: 'SCHEDULED',
-        },
-      }),
-      // Trip requests submitted by this adventurer
-      this.prisma.tripRequest.count({
-        where: { adventurerId: userId },
-      }),
-      // Callback requests submitted by this adventurer
-      this.prisma.callbackRequest.count({
-        where: { adventurerId: userId },
-      }),
+    const [totalReferred, totalUnlockedTours] = await this.prisma.$transaction([
       // Total referrals
       this.prisma.user.count({
         where: { referredById: userId },
       }),
-      // Active referrals
-      this.prisma.user.count({
-        where: { referredById: userId, status: 'ACTIVE' },
+      // Total unlocked/active adventures in the platform
+      this.prisma.adventure.count({
+        where: { status: 'ACTIVE' },
       }),
     ]);
 
     return {
-      trips: {
-        upcomingEvents,
-        completedEvents,
-        totalBookings,
-      },
-      engagement: {
-        likedAdventures,
-        postsCreated,
-        reviewsWritten,
-      },
-      planning: {
-        scheduledCalls,
-        tripRequests,
-        callbackRequests,
-      },
-      referrals: {
-        total: totalReferrals,
-        active: activeReferrals,
-        pointsEarned: totalReferrals * 100,
-      },
+      totalReferred,
+      totalUnlockedTours,
     };
   }
 
   // ==================== CORPORATE AGENT STATS ====================
   async getCorporateAgentStats(userId: string): Promise<CorporateAgentStats> {
-    const [tripRequests, callbackRequests, totalReferrals, activeReferrals] =
-      await this.prisma.$transaction([
-        // Trip requests submitted by this corporate agent
-        this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
-        // Callback requests submitted by this corporate agent
-        this.prisma.callbackRequest.count({
-          where: { adventurerId: userId },
-        }),
-        // Total referrals
-        this.prisma.user.count({ where: { referredById: userId } }),
-        // Active referrals
-        this.prisma.user.count({
-          where: { referredById: userId, status: 'ACTIVE' },
-        }),
-      ]);
+    // Trip requests submitted by this corporate agent
+    const totalTripRequests = await this.prisma.tripRequest.count({
+      where: { adventurerId: userId },
+    });
 
     return {
-      requests: {
-        totalTripRequests: tripRequests,
-        totalCallbackRequests: callbackRequests,
-      },
-      referrals: {
-        total: totalReferrals,
-        active: activeReferrals,
-        pointsEarned: totalReferrals * 100,
-      },
+      totalTripRequests,
     };
   }
 
@@ -148,108 +53,45 @@ export class DashboardRepository extends BaseRepository<
   async getIndependentAgentStats(
     userId: string,
   ): Promise<IndependentAgentStats> {
-    const [
-      upcoming,
-      completed,
-      cancelled,
-      tripRequests,
-      callbackRequests,
-      totalReferrals,
-      activeReferrals,
-    ] = await this.prisma.$transaction([
-      // Upcoming calls (as agent)
-      this.prisma.tripPlanningCall.count({
-        where: { agentId: userId, status: 'SCHEDULED' },
-      }),
-      // Completed calls (as agent)
-      this.prisma.tripPlanningCall.count({
-        where: { agentId: userId, status: 'COMPLETED' },
-      }),
-      // Cancelled calls (as agent)
-      this.prisma.tripPlanningCall.count({
-        where: { agentId: userId, status: 'CANCELLED' },
-      }),
-      // Trip requests submitted by this independent agent
-      this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
-      // Callback requests submitted by this independent agent
-      this.prisma.callbackRequest.count({
-        where: { adventurerId: userId },
-      }),
-      // Total referrals
-      this.prisma.user.count({ where: { referredById: userId } }),
-      // Active referrals
-      this.prisma.user.count({
-        where: { referredById: userId, status: 'ACTIVE' },
-      }),
-    ]);
+    const [upcomingCalls, completedCalls, totalReferrals, totalBookings] =
+      await this.prisma.$transaction([
+        // Upcoming calls (as agent)
+        this.prisma.tripPlanningCall.count({
+          where: { agentId: userId, status: 'SCHEDULED' },
+        }),
+        // Completed calls (as agent)
+        this.prisma.tripPlanningCall.count({
+          where: { agentId: userId, status: 'COMPLETED' },
+        }),
+        // Total referrals
+        this.prisma.user.count({ where: { referredById: userId } }),
+        // Total bookings (trip requests submitted by this agent)
+        this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
+      ]);
 
-    const referralPoints = totalReferrals * 100;
-    const callPoints = completed * 50;
+    const pointsEarnedPerReferral = totalReferrals * 100;
 
     return {
-      calls: {
-        upcomingCalls: upcoming,
-        completedCalls: completed,
-        cancelledCalls: cancelled,
-      },
-      requests: {
-        totalTripRequests: tripRequests,
-        totalCallbackRequests: callbackRequests,
-      },
-      referrals: {
-        total: totalReferrals,
-        active: activeReferrals,
-        pointsEarned: referralPoints,
-      },
-      totalPointsEarned: referralPoints + callPoints,
+      upcomingCalls,
+      completedCalls,
+      pointsEarnedPerReferral,
+      totalBookings,
     };
   }
 
   // ==================== AFFILIATE STATS ====================
   async getAffiliateStats(userId: string): Promise<AffiliateStats> {
-    const [totalReferrals, activeReferrals, referralsByRole] =
-      await this.prisma.$transaction([
-        this.prisma.user.count({ where: { referredById: userId } }),
-        this.prisma.user.count({
-          where: { referredById: userId, status: 'ACTIVE' },
-        }),
-        this.prisma.user.groupBy({
-          by: ['role'],
-          where: { referredById: userId },
-          _count: { role: true },
-          orderBy: { _count: { role: 'desc' } },
-        }),
-      ]);
-
-    const breakdown = {
-      adventurers: 0,
-      independentAgents: 0,
-      corporateAgents: 0,
-      affiliates: 0,
-    };
-
-    // Cast group to handle the Prisma Union type error
-    (referralsByRole as any[]).forEach((group) => {
-      const count = group._count?.role || 0;
-      switch (group.role) {
-        case Role.ADVENTURER:
-          breakdown.adventurers = count;
-          break;
-        case Role.INDEPENDENT_AGENT:
-          breakdown.independentAgents = count;
-          break;
-        case Role.COOPERATE_AGENT:
-          breakdown.corporateAgents = count;
-          break;
-        case Role.AFFILIATE:
-          breakdown.affiliates = count;
-          break;
-      }
-    });
+    const [totalReferred, totalBookings] = await this.prisma.$transaction([
+      // Total referrals
+      this.prisma.user.count({ where: { referredById: userId } }),
+      // Total bookings (trip requests submitted by this affiliate)
+      this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
+    ]);
 
     return {
-      referrals: { total: totalReferrals, active: activeReferrals, breakdown },
-      pointsEarned: totalReferrals * 100,
+      totalReferred,
+      totalBookings,
+      pointsEarned: totalReferred * 100,
     };
   }
 

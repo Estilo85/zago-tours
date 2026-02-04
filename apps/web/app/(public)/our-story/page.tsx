@@ -8,6 +8,8 @@ import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-ste
 import { Box, Heading, Text, Stack, Center } from '@chakra-ui/react';
 import React from 'react';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import Button from '@/components/ui/button/Button';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 export const mySteps = [
   {
@@ -124,6 +126,11 @@ export default function OurStory() {
         </Stack>
         <TransformationSection />
         <PurposeSection />
+        <Box>
+          <AppLink href='/register'>
+            <Button bg='secondary'>Join us</Button>
+          </AppLink>
+        </Box>
       </Stack>
     </Box>
   );

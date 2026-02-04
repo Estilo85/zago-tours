@@ -26,15 +26,13 @@ const adminMenuItems = [
   { label: 'Dashboard', icon: LuShieldCheck, href: '/dashboard' },
 
   // User Management
-  { label: 'Manage Users', icon: LuUsers, href: '/admin/users' },
-  { label: 'Manage Agents', icon: LuBriefcase, href: '/admin/agents' },
-  { label: 'Manage Affiliates', icon: LuUserPlus, href: '/admin/affiliates' },
+  { label: 'Users', icon: LuUsers, href: '/admin/users' },
 
   // Content Management
-  { label: 'Manage Adventures', icon: LuMapPin, href: '/admin/adventures' },
-  { label: 'Manage Events', icon: LuCalendar, href: '/admin/events' },
-  { label: 'Manage Reviews', icon: LuStar, href: '/admin/reviews' },
-  { label: 'Community Posts', icon: LuMessagesSquare, href: '/admin/posts' },
+  { label: 'Adventures', icon: LuMapPin, href: '/admin/adventures' },
+  { label: 'Events', icon: LuCalendar, href: '/admin/events' },
+  { label: 'Reviews', icon: LuStar, href: '/admin/reviews' },
+  { label: 'Posts', icon: LuMessagesSquare, href: '/admin/posts' },
 
   // Requests & Planning
   {
@@ -47,12 +45,7 @@ const adminMenuItems = [
   { label: 'Inquiries', icon: LuFileText, href: '/admin/inquiries' },
 
   // Business Management
-  { label: 'Contracts', icon: LuSignature, href: '/admin/contracts' },
   { label: 'Destinations', icon: LuGlobe, href: '/admin/destinations' },
-
-  // Analytics & Reports
-  { label: 'System Analytics', icon: PieChart, href: '/admin/analytics' },
-  { label: 'Reports', icon: BarChart, href: '/admin/reports' },
 
   // Settings
   { label: 'Platform Settings', icon: LuSettings, href: '/admin/settings' },
@@ -65,7 +58,7 @@ export const MENU_CONFIG = {
       { label: 'Adventures', icon: LuMapPin, href: '/adventure' },
     ],
     support: [
-      { label: 'Help Center', icon: HelpCircle, href: '/help' },
+      { label: 'Help', icon: HelpCircle, href: '/help' },
       { label: 'Settings', icon: LuSettings, href: '/setting' },
     ],
   },
@@ -75,7 +68,7 @@ export const MENU_CONFIG = {
     [Role.INDEPENDENT_AGENT]: [
       { label: 'Dashboard', icon: LuBriefcase, href: '/dashboard' },
       {
-        label: 'Media kit',
+        label: 'Media kits',
         icon: LuTicket,
         href: '/independent-agent/media-kit',
       },
@@ -90,12 +83,15 @@ export const MENU_CONFIG = {
     ],
     [Role.ADVENTURER]: [
       { label: 'Dashboard', icon: LuPlane, href: '/dashboard' },
-      { label: 'Requests', icon: LuPhone, href: '/adventurer/trip-requests' },
+      {
+        label: 'Unlocked Tours',
+        icon: LuMapPin,
+        href: '/adventurer/tours',
+      },
     ],
     [Role.AFFILIATE]: [
       { label: 'Dashboard', icon: LuDollarSign, href: '/dashboard' },
-      { label: 'My Referrals', icon: LuUserPlus, href: '/affiliate/referrals' },
-      { label: 'Earnings', icon: LuDollarSign, href: '/affiliate/earnings' },
+      { label: 'Contracts', icon: LuUserPlus, href: '/affiliate/contracts' },
     ],
   },
 };

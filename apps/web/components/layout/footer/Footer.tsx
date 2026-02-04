@@ -26,8 +26,8 @@ import { Send } from 'lucide-react';
 import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
 
 const support = [
-  { label: 'Privacy Policy', href: '#' },
-  { label: 'Terms & Condition', href: '#' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms & Condition', href: '/terms-and-condition' },
   { label: 'Safety Release Form', href: '#' },
 ];
 

@@ -3,6 +3,7 @@ import { Stack, Text, Icon, Box } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { MENU_CONFIG } from '../../_config/menu-config';
+import { usePermissions } from '@/hooks';
 
 export const Sidebar = ({
   role,
@@ -12,7 +13,7 @@ export const Sidebar = ({
   onClose?: () => void;
 }) => {
   const pathname = usePathname();
-
+  const { isAffiliate } = usePermissions();
   // ==== NAV ITEM ====
   const NavItem = ({ item }: any) => {
     const isActive = pathname === item.href;
@@ -66,9 +67,10 @@ export const Sidebar = ({
               <NavItem key={item.href} item={item} />
             ),
           )}
-          {MENU_CONFIG.common.main.map((item) => (
-            <NavItem key={item.href} item={item} />
-          ))}
+          {!isAffiliate &&
+            MENU_CONFIG.common.main.map((item) => (
+              <NavItem key={item.href} item={item} />
+            ))}
         </Stack>
 
         <SectionHeading>Support</SectionHeading>

@@ -7,29 +7,17 @@ import {
   TripType,
   UserStatus,
 } from './enums';
-
 export const TripTypeLabels: Record<TripType, string> = {
   HIKING: 'Hiking',
-  TREKKING: 'Trekking',
-  SAFARI: 'Safari',
-  WATER_SPORTS: 'Water Sports',
-  WINTER_SPORTS: 'Winter Sports',
-  CULTURAL: 'Cultural & History',
-  WELLNESS: 'Wellness & Yoga',
-  PHOTOGRAPHY: 'Photography',
-  VOLUNTEERING: 'Volunteering',
-  EXPEDITION: 'Expedition',
-  ROAD_TRIP: 'Road Trip',
-  BACKPACKING: 'Backpacking',
-  EXTREME_SPORTS: 'Extreme Sports',
-  WILDLIFE: 'Wildlife & Nature',
-  URBAN_EXPLORATION: 'Urban Exploration',
-  CYCLING: 'Cycling',
-  CLIMBING: 'Mountain Climbing',
-  DIVING: 'Scuba Diving',
-  SURFING: 'Surfing',
   KAYAKING: 'Kayaking',
-  OTHER: 'Other',
+  CANOEING: 'Canoeing',
+  SNOWBOARDING: 'Snowboarding',
+  TREKKING: 'Trekking',
+  SKIING: 'Skiing',
+  SKYDIVING: 'Skydiving',
+  SAFARIS: 'Safaris',
+  CLIMBING: 'Mountain Climbing',
+  JUMPING: 'Bungee Jumping',
 };
 
 export const RoleLabels: Record<Role, string> = {

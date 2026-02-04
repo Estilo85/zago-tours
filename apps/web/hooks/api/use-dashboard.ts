@@ -4,6 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { DashboardStatsResponse, TopPerformers } from '@zagotours/types';
 
+/**
+ * Fetch dashboard statistics for the authenticated user
+ * This works for all roles - returns role-specific stats
+ */
 export function useDashboardStats() {
   return useQuery<DashboardStatsResponse>({
     queryKey: dashboardKeys.stats(),
@@ -11,31 +15,50 @@ export function useDashboardStats() {
   });
 }
 
-export function useLeaderboard() {
+/**
+ * Fetch leaderboard data
+ * IMPORTANT: Only admins/super admins can access this endpoint
+ *
+ * @param limit - Number of top performers to fetch (default: 10)
+ * @param enabled - Whether to execute the query (should be isAnyAdmin)
+ */
+export function useLeaderboard(enabled: boolean = false) {
   return useQuery<TopPerformers>({
     queryKey: dashboardKeys.leaderboard(),
     queryFn: () => apiRequest(API_ENDPOINTS.DASHBOARD.LEADERBOARD),
+    enabled,
   });
 }
 
-export function useAgentStats(agentId: string) {
+/**
+ * Fetch specific agent statistics
+ * Admin/Super Admin only
+ */
+export function useAgentStats(agentId: string, enabled: boolean = true) {
   return useQuery({
     queryKey: dashboardKeys.agentStats(agentId),
     queryFn: () => apiRequest(API_ENDPOINTS.DASHBOARD.AGENT_STATS(agentId)),
-    enabled: !!agentId,
+    enabled: enabled && !!agentId,
   });
 }
 
-export function useAffiliateStats(affiliateId: string) {
+/**
+ * Fetch specific affiliate statistics
+ * Admin/Super Admin only
+ */
+export function useAffiliateStats(
+  affiliateId: string,
+  enabled: boolean = true,
+) {
   return useQuery({
     queryKey: dashboardKeys.affiliateStats(affiliateId),
     queryFn: () =>
       apiRequest(API_ENDPOINTS.DASHBOARD.AFFILIATE_STATS(affiliateId)),
-    enabled: !!affiliateId,
+    enabled: enabled && !!affiliateId,
   });
 }
 
-// Type guards for narrowing stats types
+// Type guards for narrowing stats types based on role
 export const isAdminStats = (
   response: DashboardStatsResponse,
 ): response is Extract<

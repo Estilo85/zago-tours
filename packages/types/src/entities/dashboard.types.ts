@@ -7,83 +7,46 @@ import { Role } from '../enums';
  */
 export interface ReferralMetrics {
   total: number;
-  active: number;
   pointsEarned: number;
-}
-
-export interface CallMetrics {
-  upcomingCalls: number;
-  completedCalls: number;
-  cancelledCalls: number;
-}
-
-export interface RequestMetrics {
-  totalTripRequests: number;
-  totalCallbackRequests: number;
-}
-
-export interface ReferralBreakdown {
-  adventurers: number;
-  independentAgents: number;
-  corporateAgents: number;
-  affiliates: number;
 }
 
 // ==================== ROLE-SPECIFIC STATS ====================
 
 /**
  * Dashboard statistics for Adventurers
- * Shows their travel activity and engagement
+ * Shows total referrals and unlocked tours
  */
 export interface AdventurerStats {
-  trips: {
-    upcomingEvents: number;
-    completedEvents: number;
-    totalBookings: number;
-  };
-  engagement: {
-    likedAdventures: number;
-    postsCreated: number;
-    reviewsWritten: number;
-  };
-  planning: {
-    scheduledCalls: number;
-    tripRequests: number;
-    callbackRequests: number;
-  };
-  referrals: ReferralMetrics;
+  totalReferred: number;
+  totalUnlockedTours: number;
 }
 
 /**
  * Dashboard statistics for Corporate Agents
- * Shows their own requests and referrals (no assignment system)
+ * Shows only trip requests
  */
 export interface CorporateAgentStats {
-  requests: RequestMetrics;
-  referrals: ReferralMetrics;
+  totalTripRequests: number;
 }
 
 /**
  * Dashboard statistics for Independent Agents
- * Shows calls, requests, and referrals with point tracking
+ * Shows calls, bookings, and referral points
  */
 export interface IndependentAgentStats {
-  calls: CallMetrics;
-  requests: RequestMetrics;
-  referrals: ReferralMetrics;
-  totalPointsEarned: number;
+  upcomingCalls: number;
+  completedCalls: number;
+  pointsEarnedPerReferral: number;
+  totalBookings: number;
 }
 
 /**
  * Dashboard statistics for Affiliates
- * Shows detailed referral breakdown and point tracking
+ * Shows referrals, bookings, and points earned
  */
 export interface AffiliateStats {
-  referrals: {
-    total: number;
-    active: number;
-    breakdown: ReferralBreakdown;
-  };
+  totalReferred: number;
+  totalBookings: number;
   pointsEarned: number;
 }
 
@@ -169,8 +132,6 @@ export interface TopPerformers {
     pointsEarned: number;
   }>;
 }
-
-// ==================== ANALYTICS DTOs (Optional - for future analytics endpoints) ====================
 
 /**
  * Date range filter for analytics queries

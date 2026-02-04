@@ -7,8 +7,6 @@ import {
   LuStar,
   LuTrendingUp,
   LuFileText,
-  LuHeart,
-  LuMessageSquare,
   LuClipboardList,
 } from 'react-icons/lu';
 import {
@@ -69,25 +67,9 @@ export const getCorporateAgentStatsConfig = (
   data: CorporateAgentStats,
 ): StatCardData[] => [
   {
-    label: 'My Trip Requests',
-    value: data?.requests?.totalTripRequests.toLocaleString(),
+    label: 'Total Trip Requests',
+    value: data?.totalTripRequests.toLocaleString(),
     icon: LuPlaneTakeoff,
-  },
-  {
-    label: 'My Callback Requests',
-    value: data?.requests?.totalCallbackRequests.toLocaleString(),
-    icon: LuPhone,
-  },
-  {
-    label: 'Total Referrals',
-    value: data?.referrals.total.toLocaleString(),
-    trend: `${data?.referrals.active} active`,
-    icon: LuUserPlus,
-  },
-  {
-    label: 'Points Earned',
-    value: data?.referrals.pointsEarned.toLocaleString(),
-    icon: LuStar,
   },
 ];
 
@@ -96,33 +78,22 @@ export const getIndependentAgentStatsConfig = (
 ): StatCardData[] => [
   {
     label: 'Upcoming Calls',
-    value: data?.calls.upcomingCalls.toLocaleString(),
+    value: data?.upcomingCalls.toLocaleString(),
     icon: LuCalendarCheck,
   },
   {
     label: 'Completed Calls',
-    value: data?.calls.completedCalls.toLocaleString(),
+    value: data?.completedCalls.toLocaleString(),
     icon: LuPhone,
   },
   {
-    label: 'My Trip Requests',
-    value: data?.requests.totalTripRequests.toLocaleString(),
+    label: 'Total Bookings',
+    value: data?.totalBookings.toLocaleString(),
     icon: LuPlaneTakeoff,
   },
   {
-    label: 'My Callback Requests',
-    value: data?.requests.totalCallbackRequests.toLocaleString(),
-    icon: LuClipboardList,
-  },
-  {
-    label: 'Total Referrals',
-    value: data?.referrals.total.toLocaleString(),
-    trend: `${data?.referrals.active} active`,
-    icon: LuUserPlus,
-  },
-  {
-    label: 'Total Points',
-    value: data?.totalPointsEarned.toLocaleString(),
+    label: 'Points Earned (Referrals)',
+    value: data?.pointsEarnedPerReferral.toLocaleString(),
     icon: LuTrendingUp,
   },
 ];
@@ -131,34 +102,19 @@ export const getAffiliateStatsConfig = (
   data: AffiliateStats,
 ): StatCardData[] => [
   {
-    label: 'Total Referrals',
-    value: data?.referrals.total.toLocaleString(),
+    label: 'Total Referred',
+    value: data?.totalReferred.toLocaleString(),
     icon: LuUserPlus,
   },
   {
-    label: 'Active Referrals',
-    value: data?.referrals.active.toLocaleString(),
-    icon: LuUsers,
+    label: 'Total Bookings',
+    value: data?.totalBookings.toLocaleString(),
+    icon: LuClipboardList,
   },
   {
     label: 'Points Earned',
     value: data?.pointsEarned.toLocaleString(),
     icon: LuStar,
-  },
-  {
-    label: 'Adventurers',
-    value: data?.referrals.breakdown.adventurers.toLocaleString(),
-    icon: LuPlaneTakeoff,
-  },
-  {
-    label: 'Independent Agents',
-    value: data?.referrals.breakdown.independentAgents.toLocaleString(),
-    icon: LuUsers,
-  },
-  {
-    label: 'Corporate Agents',
-    value: data?.referrals.breakdown.corporateAgents.toLocaleString(),
-    icon: LuUsers,
   },
 ];
 
@@ -166,45 +122,13 @@ export const getAdventurerStatsConfig = (
   data: AdventurerStats,
 ): StatCardData[] => [
   {
-    label: 'Upcoming Events',
-    value: data?.trips.upcomingEvents.toLocaleString(),
-    icon: LuCalendarCheck,
-  },
-  {
-    label: 'Completed Events',
-    value: data?.trips.completedEvents.toLocaleString(),
-    trend: `${data?.trips.totalBookings} total`,
-    icon: LuCalendarCheck,
-  },
-  {
-    label: 'Liked Adventures',
-    value: data?.engagement.likedAdventures.toLocaleString(),
-    icon: LuHeart,
-  },
-  {
-    label: 'Posts Created',
-    value: data?.engagement.postsCreated.toLocaleString(),
-    icon: LuMessageSquare,
-  },
-  {
-    label: 'Reviews Written',
-    value: data?.engagement.reviewsWritten.toLocaleString(),
-    icon: LuStar,
-  },
-  {
-    label: 'Trip Requests',
-    value: data?.planning.tripRequests.toLocaleString(),
-    icon: LuPlaneTakeoff,
-  },
-  {
-    label: 'Scheduled Calls',
-    value: data?.planning.scheduledCalls.toLocaleString(),
-    icon: LuPhone,
-  },
-  {
-    label: 'Referral Points',
-    value: data?.referrals.pointsEarned.toLocaleString(),
-    trend: `${data?.referrals.total} referrals (${data?.referrals.active} active)`,
+    label: 'Total Referred',
+    value: data?.totalReferred.toLocaleString(),
     icon: LuUserPlus,
+  },
+  {
+    label: 'Total Unlocked Tours',
+    value: data?.totalUnlockedTours.toLocaleString(),
+    icon: LuPlaneTakeoff,
   },
 ];
