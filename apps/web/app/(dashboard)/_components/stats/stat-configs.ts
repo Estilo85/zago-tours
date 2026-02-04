@@ -102,22 +102,22 @@ export const getAffiliateStatsConfig = (
 ): StatCardData[] => [
   {
     label: 'Total Referrals',
-    value: data.referrals.total.toLocaleString(),
+    value: data?.referrals.total.toLocaleString(),
     icon: LuUserPlus,
   },
   {
     label: 'Active Referrals',
-    value: data.referrals.active.toLocaleString(),
+    value: data?.referrals.active.toLocaleString(),
     icon: LuUsers,
   },
   {
     label: 'Points Earned',
-    value: data.pointsEarned.toLocaleString(),
+    value: data?.pointsEarned.toLocaleString(),
     icon: LuStar,
   },
   {
     label: 'Adventurers',
-    value: data.referrals.breakdown.adventurers.toLocaleString(),
+    value: data?.referrals.breakdown.adventurers.toLocaleString(),
     icon: LuPlaneTakeoff,
   },
 ];
