@@ -11,7 +11,6 @@ import {
 } from '@zagotours/types';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
-import { getRedirectUrlByRole } from '@/lib/auth-redirect';
 import { authKeys } from './query-keys';
 
 // ============================================
@@ -41,25 +40,16 @@ export function useAuth() {
       return result;
     },
     onSuccess: async () => {
-      const session = await getSession();
-      const userRole = session?.user?.role as Role;
-
       await queryClient.invalidateQueries({ queryKey: authKeys.session() });
       await queryClient.invalidateQueries({ queryKey: authKeys.profile() });
 
-      if (userRole) {
-        const destination = getRedirectUrlByRole(userRole);
+      toaster.create({
+        title: 'Welcome back!',
+        description: `Logged in successfully`,
+        type: 'success',
+      });
 
-        toaster.create({
-          title: 'Welcome back!',
-          description: `Logged in`,
-          type: 'success',
-        });
-
-        router.push(destination);
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
 
       router.refresh();
     },

@@ -23,7 +23,7 @@ import {
 
 // Comprehensive admin menu items
 const adminMenuItems = [
-  { label: 'Dashboard', icon: LuShieldCheck, href: '/admin' },
+  { label: 'Dashboard', icon: LuShieldCheck, href: '/dashboard' },
 
   // User Management
   { label: 'Manage Users', icon: LuUsers, href: '/admin/users' },
@@ -73,7 +73,7 @@ export const MENU_CONFIG = {
     [Role.SUPER_ADMIN]: adminMenuItems,
     [Role.ADMIN]: adminMenuItems,
     [Role.INDEPENDENT_AGENT]: [
-      { label: 'Dashboard', icon: LuBriefcase, href: '/independent-agent' },
+      { label: 'Dashboard', icon: LuBriefcase, href: '/dashboard' },
       {
         label: 'Media kit',
         icon: LuTicket,
@@ -81,7 +81,7 @@ export const MENU_CONFIG = {
       },
     ],
     [Role.COOPERATE_AGENT]: [
-      { label: 'Dashboard', icon: LuBuilding2, href: '/corporate-agent' },
+      { label: 'Dashboard', icon: LuBuilding2, href: '/dashboard' },
       {
         label: 'Trip-request',
         icon: LuUsers,
@@ -89,11 +89,11 @@ export const MENU_CONFIG = {
       },
     ],
     [Role.ADVENTURER]: [
-      { label: 'Dashboard', icon: LuPlane, href: '/adventurer' },
+      { label: 'Dashboard', icon: LuPlane, href: '/dashboard' },
       { label: 'Requests', icon: LuPhone, href: '/adventurer/trip-requests' },
     ],
     [Role.AFFILIATE]: [
-      { label: 'Dashboard', icon: LuDollarSign, href: '/affiliate' },
+      { label: 'Dashboard', icon: LuDollarSign, href: '/dashboard' },
       { label: 'My Referrals', icon: LuUserPlus, href: '/affiliate/referrals' },
       { label: 'Earnings', icon: LuDollarSign, href: '/affiliate/earnings' },
     ],
