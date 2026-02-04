@@ -8,7 +8,15 @@ import {
   isIndependentAgentStats,
   useLeaderboard,
 } from '@/hooks/api/use-dashboard';
-import { Box, Stack, Text, Heading, Spinner, Center } from '@chakra-ui/react';
+import {
+  Box,
+  Stack,
+  Text,
+  Heading,
+  Spinner,
+  Center,
+  Flex,
+} from '@chakra-ui/react';
 import {
   getAdminStatsConfig,
   getAdventurerStatsConfig,
@@ -89,22 +97,9 @@ export default function DashboardPage() {
     }
   };
 
-  const showLeaderboard =
-    statsData.role === 'ADMIN' || statsData.role === 'SUPER_ADMIN';
-
   return (
     <Box p={6}>
       <Stack gap={8}>
-        {/* Header */}
-        <Box>
-          <Heading size='xl' mb={2}>
-            {getRoleName()}
-          </Heading>
-          <Text color='gray.600'>
-            Overview of your activities and performance
-          </Text>
-        </Box>
-
         {/* Stats Grid */}
         <StatsGrid stats={getStatsConfig()} isLoading={statsLoading} />
 
@@ -191,9 +186,6 @@ export default function DashboardPage() {
             border='1px solid'
             borderColor='green.200'
           >
-            <Heading size='sm' mb={2} color='green.900'>
-              🌟 Welcome, Adventurer!
-            </Heading>
             <Text fontSize='sm' color='green.800'>
               Start planning your next adventure! You have{' '}
               {statsData.stats.planning.tripRequests} pending trip requests and{' '}
@@ -221,7 +213,9 @@ export default function DashboardPage() {
           </Box>
         )}
       </Stack>
-      <ReferralCard />
+      <Flex my={6}>
+        <ReferralCard />
+      </Flex>
     </Box>
   );
 }
