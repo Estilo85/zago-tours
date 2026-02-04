@@ -5,7 +5,7 @@ import TransformationSection from '@/components/our-story/TransformationSection'
 import PurposeSection from '@/components/our-story/PurposeSection';
 import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-step';
 
-import { Box, Heading, Text, Stack, Image, Center } from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, Center } from '@chakra-ui/react';
 import React from 'react';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 

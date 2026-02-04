@@ -1,7 +1,6 @@
 'use client';
-import { Stack, Text, HStack, Icon, Box } from '@chakra-ui/react';
+import { Stack, Text, Icon, Box } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
-import { LuLogOut } from 'react-icons/lu';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { MENU_CONFIG } from '../../_config/menu-config';
 
