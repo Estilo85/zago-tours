@@ -77,22 +77,22 @@ export const getIndependentAgentStatsConfig = (
 ): StatCardData[] => [
   {
     label: 'Upcoming Calls',
-    value: data.calls.upcomingCalls.toLocaleString(),
+    value: data?.calls.upcomingCalls.toLocaleString(),
     icon: LuCalendarCheck,
   },
   {
     label: 'Completed Calls',
-    value: data.calls.completedCalls.toLocaleString(),
+    value: data?.calls.completedCalls.toLocaleString(),
     icon: LuPhone,
   },
   {
     label: 'Total Referrals',
-    value: data.referrals.total.toLocaleString(),
+    value: data?.referrals.total.toLocaleString(),
     icon: LuUserPlus,
   },
   {
     label: 'Total Points',
-    value: data.totalPointsEarned.toLocaleString(),
+    value: data?.totalPointsEarned.toLocaleString(),
     icon: LuTrendingUp,
   },
 ];
@@ -127,23 +127,23 @@ export const getAdventurerStatsConfig = (
 ): StatCardData[] => [
   {
     label: 'Upcoming Events',
-    value: data.trips.upcomingEvents.toLocaleString(),
+    value: data?.trips.upcomingEvents.toLocaleString(),
     icon: LuCalendarCheck,
   },
   {
     label: 'Liked Adventures',
-    value: data.engagement.likedAdventures.toLocaleString(),
+    value: data?.engagement.likedAdventures.toLocaleString(),
     icon: LuHeart,
   },
   {
     label: 'Reviews Written',
-    value: data.engagement.reviewsWritten.toLocaleString(),
+    value: data?.engagement.reviewsWritten.toLocaleString(),
     icon: LuStar,
   },
   {
     label: 'Referral Points',
-    value: data.referrals.pointsEarned.toLocaleString(),
-    trend: `${data.referrals.total} referrals`,
+    value: data?.referrals.pointsEarned.toLocaleString(),
+    trend: `${data?.referrals.total} referrals`,
     icon: LuUserPlus,
   },
 ];
