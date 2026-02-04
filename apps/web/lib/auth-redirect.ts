@@ -4,21 +4,21 @@ export function getRedirectUrlByRole(role: Role): string {
   switch (role) {
     case Role.SUPER_ADMIN:
     case Role.ADMIN:
-      return '/admin';
+      return '/dashboard/admin';
 
     case Role.INDEPENDENT_AGENT:
-      return '/independent-agent';
+      return '/dashboard/independent-agent';
 
     case Role.COOPERATE_AGENT:
-      return '/corporate-agent';
+      return '/dashboard/corporate-agent';
 
     case Role.ADVENTURER:
-      return '/adventurer';
+      return '/dashboard/adventurer';
 
     case Role.AFFILIATE:
-      return '/affiliate';
+      return '/dashboard/affiliate';
 
     default:
-      return '/';
+      return '/dashboard';
   }
 }

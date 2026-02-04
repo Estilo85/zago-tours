@@ -18,8 +18,6 @@ export class DashboardRepository extends BaseRepository<
   // Point the delegate to user
   protected readonly modelDelegate = prisma.user;
 
-  // Add to dashboard.repository.ts
-
   // ==================== ADVENTURER STATS ====================
   async getAdventurerStats(userId: string): Promise<AdventurerStats> {
     const [
@@ -32,7 +30,8 @@ export class DashboardRepository extends BaseRepository<
       scheduledCalls,
       tripRequests,
       callbackRequests,
-      referrals,
+      totalReferrals,
+      activeReferrals,
     ] = await this.prisma.$transaction([
       // Upcoming events
       this.prisma.eventRegistration.count({
@@ -65,24 +64,28 @@ export class DashboardRepository extends BaseRepository<
       this.prisma.review.count({
         where: { userId },
       }),
-      // Scheduled calls
+      // Scheduled calls (as adventurer)
       this.prisma.tripPlanningCall.count({
         where: {
           adventurerId: userId,
           status: 'SCHEDULED',
         },
       }),
-      // Trip requests
+      // Trip requests submitted by this adventurer
       this.prisma.tripRequest.count({
         where: { adventurerId: userId },
       }),
-      // Callback requests
+      // Callback requests submitted by this adventurer
       this.prisma.callbackRequest.count({
         where: { adventurerId: userId },
       }),
-      // Referrals
+      // Total referrals
       this.prisma.user.count({
         where: { referredById: userId },
+      }),
+      // Active referrals
+      this.prisma.user.count({
+        where: { referredById: userId, status: 'ACTIVE' },
       }),
     ]);
 
@@ -103,30 +106,41 @@ export class DashboardRepository extends BaseRepository<
         callbackRequests,
       },
       referrals: {
-        total: referrals,
-        pointsEarned: referrals * 100,
+        total: totalReferrals,
+        active: activeReferrals,
+        pointsEarned: totalReferrals * 100,
       },
     };
   }
 
   // ==================== CORPORATE AGENT STATS ====================
   async getCorporateAgentStats(userId: string): Promise<CorporateAgentStats> {
-    const [tripRequests, callbacks, referrals] = await this.prisma.$transaction(
-      [
-        this.prisma.tripRequest.count({ where: { assignedAgentId: userId } }),
+    const [tripRequests, callbackRequests, totalReferrals, activeReferrals] =
+      await this.prisma.$transaction([
+        // Trip requests submitted by this corporate agent
+        this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
+        // Callback requests submitted by this corporate agent
         this.prisma.callbackRequest.count({
-          where: { assignedAgentId: userId },
+          where: { adventurerId: userId },
         }),
+        // Total referrals
         this.prisma.user.count({ where: { referredById: userId } }),
-      ],
-    );
+        // Active referrals
+        this.prisma.user.count({
+          where: { referredById: userId, status: 'ACTIVE' },
+        }),
+      ]);
 
     return {
-      assignedRequests: {
+      requests: {
         totalTripRequests: tripRequests,
-        totalCallbackRequests: callbacks,
+        totalCallbackRequests: callbackRequests,
       },
-      referrals: { total: referrals, pointsEarned: referrals * 100 },
+      referrals: {
+        total: totalReferrals,
+        active: activeReferrals,
+        pointsEarned: totalReferrals * 100,
+      },
     };
   }
 
@@ -134,25 +148,42 @@ export class DashboardRepository extends BaseRepository<
   async getIndependentAgentStats(
     userId: string,
   ): Promise<IndependentAgentStats> {
-    const [upcoming, completed, cancelled, callbacks, tripRequests, referrals] =
-      await this.prisma.$transaction([
-        this.prisma.tripPlanningCall.count({
-          where: { agentId: userId, status: 'SCHEDULED' },
-        }),
-        this.prisma.tripPlanningCall.count({
-          where: { agentId: userId, status: 'COMPLETED' },
-        }),
-        this.prisma.tripPlanningCall.count({
-          where: { agentId: userId, status: 'CANCELLED' },
-        }),
-        this.prisma.callbackRequest.count({
-          where: { assignedAgentId: userId },
-        }),
-        this.prisma.tripRequest.count({ where: { assignedAgentId: userId } }),
-        this.prisma.user.count({ where: { referredById: userId } }),
-      ]);
+    const [
+      upcoming,
+      completed,
+      cancelled,
+      tripRequests,
+      callbackRequests,
+      totalReferrals,
+      activeReferrals,
+    ] = await this.prisma.$transaction([
+      // Upcoming calls (as agent)
+      this.prisma.tripPlanningCall.count({
+        where: { agentId: userId, status: 'SCHEDULED' },
+      }),
+      // Completed calls (as agent)
+      this.prisma.tripPlanningCall.count({
+        where: { agentId: userId, status: 'COMPLETED' },
+      }),
+      // Cancelled calls (as agent)
+      this.prisma.tripPlanningCall.count({
+        where: { agentId: userId, status: 'CANCELLED' },
+      }),
+      // Trip requests submitted by this independent agent
+      this.prisma.tripRequest.count({ where: { adventurerId: userId } }),
+      // Callback requests submitted by this independent agent
+      this.prisma.callbackRequest.count({
+        where: { adventurerId: userId },
+      }),
+      // Total referrals
+      this.prisma.user.count({ where: { referredById: userId } }),
+      // Active referrals
+      this.prisma.user.count({
+        where: { referredById: userId, status: 'ACTIVE' },
+      }),
+    ]);
 
-    const referralPoints = referrals * 100;
+    const referralPoints = totalReferrals * 100;
     const callPoints = completed * 50;
 
     return {
@@ -161,11 +192,15 @@ export class DashboardRepository extends BaseRepository<
         completedCalls: completed,
         cancelledCalls: cancelled,
       },
-      assignedRequests: {
-        totalCallbackRequests: callbacks,
+      requests: {
         totalTripRequests: tripRequests,
+        totalCallbackRequests: callbackRequests,
       },
-      referrals: { total: referrals, pointsEarned: referralPoints },
+      referrals: {
+        total: totalReferrals,
+        active: activeReferrals,
+        pointsEarned: referralPoints,
+      },
       totalPointsEarned: referralPoints + callPoints,
     };
   }
@@ -248,6 +283,8 @@ export class DashboardRepository extends BaseRepository<
       totalCallbackRequests,
       totalPlanningCalls,
       pendingCallbacks,
+      unassignedTripRequests,
+      unassignedCallbacks,
     ] = await this.prisma.$transaction([
       this.prisma.user.count(),
       this.prisma.user.groupBy({
@@ -293,6 +330,14 @@ export class DashboardRepository extends BaseRepository<
         where: {
           createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
         },
+      }),
+      // All trip requests are unassigned (no agent assignment)
+      this.prisma.tripRequest.count({
+        where: { assignedAgentId: null },
+      }),
+      // All callback requests are unassigned (no agent assignment)
+      this.prisma.callbackRequest.count({
+        where: { assignedAgentId: null },
       }),
     ]);
 
@@ -347,6 +392,8 @@ export class DashboardRepository extends BaseRepository<
         totalCallbackRequests,
         totalPlanningCalls,
         pendingCallbacks,
+        unassignedTripRequests,
+        unassignedCallbacks,
       },
     };
   }
@@ -374,7 +421,7 @@ export class DashboardRepository extends BaseRepository<
         id: a.id,
         name: a.name,
         email: a.email,
-        role: a.role as Role,
+        role: a.role as 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT',
         pointsEarned:
           a._count.referees * 100 +
           (a.role === Role.INDEPENDENT_AGENT ? a._count.agentCalls * 50 : 0),

@@ -6,8 +6,8 @@ import { Role } from '../enums';
  * Common metrics shared across different dashboard views
  */
 export interface ReferralMetrics {
-  totalReferrals: number;
-  activeReferrals: number;
+  total: number;
+  active: number;
   pointsEarned: number;
 }
 
@@ -31,8 +31,6 @@ export interface ReferralBreakdown {
 
 // ==================== ROLE-SPECIFIC STATS ====================
 
-// Add to your dashboard.types.ts
-
 /**
  * Dashboard statistics for Adventurers
  * Shows their travel activity and engagement
@@ -53,22 +51,16 @@ export interface AdventurerStats {
     tripRequests: number;
     callbackRequests: number;
   };
-  referrals: {
-    total: number;
-    pointsEarned: number;
-  };
+  referrals: ReferralMetrics;
 }
 
 /**
  * Dashboard statistics for Corporate Agents
- * Shows assigned requests from referrals
+ * Shows their own requests and referrals (no assignment system)
  */
 export interface CorporateAgentStats {
-  assignedRequests: RequestMetrics;
-  referrals: {
-    total: number;
-    pointsEarned: number;
-  };
+  requests: RequestMetrics;
+  referrals: ReferralMetrics;
 }
 
 /**
@@ -77,11 +69,8 @@ export interface CorporateAgentStats {
  */
 export interface IndependentAgentStats {
   calls: CallMetrics;
-  assignedRequests: RequestMetrics;
-  referrals: {
-    total: number;
-    pointsEarned: number;
-  };
+  requests: RequestMetrics;
+  referrals: ReferralMetrics;
   totalPointsEarned: number;
 }
 
@@ -95,12 +84,12 @@ export interface AffiliateStats {
     active: number;
     breakdown: ReferralBreakdown;
   };
-  pointsEarned: number; // 100 points per referral
+  pointsEarned: number;
 }
 
 /**
  * Comprehensive dashboard statistics for Admins and Super Admins
- * Provides complete system overview
+ * Provides complete system overview including all incoming requests
  */
 export interface AdminStats {
   users: {
@@ -141,7 +130,9 @@ export interface AdminStats {
     totalTripRequests: number;
     totalCallbackRequests: number;
     totalPlanningCalls: number;
-    pendingCallbacks: number; // Last 7 days
+    pendingCallbacks: number;
+    unassignedTripRequests: number;
+    unassignedCallbacks: number;
   };
 }
 
@@ -151,11 +142,33 @@ export interface AdminStats {
  * Type-safe dashboard response discriminated by user role
  */
 export type DashboardStatsResponse =
-  | { role: Role.COOPERATE_AGENT; stats: CorporateAgentStats }
-  | { role: Role.INDEPENDENT_AGENT; stats: IndependentAgentStats }
-  | { role: Role.AFFILIATE; stats: AffiliateStats }
-  | { role: Role.ADMIN | Role.SUPER_ADMIN; stats: AdminStats }
-  | { role: Role.ADVENTURER; stats: AdventurerStats };
+  | { role: 'COOPERATE_AGENT'; stats: CorporateAgentStats }
+  | { role: 'INDEPENDENT_AGENT'; stats: IndependentAgentStats }
+  | { role: 'AFFILIATE'; stats: AffiliateStats }
+  | { role: 'ADMIN' | 'SUPER_ADMIN'; stats: AdminStats }
+  | { role: 'ADVENTURER'; stats: AdventurerStats };
+
+// ==================== LEADERBOARD TYPES ====================
+
+/**
+ * Top performers across the platform
+ */
+export interface TopPerformers {
+  topAgents: Array<{
+    id: string;
+    name: string;
+    email: string;
+    role: 'INDEPENDENT_AGENT' | 'COOPERATE_AGENT';
+    pointsEarned: number;
+  }>;
+  topAffiliates: Array<{
+    id: string;
+    name: string;
+    email: string;
+    referralCount: number;
+    pointsEarned: number;
+  }>;
+}
 
 // ==================== ANALYTICS DTOs (Optional - for future analytics endpoints) ====================
 
@@ -184,31 +197,5 @@ export interface AnalyticsOverview extends DateRangeFilter {
     adventures: number;
     posts: number;
     revenue: number;
-  }>;
-}
-
-/**
- * Top performers across the platform
- */
-export interface TopPerformers {
-  topAdventures: Array<{
-    id: string;
-    title: string;
-    rating: number;
-    totalLikes: number;
-  }>;
-  topAgents: Array<{
-    id: string;
-    name: string;
-    role: Role.INDEPENDENT_AGENT | Role.COOPERATE_AGENT;
-    completedCalls: number;
-    totalReferrals: number;
-    pointsEarned: number;
-  }>;
-  topAffiliates: Array<{
-    id: string;
-    name: string;
-    totalReferrals: number;
-    pointsEarned: number;
   }>;
 }

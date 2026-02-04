@@ -29,19 +29,6 @@ export default function DashboardLayout({
       />
     );
   }
-  if (isLoading) {
-    return (
-      <LoadingState
-        message='Verifying your session...'
-        minHeight='100vh'
-        containerProps={{
-          maxW: 'full',
-          py: 0,
-          px: 0,
-        }}
-      />
-    );
-  }
 
   if (!isAuthenticated || !user) return null;
 

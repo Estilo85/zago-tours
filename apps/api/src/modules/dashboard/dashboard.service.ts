@@ -20,30 +20,30 @@ export class DashboardService extends BaseService<
     role: Role,
   ): Promise<DashboardStatsResponse> {
     switch (role) {
-      case Role.COOPERATE_AGENT:
-        return {
-          role: role as any,
-          stats: await this.repository.getCorporateAgentStats(userId),
-        };
       case Role.ADVENTURER:
         return {
-          role: role as any,
+          role: 'ADVENTURER',
           stats: await this.repository.getAdventurerStats(userId),
+        };
+      case Role.COOPERATE_AGENT:
+        return {
+          role: 'COOPERATE_AGENT',
+          stats: await this.repository.getCorporateAgentStats(userId),
         };
       case Role.INDEPENDENT_AGENT:
         return {
-          role: role as any,
+          role: 'INDEPENDENT_AGENT',
           stats: await this.repository.getIndependentAgentStats(userId),
         };
       case Role.AFFILIATE:
         return {
-          role: role as any,
+          role: 'AFFILIATE',
           stats: await this.repository.getAffiliateStats(userId),
         };
       case Role.ADMIN:
       case Role.SUPER_ADMIN:
         return {
-          role: role as any,
+          role: role as 'ADMIN' | 'SUPER_ADMIN',
           stats: await this.repository.getAdminStats(),
         };
       default:
