@@ -19,7 +19,6 @@ export function useDashboardStats() {
  * Fetch leaderboard data
  * IMPORTANT: Only admins/super admins can access this endpoint
  *
- * @param limit - Number of top performers to fetch (default: 10)
  * @param enabled - Whether to execute the query (should be isAnyAdmin)
  */
 export function useLeaderboard(enabled: boolean = false) {

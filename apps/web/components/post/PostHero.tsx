@@ -1,10 +1,14 @@
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import { useUserProfile } from '@/hooks';
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { Heart } from 'lucide-react';
 import React from 'react';
 
 export default function PostHero() {
+  const { data } = useUserProfile();
+  const profileImage = data?.data?.image;
+
   return (
     <Box position='relative' w='full'>
       {/* Cover Image */}
@@ -39,11 +43,7 @@ export default function PostHero() {
           alignSelf='flex-start'
           mt='-50px'
         >
-          <AvatarImage
-            src='/images/community/community-post-banner.webp'
-            name='profile image'
-            size='2xl'
-          />
+          <AvatarImage src={profileImage} name={data?.data?.name} size='2xl' />
         </Box>
 
         <VStack align='flex-start' spaceY={1} pb={2}>

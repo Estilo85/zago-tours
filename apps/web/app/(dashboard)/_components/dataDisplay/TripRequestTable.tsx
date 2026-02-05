@@ -9,7 +9,7 @@ import { LoadingState } from '@/components/ui/LoadingState';
 import { formatDate } from '@/utils/DateFormat';
 import { useMyTripRequests } from '@/hooks';
 import { TripRequest } from '@zagotours/types';
-import { Column, DataTable } from './DataTable';
+import { Column, DataTable } from '../table/DataTable';
 
 export const TripRequestsTable = () => {
   const { data, isLoading } = useMyTripRequests();

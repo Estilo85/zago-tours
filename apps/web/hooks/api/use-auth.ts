@@ -1,3 +1,4 @@
+'use client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -7,7 +8,6 @@ import {
   RegisterDto,
   ForgotPasswordDto,
   ResetPasswordDto,
-  Role,
 } from '@zagotours/types';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';

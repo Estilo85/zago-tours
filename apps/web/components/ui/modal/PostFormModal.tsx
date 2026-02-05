@@ -73,10 +73,9 @@ export function PostFormModal({
   };
 
   const handleSubmit = () => {
-    if (!description.trim()) return;
-
+    if (!description.trim() || !title.trim()) return;
     const formData = new FormData();
-    formData.append('title', title || 'Untitled');
+    formData.append('title', title);
     formData.append('description', description);
     if (selectedFile) {
       formData.append('file', selectedFile);
@@ -204,7 +203,7 @@ export function PostFormModal({
                 size='md'
                 onClick={handleSubmit}
                 loading={isLoading}
-                disabled={!description.trim()}
+                disabled={!description.trim() || !title.trim()}
               >
                 {mode === 'create' ? 'Post' : 'Update'}
               </Button>

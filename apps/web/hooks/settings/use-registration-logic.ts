@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 import { CustomerRole, Role } from '@zagotours/types';
 import { useRoleStore } from '@/store/role-selector.store';

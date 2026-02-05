@@ -6,7 +6,6 @@ import { useComments, useCreateComment } from '../../hooks/api/use-posts';
 import { formatDate } from '@/utils/DateFormat';
 import { useState } from 'react';
 
-// Individual Comment Item
 const CommentItem = ({
   name,
   content,

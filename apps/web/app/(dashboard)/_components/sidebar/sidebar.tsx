@@ -13,7 +13,7 @@ export const Sidebar = ({
   onClose?: () => void;
 }) => {
   const pathname = usePathname();
-  const { isAffiliate } = usePermissions();
+  const { isAffiliate, isAnyAdmin } = usePermissions();
   // ==== NAV ITEM ====
   const NavItem = ({ item }: any) => {
     const isActive = pathname === item.href;
@@ -58,7 +58,6 @@ export const Sidebar = ({
 
   return (
     <Stack h='100vh' overflow='hidden'>
-      {/* 🔽 SCROLLABLE CONTENT */}
       <Box flex='1' overflowY='auto' pr={1}>
         <SectionHeading>General Setting</SectionHeading>
         <Stack gap={1}>
@@ -73,12 +72,16 @@ export const Sidebar = ({
             ))}
         </Stack>
 
-        <SectionHeading>Support</SectionHeading>
-        <Stack gap={1}>
-          {MENU_CONFIG.common.support.map((item) => (
-            <NavItem key={item.href} item={item} />
-          ))}
-        </Stack>
+        {!isAnyAdmin && (
+          <>
+            <SectionHeading>Support</SectionHeading>
+            <Stack gap={1}>
+              {MENU_CONFIG.common.support.map((item) => (
+                <NavItem key={item.href} item={item} />
+              ))}
+            </Stack>
+          </>
+        )}
       </Box>
     </Stack>
   );

@@ -11,16 +11,11 @@ import {
   Stack,
   VStack,
   Text,
-  DialogRoot,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogBackdrop,
   useBreakpointValue,
+  Collapsible,
+  Box,
 } from '@chakra-ui/react';
-import { ArrowRight, LogOut } from 'lucide-react';
+import { ArrowRight, LogOut, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useRoleStore } from '@/store/role-selector.store';
@@ -38,7 +33,7 @@ export const NavbarAuthActions = () => {
   const router = useRouter();
   const { isAuthenticated } = useAuthSession();
   const { logout } = useAuth();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
 
   // Detect if mobile
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -49,7 +44,7 @@ export const NavbarAuthActions = () => {
 
   const handleRoleSelect = (value: string) => {
     setRole(value);
-    setDialogOpen(false);
+    setCollapsibleOpen(false);
     router.push('/register');
   };
 
@@ -89,66 +84,74 @@ export const NavbarAuthActions = () => {
         <AppLink href='/login'>Login</AppLink>
       </Button>
 
-      {/* MOBILE: Dialog */}
+      {/* MOBILE: Collapsible */}
       {isMobile ? (
-        <DialogRoot
-          open={dialogOpen}
-          onOpenChange={(e) => setDialogOpen(e.open)}
-        >
-          <DialogTrigger asChild>
-            <Button
-              aria-label='join-us'
-              alignItems='center'
-              gap={3}
-              fontWeight='bold'
-              p={5}
-              cursor='pointer'
-              bg='secondary'
-              color='dark'
-            >
-              Join us <Icon as={ArrowRight} size='xs' />
-            </Button>
-          </DialogTrigger>
+        <Box position='relative'>
+          <Collapsible.Root
+            open={collapsibleOpen}
+            onOpenChange={(e) => setCollapsibleOpen(e.open)}
+          >
+            <Collapsible.Trigger asChild>
+              <Button
+                aria-label='join-us'
+                alignItems='center'
+                gap={3}
+                fontWeight='bold'
+                p={5}
+                cursor='pointer'
+                bg='secondary'
+                color='dark'
+              >
+                Join us{' '}
+                <Icon
+                  as={ChevronDown}
+                  size='xs'
+                  transform={
+                    collapsibleOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                  }
+                  transition='transform 0.2s'
+                />
+              </Button>
+            </Collapsible.Trigger>
 
-          <Portal>
-            <DialogBackdrop />
-            <DialogContent>
-              <DialogHeader>
-                <Text fontSize='lg' fontWeight='bold'>
-                  Select Your Role
-                </Text>
-              </DialogHeader>
-              <DialogCloseTrigger />
-
-              <DialogBody>
-                <VStack align='stretch' gap={3} py={4}>
+            <Collapsible.Content>
+              <Box
+                position='absolute'
+                top='calc(100% + 8px)'
+                right={0}
+                borderWidth='1px'
+                borderRadius='md'
+                boxShadow='lg'
+                zIndex={10}
+                minW='200px'
+              >
+                <VStack align='stretch' gap={0} p={2}>
                   {menuList.map((item) => (
                     <Button
                       key={item.value}
-                      variant={
-                        selectedRole === item.value ? 'solid' : 'outline'
-                      }
+                      variant='ghost'
                       bg={
-                        selectedRole === item.value ? 'blue.500' : 'transparent'
+                        selectedRole === item.value ? 'blue.100' : 'transparent'
                       }
-                      color={selectedRole === item.value ? 'white' : 'dark'}
+                      color='dark'
                       _hover={{
                         bg:
-                          selectedRole === item.value ? 'blue.600' : 'gray.100',
+                          selectedRole === item.value ? 'blue.200' : 'gray.100',
                       }}
                       onClick={() => handleRoleSelect(item.value)}
-                      p={4}
+                      p={3}
                       w='full'
                       justifyContent='flex-start'
+                      borderRadius='md'
                     >
                       {item.label}
                     </Button>
                   ))}
                 </VStack>
-              </DialogBody>
-            </DialogContent>
-          </Portal>
-        </DialogRoot>
+              </Box>
+            </Collapsible.Content>
+          </Collapsible.Root>
+        </Box>
       ) : (
         /* DESKTOP: Menu */
         <MenuRoot>

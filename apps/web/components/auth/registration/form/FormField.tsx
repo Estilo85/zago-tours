@@ -75,6 +75,21 @@ export const FormField = forwardRef<any, any>(
                       borderColor: error ? '#E53E3E' : '#E2E8F0',
                       borderRadius: '0.375rem',
                       minHeight: '40px',
+                      width: '100%',
+                    }),
+                    valueContainer: (base) => ({
+                      ...base,
+                      maxHeight: '40px',
+                      overflowY: 'auto',
+                      padding: '2px 8px',
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      maxWidth: '100%',
+                    }),
+                    container: (base) => ({
+                      ...base,
+                      width: '100%',
                     }),
                   }}
                 />

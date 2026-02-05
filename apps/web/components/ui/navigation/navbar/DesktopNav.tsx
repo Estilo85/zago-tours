@@ -20,7 +20,7 @@ export const DesktopNav = () => {
       borderColor='dark'
       position='sticky'
       top={0}
-      zIndex='sticky'
+      zIndex={1000}
       display={{ base: 'none', md: 'block' }}
       width='full'
     >

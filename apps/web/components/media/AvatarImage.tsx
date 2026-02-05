@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 interface AvatarImageProps {
-  src?: string;
+  src?: string | null;
   name: string;
   size?: AvatarSize;
   id?: string;
@@ -18,7 +18,7 @@ export const AvatarImage = ({
 }: AvatarImageProps) => {
   const stableId = useMemo(() => {
     if (id) return id;
-    return `avatar-${name.toLowerCase().replace(/\s+/g, '-')}`;
+    return `avatar-${name?.toLowerCase().replace(/\s+/g, '-')}`;
   }, [id, name]);
 
   return (

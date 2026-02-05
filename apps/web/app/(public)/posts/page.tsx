@@ -26,16 +26,21 @@ export default function Post() {
     }
   }, [posts, displayPosts.length]);
 
-  if (isLoading) return;
-  <Box>
-    <PostHero />
-    <LoadingState message='Loading events...' />;
-  </Box>;
-  if (isError) return;
-  <Box>
-    <PostHero />
-    <ErrorState />;
-  </Box>;
+  if (isLoading)
+    return (
+      <Box>
+        <PostHero />
+        <LoadingState message='Loading posts...' />
+      </Box>
+    );
+
+  if (isError)
+    return (
+      <Box>
+        <PostHero />
+        <ErrorState />
+      </Box>
+    );
 
   return (
     <Box>
@@ -44,7 +49,7 @@ export default function Post() {
         <Box width='100%' maxW='900px' px={4}>
           <PostFilterBar
             posts={posts}
-            userName='ola'
+            userName={userName}
             onFilterResults={(filtered) => setDisplayPosts(filtered)}
           />
 
@@ -54,7 +59,7 @@ export default function Post() {
           {displayPosts.length === 0 ? (
             <Center minH='300px'>
               <Text color='gray.500' fontSize='lg'>
-                No posts found
+                No posts found yet! be the first to post
               </Text>
             </Center>
           ) : (

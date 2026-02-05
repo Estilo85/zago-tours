@@ -31,7 +31,7 @@ export const MobileNav = () => {
       borderColor='dark'
       position='sticky'
       top={0}
-      zIndex='sticky'
+      zIndex={1000}
       display={{ base: 'block', md: 'none' }}
     >
       <Flex justify='space-between' align='center'>

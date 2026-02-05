@@ -53,10 +53,8 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   //=====HANDLESHARE=======
   const handleShare = async () => {
-    // First, record the share in your DB
     sharePost.mutate(post.id);
 
-    // Then, trigger native share
     const shareData = {
       title: post.title,
       text: `Check out this post by ${post.user.name} on Zago Voice`,

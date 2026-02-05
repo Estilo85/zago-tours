@@ -5,7 +5,6 @@ import { Image as ImageIcon, Video } from 'lucide-react';
 import { AvatarImage } from '../media/AvatarImage';
 import Button from '../ui/button/Button';
 import { CreatePostModal } from '../ui/modal/CreatePostModal';
-import { useCreatePost } from '@/hooks';
 
 export function PostCreator({
   userName,
@@ -14,8 +13,6 @@ export function PostCreator({
   userName: string;
   userImage?: string;
 }) {
-  const createPost = useCreatePost();
-
   return (
     <Box
       my={6}
@@ -28,6 +25,8 @@ export function PostCreator({
     >
       <Flex gap={3} align='center'>
         {/* Trigger 1: The Input Box */}
+
+        <AvatarImage src={userImage} name={userName} size='md' />
         <CreatePostModal userName={userName}>
           <Box
             flex={1}

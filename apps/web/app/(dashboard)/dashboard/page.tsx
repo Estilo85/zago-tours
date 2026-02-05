@@ -13,14 +13,19 @@ import { StatsGrid } from '../_components/stats/stat-card';
 import { Leaderboard } from '../_components/leaderboard/Leaderboard';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { ReferralCard } from '@/components/ui/card/ReferralCard';
-import { TripRequestsTable } from '../_components/table/TripRequestTable';
+import { CommunityCard } from '@/components/ui/card/CommunityCard';
+import { TripRequestsTable } from '../_components/dataDisplay/TripRequestTable';
+import UpcomingAdventuresAndEventsPage from '../_components/dataDisplay/UpcomingAdventuresAndEvents';
 
 export default function DashboardPage() {
-  const { data: statsData, isLoading: statsLoading } = useDashboardStats();
+  const { data: response, isLoading: statsLoading } = useDashboardStats();
   const { isAnyAdmin, isCooperateAgent } = usePermissions();
 
-  const { data: leaderboardData, isLoading: leaderboardLoading } =
+  const { data: leaderResponse, isLoading: leaderboardLoading } =
     useLeaderboard(isAnyAdmin);
+
+  const statsData = response?.data;
+  const leaderboardData = leaderResponse;
 
   if (statsLoading) {
     return (
@@ -140,19 +145,9 @@ export default function DashboardPage() {
         )}
 
         {statsData?.role === 'ADVENTURER' && statsData?.stats && (
-          <Box
-            bg='green.50'
-            p={4}
-            borderRadius='lg'
-            border='1px solid'
-            borderColor='green.200'
-          >
-            <Text fontSize='sm' color='green.800'>
-              Start planning your next adventure! You have{' '}
-              {statsData.stats.planning.tripRequests} pending trip requests and{' '}
-              {statsData.stats.planning.scheduledCalls} upcoming planning calls.
-            </Text>
-          </Box>
+          <>
+            <UpcomingAdventuresAndEventsPage />
+          </>
         )}
 
         {statsData?.role === 'AFFILIATE' && statsData?.stats && (
@@ -174,7 +169,8 @@ export default function DashboardPage() {
           </Box>
         )}
       </Stack>
-      <Flex my={6}>
+      <Flex my={6} justify='space-between' alignItems='stretch'>
+        <CommunityCard />
         <ReferralCard />
       </Flex>
     </Box>

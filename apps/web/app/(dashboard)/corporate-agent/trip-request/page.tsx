@@ -1,5 +1,5 @@
 import React from 'react';
-import { TripRequestsTable } from '../../_components/table/TripRequestTable';
+import { TripRequestsTable } from '../../_components/dataDisplay/TripRequestTable';
 
 export default function CorperateTripRequest() {
   return (

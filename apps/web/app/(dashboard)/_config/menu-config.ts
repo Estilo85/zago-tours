@@ -70,7 +70,7 @@ export const MENU_CONFIG = {
       {
         label: 'Media kits',
         icon: LuTicket,
-        href: '/independent-agent/media-kit',
+        href: '/independent-agent/media-kits',
       },
     ],
     [Role.COOPERATE_AGENT]: [
@@ -86,7 +86,7 @@ export const MENU_CONFIG = {
       {
         label: 'Unlocked Tours',
         icon: LuMapPin,
-        href: '/adventurer/tours',
+        href: '/adventurer/unlocked-tours',
       },
     ],
     [Role.AFFILIATE]: [

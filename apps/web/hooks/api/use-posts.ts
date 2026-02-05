@@ -175,27 +175,45 @@ export function useToggleLikePost() {
         method: 'POST',
       }),
     onMutate: async (postId) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.detail(postId) });
-      const previousData = queryClient.getQueryData(postKeys.detail(postId));
+      // Cancel outgoing queries
+      await queryClient.cancelQueries({ queryKey: postKeys.lists() });
 
-      queryClient.setQueryData(postKeys.detail(postId), (old: any) => {
-        if (!old) return old;
+      // Get previous data
+      const previousLists = queryClient.getQueryData(postKeys.lists());
+
+      // Optimistically update the posts list
+      queryClient.setQueryData(postKeys.lists(), (old: any) => {
+        if (!old?.data) return old;
         return {
           ...old,
-          isLiked: !old.isLiked,
-          likesCount: old.isLiked ? old.likesCount - 1 : old.likesCount + 1,
+          data: old.data.map((post: any) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  isLikedByUser: !post.isLikedByUser,
+                  _count: {
+                    ...post._count,
+                    likes: post.isLikedByUser
+                      ? post._count.likes - 1
+                      : post._count.likes + 1,
+                  },
+                }
+              : post,
+          ),
         };
       });
 
-      return { previousData, postId };
+      return { previousLists };
     },
     onError: (error: any, postId, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(postKeys.detail(postId), context.previousData);
+      // Rollback on error
+      if (context?.previousLists) {
+        queryClient.setQueryData(postKeys.lists(), context.previousLists);
       }
     },
-    onSettled: (_data, _error, postId) => {
-      queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
+    onSettled: () => {
+      // Refetch to ensure data is in sync
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
     },
   });
 }
@@ -208,17 +226,49 @@ export function useSharePost() {
       apiRequest(API_ENDPOINTS.POSTS.SHARE(postId), {
         method: 'POST',
       }),
-    onSuccess: (_result, postId) => {
-      queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
+    onMutate: async (postId) => {
+      await queryClient.cancelQueries({ queryKey: postKeys.lists() });
+      const previousLists = queryClient.getQueryData(postKeys.lists());
+
+      // Optimistically update share count
+      queryClient.setQueryData(postKeys.lists(), (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.map((post: any) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  isSharedByUser: true,
+                  _count: {
+                    ...post._count,
+                    shares: post._count.shares + 1,
+                  },
+                }
+              : post,
+          ),
+        };
+      });
+
+      return { previousLists };
+    },
+    onSuccess: () => {
       toaster.create({
         title: 'Post Shared',
         description: 'Post shared successfully',
         type: 'success',
       });
     },
+    onError: (error: any, postId, context) => {
+      if (context?.previousLists) {
+        queryClient.setQueryData(postKeys.lists(), context.previousLists);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+    },
   });
 }
-
 // ============================================
 // COMMENT MUTATIONS
 // ============================================

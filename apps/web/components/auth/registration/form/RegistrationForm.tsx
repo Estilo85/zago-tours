@@ -72,6 +72,7 @@ function RegistrationFormContent() {
       country: data.country,
       role: data.role as CustomerRole,
       referralCode: data.referralCode,
+      safetyAmbassador: data.safetyAmbassador,
     };
 
     // Add nested details based on role

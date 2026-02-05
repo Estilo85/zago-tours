@@ -59,7 +59,8 @@ export function PostFilterBar({
               py={1}
             >
               <User size={14} />
-              {userName || 'Guest'}
+              {userName}
+              prop is passed properly
             </Text>
           </Field.Root>
         </Box>

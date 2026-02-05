@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
-          <Flex direction='column' minH='100dvh' overflowX='hidden'>
+          <Flex direction='column' minH='100dvh' overflowX='visible'>
             <Navbar />
 
             <Box

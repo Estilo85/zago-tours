@@ -9,9 +9,6 @@ import {
   Icon,
   Heading,
   Flex,
-  Text,
-  VStack,
-  Spinner,
 } from '@chakra-ui/react';
 import AdventureCard from '../ui/card/AdventureCard';
 import Button from '../ui/button/Button';

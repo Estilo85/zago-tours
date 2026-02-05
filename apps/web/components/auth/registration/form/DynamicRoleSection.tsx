@@ -7,7 +7,18 @@ import { FormField } from './FormField';
 const certificationOptions = [
   { value: 'IATA', label: 'IATA' },
   { value: 'CLIA', label: 'CLIA' },
-  { value: 'LOCAL_LICENSE', label: 'Local License' },
+  { value: 'ASTA/VTA', label: 'ASTA/VTA' },
+  { value: 'CTA/CTC/CTIE', label: 'CTA/CTC/CTIE (The Travel Institute)' },
+  { value: 'ARC', label: 'ARC' },
+  { value: 'TRUE', label: 'TRUE' },
+  { value: 'ABTA', label: 'ABTA' },
+  { value: 'ATOL', label: 'ATOL' },
+  { value: 'ACTA/TICO', label: 'ACTA/TICO' },
+  { value: 'AFTA', label: 'AFTA' },
+  { value: 'SATSA', label: 'SATSA' },
+  { value: 'PATA', label: 'PATA' },
+  { value: 'TAANZ', label: 'TAANZ' },
+  { value: 'Other', label: 'Other(please specify)' },
 ];
 
 export function DynamicRoleSection({ finalRole }: { finalRole: Role | null }) {

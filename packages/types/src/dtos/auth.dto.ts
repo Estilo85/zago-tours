@@ -55,6 +55,7 @@ export interface RegisterDto {
   country?: string;
   role: CustomerRole;
   referralCode?: string;
+  safetyAmbassador?: boolean;
   agentDetails?: IndependentAgentDto;
   cooperateDetails?: CooperateAgentDto;
   affiliateDetails?: AffiliateDto;

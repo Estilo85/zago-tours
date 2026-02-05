@@ -29,7 +29,7 @@ const StatCard = ({
 }: StatCardProps) => (
   <Box
     bg='white'
-    p={6}
+    p={3}
     borderRadius='2xl'
     border='1px solid'
     borderColor='gray.100'
@@ -37,7 +37,7 @@ const StatCard = ({
     transition='transform 0.2s, box-shadow 0.2s'
     _hover={{ transform: 'translateY(-2px)', boxShadow: 'md' }}
   >
-    <Stack gap={4}>
+    <Stack gap={2}>
       <HStack justify='space-between' align='flex-start'>
         <Box p={2.5} bg='blue.50' borderRadius='xl' color='blue.600'>
           <Icon as={icon} boxSize={6} />
