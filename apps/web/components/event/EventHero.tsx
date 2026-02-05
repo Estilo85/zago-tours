@@ -20,7 +20,7 @@ export const EventHero = () => {
 
         <Flex direction={{ base: 'column', md: 'row' }} align='center' gap={3}>
           <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-            <NextLink href='/register'>
+            <NextLink href='#'>
               Join an event
               <Icon as={ArrowRight} ml={2} />
             </NextLink>
@@ -32,7 +32,7 @@ export const EventHero = () => {
             fontWeight='bold'
             border='2px solid white'
           >
-            <NextLink href='/register'>
+            <NextLink href='#'>
               Host an event
               <Icon as={ArrowRight} ml={2} />
             </NextLink>

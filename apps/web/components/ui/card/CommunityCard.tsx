@@ -1,5 +1,4 @@
-import { Card, Text, Heading, Stack, Icon, Box } from '@chakra-ui/react';
-import { HiUsers } from 'react-icons/hi';
+import { Card, Text, Stack } from '@chakra-ui/react';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
 
@@ -9,9 +8,9 @@ export const CommunityCard = () => {
       <Card.Body>
         <Stack gap='1'>
           <Card.Title>
-            <Heading size='md' fontWeight='bold'>
+            <Text fontSize='md' fontWeight='bold'>
               Community Activity & Feedback
-            </Heading>
+            </Text>
           </Card.Title>
           <Card.Description>
             <Text as='span' fontSize='sm' color='gray.600' lineHeight='tall'>
