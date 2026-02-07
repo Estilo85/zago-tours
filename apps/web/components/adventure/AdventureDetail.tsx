@@ -273,28 +273,27 @@ export default function AdventureDetailPage({
                 )}
               </HStack>
             </Stack>
-
-            <Flex gap={3} align='center' flex='1' justify='space-between'>
-              <IconButton
-                aria-label='Like adventure'
-                variant='outline'
-                size='lg'
-                borderRadius='full'
-                _hover={{ bg: 'red.50', color: 'red.500' }}
-              >
-                <Icon as={LuHeart} />
-              </IconButton>
-              <Button
-                bg='primary'
-                color='white'
-                size='lg'
-                px={10}
-                borderRadius='full'
-                flex={{ base: '1', md: 'initial' }}
-              >
-                Book Now
-              </Button>
-            </Flex>
+          </Flex>
+          <Flex gap={3} align='center' flex='1' justify='space-between'>
+            <IconButton
+              aria-label='Like adventure'
+              variant='outline'
+              size='lg'
+              borderRadius='full'
+              _hover={{ bg: 'red.50', color: 'red.500' }}
+            >
+              <Icon as={LuHeart} />
+            </IconButton>
+            <Button
+              bg='primary'
+              color='white'
+              size='lg'
+              px={10}
+              borderRadius='full'
+              flex={{ base: '1', md: 'initial' }}
+            >
+              Book Now
+            </Button>
           </Flex>
         </Box>
       </Flex>
