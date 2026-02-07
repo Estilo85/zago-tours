@@ -29,7 +29,20 @@ import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 import AdventureSkeleton from './AdevntureSkeleton';
 import { useAdventure } from '@/hooks';
 import { ErrorState } from '../ui/ErrorState';
-import { Verified, Dot, CheckIcon } from 'lucide-react';
+import {
+  Verified,
+  Dot,
+  CheckIcon,
+  BadgeCheck,
+  Headset,
+  ShieldCheck,
+  AlarmClockOff,
+  CircleGauge,
+  Settings,
+  ShieldPlus,
+  CalendarDays,
+  ShieldQuestionMark,
+} from 'lucide-react';
 
 interface AdventureDetailProps {
   adventureId: string;
@@ -106,40 +119,35 @@ export default function AdventureDetailPage({
           <Flex align='center' gap={5}>
             <HStack
               bg='textPrimary'
-              p={1}
-              borderRadius='md'
+              p={2}
+              borderRadius='2xl'
               whiteSpace='nowrap'
               gap={3}
             >
-              <Icon as={LuStar} color='orange.400' fill='orange.400' />
+              <Icon as={BadgeCheck} color='orange.400' fill='orange.400' />
               <Text>Certified Guides</Text>
             </HStack>
             <HStack
               bg='textPrimary'
-              p={1}
-              borderRadius='md'
+              p={2}
+              borderRadius='2xl'
               whiteSpace='nowrap'
               gap={3}
             >
-              <Icon as={LuStar} color='orange.400' fill='orange.400' />
+              <Icon as={Headset} color='orange.400' fill='orange.400' />
               <Text>Emergency Support</Text>
             </HStack>
             <HStack
               bg='textPrimary'
-              p={1}
-              borderRadius='md'
+              p={2}
+              borderRadius='2xl'
               whiteSpace='nowrap'
               gap={3}
             >
-              <Icon as={LuStar} color='orange.400' fill='orange.400' />
+              <Icon as={ShieldCheck} color='orange.400' fill='orange.400' />
               <Text>Safety Briefing</Text>
             </HStack>
           </Flex>
-          {/* <HStack gap={3}>
-            <Badge colorScheme='blue'>{adventure.tripType}</Badge>
-            <Badge colorScheme='green'>{adventure.level}</Badge>
-            <Badge colorScheme='purple'>Verified</Badge>
-          </HStack> */}
         </Stack>
       </Box>
 
@@ -148,13 +156,13 @@ export default function AdventureDetailPage({
         <Box>
           <HStack gap={5} mb={2}>
             <Heading size='2xl'>{adventure.title}</Heading>
-            <Flex align='center'>
-              <Icon as={Verified} />
+            <Flex align='center' gap={3}>
+              <Icon as={Verified} fill='green.200' color='white' />
               <Text>Verified by Zago</Text>
             </Flex>
           </HStack>
           <HStack color='gray.600'>
-            <Icon as={LuClock} />
+            <Icon as={AlarmClockOff} />
             <Text>
               {adventure.days} Days . {adventure.days - 1} night{' '}
             </Text>
@@ -184,9 +192,9 @@ export default function AdventureDetailPage({
 
           <Stack>
             <DetailItem
-              icon={LuMapPin}
+              icon={CircleGauge}
               label='Difficulty level'
-              value={adventure.level}
+              value={adventure.level.toLocaleLowerCase()}
             />
             <DetailItem
               icon={LuClock}
@@ -194,7 +202,7 @@ export default function AdventureDetailPage({
               value={adventure.tripType}
             />
             <DetailItem
-              icon={LuTrendingUp}
+              icon={ShieldPlus}
               label='Safety Score'
               value={`${adventure.safetyScore}/10`}
             />
@@ -210,17 +218,17 @@ export default function AdventureDetailPage({
               }
             />
             <DetailItem
-              icon={LuTrendingUp}
+              icon={Settings}
               label='Gear'
               value={adventure?.gear ? adventure.gear : <Icon as={CheckIcon} />}
             />
             <DetailItem
-              icon={LuTrendingUp}
+              icon={ShieldQuestionMark}
               label='Emergency plan'
               value={<Icon as={CheckIcon} />}
             />
             <DetailItem
-              icon={LuClock}
+              icon={CalendarDays}
               label='Last safety certification date'
               value={new Date(
                 adventure?.lastSafetyCertDate || new Date(),
@@ -249,10 +257,10 @@ export default function AdventureDetailPage({
           overflow='hidden'
         >
           <Flex justify='space-between' align='center' wrap='wrap' gap={6}>
-            <Stack gap={1}>
+            <Stack gap={3}>
               <Heading size='md'>{adventure.title}</Heading>
               <HStack color='gray.600'>
-                <Icon as={LuClock} />
+                <Icon as={AlarmClockOff} />
                 <Text>
                   {adventure.days} Days . {adventure.days - 1} night{' '}
                 </Text>
@@ -274,7 +282,7 @@ export default function AdventureDetailPage({
               </HStack>
             </Stack>
           </Flex>
-          <Flex gap={3} align='center' flex='1' justify='space-between'>
+          <Flex gap={3} mt={3} align='center' flex='1' justify='space-between'>
             <IconButton
               aria-label='Like adventure'
               variant='outline'
