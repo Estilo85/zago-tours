@@ -11,11 +11,12 @@ import {
   Stack,
   VStack,
   Text,
+  Flex,
   useBreakpointValue,
   Collapsible,
   Box,
 } from '@chakra-ui/react';
-import { ArrowRight, LogOut, ChevronDown } from 'lucide-react';
+import { ArrowRight, LogOut, ChevronDown, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useRoleStore } from '@/store/role-selector.store';
@@ -50,20 +51,34 @@ export const NavbarAuthActions = () => {
 
   if (isAuthenticated) {
     return (
-      <Button
-        aria-label='logout'
-        alignItems='center'
-        gap={3}
-        fontWeight='bold'
-        p={5}
-        cursor='pointer'
-        bg='red.500'
-        color='white'
-        _hover={{ bg: 'red.600' }}
-        onClick={logout}
-      >
-        Logout <Icon as={LogOut} size={{ base: 'xs', md: 'sm' }} />
-      </Button>
+      <Flex align='center' justify='space-between' gap={4}>
+        <Button
+          asChild
+          variant='outline'
+          fontWeight='medium'
+          px={{ base: 3, md: 5 }}
+          py={5}
+        >
+          <AppLink href='/dashboard'>
+            <ArrowLeft size={16} />
+            Dashboard
+          </AppLink>
+        </Button>
+        <Button
+          aria-label='logout'
+          gap={3}
+          fontWeight='bold'
+          px={{ base: 3, md: 5 }}
+          py={5}
+          cursor='pointer'
+          bg='red.500'
+          color='white'
+          _hover={{ bg: 'red.600' }}
+          onClick={logout}
+        >
+          Logout <LogOut size={16} />
+        </Button>
+      </Flex>
     );
   }
 

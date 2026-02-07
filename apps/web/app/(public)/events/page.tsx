@@ -11,7 +11,7 @@ export default function Events() {
     <Box>
       <EventHero />
       <SignatureEventsSection />
-      <Box bg='textPrimary'>
+      <Box bg='textPrimary' py={16} my={9}>
         <Benefits />
         <EventSection />
       </Box>

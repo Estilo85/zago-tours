@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { TripRequestCallbackDialog } from '../dialogs/trip-request-callback-dialog';
 import Button from '@/components/ui/button/Button';
-import { LoadingState } from '@/components/ui/LoadingState';
 
 import { formatDate } from '@/utils/DateFormat';
 import { useMyTripRequests } from '@/hooks';
 import { TripRequest } from '@zagotours/types';
 import { Column, DataTable } from '../table/DataTable';
+import { DataTableSkeleton } from '../table/Datatableskeleton';
 
 export const TripRequestsTable = () => {
   const { data, isLoading } = useMyTripRequests();
@@ -58,24 +58,20 @@ export const TripRequestsTable = () => {
     },
   ];
 
-  if (isLoading) {
-    return <LoadingState message='Loading trip requests...' />;
-  }
-
   const tripRequests = data?.data || [];
-
-  if (tripRequests.length === 0) {
-    return (
-      <Box textAlign='center' py={10}>
-        <Text fontSize='lg' color='fg.muted'>
-          No trip requests yet. Request your first trip!
-        </Text>
-      </Box>
-    );
-  }
 
   return (
     <>
+      {isLoading && <DataTableSkeleton columns={5} />}
+
+      {!isLoading && tripRequests.length === 0 && (
+        <Box textAlign='center' py={10}>
+          <Text fontSize='lg' color='fg.muted'>
+            No trip requests yet. Request your first trip!
+          </Text>
+        </Box>
+      )}
+
       <Box overflowX='auto'>
         <DataTable columns={columns} data={tripRequests} />
       </Box>

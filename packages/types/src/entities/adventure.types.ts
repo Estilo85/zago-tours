@@ -30,6 +30,7 @@ export interface Adventure {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date | null;
+  isLiked?: boolean;
 }
 
 export interface AdventureWithRelations extends Adventure {

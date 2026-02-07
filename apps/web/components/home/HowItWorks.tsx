@@ -106,7 +106,7 @@ export const HowItWorks = () => {
         </Heading>
 
         <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          Wherever you are in the world, <br /> pick your adventure, it’s that
+          Wherever you are in the world, <br /> pick your adventure, it's that
           SIMPLE
         </Text>
 
@@ -119,13 +119,20 @@ export const HowItWorks = () => {
         >
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
             {resImageData.map((img, i) => (
-              <ResponsiveImage
+              <Box
                 key={i}
-                src={img}
-                alt='how it work image'
-                height='200px'
-                width='200px'
-              />
+                transform={{
+                  base: 'none',
+                  md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
+                }}
+              >
+                <ResponsiveImage
+                  src={img}
+                  alt='how it work image'
+                  height='200px'
+                  width='200px'
+                />
+              </Box>
             ))}
           </SimpleGrid>
 
@@ -173,9 +180,9 @@ export const HowItWorks = () => {
               </Avatar.Root>
             </AvatarGroup>
             <Text fontSize={{ base: 'md', md: '2xl' }}>
-              Our team and partners aren’t new to this, we’ve spent decades
+              Our team and partners aren't new to this, we've spent decades
               leading travelers up mountains, across oceans, and into the kind
-              of stories you never forget. Together, that’s over 100 years of
+              of stories you never forget. Together, that's over 100 years of
               experience fueling your nextadventure.
             </Text>
           </Stack>

@@ -11,13 +11,13 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { useAdventures } from '@/hooks';
 import { Unlock, Calendar, CheckCircle } from 'lucide-react';
 import { AdventureResponseDto } from '@zagotours/types';
 import { formatDate } from '@/utils/DateFormat';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { Column, DataTable } from '../table/DataTable';
+import { AdventureCardSkeleton } from '@/components/ui/card/Adventurecardskeleton';
 
 export default function UpcomingAndCompletedAdventuresPage() {
   const [upcomingPage, setUpcomingPage] = useState(1);
@@ -39,7 +39,6 @@ export default function UpcomingAndCompletedAdventuresPage() {
 
   const currentDate = new Date();
 
-  // Filter upcoming adventures (future dates and published/draft status)
   const upcomingAdventures = unlockedAdventures.filter(
     (adventure: AdventureResponseDto) => {
       const adventureDate = new Date(adventure.date);
@@ -175,7 +174,7 @@ export default function UpcomingAndCompletedAdventuresPage() {
   return (
     <Container maxW='container.xl' py={10}>
       {/* Loading */}
-      {isLoading && <LoadingState message='Loading adventures...' />}
+      {isLoading && <AdventureCardSkeleton />}
 
       {/* Content */}
       {!isLoading && (

@@ -84,7 +84,7 @@ export class AdventureController {
       const existingAdventure = await this.service.getById(id);
 
       if (req.file) {
-        if (existingAdventure.publicId) {
+        if (existingAdventure?.publicId) {
           await CloudinaryService.deleteFile(existingAdventure.publicId);
         }
 
@@ -149,6 +149,15 @@ export class AdventureController {
         orderBy: { createdAt: 'desc' },
       });
 
+      if (req.userId) {
+        result.data = await Promise.all(
+          result.data.map(async (adventure) => ({
+            ...adventure,
+            isLiked: await this.service.checkIfLiked(req.userId!, adventure.id),
+          })),
+        );
+      }
+
       return ResponseUtil.paginated(res, result);
     },
   );
@@ -156,9 +165,17 @@ export class AdventureController {
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const adventure = await this.service.getById(req.params.id);
+
+    if (req.userId) {
+      const isLiked = await this.service.checkIfLiked(
+        req.userId,
+        req.params.id,
+      );
+      return ResponseUtil.success(res, { ...adventure, isLiked });
+    }
+
     return ResponseUtil.success(res, adventure);
   });
-
   //==== DELETE AN ADVENTURE ======
   delete = asyncHandler(
     async (req: ReqParamsQuery<UuidParam, { hard: string }>, res: Response) => {
@@ -167,7 +184,7 @@ export class AdventureController {
 
       const adventure = await this.service.getById(id);
 
-      if (isHard && adventure.publicId) {
+      if (isHard && adventure?.publicId) {
         await CloudinaryService.deleteFile(adventure.publicId);
       }
 

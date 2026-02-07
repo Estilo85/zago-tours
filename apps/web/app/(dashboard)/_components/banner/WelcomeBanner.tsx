@@ -19,7 +19,7 @@ export const WelcomeBanner = () => {
         color='fg.default'
         fontWeight='bold'
       >
-        👋 Welcome back, {userName}!
+        Welcome back, {userName}! 👋
       </Text>
     </Box>
   );

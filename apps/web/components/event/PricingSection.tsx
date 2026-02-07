@@ -7,19 +7,10 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { PricingCard } from '../ui/card/PricingCard';
-import { ResponsiveImage } from '../media/ResponsiveImage';
 
 export const PricingSection = () => {
   return (
     <Container maxW='6xl' my='16'>
-      <Box width='full' my={10}>
-        <ResponsiveImage
-          src='/images/adventures/adventure-section.webp'
-          alt='price plan image'
-          height='500px'
-          objectFit='cover'
-        />
-      </Box>
       <Stack textAlign='center' my={10}>
         <Heading
           size={{ base: '2xl', md: '4xl' }}

@@ -84,13 +84,13 @@ export default function HelperForm() {
         mx='auto'
         mb={6}
         p={{ base: 4, md: 6 }}
-        bg='textPrimary'
+        bg='surface'
         borderRadius='3xl'
         borderWidth='1px'
         shadow='xl'
       >
         <VStack spaceY={3} align='stretch'>
-          <Stack spaceY={3} bg='textPrimary'>
+          <Stack spaceY={3}>
             {/* Email and Phone side-by-side */}
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={5}>
               <Box position='relative'>

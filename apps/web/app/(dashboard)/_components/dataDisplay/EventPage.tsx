@@ -12,10 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { EventCard } from '@/components/ui/card/EventCard';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { useEvents } from '@/hooks';
 import { Calendar, Clock } from 'lucide-react';
 import { EventResponseDto } from '@zagotours/types';
+import { EventCardSkeleton } from '@/components/ui/card/Eventcardskeleton';
 
 export default function EventsPage() {
   const [upcomingPage, setUpcomingPage] = useState(1);
@@ -92,7 +92,7 @@ export default function EventsPage() {
           </Flex>
 
           {/* Loading */}
-          {eventsLoading && <LoadingState message='Loading events...' />}
+          {eventsLoading && <EventCardSkeleton />}
 
           {/* Empty */}
           {!eventsLoading && paginatedUpcomingEvents.length === 0 && (
@@ -142,7 +142,7 @@ export default function EventsPage() {
           </Flex>
 
           {/* Loading */}
-          {eventsLoading && <LoadingState message='Loading events...' />}
+          {eventsLoading && <EventCardSkeleton />}
 
           {/* Empty */}
           {!eventsLoading && paginatedPastEvents.length === 0 && (

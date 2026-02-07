@@ -1,18 +1,28 @@
 'use client';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import { Text, Stack, Card, Box } from '@chakra-ui/react';
-import { EventResponseDto } from '@zagotours/types';
 
-export const SignatureEventCard = ({ event }: { event: EventResponseDto }) => {
+interface SignatureEventProps {
+  url: string;
+  title: string;
+  description: string;
+}
+
+export const SignatureEventCard = ({
+  title,
+  url,
+  description,
+}: SignatureEventProps) => {
   return (
     <Card.Root
       overflow='hidden'
       variant='subtle'
-      borderStart='4px solid'
-      borderStartColor='yellow.400'
+      bg='white'
       flexDirection={{ base: 'column', sm: 'row' }}
       width='full'
       height={{ sm: '200px' }}
+      border='1px solid'
+      borderColor='gray.200'
     >
       {/* Media on the Left */}
       <Box
@@ -21,8 +31,8 @@ export const SignatureEventCard = ({ event }: { event: EventResponseDto }) => {
         height={{ base: '200px', sm: 'full' }}
       >
         <ResponsiveImage
-          src={event.mediaUrl as string}
-          alt={event.title}
+          src={url}
+          alt={title}
           height='100%'
           width='100%'
           objectFit='cover'
@@ -34,10 +44,10 @@ export const SignatureEventCard = ({ event }: { event: EventResponseDto }) => {
       <Stack flex='1' justify='center'>
         <Card.Body p={4}>
           <Card.Title mb='2' fontSize='xl' color='primary'>
-            {event.title}
+            {title}
           </Card.Title>
           <Text color='gray.600' lineClamp={3} fontSize='sm'>
-            {event.description}
+            {description}
           </Text>
         </Card.Body>
       </Stack>

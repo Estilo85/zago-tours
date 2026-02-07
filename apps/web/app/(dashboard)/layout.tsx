@@ -5,8 +5,6 @@ import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
 import { UserRole } from './_config/menu-config';
 import { useAuthSession } from '@/hooks';
-import { LoadingState } from '@/components/ui/LoadingState';
-import { WelcomeBanner } from './_components/banner/WelcomeBanner';
 
 export default function DashboardLayout({
   children,
@@ -14,21 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const { user, isLoading, isAuthenticated } = useAuthSession();
-
-  if (isLoading) {
-    return (
-      <LoadingState
-        message='Verifying your session...'
-        minHeight='100vh'
-        containerProps={{
-          maxW: 'full',
-          py: 0,
-          px: 0,
-        }}
-      />
-    );
-  }
+  const { user, isAuthenticated } = useAuthSession();
 
   if (!isAuthenticated || !user) return null;
 
@@ -84,7 +68,6 @@ export default function DashboardLayout({
           h='full'
           p={{ base: 4, md: 8 }}
         >
-          <WelcomeBanner />
           {children}
         </Box>
       </Flex>

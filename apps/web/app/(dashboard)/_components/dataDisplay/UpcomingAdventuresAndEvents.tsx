@@ -17,6 +17,8 @@ import { LoadingState } from '@/components/ui/LoadingState';
 import { useAdventures, useEvents } from '@/hooks';
 import { Calendar, Compass } from 'lucide-react';
 import { AdventureResponseDto, EventResponseDto } from '@zagotours/types';
+import { AdventureCardSkeleton } from '@/components/ui/card/Adventurecardskeleton';
+import { EventCardSkeleton } from '@/components/ui/card/Eventcardskeleton';
 
 export default function UpcomingAdventuresAndEventsPage() {
   const [toursPage, setToursPage] = useState(1);
@@ -68,7 +70,7 @@ export default function UpcomingAdventuresAndEventsPage() {
           </Flex>
 
           {/* Loading */}
-          {toursLoading && <LoadingState message='Loading tours...' />}
+          {toursLoading && <AdventureCardSkeleton />}
 
           {/* Empty */}
           {!toursLoading && upcomingTours.length === 0 && (
@@ -89,6 +91,7 @@ export default function UpcomingAdventuresAndEventsPage() {
               <SimpleGrid
                 columns={{ base: 1, md: 3 }}
                 gap={{ base: 6, md: 4 }}
+                rowGap={5}
                 justifyItems='center'
               >
                 {upcomingTours.map((tour) => (
@@ -118,7 +121,7 @@ export default function UpcomingAdventuresAndEventsPage() {
           </Flex>
 
           {/* Loading */}
-          {eventsLoading && <LoadingState message='Loading events...' />}
+          {eventsLoading && <EventCardSkeleton />}
 
           {/* Empty */}
           {!eventsLoading && upcomingEvents.length === 0 && (

@@ -1,7 +1,7 @@
 'use client';
 import { useDashboardStats, usePermissions } from '@/hooks';
 import { useLeaderboard } from '@/hooks/api/use-dashboard';
-import { Box, Stack, Text, Heading, Flex } from '@chakra-ui/react';
+import { Box, Stack, Text, Heading, Flex, Center } from '@chakra-ui/react';
 import {
   getAdminStatsConfig,
   getAdventurerStatsConfig,
@@ -15,6 +15,7 @@ import { ReferralCard } from '@/components/ui/card/ReferralCard';
 import { CommunityCard } from '@/components/ui/card/CommunityCard';
 import { TripRequestsTable } from '../_components/dataDisplay/TripRequestTable';
 import UpcomingAdventuresAndEventsPage from '../_components/dataDisplay/UpcomingAdventuresAndEvents';
+import { WelcomeBanner } from '../_components/banner/WelcomeBanner';
 
 export default function DashboardPage() {
   const { data: response, isLoading: statsLoading } = useDashboardStats();
@@ -25,14 +26,6 @@ export default function DashboardPage() {
 
   const statsData = response?.data;
   const leaderboardData = leaderResponse;
-
-  if (!statsData) {
-    return (
-      <Box p={6}>
-        <Text color='gray.500'>No dashboard data available</Text>
-      </Box>
-    );
-  }
 
   const getStatsConfig = () => {
     if (!statsData?.stats) return [];
@@ -56,18 +49,23 @@ export default function DashboardPage() {
 
   return (
     <Box p={6}>
+      <WelcomeBanner />
       <Stack gap={8}>
         {/* Stats Grid */}
+
+        {!statsLoading && !statsData && (
+          <Center p={6}>
+            <Text color='gray.500'>No dashboard data available</Text>
+          </Center>
+        )}
         <StatsGrid stats={getStatsConfig()} isLoading={statsLoading} />
 
-        {/* Corporate Agent Specific: Trip Requests Table */}
         {isCooperateAgent && (
           <>
             <TripRequestsTable />
           </>
         )}
 
-        {/* Leaderboard (Admin/Super Admin only) */}
         {isAnyAdmin && (
           <Box>
             <Heading size='lg' mb={4}>
@@ -81,82 +79,13 @@ export default function DashboardPage() {
           </Box>
         )}
 
-        {/* Role-specific insights */}
-        {isAnyAdmin && statsData?.stats && (
-          <Box
-            bg='blue.50'
-            p={4}
-            borderRadius='lg'
-            border='1px solid'
-            borderColor='blue.200'
-          >
-            <Heading size='sm' mb={2} color='blue.900'>
-              📊 Admin Insights
-            </Heading>
-            <Stack gap={2}>
-              <Text fontSize='sm' color='blue.800'>
-                • {statsData.stats.requests.unassignedTripRequests} unassigned
-                trip requests
-              </Text>
-              <Text fontSize='sm' color='blue.800'>
-                • {statsData.stats.requests.unassignedCallbacks} unassigned
-                callback requests
-              </Text>
-              <Text fontSize='sm' color='blue.800'>
-                • {statsData.stats.requests.pendingCallbacks} pending callbacks
-                (last 7 days)
-              </Text>
-            </Stack>
-          </Box>
-        )}
-
-        {(statsData?.role === 'COOPERATE_AGENT' ||
-          statsData?.role === 'INDEPENDENT_AGENT') && (
-          <Box
-            bg='purple.50'
-            p={4}
-            borderRadius='lg'
-            border='1px solid'
-            borderColor='purple.200'
-          >
-            <Heading size='sm' mb={2} color='purple.900'>
-              💡 Agent Note
-            </Heading>
-            <Text fontSize='sm' color='purple.800'>
-              All your requests are submitted directly to administrators for
-              review. Track your referrals to earn more points!
-              {statsData?.role === 'INDEPENDENT_AGENT' && (
-                <>
-                  {' '}
-                  You earn 100 points per referral and 50 points per completed
-                  call.
-                </>
-              )}
-            </Text>
-          </Box>
-        )}
-
         {statsData?.role === 'ADVENTURER' && statsData?.stats && (
           <>
             <UpcomingAdventuresAndEventsPage />
           </>
         )}
-
-        {statsData?.role === 'AFFILIATE' && statsData?.stats && (
-          <Box
-            bg='orange.50'
-            p={4}
-            borderRadius='lg'
-            border='1px solid'
-            borderColor='orange.200'
-          >
-            <Heading size='sm' mb={2} color='orange.900'>
-              🎯 Affiliate Performance
-            </Heading>
-          </Box>
-        )}
       </Stack>
-      {isAnyAdmin && (
+      {!isAnyAdmin && (
         <Flex my={6} justify='space-between' alignItems='stretch'>
           <CommunityCard />
           <ReferralCard />

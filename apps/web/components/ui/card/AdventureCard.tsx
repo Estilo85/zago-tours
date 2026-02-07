@@ -9,12 +9,14 @@ import {
   Stack,
   RatingGroup,
   Box,
+  IconButton,
 } from '@chakra-ui/react';
-import { CheckCircleIcon } from 'lucide-react';
+import { CheckCircleIcon, Heart } from 'lucide-react';
 import { ResponsiveImage } from '../../media/ResponsiveImage';
 import { Adventure } from '@zagotours/types';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
+import { useToggleLikeAdventure } from '@/hooks'; // adjust path as needed
 
 const AdventureCard = ({
   adventure,
@@ -24,6 +26,13 @@ const AdventureCard = ({
   href?: string;
 }) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;
+  const { mutate: toggleLike } = useToggleLikeAdventure();
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleLike(adventure.id);
+  };
 
   return (
     <AppLink href={`/adventures/${adventure.id}`}>
@@ -45,26 +54,57 @@ const AdventureCard = ({
             borderRadius='none'
           />
 
-          {/* Verified Badge */}
-          {adventure.isVerified && (
-            <Badge
-              position='absolute'
-              top='3'
-              left='3'
-              px='2'
-              py='0.5'
-              borderRadius='full'
-              colorPalette='green'
-              display='flex'
-              alignItems='center'
-              bg='rgba(255, 255, 255, 0.95)'
-              backdropFilter='blur(4px)'
-              fontSize='xs'
-            >
-              <Icon as={CheckCircleIcon} mr='1' boxSize='3' />
-              Verified
-            </Badge>
-          )}
+          {/* Top badges container */}
+          {/* Top badges container */}
+          <Flex
+            position='absolute'
+            top='3'
+            left='3'
+            right='3'
+            justifyContent='flex-start'
+            alignItems='flex-start'
+          >
+            {/* Verified Badge */}
+            {adventure.isVerified && (
+              <Badge
+                px='2'
+                py='0.5'
+                borderRadius='full'
+                colorPalette='green'
+                display='flex'
+                alignItems='center'
+                bg='rgba(255, 255, 255, 0.95)'
+                backdropFilter='blur(4px)'
+                fontSize='xs'
+              >
+                Verified
+                <Icon as={CheckCircleIcon} mr='1' boxSize='3' />
+              </Badge>
+            )}
+          </Flex>
+
+          <IconButton
+            aria-label='Like adventure'
+            size='sm'
+            variant='ghost'
+            onClick={handleLikeClick}
+            bg='rgba(255, 255, 255, 0.95)'
+            backdropFilter='blur(4px)'
+            borderRadius='full'
+            _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
+            position='absolute'
+            top='3'
+            right='3'
+            zIndex='2'
+          >
+            <Icon
+              as={Heart}
+              boxSize='4'
+              color={adventure?.isLiked ? 'red.500' : 'gray.600'}
+              fill={adventure?.isLiked ? 'red.500' : 'none'}
+              transition='all 0.2s'
+            />
+          </IconButton>
 
           {/* Rating Bridge */}
           <Flex

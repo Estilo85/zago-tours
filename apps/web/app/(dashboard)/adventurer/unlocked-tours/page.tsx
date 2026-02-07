@@ -1,3 +1,5 @@
+'use client';
+
 import { AppLink } from '@/components/ui/link/AppLink';
 import { Box, Button, Grid, Heading, Card, Text } from '@chakra-ui/react';
 import React from 'react';

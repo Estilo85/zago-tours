@@ -24,6 +24,7 @@ import {
 } from 'react-icons/fa';
 import { Send } from 'lucide-react';
 import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 const support = [
   { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -50,37 +51,47 @@ export default function Footer() {
               <Heading color='textInverse'>Zago</Heading>
             </Flex>
             <Text color='textPrimary'>
-              321-323 High Road, <br /> Chadwell Health, Essex
+              73 Shelton Street Covent <br /> Garden United Kingdom
             </Text>
             <Flex align='center' gap={2} color='textPrimary'>
-              <Icon
-                as={FaInstagram}
-                size={{ base: 'md', md: 'xl' }}
-                cursor='pointer'
-                _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
-                transition='all 0.2s'
-              />
-              <Icon
-                as={FaLinkedin}
-                size={{ base: 'md', md: 'xl' }}
-                cursor='pointer'
-                _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
-                transition='all 0.2s'
-              />
-              <Icon
-                as={FaTiktok}
-                size={{ base: 'md', md: 'xl' }}
-                cursor='pointer'
-                _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
-                transition='all 0.2s'
-              />
-              <Icon
-                as={FaYoutube}
-                size={{ base: 'md', md: 'xl' }}
-                cursor='pointer'
-                _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
-                transition='all 0.2s'
-              />
+              <AppLink href='https://www.instagram.com/zago.tours/'>
+                <Icon
+                  as={FaInstagram}
+                  size={{ base: 'md', md: 'xl' }}
+                  cursor='pointer'
+                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  transition='all 0.2s'
+                />
+              </AppLink>
+              <AppLink href='https://www.linkedin.com/company/zago-tours/'>
+                <Icon
+                  as={FaLinkedin}
+                  size={{ base: 'md', md: 'xl' }}
+                  cursor='pointer'
+                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  transition='all 0.2s'
+                />
+              </AppLink>
+
+              <AppLink href='https://www.tiktok.com/@zagotours?_r=1&_t=ZS-93g7ciMliOj'>
+                <Icon
+                  as={FaTiktok}
+                  size={{ base: 'md', md: 'xl' }}
+                  cursor='pointer'
+                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  transition='all 0.2s'
+                />
+              </AppLink>
+
+              <AppLink href='https://youtube.com/@zagotours?si=BKyylHr3Xffm9TDI'>
+                <Icon
+                  as={FaYoutube}
+                  size={{ base: 'md', md: 'xl' }}
+                  cursor='pointer'
+                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  transition='all 0.2s'
+                />
+              </AppLink>
             </Flex>
           </Stack>
 

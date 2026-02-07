@@ -23,7 +23,6 @@ interface FormInputProps extends Omit<InputProps & TextareaProps, 'onChange'> {
   value?: string;
 }
 
-// Wrapping with forwardRef allows RHF to "touch" the DOM element
 export const FormInput = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
   FormInputProps
@@ -52,7 +51,7 @@ export const FormInput = forwardRef<
         {isTextArea ? (
           <Textarea
             {...props}
-            ref={ref as React.Ref<HTMLTextAreaElement>} // Attach the ref
+            ref={ref as React.Ref<HTMLTextAreaElement>}
             value={value}
             onChange={onChange}
             rows={rows}
@@ -63,7 +62,7 @@ export const FormInput = forwardRef<
         ) : (
           <Input
             {...props}
-            ref={ref as React.Ref<HTMLInputElement>} // Attach the ref
+            ref={ref as React.Ref<HTMLInputElement>}
             value={value}
             onChange={onChange}
             focusRingColor='primary'

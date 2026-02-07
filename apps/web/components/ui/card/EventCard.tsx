@@ -5,8 +5,6 @@ import {
   Text,
   Stack,
   HStack,
-  Badge,
-  Card,
   Box,
   Flex,
   AvatarGroup,
@@ -27,23 +25,30 @@ export const EventCard = ({ event }: EventCardProps) => {
       name: reg.user.name,
       src: reg.user.image || undefined,
     })) || [];
+
   return (
     <AppLink href={`/events/${event.id}`}>
-      <Card.Root
-        variant='elevated'
-        px={3}
-        pt={3}
+      <Box
         bg='white'
         w={{ base: 'full', md: '280px' }}
         h='350px'
+        borderRadius='3xl'
         overflow='hidden'
+        boxShadow='sm'
         _hover={{ boxShadow: 'md' }}
         transition='all 0.2s'
-        borderRadius='3xl'
+        p={3}
         display='flex'
         flexDirection='column'
       >
-        <Box height='40%' flexShrink={0} overflow='hidden' borderRadius='3xl'>
+        {/* Image Section - 40% */}
+        <Box
+          height='40%'
+          flexShrink={0}
+          overflow='hidden'
+          borderRadius='3xl'
+          mb={3}
+        >
           <ResponsiveImage
             src={event.mediaUrl as string}
             alt={event.title}
@@ -53,10 +58,13 @@ export const EventCard = ({ event }: EventCardProps) => {
           />
         </Box>
 
-        <Card.Body gap={2} flex={1} overflow='hidden'>
+        {/* Content Section - Flexible */}
+        <Stack gap={2} flex={1} minH={0}>
+          {/* Date and Time */}
           <HStack justify='space-between' fontSize='xs' fontWeight='bold'>
             <Flex align='center' gap={2}>
-              <Calendar size={12} /> <Text>{formatDate(event.date)}</Text>
+              <Calendar size={12} />
+              <Text>{formatDate(event.date)}</Text>
             </Flex>
             <Flex align='center' gap={2}>
               <Timer size={12} />
@@ -64,19 +72,25 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
           </HStack>
 
-          {/* 3. Title */}
-          <Card.Title mt='1' lineHeight='shorter' fontSize='small'>
+          {/* Title */}
+          <Text
+            mt='1'
+            lineHeight='shorter'
+            fontSize='small'
+            fontWeight='semibold'
+          >
             {event.title}
-          </Card.Title>
+          </Text>
 
-          <Stack gap='1' pt='2'>
+          {/* Location and Tags */}
+          <Stack gap='2' pt='2' mb={0} pb={0} flex={1}>
             <Flex align='center' gap={2} width='full'>
               <MapPin size={14} style={{ flexShrink: 0 }} />
               <Text fontSize='xs' truncate minW={0} flex={1}>
                 Coming soon... | {event.location}
               </Text>
             </Flex>
-            <Flex align='center' gap={2}>
+            <Flex align='center' gap={4}>
               <Text
                 bg='textPrimary'
                 p={1}
@@ -106,32 +120,26 @@ export const EventCard = ({ event }: EventCardProps) => {
               </Text>
             </Flex>
           </Stack>
-        </Card.Body>
+        </Stack>
 
-        <Card.Footer gap='2' flexShrink={0}>
-          {/* Status Badges */}
-          {event.hasJoined && <Badge colorPalette='green'>Joined</Badge>}
-          {event.isFull && <Badge colorPalette='orange'>Full</Badge>}
-          {event.isExpired && <Badge colorPalette='red'>Expired</Badge>}
-          {/* Avatar Group for Attendees */}
-          <Box>
-            {attendees.length > 0 && (
-              <AvatarGroup size='xs'>
-                {attendees.slice(0, 3).map((person, i) => (
-                  <AvatarImage
-                    key={i}
-                    name={person.name}
-                    src={person.src || ''}
-                  />
-                ))}
-              </AvatarGroup>
-            )}
-            <Avatar.Root>
-              <Avatar.Fallback>+3</Avatar.Fallback>
-            </Avatar.Root>
-          </Box>
-        </Card.Footer>
-      </Card.Root>
+        {/* Footer Section - Fixed at bottom */}
+        <Box pt={1} borderTop='1px solid' borderColor='gray.100'>
+          {attendees.length > 0 && (
+            <AvatarGroup size='xs'>
+              {attendees.slice(0, 3).map((person, i) => (
+                <AvatarImage
+                  key={i}
+                  name={person.name}
+                  src={person.src || ''}
+                />
+              ))}
+            </AvatarGroup>
+          )}
+          <Avatar.Root>
+            <Avatar.Fallback>+3</Avatar.Fallback>
+          </Avatar.Root>
+        </Box>
+      </Box>
     </AppLink>
   );
 };

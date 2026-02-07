@@ -54,12 +54,12 @@ const adminMenuItems = [
 export const MENU_CONFIG = {
   common: {
     main: [
-      { label: 'Events', icon: LuCalendar, href: '/event' },
-      { label: 'Adventures', icon: LuMapPin, href: '/adventure' },
+      { label: 'Events', icon: LuCalendar, href: '/dashboard/event' },
+      { label: 'Adventures', icon: LuMapPin, href: '/dashboard/adventure' },
     ],
     support: [
-      { label: 'Help', icon: HelpCircle, href: '/help' },
-      { label: 'Settings', icon: LuSettings, href: '/setting' },
+      { label: 'Help', icon: HelpCircle, href: '/dashboard/help' },
+      { label: 'Settings', icon: LuSettings, href: '/dashboard/setting' },
     ],
   },
   roles: {

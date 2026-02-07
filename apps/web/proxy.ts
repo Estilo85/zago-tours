@@ -81,6 +81,7 @@ export async function proxy(request: NextRequest) {
 // Dashboard routes
 export const config = {
   matcher: [
+    '/dashboard/:path*',
     '/admin/:path*',
     '/independent-agent/:path*',
     '/corporate-agent/:path*',

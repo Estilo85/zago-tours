@@ -74,6 +74,7 @@ export interface AdventureResponseDto {
     itineraries: number;
     gallery: number;
   };
+  isLiked?: boolean;
 }
 
 export interface AdventureDetailResponseDto extends AdventureResponseDto {
