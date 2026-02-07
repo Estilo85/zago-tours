@@ -64,7 +64,7 @@ export default function TransformationSection() {
           color='primary'
           fontWeight='bolder'
         >
-          From Outdated to Outstanding
+          From Outdated to Outstanding
         </Text>
 
         <SimpleGrid

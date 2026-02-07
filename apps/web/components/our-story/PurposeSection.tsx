@@ -37,26 +37,13 @@ export default function PurposeSection() {
   return (
     <Box>
       <Stack textAlign='center' spaceY={5}>
-        <Center>
-          <Text
-            fontSize={{ base: 'xs', md: 'sm' }}
-            px={4}
-            py={1}
-            border='1px solid'
-            borderColor='primary'
-            borderRadius='full'
-            letterSpacing='widest'
-          >
-            the transformation
-          </Text>
-        </Center>
         <Text
           fontSize={{ base: 'xl', md: '3xl' }}
           lineHeight='1.2'
           color='primary'
           fontWeight='bolder'
         >
-          From Outdated to Outstanding
+          Why we do what we do
         </Text>
         <SimpleGrid
           columns={{ base: 1, md: 2 }}

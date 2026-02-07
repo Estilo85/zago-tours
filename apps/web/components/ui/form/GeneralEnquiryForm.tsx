@@ -53,7 +53,7 @@ export default function GeneralEnquiryForm() {
       maxW={{ base: '100%', md: '500px' }}
       mx='auto'
       p={{ base: 6, md: 10 }}
-      bg='textPrimary'
+      bg='surface'
       borderRadius='3xl'
       borderWidth='1px'
       shadow='xl'
@@ -104,7 +104,7 @@ export default function GeneralEnquiryForm() {
         <Button
           type='submit'
           bg='secondary'
-          color='white'
+          color='dark'
           size='xl'
           width='full'
           loading={enquiry.isPending}

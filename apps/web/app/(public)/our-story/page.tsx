@@ -5,11 +5,12 @@ import TransformationSection from '@/components/our-story/TransformationSection'
 import PurposeSection from '@/components/our-story/PurposeSection';
 import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-step';
 
-import { Box, Heading, Text, Stack, Center } from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, Center, Icon } from '@chakra-ui/react';
 import React from 'react';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
+import { ArrowRight } from 'lucide-react';
 
 export const mySteps = [
   {
@@ -126,9 +127,20 @@ export default function OurStory() {
         </Stack>
         <TransformationSection />
         <PurposeSection />
-        <Box>
+        <Box textAlign='center'>
           <AppLink href='/register'>
-            <Button bg='secondary'>Join us</Button>
+            <Button
+              aria-label='join-us'
+              alignItems='center'
+              gap={3}
+              fontWeight='bold'
+              p={5}
+              cursor='pointer'
+              bg='secondary'
+              color='dark'
+            >
+              Join us <Icon as={ArrowRight} size='sm' />
+            </Button>
           </AppLink>
         </Box>
       </Stack>

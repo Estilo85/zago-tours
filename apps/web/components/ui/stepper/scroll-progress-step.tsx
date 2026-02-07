@@ -92,7 +92,8 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
             minHeight='60vh'
             mb={index < items.length - 1 ? 8 : 0}
             display='flex'
-            alignItems='center'
+            alignItems='flex-start'
+            pt={4}
           >
             {item.content}
           </Box>

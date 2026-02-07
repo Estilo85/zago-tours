@@ -36,14 +36,18 @@ export const FeatureTileCard = ({
     >
       <Box
         p={3}
-        bg={isColored ? 'whiteAlpha.300' : 'textPrimary'}
-        borderRadius='lg'
+        bg={isColored ? 'white' : 'red.500'}
+        borderRadius='full'
         display='flex'
         alignItems='center'
         justifyContent='center'
         flexShrink={0}
       >
-        <Icon as={icon} boxSize={6} color={isColored ? 'white' : 'primary'} />
+        <Icon
+          as={icon}
+          boxSize={6}
+          color={isColored ? 'primary' : 'whiteAlpha.700'}
+        />
       </Box>
 
       <Stack gap={2} align='center'>
