@@ -13,9 +13,9 @@ const postService = new PostService(postRepository);
 const postController = new PostController(postService);
 
 // ==================== PUBLIC ROUTES ====================
-router.get('/', postController.getAll);
-router.get('/:id', postController.getById);
-router.get('/:id/comments', postController.getComments);
+router.get('/', authenticate, postController.getAll);
+router.get('/:id', authenticate, postController.getById);
+router.get('/:id/comments', authenticate, postController.getComments);
 
 // ==================== AUTHENTICATED ROUTES ====================
 // Feed & User Posts

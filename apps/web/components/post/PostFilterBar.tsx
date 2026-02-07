@@ -60,7 +60,6 @@ export function PostFilterBar({
             >
               <User size={14} />
               {userName}
-              prop is passed properly
             </Text>
           </Field.Root>
         </Box>

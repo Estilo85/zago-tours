@@ -62,10 +62,11 @@ export class PostController {
         filters.userId = String(userId);
       }
 
-      const result = await this.postService.paginate(
+      const result = await this.postService.getAllWithUserFlags(
+        req.userId!,
         Number(page),
         Number(limit),
-        { where: filters },
+        filters,
       );
 
       return ResponseUtil.paginated(res, result);

@@ -35,7 +35,7 @@ export const FormField = forwardRef<any, any>(
                 <PasswordInput
                   ref={ref}
                   name={name}
-                  value={value}
+                  value={value ?? ''}
                   onChange={onChange}
                   onBlur={onBlur}
                   placeholder={placeholder}
@@ -46,7 +46,7 @@ export const FormField = forwardRef<any, any>(
                 <Textarea
                   ref={ref}
                   name={name}
-                  value={value}
+                  value={value ?? ''}
                   onChange={onChange}
                   onBlur={onBlur}
                   placeholder={placeholder}
@@ -98,7 +98,7 @@ export const FormField = forwardRef<any, any>(
               return (
                 <Checkbox.Root
                   name={name}
-                  checked={value}
+                  checked={value ?? false}
                   onCheckedChange={(details) => onChange(details.checked)}
                 >
                   <Checkbox.HiddenInput ref={ref} onBlur={onBlur} />
@@ -114,7 +114,7 @@ export const FormField = forwardRef<any, any>(
                   ref={ref}
                   name={name}
                   type={type}
-                  value={value}
+                  value={value ?? ''}
                   onChange={onChange}
                   onBlur={onBlur}
                   placeholder={placeholder}

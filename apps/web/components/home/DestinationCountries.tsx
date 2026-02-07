@@ -14,12 +14,12 @@ const float = keyframes`
 
 const DESTINATIONS = [
   { name: 'France', top: '28%', left: '48%' },
-  { name: 'Nigeria', top: '58%', left: '50%' },
+  { name: 'Tanzania', top: '58%', left: '50%' },
   { name: 'United Arab Emirates', top: '42%', left: '62%' },
   { name: 'South Africa', top: '82%', left: '54%' },
   { name: 'Brazil', top: '65%', left: '32%' },
   { name: 'Thailand', top: '52%', left: '80%' },
-  { name: 'United Kingdom', top: '22%', left: '46%' },
+  { name: 'United Kingdom', top: '22%', left: '26%' },
   { name: 'Kenya', top: '62%', left: '58%' },
 ];
 
@@ -87,7 +87,6 @@ export const DestinationCountries = () => {
             {/* The Map Pin Icon - Fixed! */}
             <MapPin
               size={24}
-              // fill='#DC2626'
               fill='black'
               color='white'
               strokeWidth={2.5}

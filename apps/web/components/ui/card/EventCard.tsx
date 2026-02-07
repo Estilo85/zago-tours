@@ -13,7 +13,7 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
-import { Calendar, Timer } from 'lucide-react';
+import { Calendar, MapPin, Timer } from 'lucide-react';
 import { AppLink } from '../link/AppLink';
 import { formatDate } from '@/utils/DateFormat';
 
@@ -30,34 +30,31 @@ export const EventCard = ({ event }: EventCardProps) => {
   return (
     <AppLink href={`/events/${event.id}`}>
       <Card.Root
-        maxW={{ base: '100%', md: '650px' }}
         variant='elevated'
         px={3}
         pt={3}
         bg='white'
+        w={{ base: 'full', md: '280px' }}
+        h='350px'
         overflow='hidden'
-        borderWidth='1px'
-        borderColor='gray.100'
-        borderRadius='xl'
-        boxShadow='0 2px 12px rgba(0, 0, 0, 0.05)'
-        transition='transform 0.2s ease'
-        _hover={{ transform: { md: 'translateY(-2px)' } }}
+        _hover={{ boxShadow: 'md' }}
+        transition='all 0.2s'
+        borderRadius='3xl'
+        display='flex'
+        flexDirection='column'
       >
-        <ResponsiveImage
-          src={event.mediaUrl as string}
-          alt={event.title}
-          height='200px'
-          objectFit='cover'
-          borderRadius='none'
-        />
+        <Box height='40%' flexShrink={0} overflow='hidden' borderRadius='3xl'>
+          <ResponsiveImage
+            src={event.mediaUrl as string}
+            alt={event.title}
+            width='100%'
+            height='100%'
+            objectFit='cover'
+          />
+        </Box>
 
-        <Card.Body gap='3'>
-          <HStack
-            justify='space-between'
-            fontSize='xs'
-            fontWeight='bold'
-            color='blue.600'
-          >
+        <Card.Body gap={2} flex={1} overflow='hidden'>
+          <HStack justify='space-between' fontSize='xs' fontWeight='bold'>
             <Flex align='center' gap={2}>
               <Calendar size={12} /> <Text>{formatDate(event.date)}</Text>
             </Flex>
@@ -68,26 +65,50 @@ export const EventCard = ({ event }: EventCardProps) => {
           </HStack>
 
           {/* 3. Title */}
-          <Card.Title mt='1'>{event.title}</Card.Title>
+          <Card.Title mt='1' lineHeight='shorter' fontSize='small'>
+            {event.title}
+          </Card.Title>
 
-          {/* 4. Description */}
-          <Text lineClamp={2} color='fg.muted' fontSize='sm'>
-            {event.description}
-          </Text>
-
-          {/* 5. Metadata (Spots & Location) */}
           <Stack gap='1' pt='2'>
-            <Text fontSize='xs'>📍 {event.location}</Text>
-            <Text
-              fontSize='xs'
-              color={event.spotLeft < 5 ? 'red.500' : 'inherit'}
-            >
-              👥 Spots left: {event.spotLeft}
-            </Text>
+            <Flex align='center' gap={2} width='full'>
+              <MapPin size={14} style={{ flexShrink: 0 }} />
+              <Text fontSize='xs' truncate minW={0} flex={1}>
+                Coming soon... | {event.location}
+              </Text>
+            </Flex>
+            <Flex align='center' gap={2}>
+              <Text
+                bg='textPrimary'
+                p={1}
+                borderRadius='md'
+                whiteSpace='nowrap'
+                fontSize='xx-small'
+              >
+                Free Entry
+              </Text>
+              <Text
+                bg='textPrimary'
+                p={1}
+                borderRadius='md'
+                whiteSpace='nowrap'
+                fontSize='xx-small'
+              >
+                Food Wine & Drinks
+              </Text>
+              <Text
+                bg='textPrimary'
+                p={1}
+                borderRadius='md'
+                whiteSpace='nowrap'
+                fontSize='xx-small'
+              >
+                Free Entry
+              </Text>
+            </Flex>
           </Stack>
         </Card.Body>
 
-        <Card.Footer gap='2'>
+        <Card.Footer gap='2' flexShrink={0}>
           {/* Status Badges */}
           {event.hasJoined && <Badge colorPalette='green'>Joined</Badge>}
           {event.isFull && <Badge colorPalette='orange'>Full</Badge>}

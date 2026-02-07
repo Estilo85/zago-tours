@@ -91,7 +91,6 @@ export const StatsGrid = ({ stats, isLoading }: StatsGridProps) => {
             bg='gray.100'
             h='150px'
             borderRadius='2xl'
-            // animate={{ opacity: [0.5, 1, 0.5] }}
           />
         ))}
       </SimpleGrid>

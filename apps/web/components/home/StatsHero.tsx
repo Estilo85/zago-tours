@@ -76,11 +76,11 @@ export const StatsHero = () => {
 
       {/* Stats Section */}
       <Flex
-        direction='row'
+        direction={{ base: 'column', md: 'row' }}
         align='center'
         justify='center'
         gap={{ base: 4, md: 10 }}
-        flexWrap='wrap' // Critical for mobile
+        flexWrap='wrap'
         width={{ base: '100%', md: 'auto' }}
       >
         {stats.map((stat, idx) => (

@@ -5,16 +5,15 @@ import {
   Heading,
   SimpleGrid,
   Center,
-  Spinner,
-  VStack,
   Text,
+  Grid,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { SignatureEventCard } from '../ui/card/SignatureEventCard';
 import { useEvents } from '@/hooks';
 import { Event } from '@zagotours/types';
-import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
+import { SignatureEventCardSkeleton } from '../ui/card/SignatureEventcardskeleton';
 
 export default function SignatureEventsSection() {
   const { data, isLoading, isError, error } = useEvents();
@@ -25,7 +24,6 @@ export default function SignatureEventsSection() {
     return data.data.filter((event: Event) => event.isSignature);
   }, [data]);
 
-  if (isLoading) return <LoadingState message='Loading events...' />;
   if (isError) return <ErrorState message={error?.message} />;
 
   return (
@@ -38,8 +36,19 @@ export default function SignatureEventsSection() {
       >
         Our Signature Events
       </Heading>
-
-      {signatureEvents.length === 0 ? (
+      {isLoading && (
+        <SimpleGrid
+          columns={{ base: 1, md: 2 }}
+          gap={{ base: 6, md: 3 }}
+          width={{ base: 'full', lg: '900px' }}
+          justifyItems='center'
+        >
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <SignatureEventCardSkeleton key={idx} />
+          ))}
+        </SimpleGrid>
+      )}
+      {!isLoading && signatureEvents.length === 0 ? (
         <Center minH='300px'>
           <Text color='gray.500' fontSize='lg'>
             No signature events available at the moment

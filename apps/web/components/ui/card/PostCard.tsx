@@ -10,15 +10,10 @@ import {
   Heading,
   Image,
   HStack,
-  MenuContent,
-  MenuItem,
-  MenuRoot,
-  MenuTrigger,
 } from '@chakra-ui/react';
 import { LuHeart, LuMessageCircle, LuShare2 } from 'react-icons/lu';
 import { PostResponseDto } from '@zagotours/types';
 import { AvatarImage } from '@/components/media/AvatarImage';
-import { Edit, MoreVertical, Trash2 } from 'lucide-react';
 import Button from '../button/Button';
 import { CommentSection } from '@/components/post/CommentSection';
 import { formatDate } from '@/utils/DateFormat';
@@ -28,7 +23,6 @@ import {
   useToggleLikePost,
   useUpdatePost,
 } from '@/hooks';
-import { PostFormModal } from '../modal/PostFormModal';
 
 interface PostCardProps {
   post: PostResponseDto;
@@ -40,8 +34,6 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   const toggleLike = useToggleLikePost();
   const sharePost = useSharePost();
-  const deletePost = useDeletePost();
-  const updatePost = useUpdatePost();
 
   //=========== SHORTEN DESCRIPTION LENGTH =============
   const maxLength = 150;
@@ -77,15 +69,10 @@ export const PostCard = ({ post }: PostCardProps) => {
     toggleLike.mutate(post.id);
   };
 
-  const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this post?')) {
-      deletePost.mutate(post.id);
-    }
-  };
-
   return (
     <Card.Root
-      maxW={{ base: '100%', md: '600px' }}
+      width='100%'
+      maxW='600px'
       variant='elevated'
       mx='auto'
       mb={6}
@@ -118,47 +105,6 @@ export const PostCard = ({ post }: PostCardProps) => {
               </Text>
             </Box>
           </Flex>
-          <MenuRoot>
-            <MenuTrigger asChild>
-              <Button
-                variant='ghost'
-                size='sm'
-                p={2}
-                minW='auto'
-                borderRadius='full'
-              >
-                <MoreVertical size={18} color='#718096' />
-              </Button>
-            </MenuTrigger>
-            <MenuContent>
-              <MenuItem value='edit'>
-                <PostFormModal
-                  mode='edit'
-                  userName={post.user.name}
-                  initialData={{
-                    title: post.title,
-                    description: post.description,
-                    mediaUrl: post.mediaUrl || undefined,
-                  }}
-                  onSubmit={(formData) =>
-                    updatePost.mutate({ id: post.id, data: formData })
-                  }
-                  isLoading={updatePost.isPending}
-                >
-                  <Flex align='center' gap={2} width='100%'>
-                    <Edit size={16} />
-                    <Text>Edit Post</Text>
-                  </Flex>
-                </PostFormModal>
-              </MenuItem>
-              <MenuItem value='delete' onClick={handleDelete} color='red.600'>
-                <Flex align='center' gap={2}>
-                  <Trash2 size={16} />
-                  <Text>Delete Post</Text>
-                </Flex>
-              </MenuItem>
-            </MenuContent>
-          </MenuRoot>
         </Flex>
 
         {/* Post Title */}
@@ -174,27 +120,33 @@ export const PostCard = ({ post }: PostCardProps) => {
         </Heading>
       </Box>
 
-      {/* 2. MEDIA: Image or Video */}
+      {/* 2. MEDIA: Image or Video - FIXED HEIGHT */}
       {post.mediaUrl && (
-        <Box bg='gray.900' overflow='hidden'>
+        <Box
+          bg='gray.900'
+          overflow='hidden'
+          width='100%'
+          height='400px'
+          position='relative'
+        >
           {post.mediaType === 'VIDEO' ? (
             <chakra.video
               src={post.mediaUrl}
               controls
               width='100%'
-              maxH='480px'
-              style={{ objectFit: 'contain' }}
+              height='100%'
+              style={{ objectFit: 'cover' }}
             />
           ) : (
             <Image
               src={post.mediaUrl}
               alt={post.title}
               width='100%'
-              maxH='500px'
+              height='100%'
               objectFit='cover'
               loading='lazy'
               transition='scale 0.3s ease'
-              _hover={{ scale: '1.02' }}
+              _hover={{ scale: '1.05' }}
             />
           )}
         </Box>
@@ -230,6 +182,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       <Box px={2} py={2} borderTop='1px solid' borderColor='gray.50'>
         <HStack gap={1} width='100%'>
           {/* Like Button */}
+          {/* Like Button */}
           <Button
             variant='ghost'
             size='sm'
@@ -239,12 +192,9 @@ export const PostCard = ({ post }: PostCardProps) => {
             color={post.isLikedByUser ? 'red.500' : 'gray.600'}
             _hover={{ bg: 'red.50', color: 'red.600' }}
           >
-            <LuHeart
-              fill={post.isLikedByUser ? 'currentColor' : 'none'}
-              size={18}
-            />
+            <LuHeart fill={post.isLikedByUser ? 'red' : 'none'} size={18} />
             <Text fontSize='sm' fontWeight='semibold'>
-              {post._count.likes}
+              {post._count.likes} {/* Show actual count */}
             </Text>
           </Button>
 

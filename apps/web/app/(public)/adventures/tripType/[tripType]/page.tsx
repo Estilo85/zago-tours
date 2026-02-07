@@ -14,10 +14,10 @@ import {
 import AdventureCard from '@/components/ui/card/AdventureCard';
 import { useAdventures } from '@/hooks';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { TripTypeLabels } from '@zagotours/types';
 import { ArrowLeft } from 'lucide-react';
 import { AppLink } from '@/components/ui/link/AppLink';
+import { AdventureCardSkeleton } from '@/components/ui/card/Adventurecardskeleton';
 
 export default function TripTypePage() {
   const params = useParams();
@@ -34,8 +34,6 @@ export default function TripTypePage() {
   const pagination = response?.pagination;
   const displayName =
     TripTypeLabels[tripType as keyof typeof TripTypeLabels] || tripType;
-
-  if (isLoading) return <LoadingState message='Loading...' />;
 
   return (
     <Container maxW='container.xl' py={10}>
@@ -58,8 +56,23 @@ export default function TripTypePage() {
         {displayName}
       </Heading>
 
+      {/* Loading state */}
+      {isLoading && (
+        <SimpleGrid
+          columns={{ base: 1, md: 2, lg: 3 }}
+          gap={{ base: 6, md: 3 }}
+          columnGap={6}
+          width='full'
+          justifyItems='center'
+        >
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <AdventureCardSkeleton key={idx} />
+          ))}
+        </SimpleGrid>
+      )}
+
       {/* Empty state */}
-      {adventures.length === 0 && (
+      {!isLoading && adventures.length === 0 && (
         <Box textAlign='center' py={10}>
           <Text fontSize='lg' color='gray.500'>
             No {displayName.toLowerCase()} adventures available yet.
@@ -68,11 +81,16 @@ export default function TripTypePage() {
       )}
 
       {/* Adventures grid */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-        {adventures.map((adventure) => (
-          <AdventureCard key={adventure.id} adventure={adventure} />
-        ))}
-      </SimpleGrid>
+      {!isLoading && adventures.length > 0 && (
+        <SimpleGrid
+          columns={{ base: 1, md: 2, lg: 3 }}
+          gap={{ base: 6, md: 3 }}
+        >
+          {adventures.map((adventure) => (
+            <AdventureCard key={adventure.id} adventure={adventure} />
+          ))}
+        </SimpleGrid>
+      )}
 
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (

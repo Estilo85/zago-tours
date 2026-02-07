@@ -28,6 +28,8 @@ export class PostRepository extends BaseRepository<
         shares: true,
       },
     },
+    likes: true,
+    shares: true,
   };
 
   //============================

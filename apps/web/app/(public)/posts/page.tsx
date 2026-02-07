@@ -2,9 +2,10 @@
 import { PostCreator } from '@/components/post/PostCreator';
 import { PostFilterBar } from '@/components/post/PostFilterBar';
 import PostHero from '@/components/post/PostHero';
+import { PostPageSkeleton } from '@/components/post/Postpageskeleton';
 import PostSection from '@/components/post/PostSection';
 import { ErrorState } from '@/components/ui/ErrorState';
-import { LoadingState } from '@/components/ui/LoadingState';
+import { PostFormModal } from '@/components/ui/modal/PostFormModal';
 import { useCurrentUser, usePosts } from '@/hooks';
 import { Box, Flex, Center, Text } from '@chakra-ui/react';
 import React, { useState, useMemo } from 'react';
@@ -15,7 +16,8 @@ export default function Post() {
   const [displayPosts, setDisplayPosts] = useState<any[]>([]);
 
   const userName = userData?.data?.name || 'User';
-  // Extract posts from API response
+  const userImage = userData?.data?.image;
+
   const posts = useMemo(() => {
     return data?.data || [];
   }, [data]);
@@ -26,21 +28,13 @@ export default function Post() {
     }
   }, [posts, displayPosts.length]);
 
-  if (isLoading)
-    return (
-      <Box>
-        <PostHero />
-        <LoadingState message='Loading posts...' />
-      </Box>
-    );
+  if (isLoading) {
+    return <PostPageSkeleton />;
+  }
 
-  if (isError)
-    return (
-      <Box>
-        <PostHero />
-        <ErrorState />
-      </Box>
-    );
+  if (isError) {
+    return <ErrorState />;
+  }
 
   return (
     <Box>
@@ -53,10 +47,9 @@ export default function Post() {
             onFilterResults={(filtered) => setDisplayPosts(filtered)}
           />
 
-          <PostCreator userName={userName} />
+          <PostCreator userName={userName} userImage={userImage} />
 
-          {/* Pass the filtered posts down to the section */}
-          {displayPosts.length === 0 ? (
+          {!isLoading && displayPosts.length === 0 ? (
             <Center minH='300px'>
               <Text color='gray.500' fontSize='lg'>
                 No posts found yet! be the first to post
@@ -67,6 +60,8 @@ export default function Post() {
           )}
         </Box>
       </Flex>
+
+      <PostFormModal />
     </Box>
   );
 }

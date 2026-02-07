@@ -1,10 +1,10 @@
 'use client';
 
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
-import { Image as ImageIcon, Video } from 'lucide-react';
+import { CirclePlay, Image as ImageIcon } from 'lucide-react';
 import { AvatarImage } from '../media/AvatarImage';
 import Button from '../ui/button/Button';
-import { CreatePostModal } from '../ui/modal/CreatePostModal';
+import { usePostModalStore } from '@/store/usePostModalStore';
 
 export function PostCreator({
   userName,
@@ -13,6 +13,8 @@ export function PostCreator({
   userName: string;
   userImage?: string;
 }) {
+  const { openModal } = usePostModalStore();
+
   return (
     <Box
       my={6}
@@ -24,81 +26,40 @@ export function PostCreator({
       boxShadow='sm'
     >
       <Flex gap={3} align='center'>
-        {/* Trigger 1: The Input Box */}
-
         <AvatarImage src={userImage} name={userName} size='md' />
-        <CreatePostModal userName={userName}>
-          <Box
-            flex={1}
-            bg='gray.50'
-            py={2}
-            px={4}
-            borderRadius='full'
-            cursor='pointer'
-            _hover={{ bg: 'gray.100' }}
-          >
-            <Text color='gray.500' fontSize='sm'>
-              Share your experience, {userName.split(' ')[0]}...
-            </Text>
-          </Box>
-        </CreatePostModal>
+        <Box
+          flex={1}
+          bg='gray.50'
+          py={2}
+          px={4}
+          borderRadius='full'
+          cursor='pointer'
+          _hover={{ bg: 'gray.100' }}
+          onClick={openModal}
+        >
+          <Text color='gray.500' fontSize='sm'>
+            Share your experience, {userName.split(' ')[0]}...
+          </Text>
+        </Box>
 
         <HStack borderTop='1px solid' borderColor='gray.50' align='center'>
           <HStack gap={4}>
-            {/* Trigger 2: Photo Icon */}
-            <CreatePostModal userName={userName}>
-              <Box cursor='pointer'>
-                <ActionButton
-                  icon={<ImageIcon size={18} color='#3b82f6' />}
-                  label='Photo'
-                />
-              </Box>
-            </CreatePostModal>
-
-            {/* Trigger 3: Video Icon */}
-            <CreatePostModal userName={userName}>
-              <Box cursor='pointer'>
-                <ActionButton
-                  icon={<Video size={18} color='#10b981' />}
-                  label='Video'
-                />
-              </Box>
-            </CreatePostModal>
+            <ImageIcon size={32} cursor='pointer' onClick={openModal} />
+            <CirclePlay size={32} cursor='pointer' onClick={openModal} />
           </HStack>
 
-          <CreatePostModal userName={userName}>
-            <Button size='sm' colorScheme='primary' px={6} borderRadius='full'>
-              Post
-            </Button>
-          </CreatePostModal>
+          <Button
+            size='sm'
+            bg='black'
+            color='white'
+            px={6}
+            borderRadius='full'
+            onClick={openModal}
+          >
+            Post
+          </Button>
         </HStack>
       </Flex>
     </Box>
   );
 }
-
-const ActionButton = ({
-  icon,
-  label,
-}: {
-  icon: React.ReactNode;
-  label: string;
-}) => (
-  <HStack
-    gap={2}
-    p={2}
-    borderRadius='md'
-    _hover={{ bg: 'gray.50' }}
-    transition='0.2s'
-  >
-    {icon}
-    <Text
-      fontSize='xs'
-      fontWeight='bold'
-      color='gray.600'
-      display={{ base: 'none', sm: 'block' }}
-    >
-      {label}
-    </Text>
-  </HStack>
-);

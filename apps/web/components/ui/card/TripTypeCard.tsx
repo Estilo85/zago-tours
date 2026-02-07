@@ -1,17 +1,10 @@
 'use client';
 
 import { AvatarImage } from '@/components/media/AvatarImage';
-import {
-  Flex,
-  Text,
-  Icon,
-  VStack,
-  LinkBox,
-  LinkOverlay,
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { Flex, Text, Icon, VStack, LinkBox } from '@chakra-ui/react';
 import { LuChevronRight } from 'react-icons/lu';
 import { AppLink } from '../link/AppLink';
+
 interface TripTypeCardProps {
   type: string;
   label: string;

@@ -1,26 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import { SimpleGrid, Container, Heading, Center, Text } from '@chakra-ui/react';
+import { SimpleGrid, Container, Heading } from '@chakra-ui/react';
 import { TripTypeCard } from '../ui/card/TripTypeCard';
 import { TripType, TripTypeLabels } from '@zagotours/types';
-import Button from '../ui/button/Button';
+import { useAdventures } from '@/hooks';
 
 export default function TripTypeSection() {
-  const [showAll, setShowAll] = useState(false);
-  const INITIAL_DISPLAY = 8;
+  const { data: response } = useAdventures();
+
+  const adventures = response?.data || [];
+
+  const tripTypeCounts = adventures.reduce(
+    (acc, adventure) => {
+      const type = adventure.tripType;
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    },
+    {} as Record<TripType, number>,
+  );
+
+  const tripTypeImages = adventures.reduce(
+    (acc, adventure) => {
+      const type = adventure.tripType;
+      if (!acc[type] && adventure.mediaUrl) {
+        acc[type] = adventure.mediaUrl;
+      }
+      return acc;
+    },
+    {} as Record<TripType, string>,
+  );
 
   const tripTypes = Object.entries(TripTypeLabels).map(([key, label]) => ({
     key: key as TripType,
     name: label,
-    count: 0,
-    image: '/images/events/pricing-plan.webp',
+    count: tripTypeCounts[key as TripType] || 0,
+    image:
+      tripTypeImages[key as TripType] || '/images/events/pricing-plan.webp',
   }));
-
-  const displayedTypes = showAll
-    ? tripTypes
-    : tripTypes.slice(0, INITIAL_DISPLAY);
-  const hasMore = tripTypes.length > INITIAL_DISPLAY;
 
   return (
     <Container maxW='container.lg' py={10}>
@@ -41,7 +57,7 @@ export default function TripTypeSection() {
         mx='auto'
         px={4}
       >
-        {displayedTypes.map((t) => (
+        {tripTypes.map((t) => (
           <TripTypeCard
             key={t.key}
             type={t.key}
@@ -51,20 +67,6 @@ export default function TripTypeSection() {
           />
         ))}
       </SimpleGrid>
-
-      {hasMore && (
-        <Center mt={6}>
-          <Button
-            onClick={() => setShowAll(!showAll)}
-            variant='outline'
-            size='lg'
-          >
-            {showAll
-              ? 'Show Less'
-              : `See More (${tripTypes.length - INITIAL_DISPLAY} more)`}
-          </Button>
-        </Center>
-      )}
     </Container>
   );
 }

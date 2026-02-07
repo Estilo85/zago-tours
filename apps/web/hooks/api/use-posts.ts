@@ -53,11 +53,12 @@ export function useCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) =>
-      apiRequest(API_ENDPOINTS.POSTS.CREATE, {
+    mutationFn: (formData: FormData) => {
+      return apiRequest(API_ENDPOINTS.POSTS.CREATE, {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: formData,
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
       queryClient.invalidateQueries({ queryKey: postKeys.myPosts() });

@@ -11,7 +11,6 @@ import {
 } from '../_components/stats/stat-configs';
 import { StatsGrid } from '../_components/stats/stat-card';
 import { Leaderboard } from '../_components/leaderboard/Leaderboard';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { ReferralCard } from '@/components/ui/card/ReferralCard';
 import { CommunityCard } from '@/components/ui/card/CommunityCard';
 import { TripRequestsTable } from '../_components/dataDisplay/TripRequestTable';
@@ -27,12 +26,6 @@ export default function DashboardPage() {
   const statsData = response?.data;
   const leaderboardData = leaderResponse;
 
-  if (statsLoading) {
-    return (
-      <LoadingState message='Loading your dashboard...' minHeight='50vh' />
-    );
-  }
-
   if (!statsData) {
     return (
       <Box p={6}>
@@ -41,7 +34,6 @@ export default function DashboardPage() {
     );
   }
 
-  // Get stats configuration based on role using type guards
   const getStatsConfig = () => {
     if (!statsData?.stats) return [];
 
@@ -161,18 +153,15 @@ export default function DashboardPage() {
             <Heading size='sm' mb={2} color='orange.900'>
               🎯 Affiliate Performance
             </Heading>
-            <Text fontSize='sm' color='orange.800'>
-              You've referred {statsData.stats.referrals.total} users (
-              {statsData.stats.referrals.active} active). Keep growing your
-              network to earn more points!
-            </Text>
           </Box>
         )}
       </Stack>
-      <Flex my={6} justify='space-between' alignItems='stretch'>
-        <CommunityCard />
-        <ReferralCard />
-      </Flex>
+      {isAnyAdmin && (
+        <Flex my={6} justify='space-between' alignItems='stretch'>
+          <CommunityCard />
+          <ReferralCard />
+        </Flex>
+      )}
     </Box>
   );
 }

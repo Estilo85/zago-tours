@@ -15,7 +15,7 @@ import Button from '../ui/button/Button';
 import { Grip, Verified } from 'lucide-react';
 import { useAdventures } from '@/hooks';
 import { PaginationControl } from '../ui/pagination/PaginationControl';
-import { LoadingState } from '../ui/LoadingState';
+import { AdventureCardSkeleton } from '../ui/card/Adventurecardskeleton';
 
 export default function VerifiedAdventureSection() {
   const [page, setPage] = useState(1);
@@ -33,14 +33,6 @@ export default function VerifiedAdventureSection() {
 
   return (
     <Container maxW='container.xl' justifyItems='center' mt={5}>
-      {/* Loading */}
-      {isLoading && <LoadingState message='Please wait...' />}
-
-      {/* Empty */}
-      {!isLoading && adventures.length === 0 && (
-        <Box>No adventures found yet!</Box>
-      )}
-
       {/* Header */}
       <Flex align='center' mb={6} gap={5}>
         <Heading
@@ -54,8 +46,22 @@ export default function VerifiedAdventureSection() {
         </Heading>
         <Icon as={Verified} />
       </Flex>
-
-      {/* Adventures grid */}
+      {isLoading && (
+        <SimpleGrid
+          columns={{ base: 1, md: 3 }}
+          gap={{ base: 6, md: 3 }}
+          width={{ base: 'full', lg: '900px' }}
+          justifyItems='center'
+        >
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <AdventureCardSkeleton key={idx} />
+          ))}
+        </SimpleGrid>
+      )}
+      {/* Empty */}
+      {!isLoading && adventures.length === 0 && (
+        <Box>No adventures found yet!</Box>
+      )}
       <SimpleGrid
         columns={{ base: 1, md: 3 }}
         gap={{ base: 6, md: 3 }}
@@ -66,22 +72,21 @@ export default function VerifiedAdventureSection() {
           <AdventureCard key={adventure.id} adventure={adventure} />
         ))}
       </SimpleGrid>
-
-      {/* Load more button (reveals pagination) */}
-      {!showPagination && pagination && pagination.total > limit && (
+      {/* Load more button (reveals pagination) - always shows */}
+      {!showPagination && pagination && (
         <Center mt={6}>
           <Button
             bg='dark'
             color='white'
             py='1'
+            pr='4'
             onClick={() => setShowPagination(true)}
           >
             <Icon as={Grip} mr='4' boxSize='3' />
-            Load All {pagination.total} Tours
+            Load More Tours
           </Button>
         </Center>
       )}
-
       {/* Pagination */}
       {showPagination && pagination && (
         <PaginationControl pagination={pagination} onPageChange={setPage} />

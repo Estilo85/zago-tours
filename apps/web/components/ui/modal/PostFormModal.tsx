@@ -1,5 +1,8 @@
 'use client';
 
+import { AvatarImage } from '@/components/media/AvatarImage';
+import { useUserProfile, useCreatePost } from '@/hooks';
+import { usePostModalStore } from '@/store/usePostModalStore';
 import {
   Dialog,
   Portal,
@@ -12,49 +15,26 @@ import {
   Text,
   Image,
   Input,
+  Flex,
+  VStack,
 } from '@chakra-ui/react';
-import { Image as ImageIcon, Video, X } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
+import { Image as ImageIcon, X, CirclePlay } from 'lucide-react';
+import { useRef, useState } from 'react';
 
-interface PostFormModalProps {
-  children: React.ReactNode;
-  userName: string;
-  mode: 'create' | 'edit';
-  initialData?: {
-    title?: string;
-    description?: string;
-    mediaUrl?: string;
-  };
-  onSubmit: (data: FormData) => void;
-  isLoading?: boolean;
-}
-
-export function PostFormModal({
-  children,
-  userName,
-  mode,
-  initialData,
-  onSubmit,
-  isLoading,
-}: PostFormModalProps) {
+export function PostFormModal() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(
-    initialData?.mediaUrl || null,
-  );
-  const [title, setTitle] = useState(initialData?.title || '');
-  const [description, setDescription] = useState(
-    initialData?.description || '',
-  );
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Reset form when modal opens with new initial data
-  useEffect(() => {
-    if (initialData) {
-      setTitle(initialData.title || '');
-      setDescription(initialData.description || '');
-      setPreviewUrl(initialData.mediaUrl || null);
-    }
-  }, [initialData]);
+  const { isOpen, closeModal } = usePostModalStore();
+  const { data } = useUserProfile();
+  const createPost = useCreatePost();
+
+  const profileImage = data?.data?.image;
+  const name = data?.data?.name;
+  const country = data?.data?.country;
 
   const handleIconClick = () => {
     fileInputRef.current?.click();
@@ -74,48 +54,74 @@ export function PostFormModal({
 
   const handleSubmit = () => {
     if (!description.trim() || !title.trim()) return;
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     if (selectedFile) {
-      formData.append('file', selectedFile);
+      formData.append('media', selectedFile);
+
+      const mediaType = selectedFile.type.startsWith('video/')
+        ? 'VIDEO'
+        : 'IMAGE';
+      formData.append('mediaType', mediaType);
     }
 
-    onSubmit(formData);
-
-    // Reset form only for create mode
-    if (mode === 'create') {
-      setTitle('');
-      setDescription('');
-      setSelectedFile(null);
-      setPreviewUrl(null);
-    }
+    createPost.mutate(formData, {
+      onSuccess: () => {
+        setTitle('');
+        setDescription('');
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        closeModal();
+      },
+    });
   };
 
   return (
-    <Dialog.Root lazyMount size='lg'>
-      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
+    <Dialog.Root
+      open={isOpen}
+      onOpenChange={(e) => !e.open && closeModal()}
+      lazyMount
+      size='lg'
+    >
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content borderRadius='xl'>
-            <Dialog.Header textAlign='center' borderBottomWidth='1px'>
-              {mode === 'create' ? 'Create Post' : 'Edit Post'}
+            <Dialog.Header
+              borderBottomWidth='1px'
+              position='relative'
+              width='full'
+            >
+              <Text textAlign='center' fontSize='xl' fontWeight='semibold'>
+                Create post
+              </Text>
+              <Dialog.CloseTrigger asChild>
+                <CloseButton pos='absolute' top='2' right='2' />
+              </Dialog.CloseTrigger>
             </Dialog.Header>
-            <Dialog.CloseTrigger asChild>
-              <CloseButton pos='absolute' top='2' right='2' />
-            </Dialog.CloseTrigger>
 
             <Dialog.Body py={4}>
+              <Flex align='center' gap={2} mb={4}>
+                <AvatarImage src={profileImage} name={name} />
+                <VStack align='start' gap={0}>
+                  <Text fontWeight='medium'>{name}</Text>
+                  <Text fontSize='sm' color='gray.600'>
+                    {country}
+                  </Text>
+                </VStack>
+              </Flex>
+
               <Input
-                placeholder='Title (optional)'
+                placeholder='Title'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 mb={3}
               />
 
               <Textarea
-                placeholder={`What's on your mind, ${userName.split(' ')[0]}?`}
+                placeholder={`What's on your mind, ${name?.split(' ')[0]}?`}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 minH='100px'
@@ -162,51 +168,41 @@ export function PostFormModal({
                   />
                 </Box>
               )}
-
-              <Box
-                mt={4}
-                p={3}
-                border='1px solid'
-                borderColor='gray.100'
-                borderRadius='lg'
-              >
-                <HStack justify='space-between'>
-                  <Text fontSize='sm' fontWeight='semibold' color='gray.600'>
-                    Add to your post
-                  </Text>
-                  <HStack gap={1}>
-                    <IconButton
-                      variant='ghost'
-                      aria-label='Add Image'
-                      size='sm'
-                      onClick={handleIconClick}
-                    >
-                      <ImageIcon size={20} color='#3b82f6' />
-                    </IconButton>
-                    <IconButton
-                      variant='ghost'
-                      aria-label='Add Video'
-                      size='sm'
-                      onClick={handleIconClick}
-                    >
-                      <Video size={20} color='#10b981' />
-                    </IconButton>
-                  </HStack>
-                </HStack>
-              </Box>
             </Dialog.Body>
 
-            <Dialog.Footer>
-              <Button
-                colorScheme='blue'
-                w='full'
-                size='md'
-                onClick={handleSubmit}
-                loading={isLoading}
-                disabled={!description.trim() || !title.trim()}
-              >
-                {mode === 'create' ? 'Post' : 'Update'}
-              </Button>
+            <Dialog.Footer borderTopWidth='1px' pt={3}>
+              <Flex justify='space-between' align='center' w='full'>
+                <Button
+                  bg='primary'
+                  color='white'
+                  size='md'
+                  flex={1}
+                  mr={2}
+                  onClick={handleSubmit}
+                  loading={createPost.isPending}
+                  disabled={!description.trim() || !title.trim()}
+                >
+                  Post
+                </Button>
+                <HStack gap={1}>
+                  <IconButton
+                    variant='ghost'
+                    aria-label='Add Image'
+                    size='sm'
+                    onClick={handleIconClick}
+                  >
+                    <ImageIcon size={32} />
+                  </IconButton>
+                  <IconButton
+                    variant='ghost'
+                    aria-label='Add Video'
+                    size='sm'
+                    onClick={handleIconClick}
+                  >
+                    <CirclePlay size={32} />
+                  </IconButton>
+                </HStack>
+              </Flex>
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>

@@ -60,6 +60,36 @@ export class PostService extends BaseService<
   }
 
   //============================
+  // GET ALL POSTS WITH USER FLAGS
+  //============================
+  async getAllWithUserFlags(
+    userId: string,
+    page: number,
+    limit: number,
+    filters?: Prisma.PostWhereInput,
+  ) {
+    const result = await this.postRepo.paginateWithDetails(
+      page,
+      limit,
+      filters,
+    );
+
+    const postsWithFlags = result.data.map((post: any) => ({
+      ...post,
+      isLikedByUser:
+        post.likes?.some((like: any) => like.userId === userId) || false,
+      isSharedByUser:
+        post.shares?.some((share: any) => share.userId === userId) || false,
+      likes: undefined,
+      shares: undefined,
+    }));
+
+    return {
+      ...result,
+      data: postsWithFlags,
+    };
+  }
+  //============================
   // PAGINATE POSTS
   //============================
   async paginate(
