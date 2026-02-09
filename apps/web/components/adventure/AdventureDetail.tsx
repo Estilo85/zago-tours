@@ -56,6 +56,23 @@ export default function AdventureDetailPage({
 
   const adventure = response?.data;
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: adventure?.title,
+          text: `Check out this adventure: ${adventure?.title}`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log('Error sharing', error);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
+
   if (isLoading) {
     return <AdventureSkeleton />;
   }
@@ -202,6 +219,7 @@ export default function AdventureDetailPage({
               </Text>
             </HStack>
             <Button
+              onClick={handleShare}
               variant='ghost'
               border='1px solid'
               borderColor='gray.200'

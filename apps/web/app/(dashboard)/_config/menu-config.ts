@@ -1,5 +1,12 @@
 import { Role } from '@zagotours/types';
-import { BarChart, HelpCircle, PieChart } from 'lucide-react';
+import {
+  BarChart,
+  HelpCircle,
+  House,
+  MapMinus,
+  PieChart,
+  Video,
+} from 'lucide-react';
 import {
   LuCalendar,
   LuMapPin,
@@ -23,13 +30,13 @@ import {
 
 // Comprehensive admin menu items
 const adminMenuItems = [
-  { label: 'Dashboard', icon: LuShieldCheck, href: '/dashboard' },
+  { label: 'Dashboard', icon: House, href: '/dashboard' },
 
   // User Management
   { label: 'Users', icon: LuUsers, href: '/admin/users' },
 
   // Content Management
-  { label: 'Adventures', icon: LuMapPin, href: '/admin/adventures' },
+  { label: 'Adventures', icon: MapMinus, href: '/admin/adventures' },
   { label: 'Events', icon: LuCalendar, href: '/admin/events' },
   { label: 'Reviews', icon: LuStar, href: '/admin/reviews' },
   { label: 'Posts', icon: LuMessagesSquare, href: '/admin/posts' },
@@ -55,7 +62,7 @@ export const MENU_CONFIG = {
   common: {
     main: [
       { label: 'Events', icon: LuCalendar, href: '/dashboard/event' },
-      { label: 'Adventures', icon: LuMapPin, href: '/dashboard/adventure' },
+      { label: 'Adventures', icon: MapMinus, href: '/dashboard/adventure' },
     ],
     support: [
       { label: 'Help', icon: HelpCircle, href: '/dashboard/help' },
@@ -66,7 +73,7 @@ export const MENU_CONFIG = {
     [Role.SUPER_ADMIN]: adminMenuItems,
     [Role.ADMIN]: adminMenuItems,
     [Role.INDEPENDENT_AGENT]: [
-      { label: 'Dashboard', icon: LuBriefcase, href: '/dashboard' },
+      { label: 'Dashboard', icon: House, href: '/dashboard' },
       {
         label: 'Media kits',
         icon: LuTicket,
@@ -74,7 +81,7 @@ export const MENU_CONFIG = {
       },
     ],
     [Role.COOPERATE_AGENT]: [
-      { label: 'Dashboard', icon: LuBuilding2, href: '/dashboard' },
+      { label: 'Dashboard', icon: House, href: '/dashboard' },
       {
         label: 'Trip-request',
         icon: LuUsers,
@@ -82,15 +89,15 @@ export const MENU_CONFIG = {
       },
     ],
     [Role.ADVENTURER]: [
-      { label: 'Dashboard', icon: LuPlane, href: '/dashboard' },
+      { label: 'Dashboard', icon: House, href: '/dashboard' },
       {
         label: 'Unlocked Tours',
-        icon: LuMapPin,
+        icon: Video,
         href: '/adventurer/unlocked-tours',
       },
     ],
     [Role.AFFILIATE]: [
-      { label: 'Dashboard', icon: LuDollarSign, href: '/dashboard' },
+      { label: 'Dashboard', icon: House, href: '/dashboard' },
       { label: 'Contracts', icon: LuUserPlus, href: '/affiliate/contracts' },
     ],
   },

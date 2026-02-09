@@ -22,7 +22,6 @@ export function usePermissions() {
   const isIndependentAgent = hasRole(Role.INDEPENDENT_AGENT);
   const isCooperateAgent = hasRole(Role.COOPERATE_AGENT);
 
-  // Combined role checks
   const isAnyAdmin = hasRole([Role.SUPER_ADMIN, Role.ADMIN]);
   const isAnyAgent = hasRole([Role.INDEPENDENT_AGENT, Role.COOPERATE_AGENT]);
 

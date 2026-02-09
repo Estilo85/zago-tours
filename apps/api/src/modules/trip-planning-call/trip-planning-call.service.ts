@@ -20,8 +20,7 @@ export class TripPlanningCallService extends BaseService<
   protected readonly resourceName = 'TripPlanningCall';
   private calendarService: CalendarService;
   private readonly DEFAULT_MEETING_LINK =
-    process.env.DEFAULT_MEETING_LINK ||
-    'https://meet.google.com/your-fallback-link';
+    process.env.DEFAULT_MEETING_LINK || 'https://meet.google.com/kby-bhgn-hdt';
 
   constructor(private readonly callRepo: TripPlanningCallRepository) {
     super(callRepo);

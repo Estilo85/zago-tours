@@ -3,6 +3,7 @@
 import { Box, VStack, Text, List } from '@chakra-ui/react';
 import { CheckCircle } from 'lucide-react';
 import Button from '../button/Button';
+import { AppLink } from '../link/AppLink';
 
 interface PlanProps {
   title: string;
@@ -10,6 +11,7 @@ interface PlanProps {
   buttonText: string;
   features: string[];
   isActive?: boolean;
+  href?: string;
 }
 
 export const PricingCard = ({
@@ -18,6 +20,7 @@ export const PricingCard = ({
   features,
   isActive,
   buttonText,
+  href = '#',
 }: PlanProps) => {
   return (
     <Box
@@ -53,14 +56,16 @@ export const PricingCard = ({
             /monthly
           </Box>
         </Text>
-        <Button
-          width='full'
-          bg={isActive ? 'white' : 'primary'}
-          color={isActive ? 'primary' : 'white'}
-          variant={isActive ? 'solid' : 'outline'}
-        >
-          {buttonText}
-        </Button>
+        <AppLink href={href}>
+          <Button
+            width='full'
+            bg={isActive ? 'white' : 'primary'}
+            color={isActive ? 'primary' : 'white'}
+            variant={isActive ? 'solid' : 'outline'}
+          >
+            {buttonText}
+          </Button>
+        </AppLink>
         <List.Root variant='plain' gap='3' textAlign='start' py='4'>
           {features.map((feature, index) => (
             <List.Item key={index} display='flex' alignItems='center'>

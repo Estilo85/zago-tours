@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Steps } from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
 interface StepItem {
@@ -39,66 +39,49 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
   }, [items]);
 
   return (
-    <Flex
-      gap={{ base: '6', md: '10' }}
-      direction='row'
-      alignItems='stretch'
-      justify='center'
-    >
-      {/* LEFT SIDE: Indicators */}
-      <Box flexShrink={0}>
-        <Steps.Root
-          orientation='vertical'
-          step={activeStep}
-          count={items.length}
+    <Stack gap={{ base: 6, md: 8 }} maxW='800px' mx='auto' w='full'>
+      {items.map((item, index) => (
+        <Flex
+          key={index}
+          gap={{ base: 4, md: 6 }}
+          direction='row'
+          alignItems='flex-start'
+          ref={(el: any) => (contentRefs.current[index] = el)}
+          data-step-index={index}
         >
-          <Steps.List>
-            {items.map((_, index) => (
-              <Steps.Item
-                index={index}
-                key={index}
-                data-active={activeStep === index ? '' : undefined}
-              >
-                <Steps.Trigger>
-                  <Steps.Indicator
-                    bg='secondary'
-                    border='5px solid'
-                    borderColor={
-                      activeStep === index ? 'primary' : 'transparent'
-                    }
-                    color='transparent'
-                    transition='border-color 0.3s ease'
-                  />
-                </Steps.Trigger>
-                {index < items.length - 1 && (
-                  <Steps.Separator
-                    bg={activeStep > index ? 'primary' : 'gray.200'}
-                    flex='1'
-                  />
-                )}
-              </Steps.Item>
-            ))}
-          </Steps.List>
-        </Steps.Root>
-      </Box>
+          {/* Inline Step Indicator */}
+          <Flex direction='column' alignItems='center' flexShrink={0} pt={2}>
+            {/* Circle Indicator */}
+            <Box
+              w={{ base: '12px', md: '16px' }}
+              h={{ base: '12px', md: '16px' }}
+              borderRadius='full'
+              bg='secondary'
+              border='4px solid'
+              borderColor={activeStep === index ? 'primary' : 'transparent'}
+              transition='border-color 0.3s ease'
+              flexShrink={0}
+            />
 
-      {/* RIGHT SIDE: Content */}
-      <Box flex='1' overflow='hidden' maxW={{ base: '100%', md: '600px' }}>
-        {items.map((item, index) => (
-          <Box
-            key={index}
-            ref={(el: any) => (contentRefs.current[index] = el)}
-            data-step-index={index}
-            minHeight='60vh'
-            mb={index < items.length - 1 ? 8 : 0}
-            display='flex'
-            alignItems='flex-start'
-            pt={4}
-          >
+            {/* Connector Line */}
+            {index < items.length - 1 && (
+              <Box
+                w='2px'
+                flex='1'
+                minH='40px'
+                bg={activeStep > index ? 'primary' : 'gray.200'}
+                transition='background-color 0.3s ease'
+                mt={2}
+              />
+            )}
+          </Flex>
+
+          {/* Content */}
+          <Box flex='1' w='full'>
             {item.content}
           </Box>
-        ))}
-      </Box>
-    </Flex>
+        </Flex>
+      ))}
+    </Stack>
   );
 };

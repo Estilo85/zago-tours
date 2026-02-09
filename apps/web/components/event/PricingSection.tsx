@@ -1,11 +1,4 @@
-import {
-  SimpleGrid,
-  Container,
-  Stack,
-  Heading,
-  Text,
-  Box,
-} from '@chakra-ui/react';
+import { SimpleGrid, Container, Stack, Heading, Text } from '@chakra-ui/react';
 import { PricingCard } from '../ui/card/PricingCard';
 
 export const PricingSection = () => {
