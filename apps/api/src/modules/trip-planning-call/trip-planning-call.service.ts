@@ -19,6 +19,9 @@ export class TripPlanningCallService extends BaseService<
 > {
   protected readonly resourceName = 'TripPlanningCall';
   private calendarService: CalendarService;
+  private readonly DEFAULT_MEETING_LINK =
+    process.env.DEFAULT_MEETING_LINK ||
+    'https://meet.google.com/your-fallback-link';
 
   constructor(private readonly callRepo: TripPlanningCallRepository) {
     super(callRepo);
@@ -52,9 +55,11 @@ export class TripPlanningCallService extends BaseService<
       endTime || new Date(new Date(startTime).getTime() + 30 * 60 * 1000);
 
     let calendarEventId: string | undefined;
-    let generatedMeetingLink: string | undefined;
+    let finalMeetingLink: string;
 
-    if (!meetingLink) {
+    if (meetingLink) {
+      finalMeetingLink = meetingLink;
+    } else {
       try {
         const calendarEvent = await this.calendarService.createEvent({
           summary: `Trip Planning Call - ${adventurer.name}`,
@@ -65,9 +70,10 @@ export class TripPlanningCallService extends BaseService<
         });
 
         calendarEventId = calendarEvent.id || undefined;
-        generatedMeetingLink = calendarEvent.meetingLink || undefined;
+        finalMeetingLink =
+          calendarEvent.meetingLink || this.DEFAULT_MEETING_LINK;
       } catch (error) {
-        console.error('Failed to create calendar event:', error);
+        finalMeetingLink = this.DEFAULT_MEETING_LINK;
       }
     }
 
@@ -75,7 +81,7 @@ export class TripPlanningCallService extends BaseService<
       adventurer: { connect: { id: adventurerId } },
       startTime: new Date(startTime),
       endTime: new Date(callEndTime),
-      meetingLink: meetingLink || generatedMeetingLink,
+      meetingLink: finalMeetingLink,
       calendarEventId: calendarEventId,
       status: CallStatus.SCHEDULED,
     });
@@ -89,7 +95,7 @@ export class TripPlanningCallService extends BaseService<
         endTime: new Date(callEndTime),
         callId: call.id,
         createdAt: call.createdAt,
-        meetingLink: call.meetingLink || undefined,
+        meetingLink: call.meetingLink as string,
       });
     } catch (error) {
       console.error('Failed to send admin notification:', error);

@@ -45,7 +45,7 @@ export default function SignatureEventsSection() {
 
       <SimpleGrid
         columns={{ base: 1, md: 2 }}
-        gap={{ base: 6, md: 3 }}
+        gap={9}
         width={{ base: 'full', md: '900px' }}
         justifyItems='center'
       >

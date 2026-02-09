@@ -41,11 +41,12 @@ export default function GettingStartedSection() {
       mx={5}
       my={24}
       bg='white'
-      p={{ base: 0, md: 6 }}
-      py={10}
-      gap={7}
+      px={{ base: 4, md: 6 }}
+      py={20}
+      gap={10}
       borderRadius='xl'
-      border='1px solid gray'
+      borderWidth='1px'
+      borderColor='gray.200'
     >
       <Heading
         size={{ base: '2xl', md: '4xl' }}

@@ -15,7 +15,9 @@ export default function EventDetails() {
 
   if (isError) return <ErrorState message={error?.message} />;
 
-  {
-    isLoading ? <EventDetailPageSkeleton /> : <EventDetailPage event={event} />;
-  }
+  return isLoading ? (
+    <EventDetailPageSkeleton />
+  ) : (
+    <EventDetailPage event={event} />
+  );
 }

@@ -4,35 +4,26 @@ import {
   Box,
   Heading,
   Text,
-  Badge,
   Flex,
   Stack,
   Icon,
   Button,
   Container,
-  Image,
-  Separator,
+  Slider,
   HStack,
   IconButton,
-  VStack,
+  Badge,
+  Separator,
 } from '@chakra-ui/react';
 import { Itinerary } from '@zagotours/types';
-import {
-  LuShare2,
-  LuStar,
-  LuClock,
-  LuMapPin,
-  LuTrendingUp,
-  LuHeart,
-} from 'react-icons/lu';
+import { LuStar, LuClock, LuMapPin, LuHeart } from 'react-icons/lu';
 import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 import AdventureSkeleton from './AdevntureSkeleton';
 import { useAdventure } from '@/hooks';
 import { ErrorState } from '../ui/ErrorState';
 import {
   Verified,
-  Dot,
-  CheckIcon,
+  Share,
   BadgeCheck,
   Headset,
   ShieldCheck,
@@ -43,7 +34,16 @@ import {
   CalendarDays,
   ShieldQuestionMark,
   CircleCheckBig,
+  Heart,
+  Lightbulb,
+  CircleAlert,
+  PencilOff,
+  CircleX,
+  CircleCheck,
 } from 'lucide-react';
+import { ResponsiveImage } from '../media/ResponsiveImage';
+import { AvatarImage } from '../media/AvatarImage';
+import ItineraryCard from '../ui/card/ItineraryCard';
 
 interface AdventureDetailProps {
   adventureId: string;
@@ -71,23 +71,39 @@ export default function AdventureDetailPage({
     .map((step: Itinerary) => ({
       content: (
         <Box key={step.id} pb={10}>
-          <Heading size='md' mb={2} color='primary.600'>
-            Day {step.dayNumber}: {step.title}
-          </Heading>
-          {step.imageUrl && (
-            <Image
-              src={step.imageUrl}
-              alt={step.title}
-              borderRadius='md'
-              mb={4}
-              maxH='300px'
-              width='100%'
-              objectFit='cover'
-            />
-          )}
-          <Text color='gray.600' lineHeight='tall'>
-            {step.activityDetails}
-          </Text>
+          <Stack>
+            <Heading size='xl' fontWeight='bold' color='primary.600'>
+              Day {step.dayNumber}
+            </Heading>
+            <Text>{step.title}</Text>
+          </Stack>
+          <Box
+            borderRadius='xl'
+            boxShadow='sm'
+            p={{ base: 4, md: 6 }}
+            bg='gray.50'
+            borderWidth='1px'
+            my={4}
+            width='full'
+            maxW={{ base: '100%', md: '500px' }}
+            minW={{ md: '500px' }}
+          >
+            <Text color='gray.600' lineHeight='tall'>
+              {step.activityDetails}
+            </Text>
+
+            {step.imageUrl && (
+              <ResponsiveImage
+                src={step.imageUrl || ''}
+                alt={step.title}
+                borderRadius='md'
+                // mb={4}
+                maxH='300px'
+                width='100%'
+                objectFit='cover'
+              />
+            )}
+          </Box>
         </Box>
       ),
     }));
@@ -99,28 +115,30 @@ export default function AdventureDetailPage({
       px={{ base: 4, md: 6 }}
     >
       {/* 1. TOP STATS CARD */}
-      <Flex align='center' mb={{ base: 4, md: 0 }}>
+      <Flex align='center' gap={3} mb={4}>
         <Text>Adventure </Text> | <Text> Details</Text>
       </Flex>
 
       <Box
         borderRadius='xl'
         boxShadow='sm'
-        p={{ base: 4, md: 6 }}
+        p={{ base: 2, md: 6 }}
         bg='gray.50'
         borderWidth='1px'
         mb={8}
       >
         <Stack gap={3}>
           <Heading
-            size={{ base: 'xs', md: 'sm' }}
-            color='gray.500'
+            size={{ base: 'md', md: '2xl' }}
+            fontWeight='bold'
             textTransform='uppercase'
           >
             {adventure.title}
           </Heading>
           <HStack gap={2}>
-            <Icon as={LuStar} color='orange.400' fill='orange.400' />
+            <Box bg='green.600'>
+              <Icon as={LuStar} fill='white' color='green.600' />
+            </Box>
             <Text fontSize={{ base: 'sm', md: 'md' }}>
               {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
             </Text>
@@ -131,57 +149,19 @@ export default function AdventureDetailPage({
             direction={{ base: 'column', md: 'row' }}
             w='full'
           >
-            <HStack
-              bg='textPrimary'
-              p={2}
-              borderRadius='2xl'
-              whiteSpace='nowrap'
-              gap={{ base: 2, md: 3 }}
-              w={{ base: 'full', md: 'auto' }}
-              justify={{ base: 'center', md: 'flex-start' }}
-            >
-              <Icon
-                as={BadgeCheck}
-                color='orange.400'
-                fill='orange.400'
-                boxSize={{ base: 4, md: 5 }}
-              />
+            <Badge py={2} px={4} borderRadius='full'>
+              <Icon as={BadgeCheck} boxSize={{ base: 4, md: 5 }} />
               <Text fontSize={{ base: 'xs', md: 'sm' }}>Certified Guides</Text>
-            </HStack>
-            <HStack
-              bg='textPrimary'
-              p={2}
-              borderRadius='2xl'
-              whiteSpace='nowrap'
-              gap={{ base: 2, md: 3 }}
-              w={{ base: 'full', md: 'auto' }}
-              justify={{ base: 'center', md: 'flex-start' }}
-            >
-              <Icon
-                as={Headset}
-                color='orange.400'
-                fill='orange.400'
-                boxSize={{ base: 4, md: 5 }}
-              />
+            </Badge>
+            <Badge py={2} px={4} borderRadius='full'>
+              {' '}
+              <Icon as={Headset} boxSize={{ base: 4, md: 5 }} />
               <Text fontSize={{ base: 'xs', md: 'sm' }}>Emergency Support</Text>
-            </HStack>
-            <HStack
-              bg='textPrimary'
-              p={2}
-              borderRadius='2xl'
-              whiteSpace='nowrap'
-              gap={{ base: 2, md: 3 }}
-              w={{ base: 'full', md: 'auto' }}
-              justify={{ base: 'center', md: 'flex-start' }}
-            >
-              <Icon
-                as={ShieldCheck}
-                color='orange.400'
-                fill='orange.400'
-                boxSize={{ base: 4, md: 5 }}
-              />
+            </Badge>
+            <Badge py={2} px={4} borderRadius='full'>
+              <Icon as={ShieldCheck} boxSize={{ base: 4, md: 5 }} />
               <Text fontSize={{ base: 'xs', md: 'sm' }}>Safety Briefing</Text>
-            </HStack>
+            </Badge>
           </Flex>
         </Stack>
       </Box>
@@ -199,35 +179,53 @@ export default function AdventureDetailPage({
             <Heading size={{ base: 'lg', md: '2xl' }}>
               {adventure.title}
             </Heading>
-            <Flex align='center' gap={{ base: 2, md: 3 }}>
+            <Badge
+              display={{ base: 'none', md: 'flex' }}
+              py={2}
+              px={4}
+              borderRadius='full'
+            >
               <Icon
                 as={Verified}
-                fill='green.200'
+                fill='green.600'
                 color='white'
                 boxSize={{ base: 4, md: 6 }}
               />
               <Text fontSize={{ base: 'xs', md: 'sm' }}>Verified by Zago</Text>
-            </Flex>
+            </Badge>
           </HStack>
-          <HStack color='gray.600'>
-            <Icon as={AlarmClockOff} boxSize={{ base: 4, md: 5 }} />
-            <Text fontSize={{ base: 'sm', md: 'md' }}>
-              {adventure.days} Days . {adventure.days - 1} night{' '}
-            </Text>
-          </HStack>
+          <Flex align='baseline' justify='space-between'>
+            <HStack color='gray.600'>
+              <Icon as={AlarmClockOff} boxSize={{ base: 4, md: 5 }} />
+              <Text fontSize={{ base: 'sm', md: 'md' }}>
+                {adventure.days} Days ● {adventure.days - 1} night{' '}
+              </Text>
+            </HStack>
+            <Button
+              variant='ghost'
+              border='1px solid'
+              borderColor='gray.200'
+              borderRadius='full'
+              size={{ base: 'sm', md: 'md' }}
+              w={{ base: 'fit', md: 'auto' }}
+            >
+              <Icon as={Share} mr={2} /> Share
+            </Button>
+          </Flex>
         </Box>
-        <Button
-          variant='ghost'
-          border='1px solid'
-          borderColor='gray.200'
-          borderRadius='full'
-          size={{ base: 'sm', md: 'md' }}
-          w={{ base: 'full', md: 'auto' }}
-        >
-          <Icon as={LuShare2} mr={2} /> Share
-        </Button>
       </Flex>
 
+      <Box position='relative' height='300px' my={6}>
+        <ResponsiveImage
+          src={adventure.mediaUrl || ''}
+          alt={adventure.title}
+          sizes='100vw'
+          loading='eager'
+          borderRadius='none'
+        />
+
+        <Icon as={Heart} position='absolute' top={4} right={4} />
+      </Box>
       {/* 4. DESCRIPTION & DETAILS */}
       <Flex
         align='flex-start'
@@ -236,20 +234,61 @@ export default function AdventureDetailPage({
         gap={{ base: 6, md: 8 }}
       >
         <Box mb={{ base: 6, md: 12 }} w='full'>
-          <Stack>
-            <Heading size={{ base: 'sm', md: 'md' }} mb={4}>
-              See adventure
-            </Heading>
-            <Text fontSize={{ base: 'md', md: 'lg' }} color='gray.700' mb={8}>
-              {adventure.description}
-            </Text>
-          </Stack>
+          <Text fontSize={{ base: 'md', md: 'lg' }} color='gray.700' mb={8}>
+            {adventure.description}
+          </Text>
 
           <Stack gap={{ base: 3, md: 4 }}>
+            <Heading size={{ base: 'sm', md: 'xl' }} fontWeight='bold' mb={4}>
+              See adventure
+            </Heading>
             <DetailItem
               icon={CircleGauge}
               label='Difficulty level'
-              value={adventure.level.toLocaleLowerCase()}
+              value={
+                <HStack align='center'>
+                  <Box height='40px' display='flex' alignItems='center'>
+                    <Slider.Root
+                      height='40px'
+                      orientation='vertical'
+                      min={0}
+                      max={3}
+                      step={1}
+                      value={[
+                        adventure.level.toLowerCase() === 'medium'
+                          ? 1
+                          : adventure.level.toLowerCase() === 'challenging'
+                            ? 2
+                            : 3,
+                      ]}
+                      readOnly
+                    >
+                      <Slider.Control>
+                        <Slider.Track bg='gray.200' width='6px'>
+                          <Slider.Range
+                            bg={
+                              adventure.level.toLowerCase() === 'medium'
+                                ? 'green.500'
+                                : adventure.level.toLowerCase() ===
+                                    'challenging'
+                                  ? 'orange.500'
+                                  : 'red.500'
+                            }
+                          />
+                        </Slider.Track>
+                        <Slider.Thumb index={0} boxSize='8px' />
+                      </Slider.Control>
+                    </Slider.Root>
+                  </Box>
+                  <Text
+                    fontSize='sm'
+                    fontWeight='bold'
+                    textTransform='capitalize'
+                  >
+                    {adventure.level.toLowerCase()}
+                  </Text>
+                </HStack>
+              }
             />
             <DetailItem
               icon={LuClock}
@@ -266,9 +305,15 @@ export default function AdventureDetailPage({
               label='Certification'
               value={
                 adventure?.certification ? (
-                  adventure.certification
+                  <Text
+                    lineClamp={1}
+                    maxW='200px'
+                    title={adventure.certification}
+                  >
+                    {adventure.certification}
+                  </Text>
                 ) : (
-                  <Icon as={CircleCheckBig} />
+                  <Icon as={BadgeCheck} />
                 )
               }
             />
@@ -276,9 +321,16 @@ export default function AdventureDetailPage({
               icon={Settings}
               label='Gear'
               value={
-                adventure?.gear ? adventure.gear : <Icon as={CircleCheckBig} />
+                adventure?.gear ? (
+                  <Text lineClamp={1} maxW='200px' title={adventure.gear}>
+                    {adventure.gear}
+                  </Text>
+                ) : (
+                  <Icon as={CircleCheckBig} />
+                )
               }
             />
+
             <DetailItem
               icon={ShieldQuestionMark}
               label='Emergency plan'
@@ -293,11 +345,10 @@ export default function AdventureDetailPage({
             />
 
             <Box>
-              <DetailItem
-                icon={LuClock}
-                label='Safety Tips'
-                value={adventure.access}
-              />
+              <HStack gap={3}>
+                <Icon as={Lightbulb} />
+                <Heading> Safety Tips </Heading>
+              </HStack>
               <Text fontSize={{ base: 'sm', md: 'md' }}>Lorem ipsum</Text>
             </Box>
           </Stack>
@@ -334,18 +385,17 @@ export default function AdventureDetailPage({
               <HStack color='gray.600'>
                 <Icon as={AlarmClockOff} boxSize={{ base: 4, md: 5 }} />
                 <Text fontSize={{ base: 'sm', md: 'md' }}>
-                  {adventure.days} Days . {adventure.days - 1} night{' '}
+                  {adventure.days} Days ● {adventure.days - 1} night{' '}
                 </Text>
               </HStack>
               <HStack align='baseline' justify='space-between'>
                 <Text fontSize={{ base: 'xs', md: 'sm' }}>FROM</Text>
-                <Text
-                  color='primary'
-                  fontSize={{ base: 'lg', md: 'xl' }}
-                  fontWeight='bold'
-                >
-                  ${hasDiscount ? discountPrice : adventure.price}
-                </Text>
+                <HStack>
+                  <Text color='primary' fontSize={{ base: 'sm', md: 'md' }}>
+                    ${hasDiscount ? discountPrice : adventure.price}
+                  </Text>
+                  <Icon as={CircleAlert} size='sm' />
+                </HStack>
                 {hasDiscount && (
                   <Text
                     textDecoration='line-through'
@@ -390,12 +440,108 @@ export default function AdventureDetailPage({
       </Flex>
 
       {/* 5. ITINERARY */}
-      <Box>
-        <Heading size={{ base: 'md', md: 'lg' }} mb={8}>
-          Full Itinerary
-        </Heading>
+      <Box display={{ base: 'none', md: 'block' }}>
         <ScrollProgressSteps items={itineraryItems} />
       </Box>
+      <Box display={{ base: 'block', md: 'none' }}>
+        <ItineraryCard adventure={adventure} />
+      </Box>
+
+      <Stack gap={8} w='full' my={10}>
+        {/* 1. Inclusion/Exclusion Section */}
+        <Box
+          p={6}
+          border='1px solid'
+          borderColor='gray.100'
+          borderRadius='2xl'
+          bg='gray.50/30'
+          maxW={{ md: '400px' }}
+        >
+          <Stack gap={6}>
+            {/* Included */}
+            <Stack gap={3}>
+              <Text fontWeight='bold' fontSize='lg' color='gray.800'>
+                What's included
+              </Text>
+              <HStack gap={3} align='start'>
+                <Icon as={CircleCheck} color='green.500' mt={0.5} />
+                <Text fontSize='sm' color='gray.600'>
+                  Professional certified tour guides and safety equipment
+                </Text>
+              </HStack>
+            </Stack>
+
+            <Separator borderColor='gray.100' />
+
+            {/* Not Included */}
+            <Stack gap={3}>
+              <Text fontWeight='bold' fontSize='lg' color='gray.800'>
+                What's not included
+              </Text>
+              <HStack gap={3} align='start'>
+                <Icon as={CircleX} color='red.400' mt={0.5} />
+                <Text fontSize='sm' color='gray.600'>
+                  Personal travel insurance and international flight tickets
+                </Text>
+              </HStack>
+            </Stack>
+          </Stack>
+        </Box>
+
+        {/* 2. Partner Profile Card */}
+        <Box
+          p={5}
+          border='1px solid'
+          borderColor='gray.200'
+          borderRadius='2xl'
+          boxShadow='sm'
+          transition='all 0.2s'
+          _hover={{ boxShadow: 'md', borderColor: 'blue.100' }}
+          maxW={{ md: '400px' }}
+        >
+          <Stack gap={4}>
+            <Heading size='md' fontWeight='bold' letterSpacing='tight'>
+              Partner
+            </Heading>
+
+            <HStack gap={4} p={2} bg='blue.50/50' borderRadius='xl'>
+              {/* Using a placeholder for AvatarImage as requested */}
+              <Box
+                w='50px'
+                h='50px'
+                borderRadius='full'
+                overflow='hidden'
+                bg='gray.200'
+                flexShrink={0}
+              >
+                <img
+                  src='/images/events/esther-picture.webp'
+                  alt='esther'
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </Box>
+
+              <Stack gap={0} flex='1'>
+                <HStack gap={1}>
+                  <Text fontWeight='bold' fontSize='md'>
+                    Esther Akinwale
+                  </Text>
+                  <Icon
+                    as={Verified}
+                    color='blue.500'
+                    fill='blue.50'
+                    size='sm'
+                  />
+                </HStack>
+                <Text fontSize='xs' color='gray.500'>
+                  Expert in West African heritage tours with over 10 years of
+                  experience.
+                </Text>
+              </Stack>
+            </HStack>
+          </Stack>
+        </Box>
+      </Stack>
     </Container>
   );
 }

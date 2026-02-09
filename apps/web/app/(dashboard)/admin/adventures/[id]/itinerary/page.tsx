@@ -11,12 +11,12 @@ import {
   HStack,
   Text,
   IconButton,
-  Spinner,
-  Center,
-  Field,
-  Portal,
   Drawer,
   CloseButton,
+  Image,
+  AspectRatio,
+  Portal,
+  Field,
 } from '@chakra-ui/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -24,10 +24,12 @@ import { FiEdit, FiTrash2, FiPlus, FiChevronLeft } from 'react-icons/fi';
 import {
   useAdventure,
   useItineraries,
-  useCreateItinerary,
   useUpdateItinerary,
   useDeleteItinerary,
+  useCreateItinerary,
 } from '@/hooks';
+import { LoadingState } from '@/components/ui/LoadingState';
+import { UpdateItineraryDto, ItineraryResponseDto } from '@zagotours/types';
 
 export default function ItineraryPage() {
   const router = useRouter();
@@ -36,11 +38,16 @@ export default function ItineraryPage() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
+
+  // Single state for both Create and Edit
+  const [formData, setFormData] = useState<UpdateItineraryDto>({
     dayNumber: 1,
     title: '',
     activityDetails: '',
   });
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const { data: adventureRes, isLoading: loadingAdventure } =
     useAdventure(adventureId);
@@ -52,17 +59,20 @@ export default function ItineraryPage() {
   const deleteMutation = useDeleteItinerary();
 
   const itineraries = (itineraryRes?.data || []).sort(
-    (a: any, b: any) => a.dayNumber - b.dayNumber,
+    (a: ItineraryResponseDto, b: ItineraryResponseDto) =>
+      a.dayNumber - b.dayNumber,
   );
 
-  const handleOpenDrawer = (itinerary?: any) => {
+  const handleOpenDrawer = (itinerary?: ItineraryResponseDto) => {
     if (itinerary) {
       setEditingId(itinerary.id);
       setFormData({
         dayNumber: itinerary.dayNumber,
         title: itinerary.title,
         activityDetails: itinerary.activityDetails,
+        imageUrl: itinerary.imageUrl || undefined,
       });
+      setImagePreview(itinerary.imageUrl || null);
     } else {
       setEditingId(null);
       setFormData({
@@ -70,29 +80,51 @@ export default function ItineraryPage() {
         title: '',
         activityDetails: '',
       });
+      setImagePreview(null);
     }
+    setImageFile(null);
     setIsOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const action = editingId
-      ? updateMutation.mutate(
-          { adventureId, itineraryId: editingId, data: formData },
-          { onSuccess: () => setIsOpen(false) },
-        )
-      : createMutation.mutate(
-          { adventureId, data: formData },
-          { onSuccess: () => setIsOpen(false) },
-        );
+  const handleImageChange = (file: File | null) => {
+    setImageFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(editingId ? formData.imageUrl || null : null);
+    }
   };
 
-  if (loadingAdventure || loadingItineraries)
-    return (
-      <Center h='60vh'>
-        <Spinner size='xl' />
-      </Center>
-    );
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formDataToSend = new FormData();
+    formDataToSend.append('dayNumber', String(formData.dayNumber));
+    formDataToSend.append('title', formData.title || '');
+    formDataToSend.append('activityDetails', formData.activityDetails || '');
+
+    if (imageFile) {
+      formDataToSend.append('media', imageFile);
+    }
+
+    if (editingId) {
+      updateMutation.mutate(
+        { adventureId, itineraryId: editingId, data: formDataToSend },
+        { onSuccess: () => setIsOpen(false) },
+      );
+    } else {
+      createMutation.mutate(
+        { adventureId, data: formDataToSend },
+        { onSuccess: () => setIsOpen(false) },
+      );
+    }
+  };
+
+  if (loadingAdventure || loadingItineraries) return <LoadingState />;
 
   return (
     <Container maxW='container.lg' py={8}>
@@ -109,6 +141,7 @@ export default function ItineraryPage() {
         </Button>
       </HStack>
 
+      {/* List of Itineraries */}
       <VStack gap={4} align='stretch'>
         {itineraries.map((item: any) => (
           <Box
@@ -119,10 +152,25 @@ export default function ItineraryPage() {
             borderWidth='1px'
             bg='bg.panel'
           >
-            <HStack justify='space-between'>
-              <Heading size='md'>
-                Day {item.dayNumber}: {item.title}
-              </Heading>
+            <HStack justify='space-between' align='start'>
+              <VStack align='start' flex={1} gap={2}>
+                <Heading size='md'>
+                  Day {item.dayNumber}: {item.title}
+                </Heading>
+                {item.imageUrl && (
+                  <AspectRatio ratio={16 / 9} w='full' maxW='400px'>
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      rounded='md'
+                      objectFit='cover'
+                    />
+                  </AspectRatio>
+                )}
+                <Text mt={2} color='fg.subtle' whiteSpace='pre-wrap'>
+                  {item.activityDetails}
+                </Text>
+              </VStack>
               <HStack>
                 <IconButton
                   aria-label='Edit'
@@ -145,13 +193,11 @@ export default function ItineraryPage() {
                 </IconButton>
               </HStack>
             </HStack>
-            <Text mt={2} color='fg.subtle' whiteSpace='pre-wrap'>
-              {item.activityDetails}
-            </Text>
           </Box>
         ))}
       </VStack>
 
+      {/* Single Drawer for Create & Edit */}
       <Drawer.Root
         open={isOpen}
         onOpenChange={(e) => setIsOpen(e.open)}
@@ -160,7 +206,7 @@ export default function ItineraryPage() {
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner>
-            <Drawer.Content>
+            <Drawer.Content overflowY='scroll'>
               <form onSubmit={handleSubmit}>
                 <Drawer.Header>
                   <Drawer.Title>
@@ -183,6 +229,7 @@ export default function ItineraryPage() {
                         }
                       />
                     </Field.Root>
+
                     <Field.Root required>
                       <Field.Label>Title</Field.Label>
                       <Input
@@ -190,9 +237,31 @@ export default function ItineraryPage() {
                         onChange={(e) =>
                           setFormData((p) => ({ ...p, title: e.target.value }))
                         }
-                        placeholder='Arrival'
+                        placeholder='e.g. Arrival & Briefing'
                       />
                     </Field.Root>
+
+                    <Field.Root>
+                      <Field.Label>Image</Field.Label>
+                      {imagePreview && (
+                        <AspectRatio ratio={16 / 9} w='full' mb={2}>
+                          <Image
+                            src={imagePreview}
+                            alt='Preview'
+                            rounded='md'
+                            objectFit='cover'
+                          />
+                        </AspectRatio>
+                      )}
+                      <Input
+                        type='file'
+                        accept='image/*'
+                        onChange={(e) =>
+                          handleImageChange(e.target.files?.[0] || null)
+                        }
+                      />
+                    </Field.Root>
+
                     <Field.Root required>
                       <Field.Label>Activities</Field.Label>
                       <Textarea
@@ -220,7 +289,7 @@ export default function ItineraryPage() {
                       createMutation.isPending || updateMutation.isPending
                     }
                   >
-                    {editingId ? 'Update' : 'Create'}
+                    {editingId ? 'Update' : 'Create'} Day
                   </Button>
                 </Drawer.Footer>
 

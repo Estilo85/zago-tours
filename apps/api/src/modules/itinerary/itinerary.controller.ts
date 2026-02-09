@@ -4,10 +4,34 @@ import { ResponseUtil } from 'src/shared/utils/responseUtils';
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import { ReqParams, ReqParamsBody } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
-import { UpdateItineraryDto, BulkCreateItinerariesDto } from '@zagotours/types';
+import {
+  UpdateItineraryDto,
+  BulkCreateItinerariesDto,
+  CreateItineraryDto,
+} from '@zagotours/types';
 
 export class ItineraryController {
   constructor(private readonly service: ItineraryService) {}
+
+  create = asyncHandler(
+    async (
+      req: ReqParamsBody<{ adventureId: string }, CreateItineraryDto>,
+      res: Response,
+    ) => {
+      const dto: CreateItineraryDto = {
+        dayNumber: Number(req.body.dayNumber),
+        title: req.body.title,
+        activityDetails: req.body.activityDetails,
+      };
+
+      const result = await this.service.createWithImage(
+        req.params.adventureId,
+        dto,
+        req.file,
+      );
+      return ResponseUtil.success(res, result, 'Itinerary created', 201);
+    },
+  );
 
   //==============================
   // CREATE MULTIPLE ITINERARIES (BULK)
@@ -20,7 +44,14 @@ export class ItineraryController {
       const { adventureId } = req.params;
       const { itineraries } = req.body;
 
-      const result = await this.service.createBulk(adventureId, itineraries);
+      const files = req.files as Express.Multer.File[];
+
+      const result = await this.service.createBulk(
+        adventureId,
+        itineraries,
+        files,
+      );
+
       return ResponseUtil.success(res, result, result.message, 201);
     },
   );

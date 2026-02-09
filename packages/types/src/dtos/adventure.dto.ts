@@ -82,6 +82,7 @@ export interface AdventureDetailResponseDto extends AdventureResponseDto {
   gallery: AdventureGalleryResponseDto[];
   likes: AdventureLikeResponseDto[];
   isLikedByUser?: boolean;
+  isLiked?: boolean;
 }
 
 export interface AdventureListQueryDto {
@@ -107,8 +108,8 @@ export interface CreateItineraryDto {
   title: string;
   activityDetails: string;
   // Cloudinary image
-  imageUrl?: string;
-  publicId?: string;
+  imageUrl?: string | null;
+  publicId?: string | null;
 }
 
 export interface UpdateItineraryDto {

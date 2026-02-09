@@ -37,6 +37,12 @@ export interface AdventureWithRelations extends Adventure {
   likes?: AdventureLike[];
   itineraries?: Itinerary[];
   gallery?: AdventureGallery[];
+  _count: {
+    likes: number;
+    itineraries: number;
+    gallery: number;
+  };
+  isLiked?: boolean;
 }
 
 export interface AdventureLike {

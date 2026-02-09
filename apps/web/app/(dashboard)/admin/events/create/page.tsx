@@ -109,7 +109,7 @@ export default function CreateEventPage() {
       formData.append('cancellationTerms', form.cancellationTerms);
     }
     if (selectedFile) {
-      formData.append('file', selectedFile);
+      formData.append('media', selectedFile);
     }
 
     createEvent(formData, {

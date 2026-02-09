@@ -33,6 +33,7 @@ export default function PostSection({ posts }: PostSectionProps) {
       {/* Sidebar: About the community */}
       <Stack
         bg='white'
+        display={{ base: 'none', md: 'block' }}
         maxW={{ base: '100%', md: '500px' }}
         height='fit-content'
         p={5}

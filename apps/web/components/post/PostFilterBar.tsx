@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Flex, Field, Text } from '@chakra-ui/react';
-import { MapPin, Tag, User } from 'lucide-react';
+import { Box, Flex, Field, Text, HStack, Separator } from '@chakra-ui/react';
+import { MapPin, SwatchBook, Tag, User, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { PostResponseDto } from '@zagotours/types';
 import { SearchBar } from '../ui/search/Search';
@@ -43,82 +43,98 @@ export function PostFilterBar({
       borderColor='gray.100'
       my={6}
     >
-      <Flex gap={6} align='flex-end' wrap={{ base: 'wrap', md: 'nowrap' }}>
+      <Flex align={{ base: 'center', md: 'flex-end' }} justify='space-between'>
         {/* Username */}
-        <Box flex={1}>
-          <Field.Root>
-            <Field.Label fontSize='xs' fontWeight='bold' mb={0}>
-              Username
-            </Field.Label>
-            <Text
-              display='flex'
-              alignItems='center'
-              gap={1}
-              fontSize='xs'
-              fontWeight='medium'
-              py={1}
-            >
-              <User size={14} />
-              {userName}
-            </Text>
-          </Field.Root>
-        </Box>
+        <HStack gap={6} display={{ base: 'none', md: 'flex' }}>
+          <Box flex={1}>
+            <Field.Root>
+              <Field.Label fontSize='xs' fontWeight='bold' mb={0}>
+                Username
+              </Field.Label>
+              <Text
+                display='flex'
+                alignItems='center'
+                gap={1}
+                fontSize='xs'
+                fontWeight='medium'
+                py={1}
+              >
+                <User size={14} />
+                {userName}
+              </Text>
+            </Field.Root>
+          </Box>
 
-        {/* Location */}
-        <Box flex={1}>
-          <Field.Root>
-            <Field.Label
-              fontSize='xs'
-              fontWeight='bold'
-              display='flex'
-              alignItems='center'
-              gap={1}
-              mb={0}
-            >
-              <MapPin size={14} /> Location
-            </Field.Label>
-            <SelectInput
-              value={location}
-              onChange={setLocation}
-              placeholder='All Locations'
-              options={[
-                { label: 'London', value: 'london' },
-                { label: 'New York', value: 'ny' },
-              ]}
-            />
-          </Field.Root>
-        </Box>
-
-        {/* Interest */}
-        <Box flex={1}>
-          <Field.Root>
-            <Field.Label
-              fontSize='xs'
-              fontWeight='bold'
-              display='flex'
-              alignItems='center'
-              gap={1}
-              mb={0}
-            >
-              <Tag size={14} /> Interest
-            </Field.Label>
-            <SelectInput
-              value={selectedTitle}
-              onChange={setSelectedTitle}
-              placeholder='All Titles'
-              options={[...new Set(posts.map((p) => p.title))].map((title) => ({
-                label: title,
-                value: title,
-              }))}
-            />
-          </Field.Root>
-        </Box>
-
+          {/* Location */}
+          <Box flex={1}>
+            <Field.Root>
+              <Field.Label
+                fontSize='xs'
+                fontWeight='bold'
+                display='flex'
+                alignItems='center'
+                gap={1}
+                mb={0}
+              >
+                Location
+              </Field.Label>
+              <HStack>
+                <MapPin size={14} />
+                <SelectInput
+                  value={location}
+                  onChange={setLocation}
+                  placeholder='All Locations'
+                  width='120px'
+                  options={[
+                    { label: 'London', value: 'london' },
+                    { label: 'New York', value: 'ny' },
+                  ]}
+                />
+              </HStack>
+            </Field.Root>
+          </Box>
+          <Separator orientation='vertical' h='50px' />
+          {/* Interest */}
+          <Box flex={1}>
+            <Field.Root>
+              <Field.Label
+                fontSize='xs'
+                fontWeight='bold'
+                display='flex'
+                alignItems='center'
+                gap={1}
+                mb={0}
+              >
+                Interest
+              </Field.Label>
+              <HStack>
+                <Tag size={14} />
+                <SelectInput
+                  value={selectedTitle}
+                  onChange={setSelectedTitle}
+                  placeholder='All Titles'
+                  width='120px'
+                  options={[...new Set(posts.map((p) => p.title))].map(
+                    (title) => ({
+                      label: title,
+                      value: title,
+                    }),
+                  )}
+                />
+              </HStack>
+            </Field.Root>
+          </Box>
+        </HStack>
+        <HStack gap={4} display={{ base: 'flex', md: 'none' }}>
+          <Users size={32} />
+          <SwatchBook size={32} />
+        </HStack>
         {/* Search */}
-        <Box flex={2}>
+        <Box>
           <SearchBar
             placeholder='Search stories...'
             // value={searchQuery}
+            width={{ base: '130px', md: '200px' }}
             onSearch={(val) => setSearchQuery(val)}
           />
         </Box>

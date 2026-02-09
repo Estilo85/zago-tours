@@ -153,15 +153,16 @@ export const API_ENDPOINTS = {
 
   // Trip Planning Calls
   PLANNING_CALLS: {
-    SCHEDULE: buildUrl('/planning-calls'),
-    UPCOMING: buildUrl('/planning-calls/upcoming'),
-    MY_CALLS: buildUrl('/planning-calls/my-calls'),
-    RESCHEDULE: (id: string) => buildUrl(`/planning-calls/${id}/reschedule`),
-    CANCEL: (id: string) => buildUrl(`/planning-calls/${id}/cancel`),
-    COMPLETE: (id: string) => buildUrl(`/planning-calls/${id}/complete`),
-    LIST: buildUrl('/planning-calls'),
-    BY_ID: (id: string) => buildUrl(`/planning-calls/${id}`),
-    DELETE: (id: string) => buildUrl(`/planning-calls/${id}`),
+    SCHEDULE: buildUrl('/trip-planning-calls'),
+    UPCOMING: buildUrl('/trip-planning-calls/upcoming'),
+    MY_CALLS: buildUrl('/trip-planning-calls/my-calls'),
+    RESCHEDULE: (id: string) =>
+      buildUrl(`/trip-planning-calls/${id}/reschedule`),
+    CANCEL: (id: string) => buildUrl(`/trip-planning-calls/${id}/cancel`),
+    COMPLETE: (id: string) => buildUrl(`/trip-planning-calls/${id}/complete`),
+    LIST: buildUrl('/trip-planning-calls'),
+    BY_ID: (id: string) => buildUrl(`/trip-planning-calls/${id}`),
+    DELETE: (id: string) => buildUrl(`/trip-planning-calls/${id}`),
   },
 
   // Contracts

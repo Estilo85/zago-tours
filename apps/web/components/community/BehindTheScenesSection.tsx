@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Flex, Heading, Stack } from '@chakra-ui/react';
-import { Aperture, School, Wifi } from 'lucide-react';
+import { LifeBuoy, TreePalm, Wifi } from 'lucide-react';
 import React from 'react';
 import { FeatureCard } from '../ui/card/FeatureCard';
 import { ResponsiveImage } from '../media/ResponsiveImage';
@@ -9,13 +9,13 @@ import { ResponsiveImage } from '../media/ResponsiveImage';
 const cardInfo = [
   {
     heading: 'Real Experiences',
-    icon: Aperture,
+    icon: LifeBuoy,
     description:
       'Stories from travelers and professionals who have real, lived experience.',
   },
   {
     heading: 'Shared Knowledge',
-    icon: School,
+    icon: TreePalm,
     description:
       'Live sessions, discussions, and insights that help you make better travel decisions.',
   },
@@ -31,8 +31,8 @@ export default function BehindTheScenesSection() {
   return (
     <Box
       bg='textPrimary'
-      p={{ base: 2, md: 6 }}
-      py={10}
+      px={{ base: 4, md: 6 }}
+      py={20}
       mx={5}
       my={9}
       borderRadius='xl'

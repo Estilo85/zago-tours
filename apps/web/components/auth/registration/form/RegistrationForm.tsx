@@ -105,11 +105,12 @@ function RegistrationFormContent() {
   return (
     <Box
       bg='white'
-      p={7}
+      p={{ base: 5, md: 7 }}
       borderRadius='lg'
       boxShadow='sm'
-      width='md'
-      maxH='570px'
+      width={{ base: '100%', md: 'md' }}
+      maxW={{ base: '100%', md: 'md' }}
+      maxH={{ base: 'none', md: '570px' }}
       overflowY='auto'
     >
       <FormProvider {...methods}>
@@ -149,11 +150,13 @@ export default function RegistrationForm() {
       fallback={
         <Box
           bg='white'
-          p={7}
+          p={{ base: 5, md: 7 }}
           borderRadius='lg'
           boxShadow='sm'
-          width='md'
-          height='570px'
+          width={{ base: '100%', md: 'md' }}
+          maxW={{ base: '100%', md: 'md' }}
+          height={{ base: 'auto', md: '570px' }}
+          minH={{ base: '400px', md: '570px' }}
           display='flex'
           alignItems='center'
           justifyContent='center'

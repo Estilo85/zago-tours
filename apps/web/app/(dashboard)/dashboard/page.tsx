@@ -16,10 +16,12 @@ import { CommunityCard } from '@/components/ui/card/CommunityCard';
 import { TripRequestsTable } from '../_components/dataDisplay/TripRequestTable';
 import UpcomingAdventuresAndEventsPage from '../_components/dataDisplay/UpcomingAdventuresAndEvents';
 import { WelcomeBanner } from '../_components/banner/WelcomeBanner';
+import { TripPlanningCalls } from '../_components/trip-planning-calls/TripPlanningCalls';
+import SafetyAmbassadorTable from '../_components/table/SafetyAmbassadorTable';
 
 export default function DashboardPage() {
   const { data: response, isLoading: statsLoading } = useDashboardStats();
-  const { isAnyAdmin, isCooperateAgent } = usePermissions();
+  const { isAnyAdmin, isCooperateAgent, isAdventurer } = usePermissions();
 
   const { data: leaderResponse, isLoading: leaderboardLoading } =
     useLeaderboard(isAnyAdmin);
@@ -84,13 +86,18 @@ export default function DashboardPage() {
             <UpcomingAdventuresAndEventsPage />
           </>
         )}
+
+        {!isAnyAdmin && <TripPlanningCalls />}
+
+        {isAdventurer && <SafetyAmbassadorTable />}
+
+        {!isAnyAdmin && (
+          <Flex my={6} justify='space-between' alignItems='stretch'>
+            <CommunityCard />
+            <ReferralCard />
+          </Flex>
+        )}
       </Stack>
-      {!isAnyAdmin && (
-        <Flex my={6} justify='space-between' alignItems='stretch'>
-          <CommunityCard />
-          <ReferralCard />
-        </Flex>
-      )}
     </Box>
   );
 }

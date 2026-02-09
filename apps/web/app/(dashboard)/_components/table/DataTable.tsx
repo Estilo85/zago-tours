@@ -5,6 +5,8 @@ export interface Column<T> {
   label: string;
   key: keyof T;
   render?: (value: any, row: T) => React.ReactNode;
+  width?: string;
+  textAlign?: 'left' | 'center' | 'right';
 }
 
 interface DataTableProps<T> {

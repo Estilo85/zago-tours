@@ -44,12 +44,11 @@ const cardInfo = [
 
 export default function WhatToExpectSection() {
   return (
-    <Box gapY={5}>
+    <Box gapY={10}>
       <VStack mb={10} gap={5}>
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
-          color='primary'
-          fontWeight='medium'
+          fontWeight='semibold'
           textAlign='center'
         >
           This isn’t about photos or hype. <br /> It’s a space for people who{' '}
@@ -65,6 +64,7 @@ export default function WhatToExpectSection() {
             borderRadius='full'
             letterSpacing='widest'
             color='primary'
+            fontWeight='bold'
           >
             What you’ll find
           </Text>

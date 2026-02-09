@@ -2,7 +2,6 @@
 
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 import { CirclePlay, Image as ImageIcon } from 'lucide-react';
-import { AvatarImage } from '../media/AvatarImage';
 import Button from '../ui/button/Button';
 import { usePostModalStore } from '@/store/usePostModalStore';
 
@@ -26,19 +25,9 @@ export function PostCreator({
       boxShadow='sm'
     >
       <Flex gap={3} align='center'>
-        <AvatarImage src={userImage} name={userName} size='md' />
-        <Box
-          flex={1}
-          bg='gray.50'
-          py={2}
-          px={4}
-          borderRadius='full'
-          cursor='pointer'
-          _hover={{ bg: 'gray.100' }}
-          onClick={openModal}
-        >
-          <Text color='gray.500' fontSize='sm'>
-            Share your experience, {userName.split(' ')[0]}...
+        <Box flex={1}>
+          <Text color='dark' fontSize='lg'>
+            Share your experience
           </Text>
         </Box>
 

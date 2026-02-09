@@ -1,16 +1,17 @@
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import { useUserProfile } from '@/hooks';
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
-import { Heart } from 'lucide-react';
+import { Box, Flex, Heading, Icon, Text, VStack } from '@chakra-ui/react';
+import { Heart, ImagePlay, Share } from 'lucide-react';
 import React from 'react';
+import Button from '../ui/button/Button';
 
 export default function PostHero() {
   const { data } = useUserProfile();
   const profileImage = data?.data?.image;
 
   return (
-    <Box position='relative' w='full'>
+    <Box position='relative' w='full' bg='white'>
       {/* Cover Image */}
       <Box
         w='full'
@@ -25,42 +26,80 @@ export default function PostHero() {
           loading='eager'
           borderRadius='none'
         />
+
+        {/* Button on top of cover image - bottom right */}
+        <Button
+          position='absolute'
+          bottom={4}
+          right={4}
+          variant='solid'
+          bg='primary'
+          color='white'
+          borderRadius='xl'
+          size={{ base: 'sm', md: 'md' }}
+          boxShadow='md'
+          display={{ base: 'none', md: 'flex' }}
+        >
+          <Icon as={ImagePlay} mr={1} /> Edit cover
+        </Button>
       </Box>
 
       <Flex
         direction={{ base: 'column', md: 'row' }}
         justify='center'
-        align='flex-end'
+        align={{ base: 'center', md: 'flex-end' }}
         px={{ base: 4, md: 8 }}
+        pb={6}
         position='relative'
-        // mt='-64px'
         gap={6}
-        border='2px solid red'
+        borderBottom='1px solid'
+        borderColor='gray.200'
       >
         <Box
-          border='4px solid white'
+          bg='white'
           borderRadius='full'
-          alignSelf='flex-start'
-          mt='-50px'
+          mt={{ base: '-50px', md: '-150px' }}
+          p={1}
+          boxShadow='sm'
         >
           <AvatarImage src={profileImage} name={data?.data?.name} size='2xl' />
         </Box>
 
-        <VStack align='flex-start' spaceY={1} pb={2}>
+        <VStack align={{ base: 'center', md: 'flex-start' }} gap={1} pb={2}>
           <Heading
-            color='primary'
-            fontSize={{ base: 'md', md: 'xl' }}
+            fontSize={{ base: 'xl', md: '3xl' }}
+            fontWeight='bold'
             display='flex'
             alignItems='center'
             gap={2}
           >
-            Welcome to Zago Voice <Heart size={32} fill='full' />
+            Welcome to Zago Voice{' '}
+            <Box display={{ base: 'none', md: 'block' }}>
+              <Heart size={32} fill='green.500' />
+            </Box>
           </Heading>
-          <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight='medium'>
+          <Text
+            fontSize={{ base: 'sm', md: 'md' }}
+            fontWeight='medium'
+            color='gray.600'
+            display={{ base: 'none', md: 'block' }}
+          >
             Where trips and shared experiences shape better standards in
             adventure tourism.
           </Text>
         </VStack>
+        <Button
+          variant='ghost'
+          border='1px solid'
+          borderColor='gray.200'
+          borderRadius='xl'
+          size={{ base: 'sm', md: 'md' }}
+          w={{ base: 'full', md: 'auto' }}
+          display={{ base: 'none', md: 'flex' }}
+          alignSelf='flex-end'
+        >
+          <Icon as={Share} mr={1} /> Share
+        </Button>
       </Flex>
     </Box>
   );

@@ -13,16 +13,16 @@ import {
 } from '@chakra-ui/react';
 import { CheckCircleIcon, Heart } from 'lucide-react';
 import { ResponsiveImage } from '../../media/ResponsiveImage';
-import { Adventure } from '@zagotours/types';
+import { AdventureDetailResponseDto } from '@zagotours/types';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
-import { useToggleLikeAdventure } from '@/hooks'; // adjust path as needed
+import { useToggleLikeAdventure } from '@/hooks';
 
 const AdventureCard = ({
   adventure,
   href,
 }: {
-  adventure: Adventure;
+  adventure: AdventureDetailResponseDto;
   href?: string;
 }) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;

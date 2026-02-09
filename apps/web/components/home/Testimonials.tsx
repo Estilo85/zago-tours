@@ -18,21 +18,28 @@ const testimonials = [
   {
     qoute:
       'Even during uncertain times, they delivered a seamless experience. Their knowledge of destinations and attention to detail made my trip unforgettable. Truly a travel partner you can trust.',
-    author: 'Ola',
+    author: 'Atend John',
     avatarUrl: '/images/home/home-how-it-work-hero-3.webp',
     rating: 5,
   },
   {
     qoute:
       "They offer an incredible way to explore Namibia's breathtaking wildlife and landscapes. With expert guides and personalized service, they ensure a safe, thrilling, and unforgettable adventure.",
-    author: 'Ola',
+    author: 'Sara Mohamed',
     avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
     rating: 5,
   },
   {
     qoute:
       "They offer an incredible way to explore Namibia's breathtaking wildlife and landscapes. With expert guides and personalized service, they ensure a safe, thrilling, and unforgettable adventure.",
-    author: 'Ola',
+    author: 'Atend John',
+    avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
+    rating: 5,
+  },
+  {
+    qoute:
+      "They offer an incredible way to explore Namibia's breathtaking wildlife and landscapes. With expert guides and personalized service, they ensure a safe, thrilling, and unforgettable adventure.",
+    author: 'Sara Mohamed',
     avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
     rating: 5,
   },

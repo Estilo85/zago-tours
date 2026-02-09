@@ -24,8 +24,8 @@ const getResendInstance = (): Resend => {
 };
 
 export class EmailService {
-  private static fromEmail =
-    process.env.PARTNERSHIP_EMAIL || 'partnerships@zagotours.com';
+  private static fromEmail = 'muritador5050@gmail.com';
+  // process.env.PARTNERSHIP_EMAIL || 'partnerships@zagotours.com';
 
   /**
    * Send a single email

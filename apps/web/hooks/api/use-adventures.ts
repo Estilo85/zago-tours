@@ -6,6 +6,7 @@ import { adventureKeys } from './query-keys';
 import {
   AdventureDetailResponseDto,
   AdventureListQueryDto,
+  CreateItineraryDto,
   PaginatedResponse,
   ReorderGalleryDto,
 } from '@zagotours/types';
@@ -254,7 +255,7 @@ export function useCreateItinerary() {
     mutationFn: ({ adventureId, data }: { adventureId: string; data: any }) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.ITINERARIES.CREATE(adventureId), {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onSuccess: (_result, { adventureId }) => {
       queryClient.invalidateQueries({
@@ -273,12 +274,18 @@ export function useBulkCreateItineraries() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ adventureId, data }: { adventureId: string; data: any[] }) =>
+    mutationFn: ({
+      adventureId,
+      itineraries,
+    }: {
+      adventureId: string;
+      itineraries: FormData;
+    }) =>
       apiRequest(
         API_ENDPOINTS.ADVENTURES.ITINERARIES.BULK_CREATE(adventureId),
         {
           method: 'POST',
-          body: JSON.stringify(data),
+          body: itineraries,
         },
       ),
     onSuccess: (_result, { adventureId }) => {
@@ -293,7 +300,6 @@ export function useBulkCreateItineraries() {
     },
   });
 }
-
 export function useUpdateItinerary() {
   const queryClient = useQueryClient();
 

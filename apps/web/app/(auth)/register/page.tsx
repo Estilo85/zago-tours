@@ -27,7 +27,12 @@ export default function Register() {
       display='flex'
       justifyContent='center'
     >
-      <Flex position='relative' width='full' justify='center'>
+      <Flex
+        position='relative'
+        width='full'
+        justify={{ base: 'center', md: 'center' }}
+        align={{ base: 'center', md: 'flex-start' }}
+      >
         <Box
           width='700px'
           maxH='1200px'
@@ -52,7 +57,8 @@ export default function Register() {
           right={{ base: 'auto', md: '-30px' }}
           transform={{ base: 'none', md: 'translateY(-50%)' }}
           width={{ base: '100%', md: '40%' }}
-          maxWidth={{ base: '500px', md: 'none' }}
+          maxWidth={{ base: '100%', md: 'none' }}
+          px={{ base: 4, md: 0 }}
           zIndex='1'
         >
           <RegistrationForm />

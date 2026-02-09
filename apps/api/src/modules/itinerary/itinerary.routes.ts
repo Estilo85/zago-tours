@@ -14,19 +14,19 @@ const service = new ItineraryService(repository);
 const controller = new ItineraryController(service);
 
 router.use(authenticate);
-// Bulk create itineraries for an adventure
+
 router.post(
-  '/:adventureId/itineraries/bulk',
+  '/:adventureId/itineraries',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
-  controller.createBulk,
+  upload.single('media'),
+  controller.create,
 );
 
 // Get all itineraries for an adventure
 router.get(
   '/:adventureId/itineraries',
   authenticate,
-
   controller.getByAdventure,
 );
 
@@ -43,7 +43,7 @@ router.put(
   '/itineraries/:id',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
-  upload.single('image'),
+  upload.single('media'),
   controller.update,
 );
 

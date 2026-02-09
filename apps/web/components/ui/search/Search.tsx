@@ -10,6 +10,7 @@ interface SearchBarProps extends Omit<InputProps, 'onChange' | 'width'> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   width?: string | object;
+  bg?: string;
 }
 
 export const SearchBar = ({
@@ -18,18 +19,17 @@ export const SearchBar = ({
   onChange,
   value: externalValue,
   width = 'full',
+  bg = 'gray.50',
   ...props
 }: SearchBarProps) => {
   const [localValue, setLocalValue] = useState('');
 
-  // Use external value if provided, otherwise use local state
   const isControlled = externalValue !== undefined;
   const value = isControlled ? externalValue : localValue;
 
   const handleClear = () => {
     if (isControlled) {
       onSearch?.('');
-      // Trigger a fake event if onChange is required
     } else {
       setLocalValue('');
       onSearch?.('');
@@ -49,7 +49,7 @@ export const SearchBar = ({
     <Box width={width} maxW='600px'>
       <Flex
         align='center'
-        bg='gray.50'
+        bg={bg}
         px={4}
         borderRadius='full'
         border='0.5px solid'
