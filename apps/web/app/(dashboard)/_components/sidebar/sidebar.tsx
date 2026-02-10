@@ -67,6 +67,7 @@ export const Sidebar = ({
             ),
           )}
           {!isAffiliate &&
+            !isAnyAdmin &&
             MENU_CONFIG.common.main.map((item) => (
               <NavItem key={item.href} item={item} />
             ))}

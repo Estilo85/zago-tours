@@ -8,6 +8,13 @@ import {
   countryKeys,
   settingsKeys,
 } from './query-keys';
+import {
+  UpdatePlatformSettingsDto,
+  CreateDestinationCountryDto,
+  UpdateDestinationCountryDto,
+  BulkCreateDestinationCountriesDto,
+  DestinationCountryListQueryDto,
+} from '@zagotours/types';
 
 // ============================================
 // AGENT QUERIES
@@ -72,162 +79,7 @@ export function useDashboardStats() {
 }
 
 // ============================================
-// COUNTRY QUERIES
-// ============================================
-
-export function useCountries(filters?: any) {
-  return useQuery({
-    queryKey: countryKeys.list(filters),
-    queryFn: () => apiRequest(API_ENDPOINTS.COUNTRIES.LIST),
-  });
-}
-
-export function useCountry(id: string) {
-  return useQuery({
-    queryKey: countryKeys.detail(id),
-    queryFn: () => apiRequest(API_ENDPOINTS.COUNTRIES.BY_ID(id)),
-    enabled: !!id,
-  });
-}
-
-// ============================================
-// COUNTRY MUTATIONS
-// ============================================
-
-export function useCreateCountry() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data: any) =>
-      apiRequest(API_ENDPOINTS.COUNTRIES.CREATE, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
-      toaster.create({
-        title: 'Country Added',
-        description: 'Country has been added successfully',
-        type: 'success',
-      });
-    },
-    onError: (error: any) => {
-      toaster.create({
-        title: 'Creation Failed',
-        description: error.message || 'Failed to add country',
-        type: 'error',
-      });
-    },
-  });
-}
-
-export function useUpdateCountry() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) =>
-      apiRequest(API_ENDPOINTS.COUNTRIES.UPDATE(id), {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      }),
-    onMutate: async ({ id, data }) => {
-      await queryClient.cancelQueries({ queryKey: countryKeys.detail(id) });
-      const previousData = queryClient.getQueryData(countryKeys.detail(id));
-
-      queryClient.setQueryData(countryKeys.detail(id), (old: any) => ({
-        ...old,
-        ...data,
-      }));
-
-      return { previousData, id };
-    },
-    onSuccess: (_result, { id }) => {
-      queryClient.invalidateQueries({ queryKey: countryKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
-      toaster.create({
-        title: 'Country Updated',
-        description: 'Country updated successfully',
-        type: 'success',
-      });
-    },
-    onError: (error: any, { id }, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(countryKeys.detail(id), context.previousData);
-      }
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update country',
-        type: 'error',
-      });
-    },
-  });
-}
-
-export function useToggleCountryActive() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) =>
-      apiRequest(API_ENDPOINTS.COUNTRIES.TOGGLE_ACTIVE(id), {
-        method: 'PATCH',
-      }),
-    onSuccess: (_result, id) => {
-      queryClient.invalidateQueries({ queryKey: countryKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
-      toaster.create({
-        title: 'Status Updated',
-        description: 'Country status toggled successfully',
-        type: 'success',
-      });
-    },
-  });
-}
-
-export function useDeleteCountry() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) =>
-      apiRequest(API_ENDPOINTS.COUNTRIES.DELETE(id), {
-        method: 'DELETE',
-      }),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: countryKeys.lists() });
-      const previousData = queryClient.getQueryData(countryKeys.lists());
-
-      queryClient.setQueryData(countryKeys.lists(), (old: any) => {
-        if (!old?.data) return old;
-        return {
-          ...old,
-          data: old.data.filter((country: any) => country.id !== id),
-        };
-      });
-
-      return { previousData };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
-      toaster.create({
-        title: 'Country Deleted',
-        description: 'Country deleted successfully',
-        type: 'success',
-      });
-    },
-    onError: (error: any, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(countryKeys.lists(), context.previousData);
-      }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete country',
-        type: 'error',
-      });
-    },
-  });
-}
-
-// ============================================
-// SETTINGS QUERIES
+// PLATFORM SETTINGS QUERIES
 // ============================================
 
 export function usePublicSettings() {
@@ -252,14 +104,14 @@ export function useMaintenanceCheck() {
 }
 
 // ============================================
-// SETTINGS MUTATIONS
+// PLATFORM SETTINGS MUTATIONS
 // ============================================
 
 export function useUpdateSettings() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) =>
+    mutationFn: (data: UpdatePlatformSettingsDto) =>
       apiRequest(API_ENDPOINTS.SETTINGS.UPDATE, {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -388,6 +240,210 @@ export function useClearCache() {
         title: 'Cache Cleared',
         description: 'System cache cleared successfully',
         type: 'success',
+      });
+    },
+  });
+}
+
+// ============================================
+// DESTINATION COUNTRIES QUERIES
+// ============================================
+
+export function useCountries(filters?: DestinationCountryListQueryDto) {
+  return useQuery({
+    queryKey: countryKeys.list(filters),
+    queryFn: () => {
+      const params = new URLSearchParams();
+      if (filters?.page) params.append('page', filters.page.toString());
+      if (filters?.limit) params.append('limit', filters.limit.toString());
+      if (filters?.isActive !== undefined)
+        params.append('isActive', filters.isActive.toString());
+      if (filters?.search) params.append('search', filters.search);
+      if (filters?.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters?.sortOrder) params.append('sortOrder', filters.sortOrder);
+
+      const queryString = params.toString();
+      const url = queryString
+        ? `${API_ENDPOINTS.COUNTRIES.LIST}?${queryString}`
+        : API_ENDPOINTS.COUNTRIES.LIST;
+
+      return apiRequest(url);
+    },
+  });
+}
+
+export function useCountry(id: string) {
+  return useQuery({
+    queryKey: countryKeys.detail(id),
+    queryFn: () => apiRequest(API_ENDPOINTS.COUNTRIES.BY_ID(id)),
+    enabled: !!id,
+  });
+}
+
+// ============================================
+// DESTINATION COUNTRIES MUTATIONS
+// ============================================
+
+export function useCreateCountry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateDestinationCountryDto) =>
+      apiRequest(API_ENDPOINTS.COUNTRIES.CREATE, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
+      toaster.create({
+        title: 'Country Added',
+        description: 'Country has been added successfully',
+        type: 'success',
+      });
+    },
+    onError: (error: any) => {
+      toaster.create({
+        title: 'Creation Failed',
+        description: error.message || 'Failed to add country',
+        type: 'error',
+      });
+    },
+  });
+}
+
+export function useBulkCreateCountries() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: BulkCreateDestinationCountriesDto) =>
+      apiRequest(API_ENDPOINTS.COUNTRIES.CREATE, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
+      toaster.create({
+        title: 'Countries Added',
+        description: 'Countries have been added successfully',
+        type: 'success',
+      });
+    },
+    onError: (error: any) => {
+      toaster.create({
+        title: 'Bulk Creation Failed',
+        description: error.message || 'Failed to add countries',
+        type: 'error',
+      });
+    },
+  });
+}
+
+export function useUpdateCountry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: UpdateDestinationCountryDto;
+    }) =>
+      apiRequest(API_ENDPOINTS.COUNTRIES.UPDATE(id), {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }),
+    onMutate: async ({ id, data }) => {
+      await queryClient.cancelQueries({ queryKey: countryKeys.detail(id) });
+      const previousData = queryClient.getQueryData(countryKeys.detail(id));
+
+      queryClient.setQueryData(countryKeys.detail(id), (old: any) => ({
+        ...old,
+        ...data,
+      }));
+
+      return { previousData, id };
+    },
+    onSuccess: (_result, { id }) => {
+      queryClient.invalidateQueries({ queryKey: countryKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
+      toaster.create({
+        title: 'Country Updated',
+        description: 'Country updated successfully',
+        type: 'success',
+      });
+    },
+    onError: (error: any, { id }, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(countryKeys.detail(id), context.previousData);
+      }
+      toaster.create({
+        title: 'Update Failed',
+        description: error.message || 'Failed to update country',
+        type: 'error',
+      });
+    },
+  });
+}
+
+export function useToggleCountryActive() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiRequest(API_ENDPOINTS.COUNTRIES.TOGGLE_ACTIVE(id), {
+        method: 'PATCH',
+      }),
+    onSuccess: (_result, id) => {
+      queryClient.invalidateQueries({ queryKey: countryKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
+      toaster.create({
+        title: 'Status Updated',
+        description: 'Country status toggled successfully',
+        type: 'success',
+      });
+    },
+  });
+}
+
+export function useDeleteCountry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiRequest(API_ENDPOINTS.COUNTRIES.DELETE(id), {
+        method: 'DELETE',
+      }),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: countryKeys.lists() });
+      const previousData = queryClient.getQueryData(countryKeys.lists());
+
+      queryClient.setQueryData(countryKeys.lists(), (old: any) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.filter((country: any) => country.id !== id),
+        };
+      });
+
+      return { previousData };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: countryKeys.lists() });
+      toaster.create({
+        title: 'Country Deleted',
+        description: 'Country deleted successfully',
+        type: 'success',
+      });
+    },
+    onError: (error: any, _variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(countryKeys.lists(), context.previousData);
+      }
+      toaster.create({
+        title: 'Delete Failed',
+        description: error.message || 'Failed to delete country',
+        type: 'error',
       });
     },
   });

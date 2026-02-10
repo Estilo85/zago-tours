@@ -81,7 +81,6 @@ router.patch(
  */
 router.patch(
   '/:id/safety-ambassador',
-
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   userController.promoteSafetyAmbassador,
