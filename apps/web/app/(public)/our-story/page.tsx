@@ -123,7 +123,9 @@ export default function OurStory() {
           >
             The moment everything <br /> changed
           </Text>
-          <ScrollProgressSteps items={mySteps} />
+          <Box maxW='800px' mx='auto' w='full'>
+            <ScrollProgressSteps items={mySteps} />
+          </Box>
         </Stack>
         <TransformationSection />
         <PurposeSection />

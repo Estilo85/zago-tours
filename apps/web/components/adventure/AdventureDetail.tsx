@@ -14,6 +14,7 @@ import {
   IconButton,
   Badge,
   Separator,
+  RatingGroup,
 } from '@chakra-ui/react';
 import { Itinerary } from '@zagotours/types';
 import { LuStar, LuClock, LuMapPin, LuHeart } from 'react-icons/lu';
@@ -44,6 +45,7 @@ import {
 import { ResponsiveImage } from '../media/ResponsiveImage';
 import { AvatarImage } from '../media/AvatarImage';
 import ItineraryCard from '../ui/card/ItineraryCard';
+import { AppLink } from '../ui/link/AppLink';
 
 interface AdventureDetailProps {
   adventureId: string;
@@ -153,8 +155,22 @@ export default function AdventureDetailPage({
             {adventure.title}
           </Heading>
           <HStack gap={2}>
-            <Box bg='green.600'>
-              <Icon as={LuStar} fill='white' color='green.600' />
+            <Box bg='green.600' p={1} display='inline-flex'>
+              <RatingGroup.Root
+                count={5}
+                value={adventure.rating}
+                readOnly
+                size='xs'
+                css={{
+                  '& svg': {
+                    fill: 'white',
+                    color: 'white',
+                  },
+                }}
+              >
+                <RatingGroup.HiddenInput />
+                <RatingGroup.Control />
+              </RatingGroup.Root>
             </Box>
             <Text fontSize={{ base: 'sm', md: 'md' }}>
               {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
@@ -443,16 +459,18 @@ export default function AdventureDetailPage({
             >
               <Icon as={LuHeart} boxSize={{ base: 5, md: 6 }} />
             </IconButton>
-            <Button
-              bg='primary'
-              color='white'
-              size={{ base: 'md', md: 'lg' }}
-              px={{ base: 6, md: 10 }}
-              borderRadius='full'
-              flex='1'
-            >
-              Book Now
-            </Button>
+            <AppLink href='https://wa.me/447418627748' target='_blank'>
+              <Button
+                bg='primary'
+                color='white'
+                size={{ base: 'md', md: 'lg' }}
+                px={{ base: 6, md: 10 }}
+                borderRadius='full'
+                flex='1'
+              >
+                Book Now
+              </Button>
+            </AppLink>
           </Flex>
         </Box>
       </Flex>

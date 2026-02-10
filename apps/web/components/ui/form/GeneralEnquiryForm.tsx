@@ -55,8 +55,6 @@ export default function GeneralEnquiryForm() {
       p={{ base: 6, md: 10 }}
       bg='surface'
       borderRadius='3xl'
-      borderWidth='1px'
-      shadow='xl'
     >
       <VStack spaceY={8} align='stretch'>
         <Box textAlign='center'>

@@ -31,11 +31,6 @@ export const SelectableCard = ({
       bg={isActive ? 'primary' : 'white'}
       border='1px solid'
       borderColor={isActive ? 'transparent' : 'gray.200'}
-      _hover={{
-        bg: isActive ? 'green.500' : 'green.50',
-        shadow: 'md',
-        borderColor: isActive ? 'transparent' : 'green.200',
-      }}
       transition='all 0.2s cubic-bezier(.4,0,.2,1)'
       width='full'
       maxW='300px'

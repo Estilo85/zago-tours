@@ -16,6 +16,7 @@ import { ArrowRight } from 'lucide-react';
 import NextLink from 'next/link';
 import Button from '../ui/button/Button';
 import { SearchBar } from '../ui/search/Search';
+import { AppLink } from '../ui/link/AppLink';
 
 // 1. Create your data collections
 const destinations = createListCollection({
@@ -61,12 +62,12 @@ export const AdventureHero = () => {
           Adventures
         </Heading>
 
-        <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-          <NextLink href='/'>
+        <AppLink href='https://forms.gle/xccTVKqoZJASk3w59'>
+          <Button bg='secondary' color='dark' fontWeight='bold'>
             Become a supplier
             <Icon as={ArrowRight} ml={2} />
-          </NextLink>
-        </Button>
+          </Button>
+        </AppLink>
 
         <Box
           width={{ base: '95%', md: '90%', lg: '70%' }}

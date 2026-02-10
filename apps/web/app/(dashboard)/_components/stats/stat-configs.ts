@@ -67,7 +67,13 @@ export const getCorporateAgentStatsConfig = (
   data: CorporateAgentStats,
 ): StatCardData[] => [
   {
-    label: 'Total Trip Requests',
+    label: 'Trip Requests',
+    value: data?.totalTripRequests.toLocaleString(),
+    icon: LuPlaneTakeoff,
+  },
+
+  {
+    label: 'Total Trips',
     value: data?.totalTripRequests.toLocaleString(),
     icon: LuPlaneTakeoff,
   },
@@ -92,7 +98,7 @@ export const getIndependentAgentStatsConfig = (
     icon: LuPlaneTakeoff,
   },
   {
-    label: 'Points Earned (Referrals)',
+    label: 'Points Earned',
     value: data?.pointsEarnedPerReferral.toLocaleString(),
     icon: LuTrendingUp,
   },
@@ -102,7 +108,7 @@ export const getAffiliateStatsConfig = (
   data: AffiliateStats,
 ): StatCardData[] => [
   {
-    label: 'Total Referred',
+    label: 'Total Referral',
     value: data?.totalReferred.toLocaleString(),
     icon: LuUserPlus,
   },
@@ -112,7 +118,7 @@ export const getAffiliateStatsConfig = (
     icon: LuClipboardList,
   },
   {
-    label: 'Points Earned',
+    label: 'Total Commission',
     value: data?.pointsEarned.toLocaleString(),
     icon: LuStar,
   },

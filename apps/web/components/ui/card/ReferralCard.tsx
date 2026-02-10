@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
-import { Box, Text, Skeleton } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { toaster } from '@/components/ui/toaster';
 import { useCurrentUser } from '@/hooks';
 import Button from '../button/Button';
 
 export function ReferralCard() {
-  const { data: userData, isLoading } = useCurrentUser();
+  const { data: userData } = useCurrentUser();
   const [copied, setCopied] = useState(false);
 
   const referralLink = userData?.data?.referralLink;
@@ -34,21 +34,19 @@ export function ReferralCard() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <Box borderWidth='1px' borderRadius='lg' p={6} bg='bg.panel' shadow='sm'>
-        <Skeleton height='6' width='75%' mb={4} />
-        <Skeleton height='10' />
-      </Box>
-    );
-  }
-
   if (!referralLink) {
     return null;
   }
 
   return (
-    <Box borderWidth='1px' borderRadius='lg' p={6} bg='bg.panel' shadow='sm'>
+    <Box
+      borderWidth='1px'
+      borderRadius='lg'
+      p={6}
+      bg='bg.panel'
+      shadow='sm'
+      maxH='200px'
+    >
       <Text fontSize='lg' fontWeight='semibold' mb={4} color='fg.default'>
         Invite others with your unique referral link
       </Text>

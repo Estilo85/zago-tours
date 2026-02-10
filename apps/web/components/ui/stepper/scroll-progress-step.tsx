@@ -39,7 +39,7 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
   }, [items]);
 
   return (
-    <Stack gap={{ base: 6, md: 8 }} maxW='800px' mx='auto' w='full'>
+    <Stack gap={{ base: 6, md: 8 }} maxW='800px' w='full'>
       {items.map((item, index) => (
         <Flex
           key={index}
@@ -53,11 +53,11 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
           <Flex direction='column' alignItems='center' flexShrink={0} pt={2}>
             {/* Circle Indicator */}
             <Box
-              w={{ base: '12px', md: '16px' }}
-              h={{ base: '12px', md: '16px' }}
+              w={{ base: '35px', md: '35px' }}
+              h={{ base: '35px', md: '35px' }}
               borderRadius='full'
               bg='secondary'
-              border='4px solid'
+              border='7px solid'
               borderColor={activeStep === index ? 'primary' : 'transparent'}
               transition='border-color 0.3s ease'
               flexShrink={0}
@@ -68,10 +68,9 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
               <Box
                 w='2px'
                 flex='1'
-                minH='40px'
-                bg={activeStep > index ? 'primary' : 'gray.200'}
+                bg='primary'
                 transition='background-color 0.3s ease'
-                mt={2}
+                minH='100px'
               />
             )}
           </Flex>

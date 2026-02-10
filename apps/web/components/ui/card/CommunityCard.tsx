@@ -4,7 +4,7 @@ import { AppLink } from '../link/AppLink';
 
 export const CommunityCard = () => {
   return (
-    <Card.Root maxW='sm' variant='outline' overflow='hidden'>
+    <Card.Root maxW='sm' variant='outline' overflow='hidden' maxH='200px'>
       <Card.Body>
         <Stack gap='1'>
           <Card.Title>

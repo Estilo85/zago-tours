@@ -4,6 +4,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import NextLink from 'next/link';
 import Button from '../ui/button/Button';
+import { AppLink } from '../ui/link/AppLink';
 
 export const EventHero = () => {
   return (
@@ -19,24 +20,24 @@ export const EventHero = () => {
         </Text>
 
         <Flex direction={{ base: 'column', md: 'row' }} align='center' gap={3}>
-          <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-            <NextLink href='#'>
+          <AppLink href='#'>
+            <Button bg='secondary' color='dark' fontWeight='bold'>
               Join an event
               <Icon as={ArrowRight} ml={2} />
-            </NextLink>
-          </Button>
-          <Button
-            asChild
-            bg='primary'
-            color='white'
-            fontWeight='bold'
-            border='2px solid white'
-          >
-            <NextLink href='#'>
+            </Button>
+          </AppLink>
+
+          <AppLink href='https://forms.gle/bpFRxCweT8ygcCW8A'>
+            <Button
+              bg='primary'
+              color='white'
+              fontWeight='bold'
+              border='2px solid white'
+            >
               Host an event
               <Icon as={ArrowRight} ml={2} />
-            </NextLink>
-          </Button>
+            </Button>
+          </AppLink>
         </Flex>
       </Stack>
     </Box>

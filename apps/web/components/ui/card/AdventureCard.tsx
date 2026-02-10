@@ -135,7 +135,6 @@ const AdventureCard = ({
             </Text>
           </Flex>
         </Box>
-
         {/* BOTTOM LAYER: DETAILS SECTION - 50% height */}
         <Card.Body p='4' pt='6' h='50%' display='flex' flexDirection='column'>
           <Stack gap={1.5}>
@@ -178,8 +177,8 @@ const AdventureCard = ({
                 / person
               </Text>
             </Box>
-
             <Button
+              // href='https://wa.me/447418627748'
               bg='surface'
               color='dark'
               size='xs'

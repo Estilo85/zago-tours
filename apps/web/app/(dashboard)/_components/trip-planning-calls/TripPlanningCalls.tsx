@@ -173,7 +173,7 @@ export function TripPlanningCalls() {
     <Box p={8}>
       <VStack gap={6} align='stretch'>
         <Text fontSize='2xl' fontWeight='bold'>
-          Planning Call Management
+        Trip Planning Calls 
         </Text>
 
         {/* Display Upcoming Calls in Table */}

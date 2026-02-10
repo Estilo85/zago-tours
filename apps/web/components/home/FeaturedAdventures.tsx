@@ -21,11 +21,12 @@ export const FeaturedAdventures = () => {
   const adventures = response?.data || [];
 
   return (
-    <Container maxW='container.xl' justifyItems='center' mt={5}>
+    <Container maxW='container.xl' justifyItems='center' my={16}>
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}
-          gap={{ base: 6, md: 3 }}
+          rowGap={9}
+          gap={{ base: 6, md: 5 }}
           width={{ base: 'full', lg: '900px' }}
           justifyItems='center'
         >

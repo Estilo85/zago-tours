@@ -5,6 +5,7 @@ import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
 import { UserRole } from './_config/menu-config';
 import { useAuthSession } from '@/hooks';
+import DashboardHeader from './_components/header/DashboardHeader';
 
 export default function DashboardLayout({
   children,
@@ -19,57 +20,62 @@ export default function DashboardLayout({
   const userRole = user.role as UserRole;
 
   return (
-    <Flex h='100vh' bg='gray.50' overflow='hidden'>
+    <Flex direction='column' h='100vh' bg='gray.50' overflow='hidden'>
       {/* DESKTOP SIDEBAR */}
-      <Box
-        w='280px'
-        bg='primary'
-        color='white'
-        borderRight='1px solid'
-        borderColor='gray.200'
-        display={{ base: 'none', md: 'block' }}
-      >
-        <Sidebar role={userRole} />
-      </Box>
+      <DashboardHeader />
 
-      {/* MOBILE DRAWER */}
-      <Drawer.Root
-        open={open}
-        onOpenChange={(e) => setOpen(e.open)}
-        placement='start'
-        size='xs'
-      >
-        <Portal>
-          <Drawer.Backdrop />
-          <Drawer.Positioner>
-            <Drawer.Content bg='primary'>
-              <Drawer.CloseTrigger asChild>
-                <CloseButton m={4} />
-              </Drawer.CloseTrigger>
-
-              {/* Drawer handles scroll */}
-              <Drawer.Body p={0}>
-                <Sidebar role={userRole} onClose={() => setOpen(false)} />
-              </Drawer.Body>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Portal>
-      </Drawer.Root>
-
-      {/* MAIN CONTENT */}
-      <Flex direction='column' flex='1' overflow='hidden'>
-        <Navbar onOpen={() => setOpen(true)} />
-
-        {/* SINGLE SCROLL AREA */}
+      <Flex flex='1' overflow='hidden'>
+        {/* DESKTOP SIDEBAR */}
         <Box
-          flex='1'
-          overflowY='auto'
-          minH={{ base: '70vh', md: '75vh' }}
-          h='full'
-          p={{ base: 4, md: 8 }}
+          w='280px'
+          bg='primary'
+          color='white'
+          borderRight='1px solid'
+          borderColor='gray.200'
+          display={{ base: 'none', md: 'block' }}
         >
-          {children}
+          <Sidebar role={userRole} />
         </Box>
+
+        {/* MOBILE DRAWER */}
+        <Drawer.Root
+          open={open}
+          onOpenChange={(e) => setOpen(e.open)}
+          placement='start'
+          size='xs'
+        >
+          <Portal>
+            <Drawer.Backdrop />
+            <Drawer.Positioner>
+              <Drawer.Content bg='primary'>
+                <Drawer.CloseTrigger asChild>
+                  <CloseButton m={4} />
+                </Drawer.CloseTrigger>
+
+                {/* Drawer handles scroll */}
+                <Drawer.Body p={0}>
+                  <Sidebar role={userRole} onClose={() => setOpen(false)} />
+                </Drawer.Body>
+              </Drawer.Content>
+            </Drawer.Positioner>
+          </Portal>
+        </Drawer.Root>
+
+        {/* MAIN CONTENT */}
+        <Flex direction='column' flex='1' overflow='hidden'>
+          <Navbar onOpen={() => setOpen(true)} />
+
+          {/* SINGLE SCROLL AREA */}
+          <Box
+            flex='1'
+            overflowY='auto'
+            minH={{ base: '70vh', md: '75vh' }}
+            h='full'
+            p={{ base: 4, md: 8 }}
+          >
+            {children}
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   );

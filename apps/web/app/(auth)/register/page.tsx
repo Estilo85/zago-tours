@@ -59,6 +59,7 @@ export default function Register() {
           width={{ base: '100%', md: '40%' }}
           maxWidth={{ base: '100%', md: 'none' }}
           px={{ base: 4, md: 0 }}
+          my={{ base: 9, md: 0 }}
           zIndex='1'
         >
           <RegistrationForm />

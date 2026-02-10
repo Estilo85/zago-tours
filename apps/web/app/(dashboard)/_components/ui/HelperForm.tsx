@@ -12,13 +12,7 @@ import {
   HStack,
   Flex,
 } from '@chakra-ui/react';
-import {
-  LuSend,
-  LuMail,
-  LuPhone,
-  LuMapPin,
-  LuMessageSquare,
-} from 'react-icons/lu';
+import { LuSend, LuMail, LuPhone, LuMapPin } from 'react-icons/lu';
 import { useCreateInquiry } from '@/hooks';
 import { CreateGeneralInquiryDto } from '@zagotours/types';
 import { FormInput } from '@/components/ui/input/FormInput';
@@ -73,7 +67,7 @@ export default function HelperForm() {
           color='primary'
           mb={2}
         >
-          Cant Find what you <br /> looking for?
+          Can't Find what you <br /> looking for?
         </Heading>
       </Box>
       <Box
@@ -83,20 +77,20 @@ export default function HelperForm() {
         maxW={{ base: '100%', md: '530px' }}
         mx='auto'
         mb={6}
-        p={{ base: 4, md: 6 }}
+        px={{ base: 4, md: 6 }}
+        py={7}
         bg='surface'
         borderRadius='3xl'
-        borderWidth='1px'
-        shadow='xl'
+        my={9}
       >
         <VStack spaceY={3} align='stretch'>
           <Stack spaceY={3}>
             {/* Email and Phone side-by-side */}
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={5}>
               <Box position='relative'>
-                <HStack mb={2}>
-                  <Text fontSize='sm' fontWeight='medium'>
-                    Email Address
+                <HStack mb={2} color='primary'>
+                  <Text fontSize='md' fontWeight='medium' lineClamp={3}>
+                    Your Email
                   </Text>
                   <LuMail size={18} color='primary' />
                 </HStack>
@@ -112,9 +106,9 @@ export default function HelperForm() {
               </Box>
 
               <Box position='relative'>
-                <HStack mb={2}>
-                  <Text fontSize='sm' fontWeight='medium'>
-                    Phone Number
+                <HStack mb={2} color='primary'>
+                  <Text fontSize='md' fontWeight='medium' lineClamp={3}>
+                    Your Phone
                   </Text>
                   <LuPhone size={18} color='primary' />
                 </HStack>
@@ -131,9 +125,9 @@ export default function HelperForm() {
 
             {/* Address below Email/Phone */}
             <Box position='relative'>
-              <HStack>
-                <Text fontSize='sm' fontWeight='medium'>
-                  Physical Address
+              <HStack mb={2} color='primary'>
+                <Text fontSize='md' fontWeight='medium' lineClamp={3}>
+                  Your Address
                 </Text>
                 <LuMapPin color='primary' size={18} />
               </HStack>
@@ -149,9 +143,9 @@ export default function HelperForm() {
 
             {/* Message at the bottom */}
             <Box position='relative'>
-              <HStack>
-                <Text fontSize='sm' fontWeight='medium'>
-                  Your Message
+              <HStack mb={2} color='primary'>
+                <Text fontSize='md' fontWeight='medium' lineClamp={3}>
+                  Message
                 </Text>
               </HStack>
               <FormInput

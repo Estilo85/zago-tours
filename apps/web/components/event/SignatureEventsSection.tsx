@@ -6,25 +6,25 @@ import { SignatureEventCard } from '../ui/card/SignatureEventCard';
 
 const signatureEvents = [
   {
-    url: '/images/forms/adventure-form-bg.webp',
+    url: '/images/events/sig-off-the-path.webp',
     title: 'Off the Path (Expert Edition)',
     description:
       'Meet verified travel advisors Learn from the pros what truly matters before you go',
   },
   {
-    url: '/images/forms/adventure-form-bg.webp',
+    url: '/images/events/sig-ooo_stories.webp',
     title: 'OOO Stories (Traveler Edition)',
     description:
       'Hear real stories from travelers Gain insights that help you make better decisions on your own trips.',
   },
   {
-    url: '/images/forms/adventure-form-bg.webp',
+    url: '/images/events/sig-happy-hour.webp',
     title: 'Happy Hour ',
     description:
       'See how Zago Tours works behind the scenes and get your questions answered.',
   },
   {
-    url: '/images/forms/adventure-form-bg.webp',
+    url: '/images/events/sig-speed-networking.webp',
     title: 'Adventure Speed Networking',
     description:
       'Swap stories and connect with fellow explorers building their adventure lives.',

@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, VStack, Text, List } from '@chakra-ui/react';
-import { CheckCircle } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
 
@@ -12,6 +12,7 @@ interface PlanProps {
   features: string[];
   isActive?: boolean;
   href?: string;
+  description?: string;
 }
 
 export const PricingCard = ({
@@ -20,13 +21,14 @@ export const PricingCard = ({
   features,
   isActive,
   buttonText,
-  href = '#',
+  href,
+  description,
 }: PlanProps) => {
   return (
     <Box
       px={8}
       py={10}
-      borderRadius='xl'
+      borderRadius='2xl'
       borderWidth='1px'
       bg={isActive ? 'primary' : 'white'}
       color={isActive ? 'white' : 'gray.800'}
@@ -34,8 +36,11 @@ export const PricingCard = ({
       shadow={isActive ? 'xl' : 'md'}
       transform={isActive ? 'scale(1.05)' : 'none'}
       transition='all 0.3s'
+      height='100%'
+      w='100%'
+      maxW={{ base: '100%', md: '380px' }}
     >
-      <VStack spaceY={4} align='start'>
+      <VStack spaceY={4} align='start' height='100%'>
         <Text fontSize='xl' fontWeight='bold'>
           {title}
         </Text>
@@ -46,31 +51,27 @@ export const PricingCard = ({
           alignItems='baseline'
         >
           {price}
-          <Box
-            as='sub'
-            fontSize='sm'
-            fontWeight='normal'
-            ml={1}
-            color={isActive ? 'blue.100' : 'gray.500'}
-          >
+          <Box as='sub' fontSize='xl' fontWeight='bold' ml={1}>
             /monthly
           </Box>
         </Text>
-        <AppLink href={href}>
+        <AppLink href={href || ''} width='100%'>
           <Button
-            width='full'
+            width='100%'
             bg={isActive ? 'white' : 'primary'}
-            color={isActive ? 'primary' : 'white'}
+            color={isActive ? 'dark' : 'white'}
             variant={isActive ? 'solid' : 'outline'}
           >
             {buttonText}
           </Button>
         </AppLink>
-        <List.Root variant='plain' gap='3' textAlign='start' py='4'>
+
+        <Text>{description}</Text>
+        <List.Root variant='plain' gap='3' textAlign='start' py='4' flex='1'>
           {features.map((feature, index) => (
             <List.Item key={index} display='flex' alignItems='center'>
               <List.Indicator
-                as={CheckCircle}
+                as={Check}
                 color={isActive ? 'blue.200' : 'green.500'}
                 me='2'
               />

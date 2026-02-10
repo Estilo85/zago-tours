@@ -8,7 +8,6 @@ import { LuMenu } from 'react-icons/lu';
 import { SearchBar } from '@/components/ui/search/Search';
 import { TripRequestDialog } from '../dialogs/trip-request-dialog';
 import { usePermissions, useUserProfile } from '@/hooks';
-import { PlanningCallDialog } from '../dialogs/PlanningCallDialog';
 
 interface NavbarProps {
   onOpen: () => void;
@@ -16,8 +15,7 @@ interface NavbarProps {
 
 export const Navbar = ({ onOpen }: NavbarProps) => {
   const [isTripDialogOpen, setIsTripDialogOpen] = useState(false);
-  const [isPlanningCallDialogOpen, setIsPlanningCallDialogOpen] =
-    useState(false);
+
   const { data: userProfile } = useUserProfile();
   const { isAnyAdmin } = usePermissions();
 
@@ -49,30 +47,19 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
             <SearchBar />
           </Box>
         </HStack>
-        {!isAnyAdmin && (
-          <HStack gap={4}>
-            <Button
-              bg='primary'
-              onClick={() => setIsPlanningCallDialogOpen(true)}
-            >
-              Book a call
-            </Button>
+        <HStack gap={4}>
+          {!isAnyAdmin && (
             <Button bg='primary' onClick={() => setIsTripDialogOpen(true)}>
               Request a trip
             </Button>
-            <AvatarImage src={userImage} name={userName} />
-          </HStack>
-        )}
+          )}
+          <AvatarImage src={userImage} name={userName} />
+        </HStack>
       </Flex>
 
       <TripRequestDialog
         open={isTripDialogOpen}
         onOpenChange={(e) => setIsTripDialogOpen(e.open)}
-      />
-
-      <PlanningCallDialog
-        open={isPlanningCallDialogOpen}
-        onOpenChange={(e) => setIsPlanningCallDialogOpen(e.open)}
       />
     </>
   );
