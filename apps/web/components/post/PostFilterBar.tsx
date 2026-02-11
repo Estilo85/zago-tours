@@ -7,6 +7,25 @@ import { PostResponseDto } from '@zagotours/types';
 import { SearchBar } from '../ui/search/Search';
 import { SelectInput } from '../ui/input/SelectInput';
 
+// Your scattered country list for the dropdown
+const COUNTRY_OPTIONS = [
+  { label: 'Chile', value: 'Chile' },
+  { label: 'Peru', value: 'Peru Nepal' },
+  { label: 'Mexico', value: 'Mexico' },
+  { label: 'United States', value: 'United States' },
+  { label: 'Ecuador', value: 'Ecuador' },
+  { label: 'Puerto Rico', value: 'Puerto Rico' },
+  { label: 'Tibet', value: 'Tibet Bhutan' },
+  { label: 'India', value: 'India' },
+  { label: 'Tanzania', value: 'Tanzania' },
+  { label: 'Uganda', value: 'Uganda' },
+  { label: 'Mauritius', value: 'Mauritius' },
+  { label: 'Kenya', value: 'Kenya South' },
+  { label: 'South Africa', value: 'Africa' },
+  { label: 'Panama', value: 'Panama' },
+  { label: 'Philippines', value: 'Philippines' },
+];
+
 interface FilterProps {
   posts: PostResponseDto[];
   userName?: string;
@@ -27,9 +46,14 @@ export function PostFilterBar({
       const matchesSearch =
         post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.title.toLowerCase().includes(searchQuery.toLowerCase());
+
       const matchesTitle = selectedTitle === '' || post.title === selectedTitle;
-      return matchesSearch && matchesTitle;
+
+      const matchesLocation = location === '' || post.user.country === location;
+
+      return matchesSearch && matchesTitle && matchesLocation;
     });
+
     onFilterResults(filtered);
   }, [searchQuery, selectedTitle, location, posts]);
 
@@ -44,8 +68,8 @@ export function PostFilterBar({
       my={6}
     >
       <Flex align={{ base: 'center', md: 'flex-end' }} justify='space-between'>
-        {/* Username */}
         <HStack gap={6} display={{ base: 'none', md: 'flex' }}>
+          {/* Username Display */}
           <Box flex={1}>
             <Field.Root>
               <Field.Label fontSize='xs' fontWeight='bold' mb={0}>
@@ -59,13 +83,12 @@ export function PostFilterBar({
                 fontWeight='medium'
                 py={1}
               >
-                <User size={14} />
-                {userName}
+                <User size={14} /> {userName}
               </Text>
             </Field.Root>
           </Box>
 
-          {/* Location */}
+          {/* Location Filter with your Country List */}
           <Box flex={1}>
             <Field.Root>
               <Field.Label
@@ -84,17 +107,16 @@ export function PostFilterBar({
                   value={location}
                   onChange={setLocation}
                   placeholder='All Locations'
-                  width='120px'
-                  options={[
-                    { label: 'London', value: 'london' },
-                    { label: 'New York', value: 'ny' },
-                  ]}
+                  width='150px'
+                  options={COUNTRY_OPTIONS}
                 />
               </HStack>
             </Field.Root>
           </Box>
+
           <Separator orientation='vertical' h='50px' />
-          {/* Interest */}
+
+          {/* Interest Filter */}
           <Box flex={1}>
             <Field.Root>
               <Field.Label
@@ -113,7 +135,7 @@ export function PostFilterBar({
                   value={selectedTitle}
                   onChange={setSelectedTitle}
                   placeholder='All Titles'
-                  width='120px'
+                  width='150px'
                   options={[...new Set(posts.map((p) => p.title))].map(
                     (title) => ({
                       label: title,
@@ -125,15 +147,17 @@ export function PostFilterBar({
             </Field.Root>
           </Box>
         </HStack>
+
+        {/* Mobile Icons */}
         <HStack gap={4} display={{ base: 'flex', md: 'none' }}>
           <Users size={32} />
           <SwatchBook size={32} />
         </HStack>
-        {/* Search */}
+
+        {/* Search Input */}
         <Box>
           <SearchBar
             placeholder='Search stories...'
-            // value={searchQuery}
             width={{ base: '130px', md: '200px' }}
             onSearch={(val) => setSearchQuery(val)}
           />

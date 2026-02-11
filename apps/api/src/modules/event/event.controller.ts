@@ -186,7 +186,7 @@ export class EventController {
         userId,
         req.params.id,
       );
-      hasJoined = !!registration;
+      hasJoined = !!registration && registration.status === 'CONFIRMED';
     }
 
     const enrichedEvent = {

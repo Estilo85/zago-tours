@@ -1,20 +1,34 @@
 'use client';
-import { Flex, Heading, Icon } from '@chakra-ui/react';
+import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import { Flex, Heading, Box } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { FaFacebook } from 'react-icons/fa';
 
 export const Logo = () => {
   return (
-    <Flex as='span' alignItems='center' gap={3}>
-      <Icon as={FaFacebook} size={{ base: 'md', md: 'xl' }} />
-      <ChakraLink asChild textDecor='none'>
-        <NextLink href='/'>
-          <Heading size={{ base: 'md', md: 'xl' }} color='primary'>
+    <ChakraLink asChild textDecor='none' _hover={{ textDecor: 'none' }}>
+      <NextLink href='/'>
+        <Flex as='span' alignItems='center' gap={3}>
+          <ResponsiveImage
+            src='/images/logo/zago logo png-03.webp'
+            alt='ZagoTours Logo'
+            width={{ base: '35px', md: '45px' }}
+            height={{ base: '35px', md: '45px' }}
+            objectFit='contain'
+            borderRadius='none'
+            priority
+          />
+
+          <Heading
+            size={{ base: 'md', md: 'lg' }}
+            fontWeight='bold'
+            color='primary'
+            letterSpacing='tight'
+          >
             ZagoTours
           </Heading>
-        </NextLink>
-      </ChakraLink>
-    </Flex>
+        </Flex>
+      </NextLink>
+    </ChakraLink>
   );
 };

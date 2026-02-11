@@ -25,7 +25,7 @@ export const PricingSection = () => {
       >
         <PricingCard
           title='Explorer'
-          buttonText='Get started'
+          buttonText='Subscribe'
           price='£5'
           description='Peace of mind in your pocket 1 Safety 
                   Call Credit / month (up to 10 minutes)'
@@ -39,7 +39,7 @@ export const PricingSection = () => {
         />
         <PricingCard
           title='Adventurer Plus'
-          buttonText='Sign up now'
+          buttonText='Subscribe'
           price='£15'
           description='You travel bold — we’ve got your
            back 3 Safety Call Credits / month (up to 
@@ -57,7 +57,7 @@ export const PricingSection = () => {
         />
         <PricingCard
           title='Global Guardians'
-          buttonText='Sign up now'
+          buttonText='Subscribe'
           price='£30'
           description='Your dedicated safety team, 
              anywhere you go'

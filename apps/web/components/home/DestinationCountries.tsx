@@ -13,14 +13,21 @@ const float = keyframes`
 `;
 
 const DESTINATIONS = [
-  { name: 'France', top: '28%', left: '48%' },
-  { name: 'Tanzania', top: '58%', left: '50%' },
-  { name: 'United Arab Emirates', top: '42%', left: '62%' },
-  { name: 'South Africa', top: '82%', left: '54%' },
-  { name: 'Brazil', top: '65%', left: '32%' },
-  { name: 'Thailand', top: '52%', left: '80%' },
-  { name: 'United Kingdom', top: '22%', left: '26%' },
-  { name: 'Kenya', top: '62%', left: '58%' },
+  { name: 'Chile', top: '75%', left: '25%' },
+  { name: 'Peru Nepal', top: '25%', left: '72%' },
+  { name: 'Mexico', top: '35%', left: '15%' },
+  { name: 'United States', top: '20%', left: '12%' },
+  { name: 'Ecuador', top: '55%', left: '22%' },
+  { name: 'Puerto Rico', top: '42%', left: '28%' },
+  { name: 'Tibet Bhutan', top: '30%', left: '78%' },
+  { name: 'India', top: '48%', left: '70%' },
+  { name: 'Tanzania', top: '60%', left: '55%' },
+  { name: 'Uganda', top: '52%', left: '52%' },
+  { name: 'Mauritius', top: '78%', left: '60%' },
+  { name: 'Kenya', top: '45%', left: '55%' },
+  { name: 'South Africa', top: '82%', left: '52%' },
+  { name: 'Panama', top: '48%', left: '20%' },
+  { name: 'Philippines', top: '55%', left: '85%' },
 ];
 
 export const DestinationCountries = () => {

@@ -85,7 +85,8 @@ export default function DashboardLayout({
             overflowY='auto'
             minH={{ base: '70vh', md: '75vh' }}
             h='full'
-            p={{ base: 4, md: 8 }}
+            p={{ base: 2, md: 8 }}
+            w='full'
           >
             {children}
           </Box>

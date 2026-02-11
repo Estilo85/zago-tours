@@ -1,6 +1,8 @@
+'use client';
+
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { useUserProfile } from '@/hooks';
+import { usePermissions, useUserProfile } from '@/hooks';
 import { Box, Flex, Heading, Icon, Text, VStack } from '@chakra-ui/react';
 import { Heart, ImagePlay, Share } from 'lucide-react';
 import React from 'react';
@@ -8,7 +10,25 @@ import Button from '../ui/button/Button';
 
 export default function PostHero() {
   const { data } = useUserProfile();
+  const { isAnyAdmin } = usePermissions();
   const profileImage = data?.data?.image;
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Zago Voice Community',
+          text: 'Check out these amazing travel stories on Zago Voice!',
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Community link copied!');
+      }
+    } catch (error) {
+      console.log('Share failed', error);
+    }
+  };
 
   return (
     <Box position='relative' w='full' bg='white'>
@@ -28,20 +48,22 @@ export default function PostHero() {
         />
 
         {/* Button on top of cover image - bottom right */}
-        <Button
-          position='absolute'
-          bottom={4}
-          right={4}
-          variant='solid'
-          bg='primary'
-          color='white'
-          borderRadius='xl'
-          size={{ base: 'sm', md: 'md' }}
-          boxShadow='md'
-          display={{ base: 'none', md: 'flex' }}
-        >
-          <Icon as={ImagePlay} mr={1} /> Edit cover
-        </Button>
+        {isAnyAdmin && (
+          <Button
+            position='absolute'
+            bottom={4}
+            right={4}
+            variant='solid'
+            bg='primary'
+            color='white'
+            borderRadius='xl'
+            size={{ base: 'sm', md: 'md' }}
+            boxShadow='md'
+            display={{ base: 'none', md: 'flex' }}
+          >
+            <Icon as={ImagePlay} mr={1} /> Edit cover
+          </Button>
+        )}
       </Box>
 
       <Flex
@@ -97,6 +119,7 @@ export default function PostHero() {
           w={{ base: 'full', md: 'auto' }}
           display={{ base: 'none', md: 'flex' }}
           alignSelf='flex-end'
+          onClick={handleShare}
         >
           <Icon as={Share} mr={1} /> Share
         </Button>

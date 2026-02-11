@@ -2,6 +2,7 @@ import { Event, prisma, Prisma } from '@zagotours/database';
 import { BaseService } from 'src/common/service/base.service';
 import { EventRepository } from './event.repository';
 import { EventStatus } from '@zagotours/types';
+import { EmailService } from 'src/shared/services/email.service';
 
 export class EventService extends BaseService<
   Event,
@@ -36,44 +37,41 @@ export class EventService extends BaseService<
   }
 
   // Registration logic
+  // event.service.ts
+
   async registerForEvent(eventId: string, userId: string) {
-    return await prisma.$transaction(async (tx) => {
-      // 1. Get event
+    // 1. Run the database logic inside a transaction
+    const registration = await prisma.$transaction(async (tx) => {
+      // Get event and check if it exists
       const event = await tx.event.findUnique({
         where: { id: eventId, deletedAt: null },
       });
 
-      if (!event) {
-        throw new Error('Event not found');
-      }
+      if (!event) throw new Error('Event not found');
 
-      // 2. Check existing registration
+      // Check for existing registration
       const existing = await tx.eventRegistration.findUnique({
         where: { userId_eventId: { userId, eventId } },
       });
 
-      if (existing) {
+      if (existing && existing.status !== EventStatus.CANCELLED) {
         throw new Error('Already registered for this event');
       }
 
-      // 3. Validate business rules
-      if (event.spotLeft <= 0) {
-        throw new Error('Event is fully booked');
-      }
+      // Check spot availability
+      if (event.spotLeft <= 0) throw new Error('Event is fully booked');
 
-      if (new Date() > new Date(event.joinTill)) {
-        throw new Error('Registration deadline has passed');
-      }
-
-      // 5. Decrement spots
+      // Decrement available spots
       await tx.event.update({
         where: { id: eventId },
         data: { spotLeft: { decrement: 1 } },
       });
 
-      // 4. Create registration
-      const registration = await tx.eventRegistration.create({
-        data: {
+      // Upsert registration and INCLUDE User/Event data for the email
+      return await tx.eventRegistration.upsert({
+        where: { userId_eventId: { userId, eventId } },
+        update: { status: EventStatus.CONFIRMED },
+        create: {
           eventId,
           userId,
           status: EventStatus.CONFIRMED,
@@ -84,44 +82,68 @@ export class EventService extends BaseService<
               title: true,
               date: true,
               location: true,
-              mediaUrl: true,
+            },
+          },
+          user: {
+            select: {
+              email: true,
+              name: true,
             },
           },
         },
       });
-
-      return registration;
     });
-  }
 
+    if (registration.user?.email) {
+      EmailService.sendEventRegistrationEmail(
+        registration.user.email,
+        registration.user.name,
+        {
+          title: registration.event.title,
+          date: registration.event.date,
+          location: registration.event.location,
+        },
+      ).catch((err) => {
+        console.error('Event Registration Email failed to send:', err);
+      });
+    }
+
+    return registration;
+  }
   async cancelRegistration(eventId: string, userId: string) {
-    return await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       const registration = await tx.eventRegistration.findUnique({
         where: { userId_eventId: { userId, eventId } },
+        include: {
+          user: { select: { email: true, name: true } },
+          event: { select: { title: true } },
+        },
       });
 
-      if (!registration) {
-        throw new Error('Registration not found');
+      if (!registration || registration.status === EventStatus.CANCELLED) {
+        throw new Error('Registration not found or already cancelled');
       }
 
-      if (registration.status === EventStatus.CANCELLED) {
-        throw new Error('Registration already cancelled');
-      }
-
-      // Update registration status
       await tx.eventRegistration.update({
         where: { id: registration.id },
         data: { status: EventStatus.CANCELLED },
       });
 
-      // Increment spots back
       await tx.event.update({
         where: { id: eventId },
         data: { spotLeft: { increment: 1 } },
       });
 
-      return { message: 'Registration cancelled successfully' };
+      return registration;
     });
+
+    EmailService.sendEventCancellationEmail(
+      result.user.email,
+      result.user.name,
+      result.event.title,
+    ).catch((err) => console.error('Email failed', err));
+
+    return { message: 'Registration cancelled successfully' };
   }
 
   async getUserRegistrations(

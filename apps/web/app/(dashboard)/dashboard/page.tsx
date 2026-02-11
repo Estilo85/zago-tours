@@ -50,7 +50,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <Box p={6}>
+    <Box p={{ base: 0, md: 6 }}>
       <WelcomeBanner />
       <Stack gap={8}>
         {/* Stats Grid */}
@@ -92,7 +92,12 @@ export default function DashboardPage() {
         {isAdventurer && <SafetyAmbassadorTable />}
 
         {!isAnyAdmin && (
-          <Flex my={6} justify='space-between' alignItems='stretch'>
+          <Flex
+            my={6}
+            direction={{ base: 'column', md: 'row' }}
+            justify='space-between'
+            alignItems='stretch'
+          >
             <CommunityCard />
             <ReferralCard />
           </Flex>

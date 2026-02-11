@@ -24,8 +24,8 @@ const getResendInstance = (): Resend => {
 };
 
 export class EmailService {
-  private static fromEmail = 'muritador5050@gmail.com';
-  // process.env.PARTNERSHIP_EMAIL || 'partnerships@zagotours.com';
+  private static fromEmail =
+    process.env.PARTNERSHIP_EMAIL || 'partnerships@zagotours.com';
 
   /**
    * Send a single email
@@ -1121,6 +1121,59 @@ export class EmailService {
     await this.sendEmail({
       to: email,
       subject: 'Call Cancelled - Zagotours',
+      html,
+    });
+  }
+
+  /**
+   * Send Event Registration Confirmation
+   */
+  static async sendEventRegistrationEmail(
+    email: string,
+    name: string,
+    eventDetails: { title: string; date: Date; location: string },
+  ): Promise<void> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px;">
+        <h2 style="color: #4F46E5;">Adventure Confirmed! 🎒</h2>
+        <p>Hi ${name},</p>
+        <p>You're officially registered for <strong>${eventDetails.title}</strong>.</p>
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p>📅 <strong>Date:</strong> ${new Date(eventDetails.date).toLocaleDateString()}</p>
+          <p>📍 <strong>Location:</strong> ${eventDetails.location}</p>
+        </div>
+        <p>We can't wait to see you there!</p>
+        <a href="${process.env.FRONTEND_URL}/my-bookings" style="background: #4F46E5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View My Bookings</a>
+      </div>
+    `;
+
+    await this.sendEmail({
+      to: email,
+      subject: `Confirmed: ${eventDetails.title}`,
+      html,
+    });
+  }
+
+  /**
+   * Send Event Cancellation Notification
+   */
+  static async sendEventCancellationEmail(
+    email: string,
+    name: string,
+    eventTitle: string,
+  ): Promise<void> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px;">
+        <h2 style="color: #EF4444;">Registration Cancelled</h2>
+        <p>Hi ${name},</p>
+        <p>This email confirms that your registration for <strong>${eventTitle}</strong> has been cancelled.</p>
+        <p>If this was a mistake, you can always re-register on our platform if spots are still available.</p>
+      </div>
+    `;
+
+    await this.sendEmail({
+      to: email,
+      subject: `Cancelled: ${eventTitle}`,
       html,
     });
   }

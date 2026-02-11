@@ -23,6 +23,7 @@ export const SignatureEventCard = ({
       height={{ sm: '200px' }}
       border='1px solid'
       borderColor='gray.200'
+      borderRadius='xl'
     >
       {/* Media on the Left */}
       <Box

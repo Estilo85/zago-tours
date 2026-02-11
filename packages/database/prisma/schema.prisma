@@ -1,9 +1,9 @@
 // --- CONFIGURATION ---
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") 
 }
 
 generator client {
@@ -310,6 +310,7 @@ model Event {
   id                String              @id @default(uuid())
   title             String
   date              DateTime
+  time              String?
   description       String
   location          String
   creator           User                @relation(fields: [createdBy], references: [id])
