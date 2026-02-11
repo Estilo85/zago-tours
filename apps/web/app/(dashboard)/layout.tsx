@@ -1,5 +1,13 @@
 'use client';
-import { Box, Flex, Drawer, Portal, CloseButton } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Drawer,
+  Portal,
+  CloseButton,
+  Heading,
+  VStack,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
@@ -48,13 +56,19 @@ export default function DashboardLayout({
             <Drawer.Backdrop />
             <Drawer.Positioner>
               <Drawer.Content bg='primary'>
-                <Drawer.CloseTrigger asChild>
+                <Drawer.CloseTrigger>
                   <CloseButton m={4} />
                 </Drawer.CloseTrigger>
-
+                <Drawer.Header borderBottomWidth='1px'>
+                  <Heading size='sm' color='white'>
+                    Menu
+                  </Heading>
+                </Drawer.Header>
                 {/* Drawer handles scroll */}
-                <Drawer.Body p={0}>
-                  <Sidebar role={userRole} onClose={() => setOpen(false)} />
+                <Drawer.Body>
+                  <VStack align='stretch' gap={6} mt={4}>
+                    <Sidebar role={userRole} onClose={() => setOpen(false)} />
+                  </VStack>
                 </Drawer.Body>
               </Drawer.Content>
             </Drawer.Positioner>

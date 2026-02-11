@@ -17,7 +17,7 @@ export default function DashboardHeader() {
         display='flex'
         justifyContent='center'
         alignItems='center'
-        borderRadius='3xl'
+        borderRadius={{ base: 'none', md: '3xl' }}
         p={16}
         maxH={{ base: '200px', md: '300px' }}
         mb={10}

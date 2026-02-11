@@ -22,6 +22,30 @@ export class AuthController {
   });
 
   /**
+   * Register admin (SUPER_ADMIN only)
+   */
+  registerAdmin = asyncHandler(
+    async (
+      req: ReqBody<{
+        name: string;
+        email: string;
+        password: string;
+        phone?: string;
+        country?: string;
+      }>,
+      res: Response,
+    ) => {
+      const result = await this.authService.registerAdmin(req.body);
+      return ResponseUtil.success(
+        res,
+        result,
+        'Admin registered successfully',
+        201,
+      );
+    },
+  );
+
+  /**
    * Authenticate user and return user data (safe)
    */
   login = async (req: ReqBody<LoginDto>, res: Response) => {

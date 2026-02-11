@@ -6,6 +6,9 @@ import { Box, Flex } from '@chakra-ui/react';
 import Navbar from '@/components/layout/navbar/Navbar';
 import Footer from '@/components/layout/footer/Footer';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',

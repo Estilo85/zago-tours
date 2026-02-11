@@ -70,10 +70,51 @@ export class AuthService {
   }
 
   // ============================================
+  // ADMIN REGISTRATION (SUPER_ADMIN ONLY)
+  // ============================================
+  async registerAdmin(data: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    country?: string;
+  }): Promise<UserResponse> {
+    const existingUser = await this.authRepository.findByEmail(data.email);
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+
+    const hashedPassword = await BcryptUtil.hash(data.password);
+    const referralCode = await this.generateUniqueReferralCode(Role.ADMIN);
+
+    const userData = {
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+      phone: data.phone,
+      country: data.country,
+      role: Role.ADMIN,
+      referralCode,
+      referredById: null,
+    };
+
+    const user = await this.authRepository.registerWithProfile(
+      userData,
+      Role.ADMIN,
+      {},
+    );
+
+    // Send welcome email
+    EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
+      console.error('Email background error:', err),
+    );
+
+    return this.mapUserResponse(user);
+  }
+
+  // ============================================
   // LOGIN & AUTH
   // ============================================
-
-  // auth.service.ts
   async login(
     data: LoginDto,
   ): Promise<UserResponse & { accessToken: string; refreshToken: string }> {

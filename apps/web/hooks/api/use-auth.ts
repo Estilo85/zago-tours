@@ -8,6 +8,7 @@ import {
   RegisterDto,
   ForgotPasswordDto,
   ResetPasswordDto,
+  AdminRegisterDto,
 } from '@zagotours/types';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
@@ -79,6 +80,30 @@ export function useAuth() {
     },
   });
 
+  // --- REGISTER MUTATION ---
+  const registerAdmin = useMutation({
+    mutationFn: (data: AdminRegisterDto) =>
+      apiRequest(API_ENDPOINTS.AUTH.REGISTER_ADMIN, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    onSuccess: () => {
+      toaster.create({
+        title: 'Account Created',
+        description: 'Please check your email to verify your account.',
+        type: 'success',
+      });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: (error: any) => {
+      toaster.create({
+        title: 'Registration Failed',
+        description: error.message || 'Failed to create account',
+        type: 'error',
+      });
+    },
+  });
+
   // --- LOGOUT ---
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' });
@@ -99,6 +124,8 @@ export function useAuth() {
 
     // Register
     register: registerMutation.mutate,
+    registerAdmin: registerAdmin.mutate,
+    isRegisteringAdmin: registerAdmin.isPending,
     isRegistering: registerMutation.isPending,
     registerError: registerMutation.error,
 

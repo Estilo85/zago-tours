@@ -159,11 +159,13 @@ export default function AdventureDetailPage({
               <RatingGroup.Root
                 count={5}
                 value={adventure.rating}
+                allowHalf
                 readOnly
                 size='xs'
+                colorPalette='yellow'
                 css={{
                   '& svg': {
-                    fill: 'white',
+                    fill: adventure.rating > 0 ? 'white' : 'none',
                     color: 'white',
                   },
                 }}

@@ -5,8 +5,21 @@ import NextLink from 'next/link';
 import { ResponsiveImage } from '../media/ResponsiveImage';
 import Button from '../ui/button/Button';
 import { ArrowRight } from 'lucide-react';
+import { useAuthSession } from '@/hooks';
+import { AppLink } from '../ui/link/AppLink';
+import { ImageSwiper } from '../ui/swiper/ImageSwiper';
+
+const swiper_image = [
+  '/images/home/swipper/kayaking.webp',
+  '/images/home/swipper/Mountain climbing.webp',
+  '/images/home/swipper/Skiing.webp',
+  '/images/home/swipper/Skydiving.webp',
+  '/images/home/swipper/snowboarding.webp',
+];
 
 export const HomeHero = () => {
+  const { isAuthenticated } = useAuthSession();
+
   return (
     <Box
       bg='primary'
@@ -44,12 +57,14 @@ export const HomeHero = () => {
           seriously.
         </Text>
 
-        <Button asChild bg='secondary' color='dark' fontWeight='bold'>
-          <NextLink href='/register'>
-            Join Us
-            <Icon as={ArrowRight} ml={2} />
-          </NextLink>
-        </Button>
+        {!isAuthenticated && (
+          <AppLink href='/register'>
+            <Button bg='secondary' color='dark' fontWeight='bold'>
+              Join Us
+              <Icon as={ArrowRight} ml={2} />
+            </Button>
+          </AppLink>
+        )}
 
         <Box
           width={{ base: '100%', md: '70%', lg: '60%' }}
@@ -60,15 +75,19 @@ export const HomeHero = () => {
           zIndex={10}
           mt={{ base: 6, md: 0 }}
         >
-          <ResponsiveImage
-            src='/images/home/banner.webp'
-            alt='home page banner image'
-            width='100%'
-            loading='eager'
-            height={{ base: '250px', md: '400px' }}
-            borderRadius='2xl'
-            boxShadow='2xl'
-          />
+          {swiper_image.length > 0 ? (
+            <ImageSwiper images={swiper_image} autoplaySpeed={3000} />
+          ) : (
+            <ResponsiveImage
+              src='/images/home/banner.webp'
+              alt='home page banner image'
+              width='100%'
+              loading='eager'
+              height={{ base: '250px', md: '400px' }}
+              borderRadius='2xl'
+              boxShadow='2xl'
+            />
+          )}
         </Box>
       </Stack>
     </Box>

@@ -35,7 +35,6 @@ export const DesktopNav = () => {
               fontSize='sm'
               textTransform='uppercase'
               fontWeight={isActive(link.href) ? 'medium' : 'sm'}
-              color={isActive(link.href) ? 'orange.500' : 'primary'}
               textDecor='none'
             >
               {link.label}

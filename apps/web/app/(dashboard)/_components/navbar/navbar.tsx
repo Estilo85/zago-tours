@@ -30,6 +30,7 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
         align='center'
         justify='space-between'
         px={{ base: 4, md: 8 }}
+        py={{ base: 4, md: 5 }}
         bg='white'
         borderBottom='1px solid'
         borderColor='gray.200'

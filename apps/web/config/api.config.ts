@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   // Auth
   AUTH: {
     REGISTER: buildUrl('/auth/register'),
+    REGISTER_ADMIN: buildUrl('/auth/register-admin'),
     LOGIN: buildUrl('/auth/login'),
     ME: buildUrl('/auth/me'),
     FORGOT_PASSWORD: buildUrl('/auth/forgot-password'),

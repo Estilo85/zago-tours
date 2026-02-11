@@ -61,6 +61,16 @@ export interface RegisterDto {
   affiliateDetails?: AffiliateDto;
 }
 
+export interface AdminRegisterDto {
+  name?: string;
+  email: string;
+  password: string;
+  phone?: string;
+  country?: string;
+  role: Role.ADMIN;
+  referralCode?: string;
+}
+
 export type UserProfileResponse =
   | (IndependentAgentDto & { type: Role.INDEPENDENT_AGENT })
   | (CooperateAgentDto & { type: Role.COOPERATE_AGENT })

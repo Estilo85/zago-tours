@@ -21,7 +21,12 @@ export const FeaturedAdventures = () => {
   const adventures = response?.data || [];
 
   return (
-    <Container maxW='container.xl' justifyItems='center' my={16}>
+    <Container
+      maxW='container.xl'
+      justifyItems='center'
+      my={16}
+      px={{ base: 4, md: 6 }}
+    >
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}
@@ -43,8 +48,10 @@ export const FeaturedAdventures = () => {
       <SimpleGrid
         columns={{ base: 1, md: 3 }}
         gap={{ base: 6, md: 3 }}
+        rowGap={{ base: 6, md: 5 }}
         width={{ base: 'full', lg: '900px' }}
         justifyItems='center'
+        px={{ base: 0, md: 0 }}
       >
         {adventures.map((adventure) => (
           <AdventureCard key={adventure.id} adventure={adventure} />
