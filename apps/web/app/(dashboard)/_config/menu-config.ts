@@ -1,12 +1,5 @@
 import { Role } from '@zagotours/types';
-import {
-  BarChart,
-  HelpCircle,
-  House,
-  MapMinus,
-  PieChart,
-  Video,
-} from 'lucide-react';
+import { HelpCircle, House, MapMinus, Video } from 'lucide-react';
 import {
   LuCalendar,
   LuMapPin,
@@ -51,11 +44,10 @@ const adminMenuItems = [
   { label: 'Planning Calls', icon: LuTicket, href: '/admin/planning-calls' },
   { label: 'Inquiries', icon: LuFileText, href: '/admin/inquiries' },
 
-  // Business Management
-  { label: 'Destinations', icon: LuGlobe, href: '/admin/destinations' },
+  // { label: 'Destinations', icon: LuGlobe, href: '/admin/destinations' },
 
   // Settings
-  { label: 'Platform Settings', icon: LuSettings, href: '/admin/settings' },
+  { label: 'Settings', icon: LuSettings, href: '/admin/settings' },
 ];
 
 export const MENU_CONFIG = {
