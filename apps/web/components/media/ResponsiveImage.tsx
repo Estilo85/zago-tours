@@ -6,6 +6,7 @@ interface ResponsiveImageProps {
   src?: string; // Make optional
   alt: string;
   width?: BoxProps['width'];
+  maxW?: '100%';
   height?: BoxProps['height'];
   maxH?: BoxProps['height'];
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
@@ -16,12 +17,14 @@ interface ResponsiveImageProps {
   sizes?: string;
   containerProps?: BoxProps;
   fallbackBg?: string;
+  objectPosition?: string;
 }
 
 export const ResponsiveImage = ({
   src,
   alt,
   width = '100%',
+  maxW = '100%',
   height = '100%',
   maxH,
   objectFit = 'cover',
@@ -31,6 +34,7 @@ export const ResponsiveImage = ({
   sizes = '(max-width: 768px) 100vw, 50vw',
   containerProps,
   boxShadow,
+  objectPosition = 'center',
   fallbackBg = 'gray.100',
 }: ResponsiveImageProps) => {
   if (!src) {
@@ -64,6 +68,7 @@ export const ResponsiveImage = ({
       maxH={maxH}
       borderRadius={borderRadius}
       boxShadow={boxShadow}
+      objectPosition={objectPosition}
       overflow='hidden'
       {...containerProps}
     >

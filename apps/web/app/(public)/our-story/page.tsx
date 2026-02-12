@@ -11,6 +11,7 @@ import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { ArrowRight } from 'lucide-react';
+import { useAuthSession } from '@/hooks';
 
 export const mySteps = [
   {
@@ -45,7 +46,10 @@ export const mySteps = [
           src='/images/events/esther-picture.webp'
           alt='Esther'
           borderRadius='xl'
-          height='300px'
+          height='500px'
+          maxW='100%'
+          objectFit='cover'
+          objectPosition='top'
         />
       </Box>
     ),
@@ -98,6 +102,7 @@ export const mySteps = [
 ];
 
 export default function OurStory() {
+  const { isAuthenticated } = useAuthSession();
   return (
     <Box my={10} mx={{ base: '4', md: '10' }}>
       <Stack gap={20}>
@@ -129,22 +134,24 @@ export default function OurStory() {
         </Stack>
         <TransformationSection />
         <PurposeSection />
-        <Box textAlign='center'>
-          <AppLink href='/register'>
-            <Button
-              aria-label='join-us'
-              alignItems='center'
-              gap={3}
-              fontWeight='bold'
-              p={5}
-              cursor='pointer'
-              bg='secondary'
-              color='dark'
-            >
-              Join us <Icon as={ArrowRight} size='sm' />
-            </Button>
-          </AppLink>
-        </Box>
+        {!isAuthenticated && (
+          <Box textAlign='center'>
+            <AppLink href='/register'>
+              <Button
+                aria-label='join-us'
+                alignItems='center'
+                gap={3}
+                fontWeight='bold'
+                p={5}
+                cursor='pointer'
+                bg='secondary'
+                color='dark'
+              >
+                Join us <Icon as={ArrowRight} size='sm' />
+              </Button>
+            </AppLink>
+          </Box>
+        )}
       </Stack>
     </Box>
   );

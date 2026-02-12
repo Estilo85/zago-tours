@@ -28,15 +28,6 @@ export default function DashboardPage() {
   const { isAnyAdmin, isCooperateAgent, isAdventurer, isAffiliate } =
     usePermissions();
 
-  const mockData = [
-    {
-      id: 'A1',
-      name: 'Partner Terms',
-      date: '2024-05-10',
-      status: 'NOT_SIGNED',
-    },
-  ];
-
   const { data: leaderResponse, isLoading: leaderboardLoading } =
     useLeaderboard(isAnyAdmin);
 
