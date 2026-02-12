@@ -86,6 +86,19 @@ router.patch(
   userController.promoteSafetyAmbassador,
 );
 
+
+/**
+ * @route   PUT /api/users/:id/profile
+ * @desc    Update any user's profile (admin only)
+ * @access  Admin
+ */
+router.put(
+  '/:id/profile',
+  authenticate,
+  authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
+  userController.updateUserProfileById,
+);
+
 /**
  * @route   DELETE /api/users/:id
  * @desc    Delete user (soft by default, hard if ?hard=true)

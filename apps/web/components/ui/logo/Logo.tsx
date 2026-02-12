@@ -1,6 +1,6 @@
 'use client';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { Flex, Heading, Box } from '@chakra-ui/react';
+import { Flex, Heading } from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
@@ -16,7 +16,6 @@ export const Logo = () => {
             height={{ base: '35px', md: '45px' }}
             objectFit='contain'
             borderRadius='none'
-            priority
           />
 
           <Heading

@@ -4,6 +4,7 @@ import { JwtUtil } from '../utils/jwt';
 import { ResponseUtil } from '../utils/responseUtils';
 import { TypedRequest } from '../types/express.types';
 import { Role } from '@zagotours/types';
+import { prisma } from '@zagotours/database';
 
 export const authenticate = async (
   req: TypedRequest,
@@ -22,13 +23,38 @@ export const authenticate = async (
     // Use your JwtUtil to verify
     const decoded = JwtUtil.verifyAccessToken(token);
 
+    // ✅ Check if user exists and is not suspended
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.sub },
+      select: {
+        id: true,
+        status: true,
+        role: true,
+        email: true,
+        name: true,
+      },
+    });
+
+    if (!user) {
+      return ResponseUtil.error(res, 'User not found', 404);
+    }
+
+    // ✅ Block suspended users
+    if (user.status === 'SUSPENDED') {
+      return ResponseUtil.error(
+        res,
+        'Your account has been suspended. Please contact support.',
+        403,
+      );
+    }
+
     req.user = {
-      id: decoded.sub,
-      email: decoded.email,
-      role: decoded.role as Role,
-      name: decoded.name,
+      id: user.id,
+      email: user.email,
+      role: user.role as Role,
+      name: user.name,
     };
-    req.userId = decoded.sub;
+    req.userId = user.id;
 
     next();
   } catch (error) {

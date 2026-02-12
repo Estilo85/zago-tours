@@ -10,7 +10,7 @@ export default function AffiliateContracts() {
         textDecor='none'
         _hover={{ textDecor: 'underline' }}
       >
-        Download media kit (PDF)
+        Download and sign TRAVEL_ADVISOR_AGREEMENT (PDF)
       </Link>
     </Box>
   );

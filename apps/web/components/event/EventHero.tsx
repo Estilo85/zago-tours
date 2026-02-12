@@ -2,7 +2,6 @@
 import { Box, Text, Stack, Heading, Icon, Flex } from '@chakra-ui/react';
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import NextLink from 'next/link';
 import Button from '../ui/button/Button';
 import { AppLink } from '../ui/link/AppLink';
 

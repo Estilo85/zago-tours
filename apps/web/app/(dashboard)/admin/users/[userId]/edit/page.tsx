@@ -12,12 +12,12 @@ import {
   Button,
   Card,
   Input,
-  Field, // Import Field directly
-  NativeSelect, // Standard native select is more stable for RHF
+  Field,
+  NativeSelect,
 } from '@chakra-ui/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useUser, useUpdateProfile, useUpdateUserStatus } from '@/hooks';
+import { useUser, useUpdateUserStatus, useUpdateUserById } from '@/hooks';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { ArrowLeft, Save } from 'lucide-react';
 
@@ -36,7 +36,7 @@ export default function EditUserPage() {
   const userId = params?.userId as string;
 
   const { data: response, isLoading, isError } = useUser(userId);
-  const updateProfileMutation = useUpdateProfile();
+  const updateProfileMutation = useUpdateUserById();
   const updateStatusMutation = useUpdateUserStatus();
   const user = response?.data;
 
@@ -62,19 +62,25 @@ export default function EditUserPage() {
 
   const onSubmit = async (data: UserFormData) => {
     try {
+      // ✅ Use the new hook with userId and data
       await updateProfileMutation.mutateAsync({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        country: data.country,
+        id: userId,
+        data: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          country: data.country,
+        },
       });
 
+      // Update status if changed
       if (data.status !== user?.status) {
         await updateStatusMutation.mutateAsync({
           id: userId,
           status: data.status,
         });
       }
+
       router.push(`/admin/users/${userId}`);
     } catch (error) {
       console.error('Failed to update user:', error);

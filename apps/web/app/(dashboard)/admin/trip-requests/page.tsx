@@ -20,10 +20,8 @@ import { useTripRequests, useDeleteTripRequest } from '@/hooks';
 import { Column, DataTable } from '../../_components/table/DataTable';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
 import { Eye, Trash2, Plane, Calendar, MapPin, FileText } from 'lucide-react';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { TripRequestResponseDto } from '@zagotours/types';
 import AdminTableWrapper from '../../_components/table/AdminTableWrapper';
-import { toaster } from '@/components/ui/toaster';
 import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
 
 export default function DashboardTripRequest() {

@@ -26,6 +26,8 @@ import { useEvent, useDeleteEvent } from '@/hooks';
 import { formatDate } from '@/utils/DateFormat';
 import { DataTable } from '@/app/(dashboard)/_components/table/DataTable';
 import { LoadingState } from '@/components/ui/LoadingState';
+import { formatTime } from '@/utils/TimeFormat';
+import { Timer } from 'lucide-react';
 
 export default function EventAdminDetail() {
   const params = useParams();
@@ -105,6 +107,15 @@ export default function EventAdminDetail() {
               <Text fontWeight='bold'>Event Date</Text>
             </HStack>
             <Text color='fg.muted'>{formatDate(event.date)}</Text>
+          </Box>
+          <Box p={4} borderWidth='1px' rounded='lg'>
+            <HStack mb={2}>
+              <Timer />
+              <Text fontWeight='bold'>Schedule</Text>
+            </HStack>
+            <Text fontWeight='bold' color='cyan.600' fontSize='lg'>
+              {formatTime(event.time)}
+            </Text>
           </Box>
 
           <Box p={4} borderWidth='1px' rounded='lg'>

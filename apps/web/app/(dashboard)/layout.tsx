@@ -41,6 +41,7 @@ export default function DashboardLayout({
           borderRight='1px solid'
           borderColor='gray.200'
           display={{ base: 'none', md: 'block' }}
+          overflowY='scroll'
         >
           <Sidebar role={userRole} />
         </Box>
@@ -85,7 +86,9 @@ export default function DashboardLayout({
             overflowY='auto'
             minH={{ base: '70vh', md: '75vh' }}
             h='full'
-            p={{ base: 2, md: 8 }}
+            px={{ base: 2, md: 8 }}
+            pb='64'
+            pt='16'
             w='full'
           >
             {children}

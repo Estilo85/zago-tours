@@ -6,15 +6,15 @@ import React from 'react';
 
 const videos = [
   {
-    name: 'Game Drive',
+    name: 'Game Drive and Viewing(South Africa)',
     url: 'https://drive.google.com/file/d/1LRshOeMAg5ltR0sHhyBxftN4vz48xNpG/view?usp=drivesdk',
   },
   {
-    name: 'Paragliding',
+    name: 'Paragliding in South Africa',
     url: 'https://drive.google.com/file/d/1LuR89ANET_fDIHetCGEoevZASk3RBm6Y/view?usp=drivesdk',
   },
   {
-    name: 'Tarangire',
+    name: 'Tarangire National Park(Wildlife Watching)',
     url: 'https://drive.google.com/file/d/1gL3ZO5JEPTQrkujHnOIvf3Xm5CC_B6X1/view?usp=drivesdk',
   },
 ];

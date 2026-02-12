@@ -18,10 +18,24 @@ import UpcomingAdventuresAndEventsPage from '../_components/dataDisplay/Upcoming
 import { WelcomeBanner } from '../_components/banner/WelcomeBanner';
 import { TripPlanningCalls } from '../_components/trip-planning-calls/TripPlanningCalls';
 import SafetyAmbassadorTable from '../_components/table/SafetyAmbassadorTable';
+import {
+  AffiliateContractTable,
+  CorporateContractTable,
+} from '../_components/table/ContractTable';
 
 export default function DashboardPage() {
   const { data: response, isLoading: statsLoading } = useDashboardStats();
-  const { isAnyAdmin, isCooperateAgent, isAdventurer } = usePermissions();
+  const { isAnyAdmin, isCooperateAgent, isAdventurer, isAffiliate } =
+    usePermissions();
+
+  const mockData = [
+    {
+      id: 'A1',
+      name: 'Partner Terms',
+      date: '2024-05-10',
+      status: 'NOT_SIGNED',
+    },
+  ];
 
   const { data: leaderResponse, isLoading: leaderboardLoading } =
     useLeaderboard(isAnyAdmin);
@@ -50,7 +64,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <Box p={{ base: 0, md: 6 }}>
+    <Box px={{ base: 0, md: 6 }}>
       <WelcomeBanner />
       <Stack gap={8}>
         {/* Stats Grid */}
@@ -91,6 +105,19 @@ export default function DashboardPage() {
 
         {isAdventurer && <SafetyAmbassadorTable />}
 
+        {isCooperateAgent && (
+          <Box my={6}>
+            <Heading>Corporate Contract</Heading>
+            <CorporateContractTable />
+          </Box>
+        )}
+
+        {isAffiliate && (
+          <Box my={6}>
+            <Heading>Affiliate Management</Heading>
+            <AffiliateContractTable />
+          </Box>
+        )}
         {!isAnyAdmin && (
           <Flex
             my={6}

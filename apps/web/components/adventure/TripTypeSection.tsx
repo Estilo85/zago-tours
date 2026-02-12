@@ -5,11 +5,25 @@ import { TripTypeCard } from '../ui/card/TripTypeCard';
 import { TripType, TripTypeLabels } from '@zagotours/types';
 import { useAdventures } from '@/hooks';
 
+// 1. Updated keys to match your Enum exactly
+const tripTypeImageMap: Record<TripType, string> = {
+  [TripType.HIKING]: '/images/adventures/tripType/hiking.webp',
+  [TripType.KAYAKING]: '/images/adventures/tripType/kayaking.webp',
+  [TripType.CANOEING]: '/images/adventures/tripType/canoeing.webp',
+  [TripType.SNOWBOARDING]: '/images/adventures/tripType/snowboarding.webp',
+  [TripType.TREKKING]: '/images/adventures/tripType/trekking.webp',
+  [TripType.SKIING]: '/images/adventures/tripType/skiing.webp',
+  [TripType.SKYDIVING]: '/images/adventures/tripType/skydiving.webp',
+  [TripType.SAFARIS]: '/images/adventures/tripType/safari.webp', // Matches SAFARIS enum
+  [TripType.CLIMBING]: '/images/adventures/tripType/mountain climbing.webp', // Matches CLIMBING enum
+  [TripType.JUMPING]: '/images/adventures/tripType/base jumping.webp', // Matches JUMPING enum
+};
+
 export default function TripTypeSection() {
   const { data: response } = useAdventures();
-
   const adventures = response?.data || [];
 
+  // Count adventures per type
   const tripTypeCounts = adventures.reduce(
     (acc, adventure) => {
       const type = adventure.tripType;
@@ -19,24 +33,16 @@ export default function TripTypeSection() {
     {} as Record<TripType, number>,
   );
 
-  const tripTypeImages = adventures.reduce(
-    (acc, adventure) => {
-      const type = adventure.tripType;
-      if (!acc[type] && adventure.mediaUrl) {
-        acc[type] = adventure.mediaUrl;
-      }
-      return acc;
-    },
-    {} as Record<TripType, string>,
-  );
-
-  const tripTypes = Object.entries(TripTypeLabels).map(([key, label]) => ({
-    key: key as TripType,
-    name: label,
-    count: tripTypeCounts[key as TripType] || 0,
-    image:
-      tripTypeImages[key as TripType] || '/images/events/pricing-plan.webp',
-  }));
+  // Map types for rendering
+  const tripTypes = Object.entries(TripTypeLabels).map(([key, label]) => {
+    const typeKey = key as TripType;
+    return {
+      key: typeKey,
+      name: label,
+      count: tripTypeCounts[typeKey] || 0,
+      image: tripTypeImageMap[typeKey] || '/images/events/pricing-plan.webp',
+    };
+  });
 
   return (
     <Container maxW='container.lg' py={10}>

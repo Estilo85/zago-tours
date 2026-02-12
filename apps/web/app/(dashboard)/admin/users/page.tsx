@@ -12,6 +12,7 @@ import {
   Center,
   Stack,
   Dialog,
+  Portal,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useUsers, useDeleteUser } from '@/hooks';
@@ -227,37 +228,43 @@ export default function UsersAdminPage() {
         )}
       </Box>
 
-      {/* Delete Confirmation Dialog */}
+      {/* --- Delete Confirmation Dialog --- */}
       <Dialog.Root
         open={isDeleteDialogOpen}
         onOpenChange={(e) => setIsDeleteDialogOpen(e.open)}
+        role='alertdialog' // Better for accessibility on delete actions
       >
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title>Confirm Delete</Dialog.Title>
-          </Dialog.Header>
-          <Dialog.Body>
-            <Text>
-              Are you sure you want to delete user{' '}
-              <Text as='span' fontWeight='bold'>
-                {userToDelete?.name}
-              </Text>
-              ? This action cannot be undone.
-            </Text>
-          </Dialog.Body>
-          <Dialog.Footer>
-            <Dialog.ActionTrigger asChild>
-              <Button variant='outline'>Cancel</Button>
-            </Dialog.ActionTrigger>
-            <Button
-              colorPalette='red'
-              onClick={confirmDelete}
-              loading={deleteUserMutation.isPending}
-            >
-              Delete
-            </Button>
-          </Dialog.Footer>
-        </Dialog.Content>
+        <Portal>
+          <Dialog.Backdrop />
+          <Dialog.Positioner>
+            <Dialog.Content>
+              <Dialog.Header>
+                <Dialog.Title>Confirm Delete</Dialog.Title>
+              </Dialog.Header>
+              <Dialog.Body>
+                <Text>
+                  Are you sure you want to delete user{' '}
+                  <Text as='span' fontWeight='bold'>
+                    {userToDelete?.name}
+                  </Text>
+                  ? This action cannot be undone.
+                </Text>
+              </Dialog.Body>
+              <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                  <Button variant='outline'>Cancel</Button>
+                </Dialog.ActionTrigger>
+                <Button
+                  colorPalette='red'
+                  onClick={confirmDelete}
+                  loading={deleteUserMutation.isPending}
+                >
+                  Delete User
+                </Button>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Portal>
       </Dialog.Root>
     </Box>
   );

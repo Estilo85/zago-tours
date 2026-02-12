@@ -26,7 +26,6 @@ import {
 } from '@/hooks';
 import { Column, DataTable } from '../../_components/table/DataTable';
 import { AvatarImage } from '@/components/media/AvatarImage';
-import { LoadingState } from '@/components/ui/LoadingState';
 import AdminTableWrapper from '../../_components/table/AdminTableWrapper';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
 import {
@@ -41,6 +40,7 @@ import {
   XCircle,
   Phone,
 } from 'lucide-react';
+import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
 
 export default function DashboardPlanningCalls() {
   const [page, setPage] = React.useState(1);
@@ -200,7 +200,7 @@ export default function DashboardPlanningCalls() {
     },
   ];
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <DataTableSkeleton columns={5} />;
 
   return (
     <>
@@ -471,6 +471,7 @@ export default function DashboardPlanningCalls() {
                     colorPalette='orange'
                     onClick={() => handleCancel(selectedCall)}
                     loading={cancelMutation.isPending}
+                    disabled
                   >
                     <XCircle size={16} />
                     Cancel Call

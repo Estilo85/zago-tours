@@ -23,6 +23,7 @@ import {
   PostEditDrawer,
   PostViewDrawer,
 } from '../../_components/drawer/PostDrawers';
+import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
 
 export default function DashboardPosts() {
   const [page, setPage] = useState(1);
@@ -127,7 +128,7 @@ export default function DashboardPosts() {
     },
   ];
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <DataTableSkeleton columns={5} />;
 
   return (
     <>
@@ -162,11 +163,4 @@ export default function DashboardPosts() {
             open={deleteOpen}
             onClose={() => {
               setDeleteOpen(false);
-              setSelectedPost(null);
-            }}
-          />
-        </>
-      )}
-    </>
-  );
-}
+            

@@ -14,6 +14,7 @@ import { EventResponseDto } from '@zagotours/types';
 import { Calendar, MapPin, Timer } from 'lucide-react';
 import { AppLink } from '../link/AppLink';
 import { formatDate } from '@/utils/DateFormat';
+import { formatTime } from '@/utils/TimeFormat';
 
 interface EventCardProps {
   event: EventResponseDto;
@@ -68,7 +69,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
             <Flex align='center' gap={2}>
               <Timer size={12} />
-              <Text>{formatDate(event.date)}</Text>
+              <Text>{formatTime(event.time)}</Text>
             </Flex>
           </HStack>
 

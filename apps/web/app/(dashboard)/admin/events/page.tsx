@@ -22,6 +22,7 @@ import { PaginationControl } from '@/components/ui/pagination/PaginationControl'
 import { LoadingState } from '@/components/ui/LoadingState';
 import { useState } from 'react';
 import { Grip } from 'lucide-react';
+import { formatTime } from '@/utils/TimeFormat';
 
 export default function AdminEventsPage() {
   const router = useRouter();
@@ -55,6 +56,17 @@ export default function AdminEventsPage() {
       label: 'Date',
       key: 'date' as keyof EventResponseDto,
       render: (val: any) => formatDate(val),
+    },
+    {
+      label: 'Time',
+      key: 'time' as keyof EventResponseDto,
+      render: (val: any, row: any) => (
+        <Box>
+          <Badge variant='subtle' colorPalette='blue' size='xs'>
+            {formatTime(val)}
+          </Badge>
+        </Box>
+      ),
     },
     {
       label: 'Location',

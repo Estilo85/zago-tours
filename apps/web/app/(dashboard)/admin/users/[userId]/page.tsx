@@ -45,7 +45,10 @@ export default function UserDetailPage() {
   };
 
   const handlePromoteSafetyAmbassador = async () => {
-    await promoteSafetyAmbassadorMutation.mutateAsync(userId);
+    await promoteSafetyAmbassadorMutation.mutateAsync({
+      id: userId,
+      safetyAmbassador: !user.safetyAmbassador,
+    });
   };
 
   if (isLoading) {

@@ -106,7 +106,7 @@ export function useCancelPlanningCall() {
   return useMutation({
     mutationFn: (id: string) =>
       apiRequest(API_ENDPOINTS.PLANNING_CALLS.CANCEL(id), {
-        method: 'PATCH',
+        method: 'PUT',
       }),
     onSuccess: (_result, id) => {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.detail(id) });

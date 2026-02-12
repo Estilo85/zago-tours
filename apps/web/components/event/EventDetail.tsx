@@ -28,6 +28,7 @@ import {
 import Button from '../ui/button/Button';
 import { formatDate } from '@/utils/DateFormat';
 import { useCancelEventRegistration, useJoinEvent } from '@/hooks';
+import { formatTime } from '@/utils/TimeFormat';
 
 interface EventDetailPageProps {
   event: EventResponseDto;
@@ -58,7 +59,8 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
         bg='primary'
         color='textPrimary'
         borderRadius={{ base: 'none', md: '3xl' }}
-        p={{ base: 5, md: 10 }}
+        px={{ base: 5, md: 10 }}
+        pt='120px'
         mb={{ base: 0, md: '150px' }}
         position='relative'
       >
@@ -86,7 +88,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
             mt={{ base: 6, md: 0 }}
           >
             <ResponsiveImage
-              src={event.mediaUrl || '/images/home/banner.webp'}
+              src={event.mediaUrl || ''}
               alt={event.title}
               width='100%'
               loading='eager'
@@ -130,7 +132,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                 </HStack>
                 <HStack>
                   <Timer size={20} color='var(--chakra-colors-primary)' />
-                  <Text fontWeight='semibold'>{formatDate(event.date)}</Text>
+                  <Text fontWeight='semibold'>{formatTime(event.time)}</Text>
                 </HStack>
                 <HStack>
                   <MapPin size={20} color='var(--chakra-colors-primary)' />

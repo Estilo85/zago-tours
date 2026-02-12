@@ -25,6 +25,7 @@ import {
 import { Send } from 'lucide-react';
 import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
 import { AppLink } from '@/components/ui/link/AppLink';
+import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 
 const support = [
   { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -42,13 +43,24 @@ export default function Footer() {
         >
           {/* Brand Section */}
           <Stack>
-            <Flex alignItems='center' gap={2}>
-              <Icon
-                as={FaFacebook}
-                size={{ base: 'md', md: 'xl' }}
-                color='textPrimary'
+            <Flex as='span' mt='-10px' alignItems='center' gap={3}>
+              <ResponsiveImage
+                src='/images/logo/zago logo png-03.webp'
+                alt='ZagoTours Logo'
+                width={{ base: '35px', md: '45px' }}
+                height={{ base: '35px', md: '45px' }}
+                objectFit='contain'
+                borderRadius='none'
               />
-              <Heading color='textInverse'>Zago</Heading>
+
+              <Heading
+                size={{ base: 'md', md: 'lg' }}
+                fontWeight='bold'
+                color='gray.200'
+                letterSpacing='tight'
+              >
+                Zago
+              </Heading>
             </Flex>
             <Text color='textPrimary'>
               73 Shelton Street Covent <br /> Garden United Kingdom
@@ -59,8 +71,9 @@ export default function Footer() {
                   as={FaInstagram}
                   size={{ base: 'md', md: 'xl' }}
                   cursor='pointer'
-                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  _hover={{ transform: 'translateY(-2px)' }}
                   transition='all 0.2s'
+                  fill='gray.200'
                 />
               </AppLink>
               <AppLink href='https://www.linkedin.com/company/zago-tours/'>
@@ -68,8 +81,9 @@ export default function Footer() {
                   as={FaLinkedin}
                   size={{ base: 'md', md: 'xl' }}
                   cursor='pointer'
-                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  _hover={{ transform: 'translateY(-2px)' }}
                   transition='all 0.2s'
+                  fill='gray.200'
                 />
               </AppLink>
 
@@ -78,8 +92,9 @@ export default function Footer() {
                   as={FaTiktok}
                   size={{ base: 'md', md: 'xl' }}
                   cursor='pointer'
-                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  _hover={{ transform: 'translateY(-2px)' }}
                   transition='all 0.2s'
+                  fill='gray.200'
                 />
               </AppLink>
 
@@ -88,8 +103,9 @@ export default function Footer() {
                   as={FaYoutube}
                   size={{ base: 'md', md: 'xl' }}
                   cursor='pointer'
-                  _hover={{ color: 'secondary', transform: 'translateY(-2px)' }}
+                  _hover={{ transform: 'translateY(-2px)' }}
                   transition='all 0.2s'
+                  fill='gray.200'
                 />
               </AppLink>
             </Flex>

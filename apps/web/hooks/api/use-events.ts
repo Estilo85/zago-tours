@@ -55,7 +55,7 @@ export function useCreateEvent() {
     mutationFn: (data: any) =>
       apiRequest(API_ENDPOINTS.EVENTS.CREATE, {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
@@ -82,8 +82,8 @@ export function useUpdateEvent() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) =>
       apiRequest(API_ENDPOINTS.EVENTS.UPDATE(id), {
-        method: 'PATCH',
-        body: JSON.stringify(data),
+        method: 'PUT',
+        body: data,
       }),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: eventKeys.detail(id) });

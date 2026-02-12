@@ -21,11 +21,11 @@ router.post(
   upload.single('media'),
   eventController.create,
 );
-router.get('/', authenticate, eventController.getAll);
-router.get('/upcoming', authenticate, eventController.getUpcoming);
+router.get('/', eventController.getAll);
+router.get('/upcoming', eventController.getUpcoming);
 router.get('/me/bookings', authenticate, eventController.getMyBookings);
 
-router.get('/:id', authenticate, eventController.getById);
+router.get('/:id', eventController.getById);
 
 // ========== PROTECTED ROUTES (Authenticated Users) ==========
 router.post('/:id/join', authenticate, eventController.joinEvent);

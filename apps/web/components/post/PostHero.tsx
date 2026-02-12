@@ -97,7 +97,7 @@ export default function PostHero() {
           >
             Welcome to Zago Voice{' '}
             <Box display={{ base: 'none', md: 'block' }}>
-              <Heart size={32} fill='green.500' />
+              <Heart size={32} fill='green.100' color='green.300' />
             </Box>
           </Heading>
           <Text

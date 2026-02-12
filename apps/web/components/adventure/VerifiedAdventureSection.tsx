@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   SimpleGrid,
   Container,
@@ -17,7 +17,17 @@ import { useAdventures } from '@/hooks';
 import { PaginationControl } from '../ui/pagination/PaginationControl';
 import { AdventureCardSkeleton } from '../ui/card/Adventurecardskeleton';
 
-export default function VerifiedAdventureSection() {
+interface VerifiedAdventureSectionProps {
+  searchQuery?: string;
+  selectedDestination?: string;
+  selectedDate?: string;
+}
+
+export default function VerifiedAdventureSection({
+  searchQuery = '',
+  selectedDestination = '',
+  selectedDate = '',
+}: VerifiedAdventureSectionProps) {
   const [page, setPage] = useState(1);
   const [showPagination, setShowPagination] = useState(false);
 
@@ -30,6 +40,60 @@ export default function VerifiedAdventureSection() {
 
   const adventures = response?.data || [];
   const pagination = response?.pagination;
+  // Filter adventures based on search query and filters
+  const filteredAdventures = useMemo(() => {
+    return adventures.filter((adventure) => {
+      // Search query filter (searches in title, description, location, etc.)
+      const matchesSearch = searchQuery
+        ? adventure.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          adventure.description
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          adventure.location?.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+
+      // Destination filter - matches against location field
+      const matchesDestination = selectedDestination
+        ? adventure.location
+            ?.toLowerCase()
+            .includes(selectedDestination.toLowerCase())
+        : true;
+
+      // Date filter - matches against the adventure.date field
+      const matchesDate = selectedDate
+        ? (() => {
+            const adventureDate = new Date(adventure.date);
+            const now = new Date();
+
+            switch (selectedDate) {
+              case 'week':
+                const weekFromNow = new Date(now);
+                weekFromNow.setDate(now.getDate() + 7);
+                return adventureDate >= now && adventureDate <= weekFromNow;
+
+              case 'month':
+                const monthFromNow = new Date(now);
+                monthFromNow.setMonth(now.getMonth() + 1);
+                return adventureDate >= now && adventureDate <= monthFromNow;
+
+              case 'next-month':
+                const nextMonth = new Date(now);
+                nextMonth.setMonth(now.getMonth() + 1);
+                const nextMonthEnd = new Date(nextMonth);
+                nextMonthEnd.setMonth(nextMonth.getMonth() + 1);
+                return (
+                  adventureDate >= nextMonth && adventureDate < nextMonthEnd
+                );
+
+              default:
+                return true;
+            }
+          })()
+        : true;
+
+      return matchesSearch && matchesDestination && matchesDate;
+    });
+  }, [adventures, searchQuery, selectedDestination, selectedDate]);
 
   return (
     <Container maxW='container.xl' justifyItems='center' mt={5}>
@@ -46,11 +110,12 @@ export default function VerifiedAdventureSection() {
         </Heading>
         <Icon as={Verified} />
       </Flex>
+
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}
           gap={{ base: 6, md: 3 }}
-          width={{ base: 'full', lg: '900px' }}
+          width={{ base: '100%', lg: '900px' }}
           justifyItems='center'
         >
           {Array.from({ length: 6 }).map((_, idx) => (
@@ -58,22 +123,31 @@ export default function VerifiedAdventureSection() {
           ))}
         </SimpleGrid>
       )}
-      {/* Empty */}
-      {!isLoading && adventures.length === 0 && (
-        <Box>No adventures found yet!</Box>
+
+      {/* Empty state */}
+      {!isLoading && filteredAdventures.length === 0 && (
+        <Box textAlign='center' py={10}>
+          <Heading size='md' color='gray.500'>
+            {searchQuery || selectedDestination || selectedDate
+              ? 'No adventures found matching your search'
+              : 'No adventures found yet!'}
+          </Heading>
+        </Box>
       )}
+
       <SimpleGrid
         columns={{ base: 1, md: 3 }}
-        gap={{ base: 6, md: 3 }}
-        width={{ base: 'full', lg: '900px' }}
+        gap={{ base: 2, md: 3 }}
+        width={{ base: '100%', lg: '900px' }}
         justifyItems='center'
+        p={0}
       >
-        {adventures.map((adventure) => (
+        {filteredAdventures.map((adventure) => (
           <AdventureCard key={adventure.id} adventure={adventure} />
         ))}
       </SimpleGrid>
-      {/* Load more button (reveals pagination) - always shows */}
-      {!showPagination && pagination && (
+
+      {!showPagination && pagination && filteredAdventures.length > 0 && (
         <Center mt={6}>
           <Button
             bg='dark'
@@ -87,6 +161,7 @@ export default function VerifiedAdventureSection() {
           </Button>
         </Center>
       )}
+
       {/* Pagination */}
       {showPagination && pagination && (
         <PaginationControl pagination={pagination} onPageChange={setPage} />

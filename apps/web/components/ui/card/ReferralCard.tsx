@@ -46,6 +46,9 @@ export function ReferralCard() {
       bg='bg.panel'
       shadow='sm'
       maxH='200px'
+      display='flex'
+      flexDirection='column'
+      justifyContent='space-between'
     >
       <Text fontSize='lg' fontWeight='semibold' mb={4} color='fg.default'>
         Invite others with your unique referral link

@@ -86,7 +86,7 @@ export function Testimonials() {
             width='fit-content'
             position='absolute'
             top='-15%'
-            right='30%'
+            right='40%'
           >
             <ResponsiveImage
               src='/images/home/testimonial-icon.webp'

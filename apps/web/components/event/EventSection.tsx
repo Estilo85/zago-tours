@@ -9,7 +9,6 @@ import {
   VStack,
   Text,
   Center,
-  Grid,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
 import React, { useMemo } from 'react';
@@ -19,25 +18,112 @@ import { useEvents } from '@/hooks';
 import { ErrorState } from '../ui/ErrorState';
 import { EventCardSkeleton } from '../ui/card/Eventcardskeleton';
 
-export default function EventSection() {
+interface EventSectionProps {
+  searchQuery?: string;
+  selectedLocation?: string;
+  selectedDate?: string;
+}
+
+export default function EventSection({
+  searchQuery = '',
+  selectedLocation = '',
+  selectedDate = '',
+}: EventSectionProps) {
   // Shared width logic to ensure alignment
   const sectionWidth = { base: 'full', lg: '900px' };
   const { data, isLoading, isError, error } = useEvents();
 
-  // Separate upcoming and past events
+  // Generate unique locations from events data
+  const uniqueLocations = useMemo(() => {
+    if (!data?.data) return [{ label: 'All Locations', value: '' }]; // Add default
+
+    const validLocations: string[] = [];
+    data.data.forEach((event: EventResponseDto) => {
+      if (event.location && typeof event.location === 'string') {
+        validLocations.push(event.location);
+      }
+    });
+
+    const uniqueLocs = [...new Set(validLocations)];
+
+    return [
+      { label: 'All Locations', value: '' },
+      ...uniqueLocs.map((loc) => ({
+        label: loc,
+        value: loc,
+      })),
+    ];
+  }, [data]);
+
+  // Date range options
+  const dateOptions = [
+    { label: 'Any Time', value: '' },
+    { label: 'This Week', value: 'week' },
+    { label: 'This Month', value: 'month' },
+    { label: 'Next Month', value: 'next-month' },
+  ];
+
   const { upcomingEvents, pastEvents } = useMemo(() => {
     if (!data?.data) {
       return { upcomingEvents: [], pastEvents: [] };
     }
 
     const now = new Date();
-    const events: EventResponseDto[] = data.data;
+    let events: EventResponseDto[] = data.data;
+
+    // Apply filters
+    events = events.filter((event) => {
+      // Search query filter
+      const matchesSearch = searchQuery
+        ? event.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          event.description
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          event.location?.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+
+      // Location filter
+      const matchesLocation = selectedLocation
+        ? event.location?.toLowerCase().includes(selectedLocation.toLowerCase())
+        : true;
+
+      // Date filter
+      const matchesDate = selectedDate
+        ? (() => {
+            const eventDate = new Date(event.date);
+
+            switch (selectedDate) {
+              case 'week':
+                const weekFromNow = new Date(now);
+                weekFromNow.setDate(now.getDate() + 7);
+                return eventDate >= now && eventDate <= weekFromNow;
+
+              case 'month':
+                const monthFromNow = new Date(now);
+                monthFromNow.setMonth(now.getMonth() + 1);
+                return eventDate >= now && eventDate <= monthFromNow;
+
+              case 'next-month':
+                const nextMonth = new Date(now);
+                nextMonth.setMonth(now.getMonth() + 1);
+                const nextMonthEnd = new Date(nextMonth);
+                nextMonthEnd.setMonth(nextMonth.getMonth() + 1);
+                return eventDate >= nextMonth && eventDate < nextMonthEnd;
+
+              default:
+                return true;
+            }
+          })()
+        : true;
+
+      return matchesSearch && matchesLocation && matchesDate;
+    });
 
     const upcoming = events.filter((event) => new Date(event.date) >= now);
     const past = events.filter((event) => new Date(event.date) < now);
 
     return { upcomingEvents: upcoming, pastEvents: past };
-  }, [data]);
+  }, [data, searchQuery, selectedLocation, selectedDate]);
 
   if (isError) return <ErrorState message={error?.message} />;
 
@@ -64,22 +150,16 @@ export default function EventSection() {
 
             <HStack display={{ base: 'none', md: 'flex' }} spaceX={4}>
               <SelectInput
-                value=''
+                value={selectedLocation}
                 onChange={() => {}}
-                placeholder='Categories'
-                options={[
-                  { label: 'London', value: 'london' },
-                  { label: 'New York', value: 'ny' },
-                ]}
+                placeholder='Location'
+                options={uniqueLocations}
               />
               <SelectInput
-                value=''
+                value={selectedDate}
                 onChange={() => {}}
-                placeholder='Review/rating'
-                options={[
-                  { label: 'London', value: 'london' },
-                  { label: 'New York', value: 'ny' },
-                ]}
+                placeholder='Date Range'
+                options={dateOptions}
               />
             </HStack>
           </Flex>
@@ -103,7 +183,9 @@ export default function EventSection() {
           {!isLoading && upcomingEvents.length === 0 && (
             <Center width={sectionWidth} mx='auto' py={10}>
               <Text color='gray.500' fontSize='lg'>
-                No upcoming events at the moment
+                {searchQuery || selectedLocation || selectedDate
+                  ? 'No upcoming events match your search'
+                  : 'No upcoming events at the moment'}
               </Text>
             </Center>
           )}
@@ -144,22 +226,16 @@ export default function EventSection() {
 
             <HStack display={{ base: 'none', md: 'flex' }} spaceX={4}>
               <SelectInput
-                value=''
+                value={selectedLocation}
                 onChange={() => {}}
-                placeholder='Categories'
-                options={[
-                  { label: 'London', value: 'london' },
-                  { label: 'New York', value: 'ny' },
-                ]}
+                placeholder='Location'
+                options={uniqueLocations}
               />
               <SelectInput
-                value=''
+                value={selectedDate}
                 onChange={() => {}}
-                placeholder='Review rating'
-                options={[
-                  { label: 'London', value: 'london' },
-                  { label: 'New York', value: 'ny' },
-                ]}
+                placeholder='Date Range'
+                options={dateOptions}
               />
             </HStack>
           </Flex>
@@ -183,7 +259,9 @@ export default function EventSection() {
           {!isLoading && pastEvents.length === 0 && (
             <Center width={sectionWidth} mx='auto' py={10}>
               <Text color='gray.500' fontSize='lg'>
-                No past events to display
+                {searchQuery || selectedLocation || selectedDate
+                  ? 'No past events match your search'
+                  : 'No past events to display'}
               </Text>
             </Center>
           )}

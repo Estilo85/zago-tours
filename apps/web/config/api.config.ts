@@ -25,8 +25,10 @@ export const API_ENDPOINTS = {
     // Admin Routes
     LIST: buildUrl('/users'),
     BY_ID: (id: string) => buildUrl(`/users/${id}`),
+    UPDATE_BY_ID: (id: string) => buildUrl(`/users/${id}/profile`),
     UPDATE_STATUS: (id: string) => buildUrl(`/users/${id}/status`),
-    PROMOTE_SAFETY_AMBASSADOR: buildUrl('/users/safety-ambassador'),
+    PROMOTE_SAFETY_AMBASSADOR: (id: string) =>
+      buildUrl(`/users/${id}/safety-ambassador`),
     DELETE: (id: string) => buildUrl(`/users/${id}`),
   },
 

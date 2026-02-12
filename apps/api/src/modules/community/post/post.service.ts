@@ -111,10 +111,11 @@ export class PostService extends BaseService<
     postId: string,
     userId: string,
     data: UpdatePostDto,
+    isAdmin: boolean = false,
   ): Promise<Post> {
     const post = await this.getById(postId);
 
-    if (post.userId !== userId) {
+    if (post.userId !== userId && !isAdmin) {
       throw new Error('You are not authorized to update this post');
     }
 
@@ -134,10 +135,14 @@ export class PostService extends BaseService<
   //============================
   // DELETE POST
   //============================
-  async deletePost(postId: string, userId: string): Promise<Post> {
+  async deletePost(
+    postId: string,
+    userId: string,
+    isAdmin: boolean = false,
+  ): Promise<Post> {
     const post = await this.getById(postId);
 
-    if (post.userId !== userId) {
+    if (post.userId !== userId && !isAdmin) {
       throw new Error('You are not authorized to delete this post');
     }
 

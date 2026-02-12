@@ -41,6 +41,36 @@ export function useUser(id: string) {
 // USER MUTATIONS
 // ============================================
 
+export function useUpdateUserById() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      apiRequest(API_ENDPOINTS.USERS.UPDATE_BY_ID(id), {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: userKeys.detail(variables.id),
+      });
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      toaster.create({
+        title: 'User Updated',
+        description: 'User profile updated successfully',
+        type: 'success',
+      });
+    },
+    onError: (error: any) => {
+      toaster.create({
+        title: 'Update Failed',
+        description: error.message || 'Failed to update user profile',
+        type: 'error',
+      });
+    },
+  });
+}
+
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
@@ -113,23 +143,33 @@ export function usePromoteSafetyAmbassador() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userId: string) =>
-      apiRequest(API_ENDPOINTS.USERS.PROMOTE_SAFETY_AMBASSADOR, {
-        method: 'POST',
-        body: JSON.stringify({ userId }),
+    mutationFn: ({
+      id,
+      safetyAmbassador,
+    }: {
+      id: string;
+      safetyAmbassador?: boolean;
+    }) =>
+      apiRequest(API_ENDPOINTS.USERS.PROMOTE_SAFETY_AMBASSADOR(id), {
+        method: 'PATCH',
+        body: JSON.stringify({ safetyAmbassador }),
       }),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: userKeys.detail(variables.id),
+      });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
       toaster.create({
-        title: 'Promotion Successful',
-        description: 'User promoted to Safety Ambassador',
+        title: 'Success',
+        description: 'Safety ambassador status updated',
         type: 'success',
       });
     },
     onError: (error: any) => {
       toaster.create({
-        title: 'Promotion Failed',
-        description: error.message || 'Failed to promote user',
+        title: 'Failed',
+        description:
+          error.message || 'Failed to update safety ambassador status',
         type: 'error',
       });
     },

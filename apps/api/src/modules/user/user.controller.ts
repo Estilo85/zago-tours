@@ -35,6 +35,23 @@ export class UserController {
     },
   );
 
+  updateUserProfileById = asyncHandler(
+    async (
+      req: ReqParams<{ id: string }> & ReqBody<UpdateProfileDto>,
+      res: Response,
+    ) => {
+      const result = await this.userService.updateProfile(
+        req.params.id,
+        req.body,
+      );
+      return ResponseUtil.success(
+        res,
+        result,
+        'User profile updated successfully',
+      );
+    },
+  );
+
   getReferralStats = asyncHandler(async (req: TypedRequest, res: Response) => {
     const stats = await this.userService.getReferralStats(req.userId!);
     return ResponseUtil.success(res, stats);

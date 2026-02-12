@@ -13,29 +13,57 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { ArrowRight } from 'lucide-react';
-import NextLink from 'next/link';
 import Button from '../ui/button/Button';
 import { SearchBar } from '../ui/search/Search';
 import { AppLink } from '../ui/link/AppLink';
 
-// 1. Create your data collections
 const destinations = createListCollection({
   items: [
-    { label: 'Lagos', value: 'lagos' },
-    { label: 'Abuja', value: 'abuja' },
-    { label: 'Port Harcourt', value: 'ph' },
+    { label: 'All cities', value: '' },
+    { label: 'Chile', value: 'Chile' },
+    { label: 'Peru', value: 'Peru Nepal' },
+    { label: 'Mexico', value: 'Mexico' },
+    { label: 'United States', value: 'United States' },
+    { label: 'Ecuador', value: 'Ecuador' },
+    { label: 'Puerto Rico', value: 'Puerto Rico' },
+    { label: 'Tibet', value: 'Tibet Bhutan' },
+    { label: 'India', value: 'India' },
+    { label: 'Tanzania', value: 'Tanzania' },
+    { label: 'Uganda', value: 'Uganda' },
+    { label: 'Mauritius', value: 'Mauritius' },
+    { label: 'Kenya', value: 'Kenya South' },
+    { label: 'South Africa', value: 'Africa' },
+    { label: 'Panama', value: 'Panama' },
+    { label: 'Philippines', value: 'Philippines' },
   ],
 });
 
 const dates = createListCollection({
   items: [
+    { label: 'All date', value: '' },
     { label: 'This Week', value: 'week' },
     { label: 'This Month', value: 'month' },
     { label: 'Next Month', value: 'next-month' },
   ],
 });
 
-export const AdventureHero = () => {
+interface AdventureHeroProps {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  selectedDestination: string;
+  onDestinationChange: (value: string) => void;
+  selectedDate: string;
+  onDateChange: (value: string) => void;
+}
+
+export const AdventureHero = ({
+  searchQuery,
+  onSearchChange,
+  selectedDestination,
+  onDestinationChange,
+  selectedDate,
+  onDateChange,
+}: AdventureHeroProps) => {
   return (
     <Box
       bg='primary'
@@ -83,13 +111,11 @@ export const AdventureHero = () => {
           boxShadow='2xl'
         >
           <Flex
-            // 1. STACK VERTICALLY ON MOBILE
             direction={{ base: 'column', md: 'row' }}
             align={{ base: 'stretch', md: 'center' }}
             justify='space-between'
             gap={4}
             p={2}
-            // 2. ADJUST RADIUS BASED ON DIRECTION
             borderRadius={{ base: 'xl', md: 'full' }}
             border='1px solid'
             borderColor='gray.200'
@@ -122,6 +148,8 @@ export const AdventureHero = () => {
                   collection={destinations}
                   size='sm'
                   width={{ base: '150px', md: '120px' }}
+                  value={selectedDestination ? [selectedDestination] : []}
+                  onValueChange={(e) => onDestinationChange(e.value[0] || '')}
                 >
                   <Select.Control>
                     <Select.Trigger>
@@ -144,7 +172,6 @@ export const AdventureHero = () => {
                 </Select.Root>
               </HStack>
 
-              {/* 3. HIDE SEPARATOR ON MOBILE */}
               <Separator
                 orientation='vertical'
                 height='20px'
@@ -169,6 +196,8 @@ export const AdventureHero = () => {
                   collection={dates}
                   size='sm'
                   width={{ base: '150px', md: '120px' }}
+                  value={selectedDate ? [selectedDate] : []}
+                  onValueChange={(e) => onDateChange(e.value[0] || '')}
                 >
                   <Select.Control>
                     <Select.Trigger>
@@ -197,6 +226,8 @@ export const AdventureHero = () => {
               <SearchBar
                 placeholder='Search destinations...'
                 width={{ base: 'full', md: '320px' }}
+                value={searchQuery}
+                onSearch={onSearchChange}
               />
             </Box>
           </Flex>

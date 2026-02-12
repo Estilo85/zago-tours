@@ -17,17 +17,7 @@ const tripPlanningCallController = new TripPlanningCallController(
   tripPlanningCallService,
 );
 
-router.post(
-  '/',
-  authenticate,
-  authorizeRoles(
-    Role.INDEPENDENT_AGENT,
-    Role.COOPERATE_AGENT,
-    Role.ADVENTURER,
-    Role.AFFILIATE,
-  ),
-  tripPlanningCallController.scheduleCall,
-);
+router.post('/', authenticate, tripPlanningCallController.scheduleCall);
 router.get(
   '/upcoming',
   authenticate,
@@ -58,7 +48,7 @@ router.get(
   tripPlanningCallController.getAll,
 );
 
-router.put(
+router.patch(
   '/:id/reschedule',
   authenticate,
   authorizeRoles(
@@ -80,7 +70,7 @@ router.put(
   ),
   tripPlanningCallController.cancelCall,
 );
-router.put(
+router.patch(
   '/:id/complete',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),

@@ -24,7 +24,7 @@ const ROLE_ACCESS: Record<string, Role[]> = {
 };
 
 // Routes that require authentication but are not role-specific
-const AUTH_REQUIRED_ROUTES = ['/events', '/community'];
+const AUTH_REQUIRED_ROUTES = ['/posts', '/community'];
 
 // Public routes (no auth needed)
 const PUBLIC_ROUTES = [

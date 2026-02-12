@@ -110,15 +110,12 @@ export class PostController {
 
       // Handle file upload if present
       if (req.file) {
-        // Get existing post to delete old media
         const existingPost = await this.postService.getById(req.params.id);
 
-        // Delete old media from Cloudinary if it exists
         if (existingPost.publicId) {
           await CloudinaryService.deleteFile(existingPost.publicId);
         }
 
-        // Upload new file
         const uploadResult = await CloudinaryService.uploadFile(
           req.file,
           'post',
@@ -127,10 +124,13 @@ export class PostController {
         updateData.publicId = uploadResult.publicId;
       }
 
+      const isAdmin =
+        req.user?.role === 'ADMIN' || req.user?.role === 'SUPER_ADMIN';
       const post = await this.postService.updatePost(
         req.params.id,
         req.userId!,
         updateData,
+        isAdmin,
       );
 
       return ResponseUtil.success(res, post, 'Post updated successfully');
@@ -141,10 +141,11 @@ export class PostController {
   // DELETE POST
   //============================
   delete = asyncHandler(async (req: TypedRequest<UuidParam>, res: Response) => {
-    await this.postService.deletePost(req.params.id, req.userId!);
+    const isAdmin =
+      req.user?.role === 'ADMIN' || req.user?.role === 'SUPER_ADMIN';
+    await this.postService.deletePost(req.params.id, req.userId!, isAdmin);
     return ResponseUtil.success(res, null, 'Post deleted successfully');
   });
-
   //============================
   // TOGGLE LIKE
   //============================
