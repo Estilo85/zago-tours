@@ -1,25 +1,27 @@
 'use client';
 import { Box, Center, SimpleGrid, Stack, Text } from '@chakra-ui/react';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, Shuffle } from 'lucide-react';
 import { FeatureTileCard } from '../ui/card/FeatureTileCard';
-import { FaWrench } from 'react-icons/fa';
 
 //Card-data
 const cardData = [
   {
     heading: 'Old Way',
-    icon: FaWrench,
+    icon: Shuffle,
     description: 'Operator cut corners, travelers bear risk',
+    rotateIcon: true,
   },
   {
     heading: 'Old Way',
-    icon: FaWrench,
+    icon: Shuffle,
     description: 'Big promises, small delivery',
+    rotateIcon: true,
   },
   {
     heading: 'Old Way',
-    icon: FaWrench,
+    icon: Shuffle,
     description: 'Good insertions No rewards',
+    rotateIcon: true,
   },
   {
     heading: 'Zago Tours ',

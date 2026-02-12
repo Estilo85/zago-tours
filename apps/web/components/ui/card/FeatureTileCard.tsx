@@ -8,6 +8,7 @@ interface Prop {
   heading: string;
   description: string;
   bg?: string;
+  rotateIcon?: boolean;
 }
 
 export const FeatureTileCard = ({
@@ -15,6 +16,7 @@ export const FeatureTileCard = ({
   heading,
   description,
   bg = 'white',
+  rotateIcon = false,
 }: Prop) => {
   const isColored = bg === 'primary';
 
@@ -47,6 +49,7 @@ export const FeatureTileCard = ({
           as={icon}
           boxSize={6}
           color={isColored ? 'primary' : 'whiteAlpha.700'}
+          transform={rotateIcon ? 'rotate(-90deg)' : 'none'}
         />
       </Box>
 

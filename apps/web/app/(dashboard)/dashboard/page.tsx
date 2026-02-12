@@ -106,15 +106,19 @@ export default function DashboardPage() {
         {isAdventurer && <SafetyAmbassadorTable />}
 
         {isCooperateAgent && (
-          <Box my={6}>
-            <Heading>Corporate Contract</Heading>
+          <Box my={6} bg='surface' border='1px solid gray.200' p={5}>
+            <Heading mb={6} fontSize='lg' fontWeight='bold'>
+              Corporate Contract
+            </Heading>
             <CorporateContractTable />
           </Box>
         )}
 
         {isAffiliate && (
-          <Box my={6}>
-            <Heading>Affiliate Management</Heading>
+          <Box bg='surface' border='1px solid gray.200' p={5} my={6}>
+            <Heading mb={6} fontSize='lg' fontWeight='bold'>
+              Affiliate Management
+            </Heading>
             <AffiliateContractTable />
           </Box>
         )}

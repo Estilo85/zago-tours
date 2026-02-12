@@ -163,4 +163,11 @@ export default function DashboardPosts() {
             open={deleteOpen}
             onClose={() => {
               setDeleteOpen(false);
-            
+              setSelectedPost(null);
+            }}
+          />
+        </>
+      )}
+    </>
+  );
+}
