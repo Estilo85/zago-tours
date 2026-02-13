@@ -68,7 +68,6 @@ export const MobileNav = () => {
                         href={link.href}
                         variant='plain'
                         fontWeight={isActive(link.href) ? 'bold' : 'normal'}
-                        color={isActive(link.href) ? 'orange.500' : 'primary'}
                         onClick={() => setOpen(false)}
                       >
                         {link.label}

@@ -30,7 +30,7 @@ export const PricingSection = () => {
           description='Peace of mind in your pocket 1 Safety 
                   Call Credit / month (up to 10 minutes)'
           features={[
-            'Unlimited tasGeneral safety guidance (not operator mediation)ks and projects',
+            'Unlimited safety guidance',
             'Access to Safety Library',
             'Monthly Adventure Safety Digest (real stories, prevention tips)',
             'Purchase extra call credits (£5 per call)',
@@ -47,7 +47,7 @@ export const PricingSection = () => {
           isActive={true}
           features={[
             'All Tier 1 benefits',
-            'light mediation (Zago tours can call a hotel / operator once per incident)',
+            'light mediation',
             '24/7 priority line',
             'Optional Safety Check-in service',
             'Early access to verified safe experiences',

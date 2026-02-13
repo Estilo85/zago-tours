@@ -63,7 +63,8 @@ export default function Footer() {
               </Heading>
             </Flex>
             <Text color='textPrimary'>
-              73 Shelton Street Covent <br /> Garden United Kingdom
+              73 Shelton Street <br />
+              Covent Garden <br /> United Kingdom
             </Text>
             <Flex align='center' gap={2} color='textPrimary'>
               <AppLink href='https://www.instagram.com/zago.tours/'>
@@ -198,7 +199,7 @@ export default function Footer() {
               Contact Us
             </Text>
             <Text>Email: partnerships@zagotours.com</Text>
-            <Text>Phone: +1 (555) 000-0000</Text>
+            <Text>Phone: +44-7418-627-748</Text>
           </Stack>
         </SimpleGrid>
 

@@ -69,7 +69,7 @@ const SafetyAmbassadorTable = () => {
   ];
 
   return (
-    <Box bg='surface' border='1px solid gray.200' p={5}>
+    <Box bg='textInverse' p={5}>
       <Heading mb={6} fontSize='lg' fontWeight='bold'>
         Become a safety Ambassador
       </Heading>

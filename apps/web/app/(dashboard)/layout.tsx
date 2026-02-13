@@ -29,9 +29,6 @@ export default function DashboardLayout({
 
   return (
     <Flex direction='column' h='100vh' bg='gray.50' overflow='hidden'>
-      {/* DESKTOP SIDEBAR */}
-      <DashboardHeader />
-
       <Flex flex='1' overflow='hidden'>
         {/* DESKTOP SIDEBAR */}
         <Box

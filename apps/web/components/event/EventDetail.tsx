@@ -17,17 +17,14 @@ import {
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { EventResponseDto } from '@zagotours/types';
-import {
-  Calendar,
-  MapPin,
-  Timer,
-  Users,
-  Info,
-  ShieldCheck,
-} from 'lucide-react';
+import { Calendar, MapPin, Timer, Users, Info } from 'lucide-react';
 import Button from '../ui/button/Button';
 import { formatDate } from '@/utils/DateFormat';
-import { useCancelEventRegistration, useJoinEvent } from '@/hooks';
+import {
+  useCancelEventRegistration,
+  useJoinEvent,
+  usePermissions,
+} from '@/hooks';
 import { formatTime } from '@/utils/TimeFormat';
 
 interface EventDetailPageProps {
@@ -37,6 +34,7 @@ interface EventDetailPageProps {
 export const EventDetailPage = ({ event }: EventDetailPageProps) => {
   const joinEvent = useJoinEvent();
   const cancelRegistration = useCancelEventRegistration();
+  const { isAuthenticated } = usePermissions();
 
   const handleJoinEvent = () => {
     joinEvent.mutate(event.id);
@@ -212,7 +210,10 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                   <Button
                     size='lg'
                     width='full'
+                    bg='primary'
+                    color='white'
                     disabled={
+                      !isAuthenticated ||
                       event.isFull ||
                       event.isExpired ||
                       joinEvent.isPending ||
@@ -263,14 +264,6 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                   </Box>
                 </Stack>
               </Box>
-
-              <HStack p={5} bg='blue.50' borderRadius='xl' color='blue.700'>
-                <ShieldCheck size={32} />
-                <Text fontSize='xs' lineHeight='short'>
-                  <strong>Zagotours Safety:</strong> Every event includes 24/7
-                  ambassador support to ensure your peace of mind.
-                </Text>
-              </HStack>
             </Stack>
           </GridItem>
         </Grid>

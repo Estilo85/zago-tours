@@ -1,7 +1,14 @@
 'use client';
 
-import { Box, Center, Heading, Icon, Stack, Text } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import {
+  AspectRatio,
+  Box,
+  Center,
+  Heading,
+  Icon,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { ResponsiveImage } from '../media/ResponsiveImage';
 import Button from '../ui/button/Button';
 import { ArrowRight } from 'lucide-react';
@@ -26,14 +33,14 @@ export const HomeHero = () => {
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 5, md: 10 }}
-      mb={{ base: 0, md: '200px' }}
+      mb={{ base: '200px', md: '280px' }}
       position='relative'
     >
       <Stack
         textAlign='center'
         gap={5}
         align='center'
-        pb={{ base: 0, md: '250px' }}
+        pb={{ base: '20px', md: '30px' }}
       >
         <Center>
           <Text
@@ -65,31 +72,32 @@ export const HomeHero = () => {
             </Button>
           </AppLink>
         )}
+      </Stack>
 
-        <Box
-          width={{ base: '100%', md: '70%', lg: '60%' }}
-          position={{ base: 'relative', md: 'absolute' }}
-          bottom={{ base: '0', md: '-200px' }}
-          left='50%'
-          transform='translateX(-50%)'
-          zIndex={10}
-          mt={{ base: 6, md: 0 }}
-        >
-          {swiper_image.length > 0 ? (
-            <ImageSwiper images={swiper_image} autoplaySpeed={3000} />
-          ) : (
+      <Box
+        width={{ base: '90%', md: '75%', lg: '65%' }}
+        position='absolute'
+        bottom={{ base: '-180px', md: '-250px' }}
+        left='50%'
+        transform='translateX(-50%)'
+        zIndex={10}
+      >
+        {swiper_image.length > 0 ? (
+          <ImageSwiper images={swiper_image} autoplaySpeed={3000} />
+        ) : (
+          <AspectRatio ratio={16 / 9}>
             <ResponsiveImage
               src='/images/home/banner.webp'
               alt='home page banner image'
               width='100%'
               loading='eager'
-              height={{ base: '250px', md: '400px' }}
+              height='100%'
               borderRadius='2xl'
               boxShadow='2xl'
             />
-          )}
-        </Box>
-      </Stack>
+          </AspectRatio>
+        )}
+      </Box>
     </Box>
   );
 };

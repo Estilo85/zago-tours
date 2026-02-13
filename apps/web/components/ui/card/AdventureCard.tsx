@@ -7,9 +7,10 @@ import {
   Flex,
   Icon,
   Stack,
-  RatingGroup,
   Box,
   IconButton,
+  AspectRatio,
+  RatingGroup,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, Heart } from 'lucide-react';
 import { ResponsiveImage } from '../../media/ResponsiveImage';
@@ -20,13 +21,21 @@ import { useToggleLikeAdventure } from '@/hooks';
 
 const AdventureCard = ({
   adventure,
-  href,
 }: {
   adventure: AdventureDetailResponseDto;
-  href?: string;
 }) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;
   const { mutate: toggleLike } = useToggleLikeAdventure();
+
+  const handleWhatsAppBooking = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const phoneNumber = '447418627748';
+    const message = `Hi! I'm interested in booking the "${adventure.title}" adventure for $${adventure.price}. Could you provide more details?`;
+
+    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  };
 
   const handleLikeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,90 +44,100 @@ const AdventureCard = ({
   };
 
   return (
-    <AppLink href={`/adventures/${adventure.id}`}>
-      <Card.Root
-        w={{ base: 'full', md: '280px' }}
-        h='350px'
-        overflow='hidden'
-        _hover={{ boxShadow: 'md' }}
-        transition='all 0.2s'
-        borderRadius='3xl'
-      >
-        {/* TOP LAYER: IMAGE SECTION - 50% height */}
-        <Box position='relative' h='50%' flexShrink={0}>
+    <Card.Root
+      w={{ base: 'full', md: '280px' }}
+      variant='elevated'
+      overflow='hidden'
+      borderRadius='3xl'
+      role='group'
+      transition='all 0.3s ease'
+      _hover={{
+        md: {
+          boxShadow: '2xl',
+          transform: 'translateY(-4px)',
+        },
+      }}
+    >
+      {/* IMAGE SECTION */}
+      <Box position='relative' overflow='hidden'>
+        <AspectRatio ratio={4 / 3}>
           <ResponsiveImage
             src={adventure.mediaUrl || ''}
             alt={adventure.title}
             width='100%'
             height='100%'
             borderRadius='none'
+            objectFit='cover'
+            objectPosition='top' // Ensuring heads aren't cut off
+            containerProps={{
+              transition: 'transform 0.5s ease',
+              _groupHover: { transform: 'scale(1.08)' },
+            }}
           />
+        </AspectRatio>
 
-          {/* Top badges container */}
-          {/* Top badges container */}
-          <Flex
-            position='absolute'
-            top='3'
-            left='3'
-            right='3'
-            justifyContent='flex-start'
-            alignItems='flex-start'
-          >
-            {/* Verified Badge */}
-            {adventure.isVerified && (
-              <Badge
-                px='2'
-                py='0.5'
-                borderRadius='full'
-                colorPalette='green'
-                display='flex'
-                alignItems='center'
-                bg='rgba(255, 255, 255, 0.95)'
-                backdropFilter='blur(4px)'
-                fontSize='xs'
-              >
-                Verified
-                <Icon as={CheckCircleIcon} mr='1' boxSize='3' />
-              </Badge>
-            )}
-          </Flex>
+        {/* Top Floating Badges */}
+        <Flex
+          position='absolute'
+          top='3'
+          left='3'
+          right='3'
+          justify='space-between'
+          zIndex='2'
+        >
+          {adventure.isVerified && (
+            <Badge
+              px='2'
+              py='0.5'
+              borderRadius='full'
+              variant='solid'
+              colorPalette='green'
+              bg='whiteAlpha.900'
+              color='green.600'
+              display='flex'
+              alignItems='center'
+              fontSize='xs'
+            >
+              Verified <Icon as={CheckCircleIcon} ml='1' boxSize='3' />
+            </Badge>
+          )}
 
           <IconButton
-            aria-label='Like adventure'
+            aria-label='Like'
             size='sm'
             variant='ghost'
             onClick={handleLikeClick}
-            bg='rgba(255, 255, 255, 0.95)'
-            backdropFilter='blur(4px)'
+            bg='whiteAlpha.900'
             borderRadius='full'
-            _hover={{ bg: 'rgba(255, 255, 255, 1)' }}
-            position='absolute'
-            top='3'
-            right='3'
-            zIndex='2'
+            _hover={{ bg: 'white', transform: 'scale(1.1)' }}
           >
             <Icon
               as={Heart}
               boxSize='4'
-              color={adventure?.isLiked ? 'red.500' : 'gray.600'}
+              color={adventure?.isLiked ? 'red.500' : 'gray.400'}
               fill={adventure?.isLiked ? 'red.500' : 'none'}
-              transition='all 0.2s'
             />
           </IconButton>
+        </Flex>
+      </Box>
 
-          {/* Rating Bridge */}
+      {/* BODY SECTION */}
+      <AppLink href={`/adventures/${adventure.id}`}>
+        {/* Added position="relative" and pt="6" to make space for the rating bridge */}
+        <Card.Body p='4' pt='6' gap='1' position='relative'>
+          {/* RATING BRIDGE: Positioned absolute relative to Card.Body */}
           <Flex
             position='absolute'
-            bottom='0'
+            top='0'
             left='4'
-            transform='translateY(50%)'
+            transform='translateY(-50%)' 
             bg='white'
             px='2'
             py='1'
             borderRadius='full'
             boxShadow='md'
             alignItems='center'
-            zIndex='2'
+            zIndex='3'
           >
             <RatingGroup.Root
               count={5}
@@ -134,65 +153,54 @@ const AdventureCard = ({
               {adventure.rating.toFixed(1)}
             </Text>
           </Flex>
-        </Box>
-        {/* BOTTOM LAYER: DETAILS SECTION - 50% height */}
-        <Card.Body p='4' pt='6' h='50%' display='flex' flexDirection='column'>
-          <Stack gap={1.5}>
-            {/* Title */}
-            <Card.Title
-              fontWeight='semibold'
-              fontSize='md'
-              lineHeight='tight'
-              lineClamp={2}
-              minH='40px'
-            >
-              {adventure.title}
-            </Card.Title>
 
-            {/* Days / Nights */}
-            <Card.Description
-              color='gray.500'
-              fontSize='xs'
-              fontWeight='medium'
-            >
-              {adventure.days} Days / {nights}{' '}
-              {nights === 1 ? 'Night' : 'Nights'}
-            </Card.Description>
-          </Stack>
-
-          <Flex
-            justifyContent='space-between'
-            alignItems='center'
-            pt='3'
-            mt='auto'
-            borderTop='1px solid'
-            borderColor='gray.100'
+          <Card.Title
+            fontWeight='bold'
+            fontSize='md'
+            lineHeight='tight'
+            minH='45px'
           >
-            <Box>
-              <Text as='span' fontSize='lg' fontWeight='bold' color='dark'>
-                ${adventure.price}
-              </Text>
-              <Text as='span' color='gray.500' fontSize='xs'>
-                {' '}
-                / person
-              </Text>
-            </Box>
-            <Button
-              // href='https://wa.me/447418627748'
-              bg='surface'
-              color='dark'
-              size='xs'
-              px='2'
-              fontSize='xs'
-              _hover={{ transform: 'translateY(-1px)', boxShadow: 'sm' }}
-              transition='all 0.2s'
-            >
-              Book Now
-            </Button>
-          </Flex>
+            {adventure.title}
+          </Card.Title>
+          <Card.Description color='gray.500' fontSize='xs' fontWeight='medium'>
+            {adventure.days} Days / {nights} {nights === 1 ? 'Night' : 'Nights'}
+          </Card.Description>
         </Card.Body>
-      </Card.Root>
-    </AppLink>
+      </AppLink>
+
+      {/* FOOTER SECTION */}
+      <Card.Footer pt='0'>
+        <Flex
+          w='full'
+          justify='space-between'
+          align='center'
+          borderTop='1px solid'
+          borderColor='gray.100'
+          pt='3'
+        >
+          <Box>
+            <Text as='span' fontSize='lg' fontWeight='bold'>
+              ${adventure.price}
+            </Text>
+            <Text as='span' color='gray.500' fontSize='2xs' ml='1'>
+              / person
+            </Text>
+          </Box>
+          <Button
+            onClick={handleWhatsAppBooking}
+            bg='surface'
+            color='dark'
+            size='sm'
+            px='4'
+            borderRadius='xl'
+            fontWeight='bold'
+            _hover={{ filter: 'brightness(90%)' }}
+          >
+            Book Now
+          </Button>
+        </Flex>
+      </Card.Footer>
+    </Card.Root>
   );
 };
 

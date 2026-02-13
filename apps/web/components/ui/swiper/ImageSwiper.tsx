@@ -1,7 +1,7 @@
 'use client';
 
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { Box } from '@chakra-ui/react';
+import { AspectRatio, Box } from '@chakra-ui/react';
 import Slider from 'react-slick';
 
 interface ImageSwiperProps {
@@ -21,7 +21,6 @@ export const ImageSwiper = ({
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: autoplaySpeed,
-    arrows: true,
   };
 
   const SliderComponent = Slider as any;
@@ -30,15 +29,17 @@ export const ImageSwiper = ({
     <Box maxW='100%' mx='auto'>
       <SliderComponent {...settings}>
         {images.map((image, index) => (
-          <Box key={index} position='relative' aspectRatio={16 / 9}>
-            <ResponsiveImage
-              src={image}
-              alt={`Slide ${index + 1}`}
-              width='100%'
-              height={{ base: '250px', md: '400px' }}
-              borderRadius='2xl'
-              boxShadow='2xl'
-            />
+          <Box key={index} position='relative'>
+            <AspectRatio ratio={16 / 9}>
+              <ResponsiveImage
+                src={image}
+                alt={`Slide ${index + 1}`}
+                width='100%'
+                height='100%'
+                borderRadius='2xl'
+                boxShadow='2xl'
+              />
+            </AspectRatio>
           </Box>
         ))}
       </SliderComponent>
