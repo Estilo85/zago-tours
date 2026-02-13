@@ -76,7 +76,6 @@ export const ResponsiveImage = ({
         src={src}
         alt={alt}
         fill
-        quality={60}
         priority={priority}
         loading={priority ? undefined : loading}
         sizes={sizes}

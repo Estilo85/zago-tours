@@ -33,7 +33,8 @@ export const HomeHero = () => {
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 5, md: 10 }}
-      mb={{ base: '200px', md: '280px' }}
+      pb={{ base: '100px', md: '200px' }}
+      mb={{ base: '100px', md: '350px' }}
       position='relative'
     >
       <Stack
@@ -77,7 +78,7 @@ export const HomeHero = () => {
       <Box
         width={{ base: '90%', md: '75%', lg: '65%' }}
         position='absolute'
-        bottom={{ base: '-180px', md: '-250px' }}
+        bottom={{ base: '-80px', md: '-300px' }}
         left='50%'
         transform='translateX(-50%)'
         zIndex={10}
@@ -85,7 +86,7 @@ export const HomeHero = () => {
         {swiper_image.length > 0 ? (
           <ImageSwiper images={swiper_image} autoplaySpeed={3000} />
         ) : (
-          <AspectRatio ratio={16 / 9}>
+          <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
             <ResponsiveImage
               src='/images/home/banner.webp'
               alt='home page banner image'

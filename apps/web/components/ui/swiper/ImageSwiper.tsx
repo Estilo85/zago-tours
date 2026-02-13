@@ -30,7 +30,7 @@ export const ImageSwiper = ({
       <SliderComponent {...settings}>
         {images.map((image, index) => (
           <Box key={index} position='relative'>
-            <AspectRatio ratio={16 / 9}>
+            <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
               <ResponsiveImage
                 src={image}
                 alt={`Slide ${index + 1}`}
