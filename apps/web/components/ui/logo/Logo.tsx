@@ -17,15 +17,6 @@ export const Logo = () => {
             objectFit='contain'
             borderRadius='none'
           />
-
-          <Heading
-            size={{ base: 'md', md: 'lg' }}
-            fontWeight='bold'
-            color='primary'
-            letterSpacing='tight'
-          >
-            ZagoTours
-          </Heading>
         </Flex>
       </NextLink>
     </ChakraLink>

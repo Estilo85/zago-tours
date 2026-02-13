@@ -90,6 +90,7 @@ export const HomeHero = () => {
               src='/images/home/banner.webp'
               alt='home page banner image'
               width='100%'
+              priority={true}
               loading='eager'
               height='100%'
               borderRadius='2xl'

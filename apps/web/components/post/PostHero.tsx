@@ -3,7 +3,7 @@
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import { usePermissions, useUserProfile } from '@/hooks';
-import { Box, Flex, Heading, Icon, Text, VStack } from '@chakra-ui/react';
+import { Box, Flex, Heading, Icon, Text, Stack } from '@chakra-ui/react';
 import { Heart, ImagePlay, Share } from 'lucide-react';
 import React from 'react';
 import Button from '../ui/button/Button';
@@ -31,18 +31,14 @@ export default function PostHero() {
   };
 
   return (
-    <Box position='relative' w='full' bg='white'>
+    <Box w='full' bg='white' borderBottom='1px solid gray'>
       {/* Cover Image */}
-      <Box
-        w='full'
-        h={{ base: '220px', md: '320px' }}
-        overflow='hidden'
-        position='relative'
-      >
+      <Box w='full' h={{ base: '220px', md: '320px' }} position='relative'>
         <ResponsiveImage
           src='/images/community/community-post-banner.webp'
           alt='community banner'
           sizes='100vw'
+          priority={true}
           loading='eager'
           borderRadius='none'
         />
@@ -64,66 +60,77 @@ export default function PostHero() {
             <Icon as={ImagePlay} mr={1} /> Edit cover
           </Button>
         )}
-      </Box>
 
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        justify='center'
-        align={{ base: 'center', md: 'flex-end' }}
-        px={{ base: 4, md: 8 }}
-        pb={6}
-        position='relative'
-        gap={6}
-        borderBottom='1px solid'
-        borderColor='gray.200'
-      >
         <Box
           bg='white'
           borderRadius='full'
-          mt={{ base: '-50px', md: '-150px' }}
-          p={1}
+          p={{ base: 2, md: 5 }}
           boxShadow='sm'
+          position='absolute'
+          bottom={{ base: '-20px', md: '-50px' }}
+          left={{ base: '50%', md: '20%' }}
+          transform={{ base: 'translateX(-50%)', md: 'none' }}
         >
           <AvatarImage src={profileImage} name={data?.data?.name} size='2xl' />
         </Box>
+      </Box>
 
-        <VStack align={{ base: 'center', md: 'flex-start' }} gap={1} pb={2}>
+      {/* Text Content Section */}
+      <Stack
+        px={4}
+        pt={{ base: 8, md: 6 }}
+        pb={8}
+        gap={2}
+        align={{ base: 'center', md: 'flex-start' }}
+        ml={{ base: 0, md: '20%' }}
+        pl={{ base: 0, md: '120px' }}
+      >
+        <Flex
+          w='full'
+          direction={{ base: 'column', md: 'row' }}
+          justify='space-between'
+          align={{ base: 'center', md: 'center' }}
+          gap={2}
+        >
           <Heading
             fontSize={{ base: 'xl', md: '3xl' }}
             fontWeight='bold'
             display='flex'
             alignItems='center'
             gap={2}
+            textAlign={{ base: 'center', md: 'left' }}
           >
             Welcome to Zago Voice{' '}
             <Box display={{ base: 'none', md: 'block' }}>
               <Heart size={32} fill='green.100' color='green.300' />
             </Box>
           </Heading>
-          <Text
-            fontSize={{ base: 'sm', md: 'md' }}
-            fontWeight='medium'
-            color='gray.600'
-            display={{ base: 'none', md: 'block' }}
+
+          <Button
+            variant='ghost'
+            border='1px solid'
+            borderColor='gray.200'
+            borderRadius='xl'
+            size={{ base: 'sm', md: 'md' }}
+            display={{ base: 'none', md: 'flex' }}
+            onClick={handleShare}
           >
-            Where trips and shared experiences shape better standards in
-            adventure tourism.
-          </Text>
-        </VStack>
-        <Button
-          variant='ghost'
-          border='1px solid'
-          borderColor='gray.200'
-          borderRadius='xl'
-          size={{ base: 'sm', md: 'md' }}
-          w={{ base: 'full', md: 'auto' }}
-          display={{ base: 'none', md: 'flex' }}
-          alignSelf='flex-end'
-          onClick={handleShare}
+            <Icon as={Share} mr={1} /> Share
+          </Button>
+        </Flex>
+
+        <Text
+          fontSize={{ base: 'sm', md: 'md' }}
+          fontWeight='medium'
+          color='gray.600'
+          display={{ base: 'none', md: 'block' }}
+          maxW='600px'
+          textAlign='left'
         >
-          <Icon as={Share} mr={1} /> Share
-        </Button>
-      </Flex>
+          Where trips and shared experiences shape better standards in adventure
+          tourism.
+        </Text>
+      </Stack>
     </Box>
   );
 }

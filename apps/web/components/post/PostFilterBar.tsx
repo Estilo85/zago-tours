@@ -6,25 +6,7 @@ import { useState, useEffect } from 'react';
 import { PostResponseDto } from '@zagotours/types';
 import { SearchBar } from '../ui/search/Search';
 import { SelectInput } from '../ui/input/SelectInput';
-
-// Your scattered country list for the dropdown
-const COUNTRY_OPTIONS = [
-  { label: 'Chile', value: 'Chile' },
-  { label: 'Peru', value: 'Peru Nepal' },
-  { label: 'Mexico', value: 'Mexico' },
-  { label: 'United States', value: 'United States' },
-  { label: 'Ecuador', value: 'Ecuador' },
-  { label: 'Puerto Rico', value: 'Puerto Rico' },
-  { label: 'Tibet', value: 'Tibet Bhutan' },
-  { label: 'India', value: 'India' },
-  { label: 'Tanzania', value: 'Tanzania' },
-  { label: 'Uganda', value: 'Uganda' },
-  { label: 'Mauritius', value: 'Mauritius' },
-  { label: 'Kenya', value: 'Kenya South' },
-  { label: 'South Africa', value: 'Africa' },
-  { label: 'Panama', value: 'Panama' },
-  { label: 'Philippines', value: 'Philippines' },
-];
+import { getCountryOptions } from '@/utils/Countries';
 
 interface FilterProps {
   posts: PostResponseDto[];
@@ -40,6 +22,8 @@ export function PostFilterBar({
   const [location, setLocation] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const countryOptions = getCountryOptions();
 
   useEffect(() => {
     const filtered = posts.filter((post) => {
@@ -108,7 +92,7 @@ export function PostFilterBar({
                   onChange={setLocation}
                   placeholder='All Locations'
                   width='150px'
-                  options={COUNTRY_OPTIONS}
+                  options={countryOptions}
                 />
               </HStack>
             </Field.Root>

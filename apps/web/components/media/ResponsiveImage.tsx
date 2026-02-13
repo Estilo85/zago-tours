@@ -76,10 +76,12 @@ export const ResponsiveImage = ({
         src={src}
         alt={alt}
         fill
+        quality={60}
         priority={priority}
-        loading={loading}
+        loading={priority ? undefined : loading}
         sizes={sizes}
         style={{ objectFit }}
+        fetchPriority={priority ? 'high' : 'auto'}
         onError={(e) => {
           e.currentTarget.style.display = 'none';
         }}

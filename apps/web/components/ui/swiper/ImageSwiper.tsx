@@ -34,6 +34,8 @@ export const ImageSwiper = ({
               <ResponsiveImage
                 src={image}
                 alt={`Slide ${index + 1}`}
+                priority={index === 0}
+                loading={index === 0 ? 'eager' : 'lazy'}
                 width='100%'
                 height='100%'
                 borderRadius='2xl'

@@ -25,7 +25,7 @@ export function PostCreator({
       boxShadow='sm'
     >
       <Flex gap={3} align='center'>
-        <Box flex={1}>
+        <Box flex={1} onClick={openModal} cursor='pointer'>
           <Text color='dark' fontSize='lg'>
             Share your experience
           </Text>
