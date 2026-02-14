@@ -12,6 +12,7 @@ import {
 import { asyncHandler } from 'src/shared/middleware/async-handler.middleware';
 import { UpdateProfileDto, UpdateUserStatusDto } from '@zagotours/types';
 import { UuidParam } from 'src/common/validation/common.validation';
+import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,10 +28,23 @@ export class UserController {
 
   updateProfile = asyncHandler(
     async (req: ReqBody<UpdateProfileDto>, res: Response) => {
+      const updateData = { ...req.body };
+
+      if (req.file) {
+        const uploadResult = await CloudinaryService.uploadFile(
+          req.file,
+          'profile',
+          req.userId, 
+        );
+
+        updateData.image = uploadResult.url;
+      }
+
       const result = await this.userService.updateProfile(
         req.userId!,
-        req.body,
+        updateData,
       );
+
       return ResponseUtil.success(res, result, 'Profile updated successfully');
     },
   );
