@@ -9,5 +9,6 @@ export const formatTime = (dateTime: string | Date | null | undefined) => {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
+    timeZoneName: 'short',
   });
 };

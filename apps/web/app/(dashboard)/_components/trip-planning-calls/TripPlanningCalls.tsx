@@ -22,6 +22,7 @@ import { AppLink } from '@/components/ui/link/AppLink';
 import Button from '@/components/ui/button/Button';
 import { DataTableSkeleton } from '../table/Datatableskeleton';
 import { MoreVertical } from 'lucide-react';
+import { formatTime } from '@/utils/TimeFormat';
 
 export function TripPlanningCalls() {
   const { data: response, isLoading, error } = useMyPlanningCalls();
@@ -47,19 +48,12 @@ export function TripPlanningCalls() {
     {
       label: 'Date',
       key: 'startTime',
-      render: (startTime) =>
-        new Date(startTime).toLocaleDateString('en-US', {
-          dateStyle: 'medium',
-        }),
+      render: (startTime) => formatDate(startTime),
     },
     {
       label: 'Time',
-      key: 'endTime',
-      render: (endTime, row) =>
-        new Date(row.startTime).toLocaleTimeString('en-US', {
-          timeStyle: 'short',
-          timeZoneName: 'short',
-        }),
+      key: 'startTime',
+      render: (startTime) => formatTime(startTime),
     },
     {
       label: 'Action',
