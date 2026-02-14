@@ -133,7 +133,7 @@ export const getAdventurerStatsConfig = (
     icon: LuUserPlus,
   },
   {
-    label: 'Total Unlocked Tours',
+    label: 'Unlocked Tours',
     value: data?.totalUnlockedTours.toLocaleString(),
     icon: LuPlaneTakeoff,
   },

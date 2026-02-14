@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Container,
   Box,
@@ -35,11 +36,15 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
   const joinEvent = useJoinEvent();
   const cancelRegistration = useCancelEventRegistration();
   const { isAuthenticated } = usePermissions();
+  const router = useRouter();
 
   const handleJoinEvent = () => {
+    if (!isAuthenticated) {
+      router.push('/login?redirect=/events/' + event.id);
+      return;
+    }
     joinEvent.mutate(event.id);
   };
-
   const handleCancelRegistration = () => {
     cancelRegistration.mutate(event.id);
   };
@@ -213,7 +218,6 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                     bg='primary'
                     color='white'
                     disabled={
-                      !isAuthenticated ||
                       event.isFull ||
                       event.isExpired ||
                       joinEvent.isPending ||

@@ -64,13 +64,14 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
           )}
           {!isAnyAdmin && (
             <Button
-              bg='white'
-              color='primary'
+              bg='primary'
+              color='white'
               onClick={() => setIsPlanningCallDialogOpen(true)}
             >
               Book your trip planning call
             </Button>
           )}
+
           <AvatarImage src={userImage} name={userName} />
         </HStack>
       </Flex>
