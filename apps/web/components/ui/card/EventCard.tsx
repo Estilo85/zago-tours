@@ -2,6 +2,7 @@
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import {
+  Card,
   Text,
   Stack,
   HStack,
@@ -9,6 +10,7 @@ import {
   Flex,
   AvatarGroup,
   Avatar,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
 import { Calendar, MapPin, Timer } from 'lucide-react';
@@ -28,41 +30,49 @@ export const EventCard = ({ event }: EventCardProps) => {
     })) || [];
 
   return (
-    <AppLink href={`/events/${event.id}`}>
-      <Box
-        bg='white'
-        w={{ base: 'full', md: '280px' }}
-        h='350px'
-        borderRadius='3xl'
-        overflow='hidden'
-        boxShadow='sm'
-        _hover={{ boxShadow: 'md' }}
-        transition='all 0.2s'
-        p={3}
-        display='flex'
-        flexDirection='column'
-      >
-        {/* Image Section - 40% */}
-        <Box
-          height='40%'
-          flexShrink={0}
-          overflow='hidden'
-          borderRadius='3xl'
-          mb={3}
-        >
+    <Card.Root
+      w={{ base: 'full', md: '280px' }}
+      variant='elevated'
+      overflow='hidden'
+      borderRadius='3xl'
+      role='group'
+      transition='all 0.3s ease'
+      _hover={{
+        md: {
+          boxShadow: '2xl',
+          transform: 'translateY(-4px)',
+        },
+      }}
+    >
+      {/* IMAGE SECTION */}
+      <Box position='relative' overflow='hidden'>
+        <AspectRatio ratio={4 / 3}>
           <ResponsiveImage
             src={event.mediaUrl as string}
             alt={event.title}
             width='100%'
             height='100%'
+            borderRadius='none'
             objectFit='cover'
+            objectPosition='top'
+            containerProps={{
+              transition: 'transform 0.5s ease',
+              _groupHover: { transform: 'scale(1.08)' },
+            }}
           />
-        </Box>
+        </AspectRatio>
+      </Box>
 
-        {/* Content Section - Flexible */}
-        <Stack gap={2} flex={1} minH={0}>
+      {/* BODY SECTION */}
+      <AppLink href={`/events/${event.id}`}>
+        <Card.Body p='4' gap='1'>
           {/* Date and Time */}
-          <HStack justify='space-between' fontSize='xs' fontWeight='bold'>
+          <HStack
+            justify='space-between'
+            fontSize='xs'
+            fontWeight='bold'
+            mb='2'
+          >
             <Flex align='center' gap={2}>
               <Calendar size={12} />
               <Text>{formatDate(event.date)}</Text>
@@ -74,17 +84,17 @@ export const EventCard = ({ event }: EventCardProps) => {
           </HStack>
 
           {/* Title */}
-          <Text
-            mt='1'
-            lineHeight='shorter'
-            fontSize='small'
-            fontWeight='semibold'
+          <Card.Title
+            fontWeight='bold'
+            fontSize='md'
+            lineHeight='tight'
+            minH='45px'
           >
             {event.title}
-          </Text>
+          </Card.Title>
 
           {/* Location and Tags */}
-          <Stack gap='2' pt='2' mb={0} pb={0} flex={1}>
+          <Stack gap='2' pt='2'>
             <Flex align='center' gap={2} width='full'>
               <MapPin size={14} style={{ flexShrink: 0 }} />
               <Text fontSize='xs' truncate minW={0} flex={1}>
@@ -121,10 +131,12 @@ export const EventCard = ({ event }: EventCardProps) => {
               </Text>
             </Flex>
           </Stack>
-        </Stack>
+        </Card.Body>
+      </AppLink>
 
-        {/* Footer Section - Fixed at bottom */}
-        <Box pt={1} borderTop='1px solid' borderColor='gray.100'>
+      {/* FOOTER SECTION */}
+      <Card.Footer pt='0'>
+        <Box w='full' borderTop='1px solid' borderColor='gray.100' pt='3'>
           {attendees.length > 0 && (
             <AvatarGroup size='xs'>
               {attendees.slice(0, 3).map((person, i) => (
@@ -140,7 +152,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             <Avatar.Fallback>+3</Avatar.Fallback>
           </Avatar.Root>
         </Box>
-      </Box>
-    </AppLink>
+      </Card.Footer>
+    </Card.Root>
   );
 };

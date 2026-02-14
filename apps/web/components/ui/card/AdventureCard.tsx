@@ -84,7 +84,7 @@ const AdventureCard = ({
             height='100%'
             borderRadius='none'
             objectFit='cover'
-            objectPosition='top' // Ensuring heads aren't cut off
+            objectPosition='top'
             containerProps={{
               transition: 'transform 0.5s ease',
               _groupHover: { transform: 'scale(1.08)' },
