@@ -58,6 +58,7 @@ export class AdventureController {
   );
 
   //==== UPDATE AN ADVENTURE ======
+  //==== UPDATE AN ADVENTURE ======
   update = asyncHandler(
     async (
       req: ReqParamsBody<UuidParam, UpdateAdventureDto>,
@@ -71,6 +72,8 @@ export class AdventureController {
       if (adventureData.days) adventureData.days = Number(adventureData.days);
       if (adventureData.safetyScore)
         adventureData.safetyScore = Number(adventureData.safetyScore);
+      if (adventureData.rating)
+        adventureData.rating = Number(adventureData.rating); // ADD THIS LINE
 
       if (adventureData.date) {
         adventureData.date = new Date(adventureData.date);
@@ -100,7 +103,6 @@ export class AdventureController {
       return ResponseUtil.success(res, result, 'Adventure updated');
     },
   );
-
   //==== GET ALL ADVENTURES ======
   getAll = asyncHandler(
     async (req: ReqQuery<AdventureListQueryDto>, res: Response) => {
@@ -163,18 +165,19 @@ export class AdventureController {
   );
 
   //==== GET ADVENTURE BY ID ======
+  //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
-    const adventure = await this.service.getById(req.params.id);
+    const { id } = req.params;
+    const userId = req.userId;
 
-    if (req.userId) {
-      const isLiked = await this.service.checkIfLiked(
-        req.userId,
-        req.params.id,
-      );
-      return ResponseUtil.success(res, { ...adventure, isLiked });
+    const result = await this.service.getById(id);
+
+    if (userId && result) {
+      const isLiked = await this.service.checkIfLiked(userId, id);
+      return ResponseUtil.success(res, { ...result, isLiked });
     }
 
-    return ResponseUtil.success(res, adventure);
+    return ResponseUtil.success(res, result);
   });
   //==== DELETE AN ADVENTURE ======
   delete = asyncHandler(

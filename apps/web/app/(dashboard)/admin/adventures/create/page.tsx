@@ -1,6 +1,6 @@
 'use client';
 
-import { useBulkCreateAdventures } from '@/hooks';
+import { useCreateAdventure } from '@/hooks';
 import {
   Box,
   Button,
@@ -10,11 +10,12 @@ import {
   Textarea,
   VStack,
   HStack,
-  IconButton,
   Text,
   SimpleGrid,
   Field,
   createListCollection,
+  Image,
+  IconButton,
 } from '@chakra-ui/react';
 import {
   SelectContent,
@@ -26,13 +27,12 @@ import {
 import {
   AdventureLevel,
   AdventureLevelLabels,
-  CreateAdventureDto,
   TripType,
   TripTypeLabels,
 } from '@zagotours/types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FiPlus, FiTrash2, FiChevronLeft } from 'react-icons/fi';
+import { FiChevronLeft, FiUpload, FiX } from 'react-icons/fi';
 
 const INITIAL_ADVENTURE = {
   title: '',
@@ -46,18 +46,18 @@ const INITIAL_ADVENTURE = {
   certification: '',
   gear: '',
   date: '',
+  rating: 0,
+  imageFile: null as File | null,
+  imagePreview: null as string | null,
 };
+
+type AdventureFormData = typeof INITIAL_ADVENTURE;
 
 export default function CreateAdventurePage() {
   const router = useRouter();
-  // Use a type that has date as string for form handling
-  type AdventureFormData = Omit<CreateAdventureDto, 'date'> & { date: string };
-
-  const [adventures, setAdventures] = useState<AdventureFormData[]>([
-    { ...INITIAL_ADVENTURE },
-  ]);
-
-  const { mutate: bulkCreate, isPending } = useBulkCreateAdventures();
+  const [adventure, setAdventure] =
+    useState<AdventureFormData>(INITIAL_ADVENTURE);
+  const { mutate: createAdventure, isPending } = useCreateAdventure();
 
   const levelCollection = createListCollection({
     items: Object.entries(AdventureLevelLabels).map(([value, label]) => ({
@@ -73,37 +73,65 @@ export default function CreateAdventurePage() {
     })),
   });
 
-  const addAdventureForm = () => {
-    setAdventures((prev) => [...prev, { ...INITIAL_ADVENTURE }]);
-  };
-
-  const removeAdventureForm = (index: number) => {
-    if (adventures.length <= 1) return;
-    setAdventures((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const handleChange = <K extends keyof AdventureFormData>(
-    index: number,
     field: K,
     value: AdventureFormData[K],
   ) => {
-    setAdventures((prev) => {
-      const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        [field]: value,
-      } as AdventureFormData;
-      return updated;
-    });
+    setAdventure((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleImageChange = (file: File | null) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAdventure((prev) => ({
+        ...prev,
+        imageFile: file,
+        imagePreview: reader.result as string,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = () => {
+    setAdventure((prev) => ({
+      ...prev,
+      imageFile: null,
+      imagePreview: null,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const adventuresToCreate: CreateAdventureDto[] = adventures.map((adv) => ({
-      ...adv,
-    }));
 
-    bulkCreate(adventuresToCreate, {
+    const formData = new FormData();
+
+    // Append all adventure fields
+    formData.append('title', adventure.title);
+    formData.append('description', adventure.description);
+    formData.append('location', adventure.location);
+    formData.append('price', adventure.price.toString());
+    formData.append('level', adventure.level);
+    formData.append('tripType', adventure.tripType);
+    formData.append('days', adventure.days.toString());
+    formData.append('safetyScore', adventure.safetyScore.toString());
+    formData.append('rating', adventure.rating.toString());
+    formData.append('date', adventure.date);
+
+    if (adventure.certification)
+      formData.append('certification', adventure.certification);
+    if (adventure.gear) formData.append('gear', adventure.gear);
+
+    // Append image if exists
+    if (adventure.imageFile) {
+      formData.append('media', adventure.imageFile);
+    }
+
+    createAdventure(formData as any, {
       onSuccess: () => {
         router.push('/admin/adventures');
       },
@@ -112,202 +140,251 @@ export default function CreateAdventurePage() {
 
   return (
     <Container maxW='container.lg' py={8}>
-      <HStack justify='space-between' mb={8}>
-        <VStack align='start' gap={1}>
-          <Button variant='ghost' size='sm' onClick={() => router.back()}>
-            <FiChevronLeft style={{ marginRight: '8px' }} /> Back
-          </Button>
-          <Heading size='xl'>Bulk Create Adventures</Heading>
-        </VStack>
-        <Button
-          colorPalette='cyan'
-          variant='surface'
-          onClick={addAdventureForm}
-        >
-          <FiPlus style={{ marginRight: '8px' }} /> Add Another Trip
+      <VStack align='start' gap={1} mb={8}>
+        <Button variant='ghost' size='sm' onClick={() => router.back()}>
+          <FiChevronLeft style={{ marginRight: '8px' }} /> Back
         </Button>
-      </HStack>
+        <Heading size='xl'>Create New Adventure</Heading>
+        <Text color='fg.muted'>
+          Fill in the details to create a new adventure trip
+        </Text>
+      </VStack>
 
       <form onSubmit={handleSubmit}>
-        <VStack gap={10} align='stretch'>
-          {adventures.map((adventure, index) => (
-            <Box
-              key={index}
-              p={6}
-              bg='bg.panel'
-              shadow='md'
-              rounded='lg'
-              borderWidth='1px'
-              position='relative'
-            >
-              <HStack justify='space-between' mb={4}>
-                <Heading size='md' color='cyan.600'>
-                  Adventure #{index + 1}
-                </Heading>
-                {adventures.length > 1 && (
+        <Box p={6} bg='bg.panel' shadow='md' rounded='lg' borderWidth='1px'>
+          <VStack gap={4} align='stretch'>
+            {/* Image Upload Section */}
+            <Field.Root>
+              <Field.Label>Adventure Image</Field.Label>
+              {adventure.imagePreview ? (
+                <Box position='relative' maxW='300px'>
+                  <Image
+                    src={adventure.imagePreview}
+                    alt='Preview'
+                    rounded='md'
+                    objectFit='cover'
+                    h='200px'
+                    w='100%'
+                  />
                   <IconButton
-                    aria-label='Remove adventure'
-                    variant='ghost'
+                    aria-label='Remove image'
+                    position='absolute'
+                    top={2}
+                    right={2}
+                    size='sm'
                     colorPalette='red'
-                    onClick={() => removeAdventureForm(index)}
+                    onClick={removeImage}
                   >
-                    <FiTrash2 />
+                    <FiX />
                   </IconButton>
-                )}
-              </HStack>
-
-              <VStack gap={4} align='stretch'>
-                <Field.Root required>
-                  <Field.Label>Title</Field.Label>
+                </Box>
+              ) : (
+                <Box
+                  border='2px dashed'
+                  borderColor='border.emphasized'
+                  rounded='md'
+                  p={6}
+                  textAlign='center'
+                  cursor='pointer'
+                  _hover={{ bg: 'bg.muted' }}
+                  onClick={() =>
+                    document.getElementById('image-upload')?.click()
+                  }
+                >
+                  <FiUpload size={32} style={{ margin: '0 auto 8px' }} />
+                  <Text fontSize='sm' color='fg.muted'>
+                    Click to upload adventure image
+                  </Text>
                   <Input
-                    value={adventure.title}
-                    onChange={(e) =>
-                      handleChange(index, 'title', e.target.value)
-                    }
-                    placeholder='E.g. Everest Base Camp'
+                    id='image-upload'
+                    type='file'
+                    accept='image/*'
+                    display='none'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageChange(file);
+                    }}
                   />
-                </Field.Root>
+                </Box>
+              )}
+            </Field.Root>
 
-                <Field.Root required>
-                  <Field.Label>Description</Field.Label>
-                  <Textarea
-                    value={adventure.description}
-                    onChange={(e) =>
-                      handleChange(index, 'description', e.target.value)
-                    }
-                    placeholder='Describe the adventure details...'
-                  />
-                </Field.Root>
+            <Field.Root required>
+              <Field.Label>Title</Field.Label>
+              <Input
+                value={adventure.title}
+                onChange={(e) => handleChange('title', e.target.value)}
+                placeholder='E.g. Everest Base Camp'
+              />
+            </Field.Root>
 
-                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                  <Field.Root required>
-                    <Field.Label>Location</Field.Label>
-                    <Input
-                      value={adventure.location}
-                      onChange={(e) =>
-                        handleChange(index, 'location', e.target.value)
-                      }
-                    />
-                  </Field.Root>
+            <Field.Root required>
+              <Field.Label>Description</Field.Label>
+              <Textarea
+                value={adventure.description}
+                onChange={(e) => handleChange('description', e.target.value)}
+                placeholder='Describe the adventure details...'
+                rows={4}
+              />
+            </Field.Root>
 
-                  <Field.Root required>
-                    <Field.Label>Price ($)</Field.Label>
-                    <Input
-                      type='number'
-                      value={adventure.price}
-                      onChange={(e) =>
-                        handleChange(index, 'price', Number(e.target.value))
-                      }
-                    />
-                  </Field.Root>
-                </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+              <Field.Root required>
+                <Field.Label>Location</Field.Label>
+                <Input
+                  value={adventure.location}
+                  onChange={(e) => handleChange('location', e.target.value)}
+                  placeholder='E.g. Nepal'
+                />
+              </Field.Root>
 
-                <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
-                  <Field.Root required>
-                    <Field.Label>Level</Field.Label>
-                    <SelectRoot
-                      collection={levelCollection}
-                      value={[adventure.level]}
-                      onValueChange={(e) =>
-                        handleChange(
-                          index,
-                          'level',
-                          e.value[0] as AdventureLevel,
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValueText placeholder='Select level' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {levelCollection.items.map((item) => (
-                          <SelectItem key={item.value} item={item}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </SelectRoot>
-                  </Field.Root>
+              <Field.Root required>
+                <Field.Label>Price ($)</Field.Label>
+                <Input
+                  type='number'
+                  value={adventure.price}
+                  onChange={(e) =>
+                    handleChange('price', Number(e.target.value))
+                  }
+                  min='0'
+                />
+              </Field.Root>
+            </SimpleGrid>
 
-                  <Field.Root required>
-                    <Field.Label>Trip Type</Field.Label>
-                    <SelectRoot
-                      collection={tripTypeCollection}
-                      value={[adventure.tripType]}
-                      onValueChange={(e) =>
-                        handleChange(index, 'tripType', e.value[0] as TripType)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValueText placeholder='Select type' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {tripTypeCollection.items.map((item) => (
-                          <SelectItem key={item.value} item={item}>
-                            {item.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </SelectRoot>
-                  </Field.Root>
+            <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
+              <Field.Root required>
+                <Field.Label>Level</Field.Label>
+                <SelectRoot
+                  collection={levelCollection}
+                  value={[adventure.level]}
+                  onValueChange={(e) =>
+                    handleChange('level', e.value[0] as AdventureLevel)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValueText placeholder='Select level' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {levelCollection.items.map((item) => (
+                      <SelectItem key={item.value} item={item}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectRoot>
+              </Field.Root>
 
-                  <Field.Root required>
-                    <Field.Label>Start Date</Field.Label>
-                    <Input
-                      type='date'
-                      value={
-                        typeof adventure.date === 'string' ? adventure.date : ''
-                      }
-                      onChange={(e) =>
-                        handleChange(index, 'date', e.target.value)
-                      }
-                    />
-                  </Field.Root>
-                </SimpleGrid>
+              <Field.Root required>
+                <Field.Label>Trip Type</Field.Label>
+                <SelectRoot
+                  collection={tripTypeCollection}
+                  value={[adventure.tripType]}
+                  onValueChange={(e) =>
+                    handleChange('tripType', e.value[0] as TripType)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValueText placeholder='Select type' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tripTypeCollection.items.map((item) => (
+                      <SelectItem key={item.value} item={item}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectRoot>
+              </Field.Root>
 
-                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                  <Field.Root required>
-                    <Field.Label>Days</Field.Label>
-                    <Input
-                      type='number'
-                      value={adventure.days}
-                      onChange={(e) =>
-                        handleChange(index, 'days', Number(e.target.value))
-                      }
-                    />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Certification Required</Field.Label>
-                    <Input
-                      value={adventure.certification}
-                      onChange={(e) =>
-                        handleChange(index, 'certification', e.target.value)
-                      }
-                    />
-                  </Field.Root>
-                </SimpleGrid>
-              </VStack>
-            </Box>
-          ))}
+              <Field.Root required>
+                <Field.Label>Start Date</Field.Label>
+                <Input
+                  type='date'
+                  value={adventure.date}
+                  onChange={(e) => handleChange('date', e.target.value)}
+                />
+              </Field.Root>
+            </SimpleGrid>
 
-          <Box pt={6} borderTopWidth='1px'>
-            <HStack gap={4} justify='flex-end'>
-              <Text color='fg.muted' fontSize='sm'>
-                Total Adventures: {adventures.length}
-              </Text>
-              <Button
-                type='submit'
-                bg='primary'
-                color='white'
-                size='lg'
-                loading={isPending}
-                minW='200px'
-              >
-                Create All Adventures
-              </Button>
-            </HStack>
-          </Box>
-        </VStack>
+            <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
+              <Field.Root required>
+                <Field.Label>Days</Field.Label>
+                <Input
+                  type='number'
+                  value={adventure.days}
+                  onChange={(e) => handleChange('days', Number(e.target.value))}
+                  min='1'
+                />
+              </Field.Root>
+
+              <Field.Root required>
+                <Field.Label>Safety Score (0-100)</Field.Label>
+                <Input
+                  type='number'
+                  min='0'
+                  max='100'
+                  value={adventure.safetyScore}
+                  onChange={(e) =>
+                    handleChange('safetyScore', Number(e.target.value))
+                  }
+                />
+              </Field.Root>
+
+              <Field.Root required>
+                <Field.Label>Rating (0-5)</Field.Label>
+                <Input
+                  type='number'
+                  min='0'
+                  max='5'
+                  step='0.1'
+                  value={adventure.rating}
+                  onChange={(e) =>
+                    handleChange('rating', Number(e.target.value))
+                  }
+                />
+              </Field.Root>
+            </SimpleGrid>
+
+            <Field.Root>
+              <Field.Label>Certification Required</Field.Label>
+              <Input
+                value={adventure.certification}
+                onChange={(e) => handleChange('certification', e.target.value)}
+                placeholder='E.g. Advanced Scuba Diving'
+              />
+            </Field.Root>
+
+            <Field.Root>
+              <Field.Label>Gear List</Field.Label>
+              <Textarea
+                value={adventure.gear}
+                onChange={(e) => handleChange('gear', e.target.value)}
+                placeholder='List required gear...'
+                rows={3}
+              />
+            </Field.Root>
+          </VStack>
+        </Box>
+
+        <HStack gap={4} justify='flex-end' mt={6}>
+          <Button
+            variant='outline'
+            onClick={() => router.back()}
+            disabled={isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type='submit'
+            bg='primary'
+            color='white'
+            size='lg'
+            loading={isPending}
+            minW='200px'
+          >
+            Create Adventure
+          </Button>
+        </HStack>
       </form>
     </Container>
   );

@@ -71,9 +71,8 @@ export const NavbarAuthActions = () => {
           px={{ base: 3, md: 5 }}
           py={5}
           cursor='pointer'
-          bg='red.500'
+          bg='primary'
           color='white'
-          _hover={{ bg: 'red.600' }}
           onClick={logout}
         >
           Logout <LogOut size={16} />

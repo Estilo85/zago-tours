@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Box, Stack, Steps } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
 interface StepItem {
@@ -39,48 +39,52 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
   }, [items]);
 
   return (
-    <Stack gap={{ base: 6, md: 8 }} maxW='800px' w='full'>
-      {items.map((item, index) => (
-        <Flex
-          key={index}
-          gap={{ base: 4, md: 6 }}
-          direction='row'
-          alignItems='flex-start'
-          ref={(el: any) => (contentRefs.current[index] = el)}
-          data-step-index={index}
-        >
-          {/* Inline Step Indicator */}
-          <Flex direction='column' alignItems='center' flexShrink={0} pt={2}>
-            {/* Circle Indicator */}
-            <Box
-              w={{ base: '35px', md: '35px' }}
-              h={{ base: '35px', md: '35px' }}
-              borderRadius='full'
-              bg='secondary'
-              border='7px solid'
-              borderColor={activeStep === index ? 'primary' : 'transparent'}
-              transition='border-color 0.3s ease'
-              flexShrink={0}
-            />
-
-            {/* Connector Line */}
-            {index < items.length - 1 && (
-              <Box
-                w='2px'
-                flex='1'
-                bg='primary'
-                transition='background-color 0.3s ease'
-                minH='100px'
+    <Steps.Root
+      orientation='vertical'
+      step={activeStep}
+      gap={{ base: 6, md: 8 }}
+    >
+      <Stack gap={0} w='full'>
+        {items.map((item, index) => (
+          <Box
+            key={index}
+            ref={(el: any) => (contentRefs.current[index] = el)}
+            data-step-index={index}
+            w='full'
+            position='relative'
+          >
+            <Steps.Item index={index}>
+              <Steps.Indicator
+                w={{ base: '35px', md: '35px' }}
+                h={{ base: '35px', md: '35px' }}
+                borderRadius='full'
+                bg='secondary'
+                border='7px solid'
+                borderColor={activeStep === index ? 'primary' : 'transparent'}
+                transition='border-color 0.3s ease'
               />
-            )}
-          </Flex>
+              {index < items.length - 1 && (
+                <Steps.Separator
+                  w='2px'
+                  bg='primary'
+                  // Ensure the separator stretches to connect steps
+                  flexGrow={1}
+                />
+              )}
+            </Steps.Item>
 
-          {/* Content */}
-          <Box flex='1' w='full'>
-            {item.content}
+            <Box
+              position='absolute'
+              top='35px'
+              left={{ base: '47px', md: '47px' }}
+              w='calc(100% - 47px)'
+              pb={6}
+            >
+              {item.content}
+            </Box>
           </Box>
-        </Flex>
-      ))}
-    </Stack>
+        ))}
+      </Stack>
+    </Steps.Root>
   );
 };

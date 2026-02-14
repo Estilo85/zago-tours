@@ -54,7 +54,11 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
 
         <HStack gap={4}>
           {!isAnyAdmin && (
-            <Button bg='primary' onClick={() => setIsTripDialogOpen(true)}>
+            <Button
+              bg='primary'
+              color='white'
+              onClick={() => setIsTripDialogOpen(true)}
+            >
               Request a trip
             </Button>
           )}

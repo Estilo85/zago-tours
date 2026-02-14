@@ -246,7 +246,8 @@ export default function EditEventPage() {
 
           <Button
             type='submit'
-            colorPalette='blue'
+            bg='primary'
+            color='white'
             size='lg'
             loading={isPending}
           >

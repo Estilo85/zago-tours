@@ -182,7 +182,8 @@ export default function SettingPage() {
                   <Flex justify='flex-end' pt={4}>
                     <Button
                       type='submit'
-                      colorPalette='blue'
+                      bg='primary'
+                      color='white'
                       loading={updateProfile.isPending}
                       loadingText='Saving...'
                     >

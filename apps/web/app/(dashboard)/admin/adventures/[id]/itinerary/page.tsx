@@ -284,7 +284,8 @@ export default function ItineraryPage() {
                   </Button>
                   <Button
                     type='submit'
-                    colorPalette='blue'
+                    bg='primary'
+                    color='white'
                     loading={
                       createMutation.isPending || updateMutation.isPending
                     }

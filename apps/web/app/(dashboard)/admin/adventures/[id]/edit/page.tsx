@@ -14,6 +14,9 @@ import {
   Spinner,
   Center,
   createListCollection,
+  Image,
+  IconButton,
+  Text,
 } from '@chakra-ui/react';
 import {
   SelectContent,
@@ -24,7 +27,14 @@ import {
 } from '@chakra-ui/react/select';
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { FiSave, FiChevronLeft, FiList, FiImage } from 'react-icons/fi';
+import {
+  FiSave,
+  FiChevronLeft,
+  FiList,
+  FiImage,
+  FiUpload,
+  FiX,
+} from 'react-icons/fi';
 
 // Hooks and Constants
 import { useAdventure, useUpdateAdventure } from '@/hooks';
@@ -35,12 +45,19 @@ import {
   UpdateAdventureDto,
 } from '@zagotours/types';
 
+type FormDataWithImage = UpdateAdventureDto & {
+  imageFile?: File | null;
+  imagePreview?: string | null;
+  currentImage?: string | null;
+  rating?: number;
+};
+
 export default function EditAdventurePage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
-  const [formData, setFormData] = useState<UpdateAdventureDto | null>(null);
+  const [formData, setFormData] = useState<FormDataWithImage | null>(null);
 
   // Create collections for Select components
   const levelCollection = createListCollection({
@@ -88,20 +105,89 @@ export default function EditAdventurePage() {
           ? new Date(adventure.date).toISOString().split('T')[0]
           : '',
         status: adventure.status,
+        rating: adventure.rating || 0,
+        currentImage: adventure.mediaUrl || null,
       });
     }
   }, [response]);
 
-  const handleChange = (field: keyof UpdateAdventureDto, value: any) => {
+  const handleChange = (field: keyof FormDataWithImage, value: any) => {
     setFormData((prev) => (prev ? { ...prev, [field]: value } : null));
+  };
+
+  const handleImageChange = (file: File | null) => {
+    if (!file) return;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) =>
+        prev
+          ? {
+              ...prev,
+              imageFile: file,
+              imagePreview: reader.result as string,
+            }
+          : null,
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = () => {
+    setFormData((prev) =>
+      prev
+        ? {
+            ...prev,
+            imageFile: null,
+            imagePreview: null,
+            currentImage: null,
+          }
+        : null,
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
 
+    // Create FormData for multipart/form-data submission
+    const submitData = new FormData();
+
+    // Append all fields
+    if (formData.title) submitData.append('title', formData.title);
+    if (formData.description)
+      submitData.append('description', formData.description);
+    if (formData.location) submitData.append('location', formData.location);
+    if (formData.price) submitData.append('price', formData.price.toString());
+    if (formData.level) submitData.append('level', formData.level);
+    if (formData.tripType) submitData.append('tripType', formData.tripType);
+    if (formData.days) submitData.append('days', formData.days.toString());
+    if (formData.safetyScore)
+      submitData.append('safetyScore', formData.safetyScore.toString());
+    if (formData.rating !== undefined)
+      submitData.append('rating', formData.rating.toString());
+    if (formData.date) {
+      const dateValue =
+        typeof formData.date === 'string'
+          ? formData.date
+          : new Date(formData.date).toISOString().split('T')[0];
+      if (dateValue) {
+        submitData.append('date', dateValue);
+      }
+    }
+    if (formData.status) submitData.append('status', formData.status);
+    if (formData.certification)
+      submitData.append('certification', formData.certification);
+    if (formData.gear) submitData.append('gear', formData.gear);
+
+    // Append image if new one selected
+    if (formData.imageFile) {
+      submitData.append('media', formData.imageFile);
+    }
+
     updateAdventure(
-      { id, data: formData },
+      { id, data: submitData as any },
       {
         onSuccess: () => {
           router.push(`/admin/adventures/${id}`);
@@ -118,6 +204,8 @@ export default function EditAdventurePage() {
     );
   }
 
+  const displayImage = formData.imagePreview || formData.currentImage;
+
   return (
     <Container maxW='container.md' py={8}>
       <HStack justify='space-between' mb={6}>
@@ -132,6 +220,67 @@ export default function EditAdventurePage() {
       <Box bg='bg.panel' p={6} shadow='sm' rounded='md' borderWidth='1px'>
         <form onSubmit={handleSubmit}>
           <VStack gap={4} align='stretch'>
+            {/* Image Upload Section */}
+            <Field.Root>
+              <Field.Label>Adventure Image</Field.Label>
+              {displayImage ? (
+                <Box position='relative' maxW='400px'>
+                  <Image
+                    src={displayImage}
+                    alt='Adventure'
+                    rounded='md'
+                    objectFit='cover'
+                    h='250px'
+                    w='100%'
+                  />
+                  <IconButton
+                    aria-label='Remove image'
+                    position='absolute'
+                    top={2}
+                    right={2}
+                    size='sm'
+                    colorPalette='red'
+                    onClick={removeImage}
+                  >
+                    <FiX />
+                  </IconButton>
+                  {formData.imagePreview && (
+                    <Text fontSize='xs' color='green.500' mt={2}>
+                      New image selected (save to upload)
+                    </Text>
+                  )}
+                </Box>
+              ) : (
+                <Box
+                  border='2px dashed'
+                  borderColor='border.emphasized'
+                  rounded='md'
+                  p={8}
+                  textAlign='center'
+                  cursor='pointer'
+                  _hover={{ bg: 'bg.muted' }}
+                  onClick={() =>
+                    document.getElementById('image-input')?.click()
+                  }
+                >
+                  <FiUpload size={40} style={{ margin: '0 auto 12px' }} />
+                  <Text fontSize='sm' color='fg.muted'>
+                    Click to upload adventure image
+                  </Text>
+                  <Input
+                    id='image-input'
+                    type='file'
+                    accept='image/*'
+                    display='none'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageChange(file);
+                    }}
+                  />
+                </Box>
+              )}
+            </Field.Root>
+
             <Field.Root required>
               <Field.Label>Title</Field.Label>
               <Input
@@ -232,7 +381,7 @@ export default function EditAdventurePage() {
               </Field.Root>
             </SimpleGrid>
 
-            <SimpleGrid columns={3} gap={4}>
+            <SimpleGrid columns={4} gap={4}>
               <Field.Root required>
                 <Field.Label>Days</Field.Label>
                 <Input
@@ -249,6 +398,20 @@ export default function EditAdventurePage() {
                   value={formData.safetyScore}
                   onChange={(e) =>
                     handleChange('safetyScore', Number(e.target.value))
+                  }
+                />
+              </Field.Root>
+
+              <Field.Root required>
+                <Field.Label>Rating (0-5)</Field.Label>
+                <Input
+                  type='number'
+                  min='0'
+                  max='5'
+                  step='0.1'
+                  value={formData.rating}
+                  onChange={(e) =>
+                    handleChange('rating', Number(e.target.value))
                   }
                 />
               </Field.Root>
@@ -286,7 +449,8 @@ export default function EditAdventurePage() {
               </Button>
               <Button
                 type='submit'
-                colorPalette='blue'
+                bg='primary'
+                color='white'
                 loading={isUpdating}
                 flex={1}
               >

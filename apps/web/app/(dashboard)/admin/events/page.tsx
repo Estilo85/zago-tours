@@ -126,7 +126,8 @@ export default function AdminEventsPage() {
       <HStack justify='space-between' mb={6}>
         <Heading size='lg'>Manage Events</Heading>
         <Button
-          colorPalette='cyan'
+          bg='primary'
+          color='white'
           onClick={() => router.push('/admin/events/create')}
         >
           <FiPlus /> Create Event

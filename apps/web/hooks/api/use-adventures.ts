@@ -6,6 +6,7 @@ import { adventureKeys } from './query-keys';
 import {
   AdventureDetailResponseDto,
   AdventureListQueryDto,
+  CreateAdventureDto,
   CreateItineraryDto,
   PaginatedResponse,
   ReorderGalleryDto,
@@ -79,7 +80,7 @@ export function useCreateAdventure() {
     mutationFn: (data: any) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.CREATE, {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
@@ -103,7 +104,7 @@ export function useBulkCreateAdventures() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any[]) =>
+    mutationFn: (data: CreateAdventureDto[]) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.BULK_CREATE, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -126,7 +127,7 @@ export function useUpdateAdventure() {
     mutationFn: ({ id, data }: { id: string; data: any }) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.UPDATE(id), {
         method: 'PATCH',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: adventureKeys.detail(id) });
@@ -220,11 +221,23 @@ export function useToggleLikeAdventure() {
       const previousData = queryClient.getQueryData(adventureKeys.detail(id));
 
       queryClient.setQueryData(adventureKeys.detail(id), (old: any) => {
-        if (!old) return old;
+        if (!old?.data) return old;
+
+        const currentLikesCount = old.data._count?.likes || 0;
+        const isCurrentlyLiked = old.data.isLiked || false;
+
         return {
           ...old,
-          isLiked: !old.isLiked,
-          likesCount: old.isLiked ? old.likesCount - 1 : old.likesCount + 1,
+          data: {
+            ...old.data,
+            isLiked: !isCurrentlyLiked,
+            _count: {
+              ...old.data._count,
+              likes: isCurrentlyLiked
+                ? currentLikesCount - 1
+                : currentLikesCount + 1,
+            },
+          },
         };
       });
 
@@ -237,9 +250,15 @@ export function useToggleLikeAdventure() {
           context.previousData,
         );
       }
+      toaster.create({
+        title: 'Error',
+        description: 'Failed to update like status',
+        type: 'error',
+      });
     },
     onSettled: (_data, _error, id) => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
     },
   });
 }

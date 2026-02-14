@@ -39,7 +39,7 @@ const StatCard = ({
   >
     <Stack gap={2}>
       <HStack justify='space-between' align='flex-start'>
-        <Box p={2.5} bg='blue.50' borderRadius='xl' color='blue.600'>
+        <Box p={2.5} bg='green.50' borderRadius='xl' color='green.600'>
           <Icon as={icon} boxSize={6} />
         </Box>
         {trend && (
@@ -86,12 +86,7 @@ export const StatsGrid = ({ stats, isLoading }: StatsGridProps) => {
     return (
       <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} gap={6}>
         {[1, 2, 3, 4].map((i) => (
-          <Box
-            key={i}
-            bg='gray.100'
-            h='150px'
-            borderRadius='2xl'
-          />
+          <Box key={i} bg='gray.100' h='150px' borderRadius='2xl' />
         ))}
       </SimpleGrid>
     );

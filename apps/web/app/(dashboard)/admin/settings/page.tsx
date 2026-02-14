@@ -143,7 +143,8 @@ export default function CreateAdmin() {
                 {/* Submit Button */}
                 <Button
                   type='submit'
-                  colorPalette='blue'
+                  bg='primary'
+                  color='white'
                   size='lg'
                   loading={isRegisteringAdmin}
                   width='full'

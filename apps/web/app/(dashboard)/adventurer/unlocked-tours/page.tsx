@@ -6,16 +6,40 @@ import React from 'react';
 
 const videos = [
   {
-    name: 'Game Drive and Viewing(South Africa)',
-    url: 'https://drive.google.com/file/d/1LRshOeMAg5ltR0sHhyBxftN4vz48xNpG/view?usp=drivesdk',
+    name: 'Tarangire National Park: Wildlife Watching',
+    url: 'https://youtube.com/shorts/k4Wrre-s--I',
+  },
+  {
+    name: 'Hot Air Balloon Safari (South Africa)',
+    url: 'https://youtu.be/lWtPeN8NYNQ',
+  },
+  {
+    name: ' Masai Mara (Kenya)',
+    url: 'https://youtu.be/h6Xd_tsqt50 ',
+  },
+  {
+    name: '   Inca Trail Trek (Peru)',
+    url: 'https://youtube.com/shorts/Jmq5TNyGDjI ',
+  },
+  {
+    name: '  Island Hopping (Philippines)',
+    url: 'https://youtube.com/shorts/MPBg_hmeCSg ',
+  },
+  {
+    name: 'White water rafting (Uganda)',
+    url: 'https://youtube.com/shorts/To6gLWHcwMA ',
+  },
+  {
+    name: ' Game Driving and Viewing (South Africa):',
+    url: 'https://youtu.be/b1bDfj8LvZ8 ',
+  },
+  {
+    name: 'Mountain Trekking (Tanzania)',
+    url: 'https://youtube.com/shorts/kNn6lu1MiNg ',
   },
   {
     name: 'Paragliding in South Africa',
-    url: 'https://drive.google.com/file/d/1LuR89ANET_fDIHetCGEoevZASk3RBm6Y/view?usp=drivesdk',
-  },
-  {
-    name: 'Tarangire National Park(Wildlife Watching)',
-    url: 'https://drive.google.com/file/d/1gL3ZO5JEPTQrkujHnOIvf3Xm5CC_B6X1/view?usp=drivesdk',
+    url: 'https://youtube.com/shorts/ZZmOg4Gx-jk ',
   },
 ];
 

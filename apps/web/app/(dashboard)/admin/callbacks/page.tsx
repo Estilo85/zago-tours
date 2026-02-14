@@ -384,7 +384,8 @@ export default function DashboardCallbacks() {
                         <Button
                           size='sm'
                           variant='outline'
-                          colorPalette='blue'
+                          bg='primary'
+                          color='white'
                           onClick={() =>
                             (window.location.href = `tel:${selectedCallback.phone}`)
                           }

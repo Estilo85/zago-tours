@@ -17,7 +17,8 @@ import { ResponsiveImage } from '../../media/ResponsiveImage';
 import { AdventureDetailResponseDto } from '@zagotours/types';
 import Button from '../button/Button';
 import { AppLink } from '../link/AppLink';
-import { useToggleLikeAdventure } from '@/hooks';
+import { usePermissions, useToggleLikeAdventure } from '@/hooks';
+import { useRouter } from 'next/navigation';
 
 const AdventureCard = ({
   adventure,
@@ -25,7 +26,9 @@ const AdventureCard = ({
   adventure: AdventureDetailResponseDto;
 }) => {
   const nights = adventure.days > 1 ? adventure.days - 1 : 0;
+  const router = useRouter();
   const { mutate: toggleLike } = useToggleLikeAdventure();
+  const { isAuthenticated } = usePermissions();
 
   const handleWhatsAppBooking = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -33,13 +36,26 @@ const AdventureCard = ({
 
     const phoneNumber = '447418627748';
     const message = `Hi! I'm interested in booking the "${adventure.title}" adventure for $${adventure.price}. Could you provide more details?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
-    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.href = whatsappUrl;
+    } else {
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   const handleLikeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isAuthenticated) {
+      router.push('/login?redirect=/adventures/' + adventure.id);
+      return;
+    }
+
     toggleLike(adventure.id);
   };
 
@@ -130,7 +146,7 @@ const AdventureCard = ({
             position='absolute'
             top='0'
             left='4'
-            transform='translateY(-50%)' 
+            transform='translateY(-50%)'
             bg='white'
             px='2'
             py='1'
