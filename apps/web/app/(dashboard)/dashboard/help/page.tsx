@@ -3,9 +3,5 @@ import React from 'react';
 import HelperForm from '../../_components/ui/HelperForm';
 
 export default function HelpPage() {
-  return (
-    <div>
-      <HelperForm />
-    </div>
-  );
+  return <HelperForm />;
 }

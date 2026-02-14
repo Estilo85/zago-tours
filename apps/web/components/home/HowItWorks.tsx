@@ -59,10 +59,10 @@ const cardData = [
 
 //ResponsiveImage-Data
 const resImageData = [
-  '/images/home/home-how-it-work-sect-1.webp',
-  '/images/home/home-how-it-work-sect-2.webp',
-  '/images/home/home-how-it-work-sect-3.webp',
-  '/images/home/home-how-it-work-sect-4.webp',
+  '/images/adventures/tripType/skiing.webp',
+  '/images/adventures/tripType/hiking.webp',
+  '/images/adventures/tripType/mountain climbing.webp',
+  '/images/adventures/tripType/safari.webp',
 ];
 
 export const HowItWorks = () => {

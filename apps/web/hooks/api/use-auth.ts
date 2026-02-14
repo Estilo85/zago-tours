@@ -31,11 +31,11 @@ export function useAuth() {
       });
 
       if (result?.error) {
-        throw new Error(result.error);
+        throw new Error('Invalid credentials');
       }
 
       if (!result?.ok) {
-        throw new Error('Login failed');
+        throw new Error('Invalid credentials');
       }
 
       return result;
@@ -43,16 +43,15 @@ export function useAuth() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: authKeys.session() });
       await queryClient.invalidateQueries({ queryKey: authKeys.profile() });
-
-      toaster.create({
-        title: 'Welcome back!',
-        description: `Logged in successfully`,
-        type: 'success',
-      });
-
       router.push('/dashboard');
-
       router.refresh();
+    },
+    onError: () => {
+      toaster.create({
+        title: 'Login Failed',
+        description: 'Invalid email or password',
+        type: 'error',
+      });
     },
   });
 
@@ -71,16 +70,16 @@ export function useAuth() {
       });
       router.push('/login');
     },
-    onError: (error: any) => {
+    onError: () => {
       toaster.create({
         title: 'Registration Failed',
-        description: error.message || 'Failed to create account',
+        description: 'Unable to create account. Please try again.',
         type: 'error',
       });
     },
   });
 
-  // --- REGISTER MUTATION ---
+  // --- ADMIN REGISTER MUTATION ---
   const registerAdmin = useMutation({
     mutationFn: (data: AdminRegisterDto) =>
       apiRequest(API_ENDPOINTS.AUTH.REGISTER_ADMIN, {
@@ -88,17 +87,12 @@ export function useAuth() {
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
-      toaster.create({
-        title: 'Account Created',
-        description: 'Please check your email to verify your account.',
-        type: 'success',
-      });
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
-    onError: (error: any) => {
+    onError: () => {
       toaster.create({
-        title: 'Registration Failed',
-        description: error.message || 'Failed to create account',
+        title: 'Failed',
+        description: 'Unable to create admin account',
         type: 'error',
       });
     },
@@ -108,26 +102,18 @@ export function useAuth() {
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' });
     queryClient.clear();
-
-    toaster.create({
-      title: 'Logged Out',
-      description: 'You have been logged out successfully',
-      type: 'info',
-    });
   };
 
   return {
     // Login
     login: loginMutation.mutate,
     isLoggingIn: loginMutation.isPending,
-    loginError: loginMutation.error,
 
     // Register
     register: registerMutation.mutate,
     registerAdmin: registerAdmin.mutate,
     isRegisteringAdmin: registerAdmin.isPending,
     isRegistering: registerMutation.isPending,
-    registerError: registerMutation.error,
 
     logout: handleLogout,
   };
@@ -148,15 +134,18 @@ export function usePassword() {
     onSuccess: () => {
       toaster.create({
         title: 'Email Sent',
-        description: 'Please check your email for password reset instructions',
+        description:
+          'If an account exists, you will receive a password reset link',
         type: 'success',
       });
     },
-    onError: (error: Error) => {
+    onError: () => {
+      // Always show success to prevent user enumeration
       toaster.create({
-        title: 'Failed to Send Email',
-        description: error.message,
-        type: 'error',
+        title: 'Email Sent',
+        description:
+          'If an account exists, you will receive a password reset link',
+        type: 'success',
       });
     },
   });
@@ -176,10 +165,10 @@ export function usePassword() {
         type: 'success',
       });
     },
-    onError: (error: Error) => {
+    onError: () => {
       toaster.create({
         title: 'Reset Failed',
-        description: error.message,
+        description: 'Invalid or expired reset link',
         type: 'error',
       });
     },
@@ -189,12 +178,10 @@ export function usePassword() {
     // Forgot Password exports
     sendResetLink: forgotPassword.mutate,
     isSendingLink: forgotPassword.isPending,
-    forgotPasswordError: forgotPassword.error,
 
     // Reset Password exports
     resetPassword: resetPassword.mutate,
     isResetting: resetPassword.isPending,
-    resetPasswordError: resetPassword.error,
   };
 }
 

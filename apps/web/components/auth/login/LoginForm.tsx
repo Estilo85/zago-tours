@@ -10,7 +10,7 @@ import { LoginFormData, loginSchema } from '@/app/validations/auth-validation';
 import { useAuth } from '@/hooks';
 
 export function LoginForm() {
-  const { login, isLoggingIn, loginError } = useAuth();
+  const { login, isLoggingIn } = useAuth();
 
   const {
     control,
@@ -49,7 +49,7 @@ export function LoginForm() {
 
           <Stack gap={4}>
             {/* SERVER-SIDE ERROR DISPLAY */}
-            {loginError && (
+            {/* {loginError && (
               <Box
                 p={3}
                 bg='red.50'
@@ -64,7 +64,7 @@ export function LoginForm() {
                     : loginError.message}
                 </Text>
               </Box>
-            )}
+            )} */}
 
             <Controller
               name='email'

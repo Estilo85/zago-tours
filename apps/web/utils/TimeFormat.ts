@@ -1,6 +1,11 @@
-export const formatTime = (time?: string) => {
-  if (!time) return 'N/A';
-  return new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
+export const formatTime = (dateTime: string | Date | null | undefined) => {
+  if (!dateTime) return 'N/A';
+
+  const dateObj = typeof dateTime === 'string' ? new Date(dateTime) : dateTime;
+
+  if (isNaN(dateObj.getTime())) return 'Invalid Time';
+
+  return dateObj.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,

@@ -32,7 +32,6 @@ export function TripPlanningCalls() {
   const [selectedCallForCancel, setSelectedCallForCancel] =
     useState<TripPlanningCallResponseDto | null>(null);
 
-  // Get upcoming calls (scheduled and not in the past)
   const upcomingCalls = calls.filter(
     (call: TripPlanningCallResponseDto) =>
       call.status === 'SCHEDULED' && new Date(call.startTime) > new Date(),
@@ -59,6 +58,7 @@ export function TripPlanningCalls() {
       render: (endTime, row) =>
         new Date(row.startTime).toLocaleTimeString('en-US', {
           timeStyle: 'short',
+          timeZoneName: 'short',
         }),
     },
     {
@@ -173,7 +173,7 @@ export function TripPlanningCalls() {
     <Box p={8}>
       <VStack gap={6} align='stretch'>
         <Text fontSize='2xl' fontWeight='bold'>
-        Trip Planning Calls 
+          Trip Planning Calls
         </Text>
 
         {/* Display Upcoming Calls in Table */}

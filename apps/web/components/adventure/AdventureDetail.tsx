@@ -484,7 +484,48 @@ export default function AdventureDetailPage({
       <Box display={{ base: 'block', md: 'none' }}>
         <ItineraryCard adventure={adventure} />
       </Box>
-
+      {adventure.gallery && adventure.gallery.length > 0 && (
+        <Box my={8}>
+          <Heading size={{ base: 'md', md: 'lg' }} mb={4}>
+            Gallery
+          </Heading>
+          <Flex
+            gap={4}
+            overflowX='auto'
+            pb={4}
+            css={{
+              '&::-webkit-scrollbar': {
+                height: '8px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: '#CBD5E0',
+                borderRadius: '4px',
+              },
+            }}
+          >
+            {adventure.gallery
+              .sort((a, b) => a.order - b.order)
+              .map((item) => (
+                <Box
+                  key={item.id}
+                  minW={{ base: '250px', md: '300px' }}
+                  height='200px'
+                  borderRadius='lg'
+                  overflow='hidden'
+                  flexShrink={0}
+                >
+                  <ResponsiveImage
+                    src={item.mediaUrl}
+                    alt={item.altText || `${adventure.title} gallery image`}
+                    width='100%'
+                    height='100%'
+                    objectFit='cover'
+                  />
+                </Box>
+              ))}
+          </Flex>
+        </Box>
+      )}
       <Stack gap={8} w='full' my={10}>
         {/* 1. Inclusion/Exclusion Section */}
         <Box

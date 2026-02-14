@@ -1,6 +1,5 @@
 'use client';
 
-import { AvatarImage } from '@/components/media/AvatarImage';
 import { Box, Flex, Text, RatingGroup, Stack } from '@chakra-ui/react';
 
 interface TestimonialCardProps {
@@ -55,7 +54,7 @@ export const TestimonialCard = ({
         </Box>
 
         <Flex direction='row' align='center' gap='3' order={{ base: 2, md: 1 }}>
-          <AvatarImage src={avatarUrl ?? ''} name={author} />
+          {/* <AvatarImage src={avatarUrl ?? ''} name={author} /> */}
           <Stack gap='0' textAlign='left'>
             {' '}
             <Text fontWeight='bold' fontSize='sm' color='gray.800'>

@@ -67,7 +67,7 @@ export default function HelperForm() {
           color='primary'
           mb={2}
         >
-          Can't Find what you <br /> looking for?
+          Can't find what you <br /> looking for?
         </Heading>
       </Box>
       <Box

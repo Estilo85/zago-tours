@@ -84,16 +84,11 @@ export function useCreateAdventure() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
-      toaster.create({
-        title: 'Adventure Created',
-        description: 'Your adventure has been created successfully',
-        type: 'success',
-      });
     },
-    onError: (error: any) => {
+    onError: () => {
       toaster.create({
         title: 'Creation Failed',
-        description: error.message || 'Failed to create adventure',
+        description: 'Failed to create adventure',
         type: 'error',
       });
     },
@@ -111,10 +106,12 @@ export function useBulkCreateAdventures() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Adventures Created',
-        description: 'Adventures created successfully',
-        type: 'success',
+        title: 'Creation Failed',
+        description: 'Failed to create adventures',
+        type: 'error',
       });
     },
   });
@@ -143,13 +140,8 @@ export function useUpdateAdventure() {
     onSuccess: (_result, { id }) => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
-      toaster.create({
-        title: 'Adventure Updated',
-        description: 'Adventure updated successfully',
-        type: 'success',
-      });
     },
-    onError: (error: any, { id }, context) => {
+    onError: (_error, { id }, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
           adventureKeys.detail(id),
@@ -158,7 +150,7 @@ export function useUpdateAdventure() {
       }
       toaster.create({
         title: 'Update Failed',
-        description: error.message || 'Failed to update adventure',
+        description: 'Failed to update adventure',
         type: 'error',
       });
     },
@@ -189,19 +181,14 @@ export function useDeleteAdventure() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
-      toaster.create({
-        title: 'Adventure Deleted',
-        description: 'Adventure deleted successfully',
-        type: 'success',
-      });
     },
-    onError: (error: any, _variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(adventureKeys.lists(), context.previousData);
       }
       toaster.create({
         title: 'Delete Failed',
-        description: error.message || 'Failed to delete adventure',
+        description: 'Failed to delete adventure',
         type: 'error',
       });
     },
@@ -243,7 +230,7 @@ export function useToggleLikeAdventure() {
 
       return { previousData, id };
     },
-    onError: (error: any, id, context) => {
+    onError: (_error, id, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
           adventureKeys.detail(id),
@@ -280,10 +267,12 @@ export function useCreateItinerary() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Itinerary Created',
-        description: 'Itinerary added successfully',
-        type: 'success',
+        title: 'Creation Failed',
+        description: 'Failed to add itinerary',
+        type: 'error',
       });
     },
   });
@@ -311,14 +300,17 @@ export function useBulkCreateItineraries() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Itineraries Created',
-        description: 'Itineraries added successfully',
-        type: 'success',
+        title: 'Creation Failed',
+        description: 'Failed to add itineraries',
+        type: 'error',
       });
     },
   });
 }
+
 export function useUpdateItinerary() {
   const queryClient = useQueryClient();
 
@@ -340,10 +332,12 @@ export function useUpdateItinerary() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Itinerary Updated',
-        description: 'Itinerary updated successfully',
-        type: 'success',
+        title: 'Update Failed',
+        description: 'Failed to update itinerary',
+        type: 'error',
       });
     },
   });
@@ -367,10 +361,12 @@ export function useDeleteItinerary() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Itinerary Deleted',
-        description: 'Itinerary removed successfully',
-        type: 'success',
+        title: 'Delete Failed',
+        description: 'Failed to remove itinerary',
+        type: 'error',
       });
     },
   });
@@ -393,10 +389,12 @@ export function useCreateGalleryImage() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.gallery(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Image Added',
-        description: 'Gallery image added successfully',
-        type: 'success',
+        title: 'Upload Failed',
+        description: 'Failed to add gallery image',
+        type: 'error',
       });
     },
   });
@@ -438,16 +436,11 @@ export function useBulkUploadGallery() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.gallery(adventureId),
       });
-      toaster.create({
-        title: 'Images Uploaded',
-        description: 'Gallery images uploaded successfully',
-        type: 'success',
-      });
     },
-    onError: (error: Error) => {
+    onError: () => {
       toaster.create({
         title: 'Upload Failed',
-        description: error.message || 'Something went wrong',
+        description: 'Failed to upload gallery images',
         type: 'error',
       });
     },
@@ -475,10 +468,12 @@ export function useUpdateGalleryImage() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.gallery(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Image Updated',
-        description: 'Gallery image updated successfully',
-        type: 'success',
+        title: 'Update Failed',
+        description: 'Failed to update gallery image',
+        type: 'error',
       });
     },
   });
@@ -495,17 +490,11 @@ export function useReorderGallery() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.all });
-
-      toaster.create({
-        title: 'Order Updated',
-        description: 'Gallery sequence saved successfully',
-        type: 'success',
-      });
     },
-    onError: (error: Error) => {
+    onError: () => {
       toaster.create({
         title: 'Reorder Failed',
-        description: error.message,
+        description: 'Failed to save gallery sequence',
         type: 'error',
       });
     },
@@ -530,10 +519,12 @@ export function useDeleteGalleryImage() {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.gallery(adventureId),
       });
+    },
+    onError: () => {
       toaster.create({
-        title: 'Image Deleted',
-        description: 'Gallery image removed successfully',
-        type: 'success',
+        title: 'Delete Failed',
+        description: 'Failed to remove gallery image',
+        type: 'error',
       });
     },
   });

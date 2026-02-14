@@ -61,7 +61,21 @@ const SafetyAmbassadorTable = () => {
     },
     {
       id: '2',
-      curriculum: 'Module',
+      curriculum: 'Module 2',
+      date: '2024-05-22',
+      status: 'uncompleted',
+      action: 'start',
+    },
+    {
+      id: '2',
+      curriculum: 'Module 3',
+      date: '2024-05-22',
+      status: 'uncompleted',
+      action: 'start',
+    },
+    {
+      id: '2',
+      curriculum: 'Exam',
       date: '2024-05-22',
       status: 'uncompleted',
       action: 'start',

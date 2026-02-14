@@ -22,11 +22,17 @@ import {
   AffiliateContractTable,
   CorporateContractTable,
 } from '../_components/table/ContractTable';
+import MediaKitPage from '../independent-agent/media-kits/page';
 
 export default function DashboardPage() {
   const { data: response, isLoading: statsLoading } = useDashboardStats();
-  const { isAnyAdmin, isCooperateAgent, isAdventurer, isAffiliate } =
-    usePermissions();
+  const {
+    isAnyAdmin,
+    isCooperateAgent,
+    isIndependentAgent,
+    isAdventurer,
+    isAffiliate,
+  } = usePermissions();
 
   const { data: leaderResponse, isLoading: leaderboardLoading } =
     useLeaderboard(isAnyAdmin);
@@ -104,6 +110,8 @@ export default function DashboardPage() {
             <CorporateContractTable />
           </Box>
         )}
+
+        {isIndependentAgent && <MediaKitPage />}
 
         {isAffiliate && (
           <Box bg='surface' border='1px solid gray.200' p={5} my={6}>

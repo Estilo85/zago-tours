@@ -78,7 +78,7 @@ export function useUpdateProfile() {
     mutationFn: (data: any) =>
       apiRequest(API_ENDPOINTS.USERS.UPDATE_PROFILE, {
         method: 'PATCH',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onMutate: async (newData) => {
       await queryClient.cancelQueries({ queryKey: userKeys.profile() });

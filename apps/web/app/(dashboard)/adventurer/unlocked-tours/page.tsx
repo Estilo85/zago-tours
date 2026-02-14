@@ -1,8 +1,9 @@
 'use client';
 
 import { AppLink } from '@/components/ui/link/AppLink';
-import { Box, Button, Grid, Heading, Card, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, Heading, Card, Icon } from '@chakra-ui/react';
 import React from 'react';
+import { Play } from 'lucide-react';
 
 const videos = [
   {
@@ -59,14 +60,39 @@ export default function UnlockedTours() {
         {videos.map((video, index) => (
           <Card.Root key={index} boxShadow='md' borderRadius='lg'>
             <Card.Body>
-              <Box mb={4}>
+              <Box
+                mb={4}
+                position='relative'
+                height='200px'
+                bg='gray.200'
+                borderRadius='lg'
+                overflow='hidden'
+              >
                 <iframe
                   src={video.url.replace('/view?usp=drivesdk', '/preview')}
                   width='100%'
-                  height='200'
-                  style={{ borderRadius: '8px', border: 'none' }}
+                  height='100%'
+                  style={{ border: 'none' }}
                   title={video.name}
                 />
+
+                {/* Play button overlay */}
+                <Box
+                  position='absolute'
+                  top='50%'
+                  left='50%'
+                  transform='translate(-50%, -50%)'
+                  pointerEvents='none'
+                >
+                  <Box
+                    bg='rgba(0, 0, 0, 0.6)'
+                    borderRadius='full'
+                    p={3}
+                    display='flex'
+                  >
+                    <Icon as={Play} boxSize={6} color='white' fill='white' />
+                  </Box>
+                </Box>
               </Box>
               <Heading size='md'>{video.name}</Heading>
             </Card.Body>

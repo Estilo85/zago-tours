@@ -12,35 +12,34 @@ import {
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
 import { TestimonialCard } from '../ui/card/TestimonialCard';
-import { ResponsiveImage } from '../media/ResponsiveImage';
 
 const testimonials = [
   {
     qoute:
       " Nunca deja de ser increíble' es una frase que dije una y otra vez! Este fue un viaje místico increíble con impresionantes vistas inspiradoras",
     author: 'Atend John',
-    avatarUrl: '/images/home/home-how-it-work-hero-3.webp',
+    // avatarUrl: '/images/home/home-how-it-work-hero-3.webp',
     rating: 5,
   },
   {
     qoute:
       '5 stars isn’t even enough. It’s an incredible experience. We have been traveling for almost 13 months now and it’s one of our highlights',
     author: 'Sara Mohamed',
-    avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
+    // avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
     rating: 5,
   },
   {
     qoute:
       'Had a fabulous experience from start to finish with Moses and his team. Excellent communication, tailored options, and a great experience provided on ground. Support local operators!',
     author: 'Joe Atla',
-    avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
+    // avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
     rating: 5,
   },
   {
     qoute:
       'As a first time and second time rafting couple, we were amazed about how serious they take safety measures. They explain you how to react and what to do. We always felt safe, even with the rough river conditions. Two times we needed to walk because the water level was just too high. We didn’t mind at all, because safety first. Halfway you enjoy your lunch together with the crew. They prepare it themselves. It was very nice. And the fruits oh my oh my so sweet!',
     author: 'San Martins',
-    avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
+    // avatarUrl: '/images/home/home-how-it-work-hero-1.webp',
     rating: 5,
   },
 ];
@@ -81,7 +80,7 @@ export function Testimonials() {
             </IconButton>
           </Carousel.PrevTrigger>
 
-          <Box
+          {/* <Box
             as='span'
             width='fit-content'
             position='absolute'
@@ -94,14 +93,14 @@ export function Testimonials() {
               height='50px'
               alt='testimonial-icon'
             />
-          </Box>
+          </Box> */}
           <Carousel.ItemGroup>
             {testimonials.map((item, index) => (
               <Carousel.Item key={index} index={index}>
                 <TestimonialCard
                   quote={item.qoute}
                   author={item.author}
-                  avatarUrl={item.avatarUrl}
+                  // avatarUrl={item.avatarUrl}
                   rating={item.rating}
                 />
               </Carousel.Item>

@@ -14,12 +14,14 @@ const float = keyframes`
 
 const DESTINATIONS = [
   { name: 'Chile', top: '75%', left: '25%' },
-  { name: 'Peru Nepal', top: '25%', left: '72%' },
+  { name: 'Peru', top: '25%', left: '72%' },
+  { name: 'Nepal', top: '45%', left: '72%' },
   { name: 'Mexico', top: '35%', left: '15%' },
   { name: 'United States', top: '20%', left: '12%' },
   { name: 'Ecuador', top: '55%', left: '22%' },
   { name: 'Puerto Rico', top: '42%', left: '28%' },
-  { name: 'Tibet Bhutan', top: '30%', left: '78%' },
+  { name: 'Tibet', top: '30%', left: '78%' },
+  { name: 'Bhutan', top: '30%', left: '48%' },
   { name: 'India', top: '48%', left: '70%' },
   { name: 'Tanzania', top: '60%', left: '55%' },
   { name: 'Uganda', top: '52%', left: '52%' },
