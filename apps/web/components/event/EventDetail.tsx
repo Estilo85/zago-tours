@@ -117,7 +117,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
             >
               <Stack spaceY={2}>
                 <Badge
-                  colorPalette={event.isSignature ? 'yellow' : 'blue'}
+                  colorPalette={event.isSignature ? 'green.200' : 'dark'}
                   alignSelf='start'
                   size='lg'
                 >

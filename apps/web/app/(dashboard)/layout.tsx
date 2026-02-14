@@ -24,19 +24,6 @@ export default function DashboardLayout({
   const [open, setOpen] = useState(false);
   const { user, isAuthenticated, isLoading } = useAuthSession();
 
-  if (isLoading) {
-    return (
-      <Center h='100vh' bg='gray.50'>
-        <VStack gap={4}>
-          <Spinner size='xl' width='xl' color='primary' />
-          <Heading size='sm' color='gray.600'>
-            Loading...
-          </Heading>
-        </VStack>
-      </Center>
-    );
-  }
-
   if (!isAuthenticated || !user) return null;
 
   const userRole = user.role as UserRole;

@@ -5,6 +5,7 @@ import { UserController } from './user.controller';
 import { Role } from '@zagotours/database';
 import { authenticate } from 'src/shared/middleware/authentication.middleware';
 import { authorizeRoles } from 'src/shared/middleware/authorization.middleware';
+import { upload } from 'src/config/multer.config';
 
 const router: Router = Router();
 
@@ -29,7 +30,12 @@ router.get('/profile', authenticate, userController.getProfile);
  * @desc    Update current user's profile
  * @access  Private
  */
-router.put('/profile', authenticate, userController.updateProfile);
+router.put(
+  '/profile',
+  authenticate,
+  upload.single('media'),
+  userController.updateProfile,
+);
 
 /**
  * @route   GET /api/users/referrals
@@ -85,7 +91,6 @@ router.patch(
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   userController.promoteSafetyAmbassador,
 );
-
 
 /**
  * @route   PUT /api/users/:id/profile

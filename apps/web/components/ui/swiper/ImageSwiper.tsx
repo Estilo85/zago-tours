@@ -26,7 +26,7 @@ export const ImageSwiper = ({
   const SliderComponent = Slider as any;
 
   return (
-    <Box maxW='100%' height='fit-content' mx='auto' borderRadius='3xl'>
+    <Box maxW='100%' mx='auto' borderRadius='3xl'>
       <SliderComponent {...settings}>
         {images.map((image, index) => (
           <Box key={index} position='relative'>
