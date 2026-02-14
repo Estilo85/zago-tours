@@ -35,12 +35,13 @@ export const mySteps = [
           >
             Hi, I'm Esther 👋
           </Heading>
-          <Text fontSize='lg' lineHeight='relaxed' letterSpacing='wide'>
-            Good to have you here. Welcome to the Zago side. Before Zago Tours,
-            I ran Zippa Marketing, connecting thousands of travel professionals
-            across 70+ countries. I was the person people called when things
-            went wrong: a traveler in trouble, an operator panicking, a trip
-            that suddenly felt unsafe.
+          <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
+            Good to have you here. <br />
+            Welcome to the Zago side. <br />
+            Before Zago Tours, I ran Zippa Marketing, connecting thousands of
+            travel professionals across 70+ countries. <br />I was the person
+            people called when things went wrong: a traveler in trouble, an
+            operator panicking, a trip that suddenly felt unsafe.
           </Text>
         </Stack>
         <ResponsiveImage

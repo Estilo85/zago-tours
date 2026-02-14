@@ -24,11 +24,14 @@ export class CloudinaryService {
   static async uploadFile(
     file: Express.Multer.File,
     context: UploadContext,
+    customId?: string,
   ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: this.getFolderName(context),
+          public_id: customId,
+          invalidate: true,
           resource_type: 'auto',
           transformation: file.mimetype.startsWith('image/')
             ? [{ quality: 'auto:good', fetch_format: 'auto' }]

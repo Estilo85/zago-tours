@@ -58,7 +58,6 @@ export class AdventureController {
   );
 
   //==== UPDATE AN ADVENTURE ======
-  //==== UPDATE AN ADVENTURE ======
   update = asyncHandler(
     async (
       req: ReqParamsBody<UuidParam, UpdateAdventureDto>,
@@ -164,7 +163,6 @@ export class AdventureController {
     },
   );
 
-  //==== GET ADVENTURE BY ID ======
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const { id } = req.params;
