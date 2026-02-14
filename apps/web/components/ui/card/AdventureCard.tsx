@@ -93,12 +93,14 @@ const AdventureCard = ({
         </AspectRatio>
 
         {/* Top Floating Badges */}
+        {/* Top Floating Badges */}
         <Flex
           position='absolute'
           top='3'
           left='3'
           right='3'
-          justify='space-between'
+          justify='flex-end' // Changed from 'space-between'
+          gap='2' // Add gap between badges
           zIndex='2'
         >
           {adventure.isVerified && (
@@ -113,6 +115,7 @@ const AdventureCard = ({
               display='flex'
               alignItems='center'
               fontSize='xs'
+              mr='auto'
             >
               Verified <Icon as={CheckCircleIcon} ml='1' boxSize='3' />
             </Badge>
