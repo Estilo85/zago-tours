@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Box,
   Button,
@@ -17,14 +17,25 @@ import {
   SimpleGrid,
   Badge,
   Field,
+  Image,
 } from '@chakra-ui/react';
 
-import { LuUser, LuMail, LuPhone, LuGlobe, LuSave } from 'react-icons/lu';
+import {
+  LuUser,
+  LuMail,
+  LuPhone,
+  LuGlobe,
+  LuSave,
+  LuUpload,
+  LuX,
+} from 'react-icons/lu';
 import { useUpdateProfile, useUserProfile } from '@/hooks';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 export default function SettingPage() {
   const { data: profileResponse, isLoading } = useUserProfile();
   const updateProfile = useUpdateProfile();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const userData = profileResponse?.data;
 
@@ -32,8 +43,10 @@ export default function SettingPage() {
     name: '',
     phone: '',
     country: '',
-    image: '',
   });
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   // Sync data when fetched
   useEffect(() => {
@@ -42,8 +55,8 @@ export default function SettingPage() {
         name: userData.name || '',
         phone: userData.phone || '',
         country: userData.country || '',
-        image: userData.image || '',
       });
+      setImagePreview(userData.image || '');
     }
   }, [userData]);
 
@@ -51,12 +64,58 @@ export default function SettingPage() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateProfile.mutate(formData);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      // Validate file size (e.g., max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert('Image size should be less than 5MB');
+        return;
+      }
+
+      setImageFile(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  if (isLoading) return <Box p={10}>Loading profile...</Box>;
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview(userData?.image || '');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Create FormData
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('phone', formData.phone);
+    formDataToSend.append('country', formData.country);
+
+    if (imageFile) {
+      formDataToSend.append('media', imageFile);
+    }
+
+    updateProfile.mutate(formDataToSend);
+  };
+
+  if (isLoading) return <LoadingState message='Loading profile...' />;
 
   return (
     <Container maxW='4xl' py={10}>
@@ -77,7 +136,7 @@ export default function SettingPage() {
                 <Flex direction='column' align='center'>
                   <Avatar.Root size='2xl' mb={4}>
                     <Avatar.Fallback name={userData?.name} />
-                    <Avatar.Image src={userData?.image} />
+                    <Avatar.Image src={imagePreview} />
                   </Avatar.Root>
                   <Heading size='md'>{userData?.name}</Heading>
                   <Badge variant='subtle' colorPalette='blue' mt={2}>
@@ -157,13 +216,60 @@ export default function SettingPage() {
                   </Field.Root>
 
                   <Field.Root>
-                    <Field.Label>Profile Image URL</Field.Label>
-                    <Input
-                      name='image'
-                      value={formData.image}
-                      onChange={handleChange}
-                      placeholder='https://example.com/avatar.jpg'
-                    />
+                    <Field.Label>Profile Image</Field.Label>
+                    <Stack gap={3}>
+                      <Input
+                        ref={fileInputRef}
+                        type='file'
+                        accept='image/*'
+                        onChange={handleFileChange}
+                        display='none'
+                        id='image-upload'
+                      />
+
+                      {imagePreview && (
+                        <Box position='relative' w='fit-content'>
+                          <Image
+                            src={imagePreview}
+                            alt='Preview'
+                            borderRadius='md'
+                            maxH='200px'
+                            objectFit='cover'
+                          />
+                          {imageFile && (
+                            <Button
+                              position='absolute'
+                              top={2}
+                              right={2}
+                              size='sm'
+                              colorPalette='red'
+                              onClick={handleRemoveImage}
+                            >
+                              <LuX />
+                            </Button>
+                          )}
+                        </Box>
+                      )}
+
+                      <Button
+                        variant='outline'
+                        onClick={() => fileInputRef.current?.click()}
+                        w='fit-content'
+                      >
+                        <LuUpload />
+                        {imageFile ? 'Change Image' : 'Upload Image'}
+                      </Button>
+
+                      {imageFile && (
+                        <Text fontSize='sm' color='fg.muted'>
+                          Selected: {imageFile.name} (
+                          {(imageFile.size / 1024).toFixed(2)} KB)
+                        </Text>
+                      )}
+                    </Stack>
+                    <Field.HelperText>
+                      Accepts JPG, PNG, GIF. Max size: 5MB
+                    </Field.HelperText>
                   </Field.Root>
 
                   <Field.Root>
