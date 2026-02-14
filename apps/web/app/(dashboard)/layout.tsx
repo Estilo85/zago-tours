@@ -7,13 +7,14 @@ import {
   CloseButton,
   Heading,
   VStack,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Navbar } from './_components/navbar/navbar';
 import { Sidebar } from './_components/sidebar/sidebar';
 import { UserRole } from './_config/menu-config';
 import { useAuthSession } from '@/hooks';
-import DashboardHeader from './_components/header/DashboardHeader';
 
 export default function DashboardLayout({
   children,
@@ -21,7 +22,20 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const { user, isAuthenticated } = useAuthSession();
+  const { user, isAuthenticated, isLoading } = useAuthSession();
+
+  if (isLoading) {
+    return (
+      <Center h='100vh' bg='gray.50'>
+        <VStack gap={4}>
+          <Spinner size='xl' width='xl' color='primary' />
+          <Heading size='sm' color='gray.600'>
+            Loading...
+          </Heading>
+        </VStack>
+      </Center>
+    );
+  }
 
   if (!isAuthenticated || !user) return null;
 
