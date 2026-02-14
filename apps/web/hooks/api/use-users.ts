@@ -64,7 +64,7 @@ export function useUpdateUserById() {
     onError: (error: any) => {
       toaster.create({
         title: 'Update Failed',
-        description: error.message || 'Failed to update user profile',
+        description: 'Failed to update user profile',
         type: 'error',
       });
     },
@@ -77,7 +77,7 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: (data: any) =>
       apiRequest(API_ENDPOINTS.USERS.UPDATE_PROFILE, {
-        method: 'PATCH',
+        method: 'PUT',
         body: data,
       }),
     onMutate: async (newData) => {
@@ -105,7 +105,7 @@ export function useUpdateProfile() {
       }
       toaster.create({
         title: 'Update Failed',
-        description: error.message || 'Failed to update profile',
+        description: 'Failed to update profile',
         type: 'error',
       });
     },
