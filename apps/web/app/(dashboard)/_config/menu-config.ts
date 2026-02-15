@@ -44,7 +44,7 @@ const adminMenuItems = [
   { label: 'Planning Calls', icon: LuTicket, href: '/admin/planning-calls' },
   { label: 'Inquiries', icon: LuFileText, href: '/admin/inquiries' },
 
-  // { label: 'Destinations', icon: LuGlobe, href: '/admin/destinations' },
+  { label: 'Subscribers', icon: LuGlobe, href: '/admin/newsletter' },
 
   // Settings
   { label: 'Settings', icon: LuSettings, href: '/admin/settings' },

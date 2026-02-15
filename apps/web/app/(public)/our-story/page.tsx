@@ -12,6 +12,7 @@ import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { ArrowRight } from 'lucide-react';
 import { useAuthSession } from '@/hooks';
+import Image from 'next/image';
 
 export const mySteps = [
   {
@@ -51,7 +52,7 @@ export const mySteps = [
           height='200px'
           maxW='100%'
           objectFit='cover'
-          objectPosition='top'
+          objectPosition='right top'
         />
       </Box>
     ),
@@ -66,15 +67,16 @@ export const mySteps = [
         bg='white'
         shadow='sm'
       >
-        <Text fontSize='lg' lineHeight='relaxed' letterSpacing='wide'>
-          I would help fix the situation quietly… but deep down, I knew these
-          incidents weren't random. Then came the moment that changed me.
-          Someone shared a story in our community—an adventure traveler whose
-          adventure ended in a tragedy that should never have happened. They
-          asked for my thoughts, and I couldn't look away. I needed to
-          understand "why." My research uncovered a truth the industry doesn't
-          talk about enough: Adventure travel is growing fast, but safety hasn't
-          grown with it.
+        <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
+          I would help fix the situation quietly… <br />
+          but deep down, I knew these incidents weren't random. <br /> Then came
+          the moment that changed me. <br /> Someone shared a story in our
+          community an adventure traveler whose adventure ended in a tragedy
+          that should never have happened. <br /> They asked for my thoughts,
+          and I couldn't look away. I needed to understand "why." <br /> My
+          research uncovered a truth the industry doesn't talk about enough:
+          Adventure travel is growing fast, <br /> but safety hasn't grown with
+          it.
         </Text>
       </Box>
     ),
@@ -89,14 +91,15 @@ export const mySteps = [
         bg='white'
         shadow='sm'
       >
-        <Text fontSize='lg' lineHeight='relaxed' letterSpacing='wide'>
-          Young explorers are stepping into the world with courage and
-          curiosity, but too often, without protection or trust. That didn't sit
-          right with me. And I could no longer pretend it wasn't happening. So I
-          started Zago Tours. A place where freedom and safety can finally
-          coexist. Where every adventure is verified. Where travelers feel
-          excited, not anxious. Because the world deserves better adventures.
-          And young travelers deserve to come home safely, every single time.
+        <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
+          Young explorers are stepping into the world <br /> with courage and
+          curiosity, but too often, <br /> without protection or trust. <br />{' '}
+          That didn't sit right with me. And I could no longer pretend it wasn't
+          happening. <br /> So I started Zago Tours. A place where freedom and
+          safety can finally coexist. Where every adventure is verified. Where
+          travelers feel excited, not anxious. <br /> Because the world deserves
+          better adventures. And young travelers deserve to come home safely,
+          every single time.
         </Text>
       </Box>
     ),

@@ -36,9 +36,6 @@ const CommentItem = ({
         pl={2}
       >
         <Text cursor='pointer' _hover={{ color: 'primary.600' }}>
-          Like
-        </Text>
-        <Text cursor='pointer' _hover={{ color: 'primary.600' }}>
           Reply
         </Text>
         <Text fontWeight='normal'>{time}</Text>

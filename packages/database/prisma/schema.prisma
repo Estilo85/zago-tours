@@ -3,7 +3,7 @@
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL") 
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -434,4 +434,11 @@ model DestinationCountry {
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+}
+
+
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
 }

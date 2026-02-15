@@ -14,7 +14,7 @@ export default function FormSection() {
         color='primary'
         mb={6}
       >
-        Can't Find what <br /> you looking for?
+        Can't find what <br /> you looking for?
       </Heading>
 
       <GeneralEnquiryForm />

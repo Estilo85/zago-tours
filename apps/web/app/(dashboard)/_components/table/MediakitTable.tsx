@@ -2,48 +2,107 @@
 
 import { useState } from 'react';
 import { Box, Text, HStack, IconButton, Menu, Portal } from '@chakra-ui/react';
-import { MoreVertical, FileText } from 'lucide-react';
+import { MoreVertical, FileText, ExternalLink, Download } from 'lucide-react';
 import { Column, DataTable } from '../table/DataTable';
 import AdminTableWrapper from '../table/AdminTableWrapper';
 import { DataTableSkeleton } from '../table/Datatableskeleton';
 import { formatDate } from '@/utils/DateFormat';
 
-// Define your MediaKit type based on your API response
 interface MediaKit {
   id: string;
   adventureName: string;
   createdAt: string;
+  driveUrl: string;
 }
 
 export function MediaKitTable() {
-  // Replace with your actual hook
-  // const { data: response, isLoading, error } = useMediaKits();
-  // const mediaKits = response?.data || [];
-
-  // Mock data for demonstration
   const isLoading = false;
   const error = null;
+
   const mediaKits: MediaKit[] = [
     {
       id: '1',
       adventureName: 'Safari Adventure Kenya',
       createdAt: '2026-02-10T10:00:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1EngUqCMIFaFQ0eoaxexs69e6Rvk1jQkB',
     },
     {
       id: '2',
       adventureName: 'Mountain Hiking Nepal',
       createdAt: '2026-02-12T14:30:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1_qPTpjlYb7nmYLGGYazIWKOEsPdNvIa2',
+    },
+    {
+      id: '3',
+      adventureName: 'Beach Escape Bali',
+      createdAt: '2026-02-13T09:00:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1BmAbNfu5o1BgwjPtujNsvg0GtQ0eENu5',
+    },
+    {
+      id: '4',
+      adventureName: 'Desert Tour Dubai',
+      createdAt: '2026-02-14T11:00:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1hobOsbzM5NRsLdo4u0ah-_mZJzEcWFq0',
+    },
+    {
+      id: '5',
+      adventureName: 'City Lights Tokyo',
+      createdAt: '2026-02-14T16:00:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/13ppM5bklzm30uj9vxtx35yrbwfHjNmGL',
+    },
+    {
+      id: '6',
+      adventureName: 'Amazon Rainforest Expedition',
+      createdAt: '2026-02-15T08:30:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1SWCUwRPTUs9RtA_tGR0XhXkWUJmn_sHu',
+    },
+    {
+      id: '7',
+      adventureName: 'Swiss Alps Skiing',
+      createdAt: '2026-02-15T12:00:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1YnDhjlbNHqNAI5oUAA1b3m7SfOABRuVZ',
+    },
+    {
+      id: '8',
+      adventureName: 'Northern Lights Iceland',
+      createdAt: '2026-02-15T18:45:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1XldP_jlC7CP37bORfDskBBqff_QrKPTW',
+    },
+    {
+      id: '9',
+      adventureName: 'Great Wall Trek China',
+      createdAt: '2026-02-16T07:15:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1HaM87cXHTAxDRVz3Hn37JPXxACv_wvbp',
+    },
+    {
+      id: '10',
+      adventureName: 'Pyramids Giza Tour',
+      createdAt: '2026-02-16T10:30:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1KOaOGN7UM9xxHH9k6m8MU5JHoouSQaSy',
     },
   ];
 
   const handleView = (mediaKit: MediaKit) => {
-    // Handle view logic - maybe open a modal or navigate to detail page
-    console.log('View media kit:', mediaKit);
+    if (mediaKit.driveUrl) {
+      window.open(mediaKit.driveUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleDownload = (mediaKit: MediaKit) => {
-    // Handle download logic - call your API endpoint
-    console.log('Download media kit:', mediaKit);
+    if (mediaKit.driveUrl) {
+      const win = window.open(mediaKit.driveUrl, '_blank');
+      if (win) win.focus();
+    }
   };
 
   const columns: Column<MediaKit>[] = [
@@ -75,13 +134,17 @@ export function MediaKitTable() {
               <Menu.Positioner>
                 <Menu.Content>
                   <Menu.Item value='view' onClick={() => handleView(row)}>
-                    View
+                    <HStack gap={2}>
+                      <ExternalLink size={14} /> View Folder
+                    </HStack>
                   </Menu.Item>
                   <Menu.Item
                     value='download'
                     onClick={() => handleDownload(row)}
                   >
-                    Download
+                    <HStack gap={2}>
+                      <Download size={14} /> Open to Download
+                    </HStack>
                   </Menu.Item>
                 </Menu.Content>
               </Menu.Positioner>
@@ -115,7 +178,7 @@ export function MediaKitTable() {
       title='Media Kit'
       hasData={mediaKits.length > 0}
       emptyIcon={<FileText size={48} />}
-      emptyText='No media kits available. Media kits will appear here once adventures are created.'
+      emptyText='No media kits available.'
     >
       <DataTable columns={columns} data={mediaKits} />
     </AdminTableWrapper>

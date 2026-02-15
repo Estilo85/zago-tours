@@ -19,7 +19,7 @@ import { AppLink } from '../ui/link/AppLink';
 
 const destinations = createListCollection({
   items: [
-    { label: 'All cities', value: '' },
+    { label: 'All countries', value: '' },
     { label: 'Chile', value: 'Chile' },
     { label: 'Peru', value: 'Peru Nepal' },
     { label: 'Mexico', value: 'Mexico' },
@@ -153,7 +153,7 @@ export const AdventureHero = ({
                 >
                   <Select.Control>
                     <Select.Trigger>
-                      <Select.ValueText placeholder='Select City' />
+                      <Select.ValueText placeholder='Select Country' />
                       <Select.Indicator />
                     </Select.Trigger>
                   </Select.Control>

@@ -196,6 +196,11 @@ export const API_ENDPOINTS = {
       buildUrl(`/dashboard/affiliate/${affiliateId}`),
   },
 
+  NEWSLETTER: {
+    SUBSCRIBE: buildUrl('/newsletter/subscribe'),
+    LIST: buildUrl('/newsletter/list'),
+  },
+
   // Destination Countries
   COUNTRIES: {
     LIST: buildUrl('/countries'),

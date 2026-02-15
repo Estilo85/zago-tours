@@ -26,6 +26,8 @@ import { Send } from 'lucide-react';
 import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import { useState } from 'react';
+import { useSubscribeToNewsletter } from '@/hooks/api/use-newsletter';
 
 const support = [
   { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -34,6 +36,16 @@ const support = [
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const { mutate: subscribe, isPending } = useSubscribeToNewsletter();
+
+  const handleSubscribe = () => {
+    if (!email) return;
+    subscribe(email, {
+      onSuccess: () => setEmail(''),
+    });
+  };
+
   return (
     <Box bg='primary' mt='auto' shadow='0 -10px 20px rgba(0,0,0,0.05)'>
       <Container maxW='1440px' p={{ base: 6, md: 10 }}>
@@ -119,10 +131,13 @@ export default function Footer() {
             zIndex={1}
           >
             <Text fontWeight='bold' color='textInverse'>
-              Join Movement
+              Join The Movement
             </Text>
             <Box position='relative'>
               <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isPending}
                 placeholder='Enter  email...'
                 size={{ base: 'sm', md: 'lg' }}
                 w='full'
@@ -147,6 +162,8 @@ export default function Footer() {
                 colorPalette='red'
                 bg='secondary'
                 cursor='pointer'
+                onClick={handleSubscribe}
+                loading={isPending}
               >
                 <Icon as={Send} color='dark' />
               </IconButton>
@@ -198,7 +215,7 @@ export default function Footer() {
             <Text fontWeight='bold' mb={2} color='textInverse'>
               Contact Us
             </Text>
-            <Text>Email: partnerships@zagotours.com</Text>
+            <Text>partnerships@zagotours.com</Text>
             <Text>Phone: +44-7418-627-748</Text>
           </Stack>
         </SimpleGrid>
@@ -210,7 +227,7 @@ export default function Footer() {
             Safety as a Sysytem <sup>TM</sup>{' '}
           </Text>
           <Text>
-            © {new Date().getFullYear()} ZagoTours. All rights reserved.
+            © {new Date().getFullYear()} Zago Tours. All rights reserved.
           </Text>
         </Stack>
       </Container>

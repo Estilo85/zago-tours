@@ -105,6 +105,11 @@ export const planningCallKeys = {
   myCalls: () => [...planningCallKeys.all, 'my-calls'] as const,
 };
 
+export const newsletterKeys = {
+  all: ['newsletter'] as const,
+  list: () => [...newsletterKeys.all, 'list'] as const,
+};
+
 export const contractKeys = {
   all: ['contracts'] as const,
   lists: () => [...contractKeys.all, 'list'] as const,

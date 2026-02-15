@@ -42,12 +42,13 @@ const cardData = [
     heading: 'Select Your Adventure',
     icon: BookAIcon,
     description:
-      'Every trip on Zago is approved through our Quality and Safety Standard.',
+      'Every trip on Zago is approved through our Quality and Safety Standard. If it is here, it has earned its place.',
   },
   {
     heading: 'Know What to Expect',
     icon: FileExclamationPointIcon,
-    description: 'From the guides to the routes to the conditions on ground.',
+    description:
+      'From the guides to the routes to the conditions on the ground. Clear information, no guesswork, no surprises.',
   },
   {
     heading: 'Go',
@@ -179,11 +180,11 @@ export const HowItWorks = () => {
                 <Avatar.Fallback fontSize='xs'>+</Avatar.Fallback>
               </Avatar.Root>
             </AvatarGroup>
-            <Text fontSize={{ base: 'md', md: '2xl' }}>
+            <Text fontSize={{ base: 'md', md: '2xl' }} wordSpacing='normal'>
               Our team and partners aren't new to this, we've spent decades
               leading travelers up mountains, across oceans, and into the kind
               of stories you never forget. Together, that's over 100 years of
-              experience fueling your nextadventure.
+              experience fueling your next adventure.
             </Text>
           </Stack>
         </Box>
