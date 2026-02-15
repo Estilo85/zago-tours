@@ -18,7 +18,8 @@ export const TestimonialCard = ({
   return (
     <Box
       maxW='sm'
-      h={{ base: 'auto', md: '230px' }}
+      minH={{ base: 'auto', md: '230px' }}
+      maxH={{ base: 'auto', md: '230px' }}
       display='flex'
       flexDirection='column'
       bg='white'
@@ -34,6 +35,8 @@ export const TestimonialCard = ({
         fontSize='md'
         lineHeight='relaxed'
         lineClamp={4}
+        flex='1'
+        overflow='hidden'
       >
         "{quote}"
       </Text>
@@ -45,6 +48,7 @@ export const TestimonialCard = ({
         justify='space-between'
         gap={{ base: 4, md: 0 }}
         pt='4'
+        flexShrink={0}
       >
         <Box order={{ base: 1, md: 2 }}>
           <RatingGroup.Root count={5} value={rating} readOnly size='xs'>
@@ -54,9 +58,7 @@ export const TestimonialCard = ({
         </Box>
 
         <Flex direction='row' align='center' gap='3' order={{ base: 2, md: 1 }}>
-          {/* <AvatarImage src={avatarUrl ?? ''} name={author} /> */}
           <Stack gap='0' textAlign='left'>
-            {' '}
             <Text fontWeight='bold' fontSize='sm' color='gray.800'>
               {author}
             </Text>

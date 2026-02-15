@@ -38,21 +38,24 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
-          <Flex direction='column' minH='100dvh' overflowX='visible'>
-            <Navbar />
-
-            <Box
-              as='main'
-              flex='1'
-              width='100%'
-              display='flex'
-              flexDirection='column'
-            >
+          {/* Main Layout Container - Sticky Footer Pattern */}
+          <Flex direction='column' minH='100dvh' position='relative'>
+            {/* Fixed/Sticky Header */}
+            <Box as='header' width='100%'>
+              <Navbar />
+            </Box>
+            {/* Main Content Area - Takes remaining space */}
+            <Box as='main' flex='1 0 auto' width='100%' position='relative'>
               {children}
             </Box>
 
-            <Footer />
+            {/* Footer - Stays at bottom */}
+            <Box as='footer' flexShrink={0} width='100%' mt='auto'>
+              <Footer />
+            </Box>
           </Flex>
+
+          {/* Toast Notifications - Portal */}
           <Toaster />
         </Provider>
       </body>

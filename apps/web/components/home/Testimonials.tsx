@@ -81,7 +81,7 @@ export function Testimonials() {
               variant='subtle'
               borderRadius='full'
               aria-label='Previous slide'
-              _hover={{ bg: 'blue.50', color: 'blue.600' }}
+              _hover={{ bg: 'green.50', color: 'green.600' }}
             >
               <LuArrowLeft />
             </IconButton>
@@ -104,7 +104,7 @@ export function Testimonials() {
               variant='subtle'
               borderRadius='full'
               aria-label='Next slide'
-              _hover={{ bg: 'blue.50', color: 'blue.600' }}
+              _hover={{ bg: 'green.50', color: 'green.600' }}
             >
               <LuArrowRight />
             </IconButton>
