@@ -26,7 +26,7 @@ export default function Post() {
     if (posts.length > 0 && displayPosts.length === 0) {
       setDisplayPosts(posts);
     }
-  }, [posts, displayPosts.length]);
+  }, [posts]);
 
   if (isLoading) {
     return <PostPageSkeleton />;
