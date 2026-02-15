@@ -7,8 +7,6 @@ import {
   CloseButton,
   Heading,
   VStack,
-  Center,
-  Spinner,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Navbar } from './_components/navbar/navbar';
@@ -22,11 +20,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const { user, isAuthenticated, isLoading } = useAuthSession();
+  const { user } = useAuthSession();
 
-  if (!isAuthenticated || !user) return null;
-
-  const userRole = user.role as UserRole;
+  const userRole = user?.role as UserRole;
 
   return (
     <Flex direction='column' h='100vh' bg='gray.50' overflow='hidden'>
@@ -39,7 +35,14 @@ export default function DashboardLayout({
           borderRight='1px solid'
           borderColor='gray.200'
           display={{ base: 'none', md: 'block' }}
-          overflowY='scroll'
+          overflowY='auto'
+          css={{
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+            '-ms-overflow-style': 'none',
+            'scrollbar-width': 'none',
+          }}
         >
           <Sidebar role={userRole} />
         </Box>
@@ -63,7 +66,6 @@ export default function DashboardLayout({
                     Menu
                   </Heading>
                 </Drawer.Header>
-                {/* Drawer handles scroll */}
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     <Sidebar role={userRole} onClose={() => setOpen(false)} />
@@ -78,18 +80,26 @@ export default function DashboardLayout({
         <Flex direction='column' flex='1' overflow='hidden'>
           <Navbar onOpen={() => setOpen(true)} />
 
-          {/* SINGLE SCROLL AREA */}
+          {/* SCROLLABLE CONTENT AREA */}
           <Box
             flex='1'
             overflowY='auto'
-            minH={{ base: '70vh', md: '75vh' }}
-            h='full'
-            px={{ base: 2, md: 8 }}
-            pb='64'
-            pt='16'
-            w='full'
+            css={{
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              '-ms-overflow-style': 'none',
+              'scrollbar-width': 'none',
+            }}
           >
-            {children}
+            <Box
+              px={{ base: 4, md: 6 }}
+              py={{ base: 4, md: 6 }}
+              pb={{ base: 8, md: 12 }}
+              maxW='100%'
+            >
+              {children}
+            </Box>
           </Box>
         </Flex>
       </Flex>

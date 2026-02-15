@@ -171,9 +171,9 @@ export function useJoinEvent() {
       apiRequest(API_ENDPOINTS.EVENTS.JOIN(id), {
         method: 'POST',
       }),
-    onSuccess: (_result, id) => {
-      queryClient.invalidateQueries({ queryKey: eventKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
+    onSuccess: async (_result, id) => {
+      await queryClient.refetchQueries({ queryKey: eventKeys.detail(id) });
+      await queryClient.refetchQueries({ queryKey: eventKeys.myBookings() });
       toaster.create({
         title: 'Registration Successful',
         description: 'You have successfully registered for this event',
@@ -198,9 +198,9 @@ export function useCancelEventRegistration() {
       apiRequest(API_ENDPOINTS.EVENTS.CANCEL_REGISTRATION(id), {
         method: 'POST',
       }),
-    onSuccess: (_result, id) => {
-      queryClient.invalidateQueries({ queryKey: eventKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
+    onSuccess: async (_result, id) => {
+      await queryClient.refetchQueries({ queryKey: eventKeys.detail(id) });
+      await queryClient.refetchQueries({ queryKey: eventKeys.myBookings() });
       toaster.create({
         title: 'Registration Cancelled',
         description: 'Your event registration has been cancelled',

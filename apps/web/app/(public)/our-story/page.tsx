@@ -7,7 +7,6 @@ import { ScrollProgressSteps } from '@/components/ui/stepper/scroll-progress-ste
 
 import { Box, Heading, Text, Stack, Center, Icon } from '@chakra-ui/react';
 import React from 'react';
-import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
 import { ArrowRight } from 'lucide-react';

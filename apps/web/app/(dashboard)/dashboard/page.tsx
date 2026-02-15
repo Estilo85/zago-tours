@@ -61,11 +61,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <Box px={{ base: 0, md: 6 }}>
+    <Box>
       <WelcomeBanner />
       <Stack gap={8}>
-        {/* Stats Grid */}
-
         {!statsLoading && !statsData && (
           <Center p={6}>
             <Text color='gray.500'>No dashboard data available</Text>
@@ -73,11 +71,7 @@ export default function DashboardPage() {
         )}
         <StatsGrid stats={getStatsConfig()} isLoading={statsLoading} />
 
-        {isCooperateAgent && (
-          <>
-            <TripRequestsTable />
-          </>
-        )}
+        {isCooperateAgent && <TripRequestsTable />}
 
         {isAnyAdmin && (
           <Box>
@@ -93,9 +87,7 @@ export default function DashboardPage() {
         )}
 
         {statsData?.role === 'ADVENTURER' && statsData?.stats && (
-          <>
-            <UpcomingAdventuresAndEventsPage />
-          </>
+          <UpcomingAdventuresAndEventsPage />
         )}
 
         {!isAnyAdmin && <TripPlanningCalls />}
@@ -103,7 +95,7 @@ export default function DashboardPage() {
         {isAdventurer && <SafetyAmbassadorTable />}
 
         {isCooperateAgent && (
-          <Box my={6} bg='surface' border='1px solid gray.200' p={5}>
+          <Box bg='surface' border='1px solid gray.200' p={5}>
             <Heading mb={6} fontSize='lg' fontWeight='bold'>
               Corporate Contract
             </Heading>
@@ -114,7 +106,7 @@ export default function DashboardPage() {
         {isIndependentAgent && <MediaKitPage />}
 
         {isAffiliate && (
-          <Box bg='surface' border='1px solid gray.200' p={5} my={6}>
+          <Box bg='surface' border='1px solid gray.200' p={5}>
             <Heading mb={6} fontSize='lg' fontWeight='bold'>
               Affiliate Management
             </Heading>
@@ -123,7 +115,6 @@ export default function DashboardPage() {
         )}
         {!isAnyAdmin && (
           <Flex
-            my={6}
             direction={{ base: 'column', md: 'row' }}
             justify='space-between'
             alignItems='stretch'
