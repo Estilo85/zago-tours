@@ -20,6 +20,8 @@ import {
 } from '@chakra-ui/react';
 import { Image as ImageIcon, X, CirclePlay } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { SelectInput } from '../input/SelectInput';
+import { TripTypeLabels } from '@zagotours/types';
 
 export function PostFormModal() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -112,13 +114,19 @@ export function PostFormModal() {
                   </Text>
                 </VStack>
               </Flex>
-
-              <Input
-                placeholder='Title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                mb={3}
-              />
+              <Box mb={3}>
+                <SelectInput
+                  value={title}
+                  onChange={setTitle}
+                  placeholder='Select trip type'
+                  options={Object.entries(TripTypeLabels).map(
+                    ([value, label]) => ({
+                      label,
+                      value,
+                    }),
+                  )}
+                />
+              </Box>
 
               <Textarea
                 placeholder={`What's on your mind, ${name?.split(' ')[0]}?`}

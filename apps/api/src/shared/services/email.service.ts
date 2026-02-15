@@ -6,6 +6,7 @@ export interface EmailOptions {
   html: string;
   text?: string;
   replyTo?: string;
+  from?: string;
 }
 
 let resendInstance: Resend | null = null;
@@ -24,8 +25,10 @@ const getResendInstance = (): Resend => {
 };
 
 export class EmailService {
-  private static fromEmail =
+  private static adminEmail =
     process.env.PARTNERSHIP_EMAIL || 'partnerships@zagotours.com';
+  private static supportEmail =
+    process.env.SUPPORT_EMAIL || 'support@zagotours.com';
 
   /**
    * Send a single email
@@ -34,14 +37,13 @@ export class EmailService {
     try {
       const resend = getResendInstance();
       await resend.emails.send({
-        from: this.fromEmail,
+        from: options.from || this.adminEmail,
         to: options.to,
         subject: options.subject,
         html: options.html,
         text: options.text,
       });
     } catch (error) {
-      console.error('Failed to send email:', error);
       throw new Error('Email sending failed');
     }
   }
@@ -89,12 +91,68 @@ export class EmailService {
     `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Welcome to Zago Tours',
       html,
     });
   }
 
+  /**
+   * Send password reset email
+   */
+  static async sendPasswordResetEmail(
+    email: string,
+    resetToken: string,
+  ): Promise<void> {
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background-color: #4F46E5; color: white; padding: 20px; text-align: center; }
+          .content { padding: 20px; background-color: #f9fafb; }
+          .button { display: inline-block; padding: 12px 24px; background-color: #4F46E5; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+          .warning { background-color: #FEF2F2; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #EF4444; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Password Reset Request</h1>
+          </div>
+          <div class="content">
+            <p>Hi,</p>
+            <p>We received a request to reset your password for your Zagotours account.</p>
+            
+            <a href="${resetUrl}" class="button">Reset Password</a>
+            
+            <div class="warning">
+              <strong>⚠️ Security Notice:</strong>
+              <p>This link will expire in 1 hour. If you didn't request a password reset, please ignore this email.</p>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+              If the button doesn't work, copy and paste this link into your browser:<br>
+              <a href="${resetUrl}">${resetUrl}</a>
+            </p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+    await this.sendEmail({
+      from: this.supportEmail,
+      to: email,
+      subject: 'Reset Your Password - Zagotours',
+      html,
+    });
+  }
   /**
    * Send admin notification for new general inquiry
    */
@@ -182,7 +240,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: this.fromEmail,
+      to: this.adminEmail,
       subject: `New Inquiry from ${inquiryData.email} - Zagotours`,
       html,
     });
@@ -245,6 +303,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Trip Planning Call Request Received - Zagotours',
       html,
@@ -282,6 +341,7 @@ export class EmailService {
     `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'We Received Your Inquiry - Zagotours',
       html,
@@ -324,6 +384,7 @@ export class EmailService {
     `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Contract Ready for Signature - Zagotours',
       html,
@@ -398,7 +459,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: this.fromEmail,
+      to: this.adminEmail,
       subject: `Contract Signed - ${contractData.userName}`,
       html,
     });
@@ -449,6 +510,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Contract Signed Successfully - Zagotours',
       html,
@@ -534,7 +596,7 @@ export class EmailService {
               ${requestData.preferences}
             </div>
 
-            <a href="${process.env.FRONTEND_URL}/agent/trip-requests/${requestData.requestId}" class="button">View Request Details</a>
+            <a href="${process.env.FRONTEND_URL}/trip-requests/${requestData.requestId}" class="button">View Request Details</a>
             
             <p style="margin-top: 20px;">Please reach out to ${requestData.adventurerName} to discuss their trip requirements.</p>
           </div>
@@ -544,7 +606,8 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: agentEmail,
+      from: this.supportEmail,
+      to: this.adminEmail,
       subject: `New Trip Request: ${requestData.destination} - Zagotours`,
       html,
     });
@@ -617,7 +680,7 @@ export class EmailService {
               </div>
             </div>
 
-            <a href="${process.env.FRONTEND_URL}/agent/callback-requests/${requestData.requestId}" class="button">View Request Details</a>
+            <a href="${process.env.FRONTEND_URL}/callback-requests/${requestData.requestId}" class="button">View Request Details</a>
             
             <p style="margin-top: 20px;">Please reach out to ${requestData.requestorName} at their preferred time to discuss their travel needs.</p>
           </div>
@@ -627,7 +690,8 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: agentEmail,
+      from: this.supportEmail,
+      to: this.adminEmail,
       subject: `New Callback Request from ${requestData.requestorName} - Zagotours`,
       html,
     });
@@ -746,7 +810,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: this.fromEmail,
+      to: this.adminEmail,
       subject: `New Call Request - ${callData.adventurerName} - Zagotours`,
       html,
     });
@@ -858,7 +922,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: this.fromEmail,
+      to: this.adminEmail,
       subject: `New Trip Request - ${requestData.destination} - Zagotours`,
       html,
     });
@@ -946,7 +1010,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
-      to: this.fromEmail,
+      to: this.adminEmail,
       subject: `Unassigned Callback Request - ${callbackData.name}`,
       html,
     });
@@ -1017,6 +1081,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Call Rescheduled - Zagotours',
       html,
@@ -1081,6 +1146,7 @@ export class EmailService {
   `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: 'Call Cancelled - Zagotours',
       html,
@@ -1097,7 +1163,7 @@ export class EmailService {
   ): Promise<void> {
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px;">
-        <h2 style="color: #4F46E5;">Adventure Confirmed! 🎒</h2>
+        <h2 style="color: #4F46E5;">Event Confirmed! 🎒</h2>
         <p>Hi ${name},</p>
         <p>You're officially registered for <strong>${eventDetails.title}</strong>.</p>
         <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
@@ -1110,6 +1176,7 @@ export class EmailService {
     `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: `Confirmed: ${eventDetails.title}`,
       html,
@@ -1134,6 +1201,7 @@ export class EmailService {
     `;
 
     await this.sendEmail({
+      from: this.supportEmail,
       to: email,
       subject: `Cancelled: ${eventTitle}`,
       html,

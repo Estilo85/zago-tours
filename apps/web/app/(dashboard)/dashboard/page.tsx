@@ -118,6 +118,7 @@ export default function DashboardPage() {
             direction={{ base: 'column', md: 'row' }}
             justify='space-between'
             alignItems='stretch'
+            gap={6}
           >
             <CommunityCard />
             <ReferralCard />

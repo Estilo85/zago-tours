@@ -20,11 +20,11 @@ import { formatDate } from '@/utils/DateFormat';
 import { DataTable } from '../../_components/table/DataTable';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
 import { LoadingState } from '@/components/ui/LoadingState';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Grip } from 'lucide-react';
 import { formatTime } from '@/utils/TimeFormat';
 
-export default function AdminEventsPage() {
+function AdminEventsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get('page') || '1');
@@ -152,7 +152,6 @@ export default function AdminEventsPage() {
         )}
       </Box>
 
-      {/* Load More Button (Initial State) */}
       {!isLoading &&
         !showPagination &&
         pagination &&
@@ -165,7 +164,6 @@ export default function AdminEventsPage() {
           </Center>
         )}
 
-      {/* Full Pagination Controls */}
       {!isLoading && showPagination && pagination && (
         <Box mt={6}>
           <PaginationControl
@@ -178,5 +176,13 @@ export default function AdminEventsPage() {
         </Box>
       )}
     </Container>
+  );
+}
+
+export default function AdminEventsPage() {
+  return (
+    <Suspense fallback={<LoadingState message='Loading events...' />}>
+      <AdminEventsContent />
+    </Suspense>
   );
 }

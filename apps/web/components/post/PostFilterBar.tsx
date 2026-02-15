@@ -3,7 +3,7 @@
 import { Box, Flex, Field, Text, HStack, Separator } from '@chakra-ui/react';
 import { MapPin, SwatchBook, Tag, User, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { PostResponseDto } from '@zagotours/types';
+import { PostResponseDto, TripTypeLabels } from '@zagotours/types';
 import { SearchBar } from '../ui/search/Search';
 import { SelectInput } from '../ui/input/SelectInput';
 import { getCountryOptions } from '@/utils/Countries';
@@ -101,6 +101,7 @@ export function PostFilterBar({
           <Separator orientation='vertical' h='50px' />
 
           {/* Interest Filter */}
+          {/* Interest Filter */}
           <Box flex={1}>
             <Field.Root>
               <Field.Label
@@ -118,12 +119,12 @@ export function PostFilterBar({
                 <SelectInput
                   value={selectedTitle}
                   onChange={setSelectedTitle}
-                  placeholder='All Titles'
+                  placeholder='All Interests'
                   width='150px'
-                  options={[...new Set(posts.map((p) => p.title))].map(
-                    (title) => ({
-                      label: title,
-                      value: title,
+                  options={Object.entries(TripTypeLabels).map(
+                    ([value, label]) => ({
+                      label,
+                      value,
                     }),
                   )}
                 />
