@@ -35,9 +35,9 @@ const CommentItem = ({
         spaceX={4}
         pl={2}
       >
-        <Text cursor='pointer' _hover={{ color: 'primary.600' }}>
+        {/* <Text cursor='pointer' _hover={{ color: 'primary.600' }}>
           Reply
-        </Text>
+        </Text> */}
         <Text fontWeight='normal'>{time}</Text>
       </HStack>
     </VStack>
