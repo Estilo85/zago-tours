@@ -65,9 +65,14 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
           )}
           {!isAnyAdmin && (
             <>
-              <Box display={{ base: 'inline', md: 'none' }}>
+              <Box
+                bg='primary'
+                borderRadius='full'
+                p={5}
+                display={{ base: 'inline', md: 'none' }}
+              >
                 <PhoneCall
-                  color='primary'
+                  color='white'
                   onClick={() => setIsPlanningCallDialogOpen(true)}
                 />
               </Box>
