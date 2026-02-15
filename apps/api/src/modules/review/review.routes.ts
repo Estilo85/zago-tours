@@ -15,11 +15,7 @@ const reviewController = new ReviewController(reviewService);
 
 // Public routes
 router.get('/', reviewController.getAll);
-router.get(
-  '/featured',
-  authenticate,
-  reviewController.getFeatured,
-);
+router.get('/featured', authenticate, reviewController.getFeatured);
 router.get(
   '/average-rating',
   authenticate,
@@ -34,12 +30,7 @@ router.get(
 );
 
 // Authenticated routes
-router.post(
-  '/',
-  authenticate,
-
-  reviewController.create,
-);
+router.post('/', authenticate, reviewController.create);
 router.get('/my/reviews', authenticate, reviewController.getMyReviews);
 router.put('/:id', authenticate, reviewController.update);
 router.delete(

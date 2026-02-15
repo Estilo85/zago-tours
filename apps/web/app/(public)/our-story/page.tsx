@@ -27,11 +27,11 @@ export const mySteps = [
           bg='white'
           shadow='sm'
           mb={10}
+          textAlign='left'
         >
           <Heading
             size={{ base: 'xl', md: '2xl' }}
             color='primary'
-            textAlign='left'
             letterSpacing='tight'
           >
             Hi, I'm Esther 👋
@@ -56,20 +56,32 @@ export const mySteps = [
             letterSpacing='wide'
           >
             Before Zago Tours, I ran Zippa Marketing, connecting thousands of
-            travel professionals across 70+ countries. I was the person people
-            called when things went wrong: a traveler in trouble, an operator
-            panicking, a trip that suddenly felt unsafe.
+            travel professionals across 70+ countries.
+          </Text>
+
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            I was the person people called when things went wrong: a traveler in
+            trouble, an operator panicking, a trip that suddenly felt unsafe.
           </Text>
         </Stack>
-        <ResponsiveImage
-          src='/images/events/esther-picture.webp'
-          alt='Esther'
-          borderRadius='xl'
-          height={{ base: '250px', md: '300px' }}
-          maxW='100%'
-          objectFit='cover'
-          objectPosition='center top'
-        />
+        <Box height='400px' width='100%' borderRadius='xl' overflow='hidden'>
+          <Image
+            src='/images/events/esther-picture.webp'
+            alt='Esther'
+            width={800}
+            height={300}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: '50% 20%',
+            }}
+          />
+        </Box>
       </Box>
     ),
   },
@@ -83,7 +95,7 @@ export const mySteps = [
         bg='white'
         shadow='sm'
       >
-        <Stack gap={4}>
+        <Stack textAlign='left' gap={4}>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}
             lineHeight='tall'
@@ -106,17 +118,34 @@ export const mySteps = [
           >
             Someone shared a story in our community — an adventure traveler
             whose adventure ended in a tragedy that should never have happened.
-            They asked for my thoughts, and I couldn't look away. I needed to
-            understand "why."
           </Text>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}
             lineHeight='tall'
             letterSpacing='wide'
           >
-            My research uncovered a truth the industry doesn't talk about
-            enough: Adventure travel is growing fast, but safety hasn't grown
-            with it.
+            They asked for my thoughts, and I couldn't look away.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            I needed to understand "why."
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            My research uncovered a truth the industry doesn't talk about enough
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Adventure travel is growing fast, but safety hasn't grown with it.
           </Text>
         </Stack>
       </Box>
@@ -132,7 +161,7 @@ export const mySteps = [
         bg='white'
         shadow='sm'
       >
-        <Stack gap={4}>
+        <Stack textAlign='left' gap={4}>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}
             lineHeight='tall'
@@ -146,25 +175,56 @@ export const mySteps = [
             lineHeight='tall'
             letterSpacing='wide'
           >
-            That didn't sit right with me. And I could no longer pretend it
-            wasn't happening.
+            That didn't sit right with me.
           </Text>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}
             lineHeight='tall'
             letterSpacing='wide'
           >
-            So I started Zago Tours. A place where freedom and safety can
-            finally coexist. Where every adventure is verified. Where travelers
-            feel excited, not anxious.
+            And I could no longer pretend it wasn't happening.
           </Text>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}
             lineHeight='tall'
             letterSpacing='wide'
           >
-            Because the world deserves better adventures. And young travelers
-            deserve to come home safely, every single time.
+            So I started Zago Tours.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            A place where freedom and safety can finally coexist.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Where every adventure is verified.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Where travelers feel excited, not anxious or a mix of both.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Because the world deserves better adventures.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            And young travelers deserve to come home safely, every single time.
           </Text>
         </Stack>
       </Box>
