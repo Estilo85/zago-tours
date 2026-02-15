@@ -6,7 +6,6 @@ import {
   Text,
   Flex,
   Icon,
-  Stack,
   Box,
   IconButton,
   AspectRatio,
@@ -124,7 +123,8 @@ const AdventureCard = ({
           <IconButton
             aria-label='Like'
             size='sm'
-            variant='ghost'
+            variant={adventure?.isLiked ? 'solid' : 'outline'}
+            colorScheme={adventure?.isLiked ? 'red' : 'gray'}
             onClick={handleLikeClick}
             bg='whiteAlpha.900'
             borderRadius='full'

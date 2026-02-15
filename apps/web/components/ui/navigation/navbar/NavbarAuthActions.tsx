@@ -16,7 +16,7 @@ import {
   Collapsible,
   Box,
 } from '@chakra-ui/react';
-import { ArrowRight, LogOut, ChevronDown, ArrowLeft } from 'lucide-react';
+import { ArrowRight, LogOut, ChevronDown, LayoutDashboard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useRoleStore } from '@/store/role-selector.store';
@@ -55,27 +55,30 @@ export const NavbarAuthActions = () => {
         <Button
           asChild
           variant='outline'
+          aria-label='Dashboard'
           fontWeight='medium'
           px={{ base: 3, md: 5 }}
           py={5}
+          borderRadius={{ base: 'full', md: 'lg' }}
+          _hover={{ bg: 'gray.50', transform: 'scale(1.1)' }}
         >
           <AppLink href='/dashboard'>
-            <ArrowLeft size={16} />
-            Dashboard
+            <LayoutDashboard size={16} />
+            <Text display={{ base: 'none', md: 'inline' }} ml={2}>
+              Dashboard
+            </Text>
           </AppLink>
         </Button>
         <Button
           aria-label='logout'
-          gap={3}
-          fontWeight='bold'
-          px={{ base: 3, md: 5 }}
-          py={5}
           cursor='pointer'
           bg='primary'
           color='white'
+          borderRadius='full'
+          _hover={{ transform: 'scale(1.1)' }}
           onClick={logout}
         >
-          Logout <LogOut size={16} />
+          <LogOut size={16} />
         </Button>
       </Flex>
     );

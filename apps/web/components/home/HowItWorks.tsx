@@ -92,8 +92,10 @@ export const HowItWorks = () => {
             border='1px solid white'
             borderRadius='full'
             letterSpacing='widest'
+            color='primary'
+            fontWeight='semibold'
           >
-            Just breaks, no plans
+            JUST BREAKS, NO PLANS
           </Text>
         </Center>
 

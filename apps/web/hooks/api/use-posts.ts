@@ -176,45 +176,71 @@ export function useToggleLikePost() {
         method: 'POST',
       }),
     onMutate: async (postId) => {
-      // Cancel outgoing queries
-      await queryClient.cancelQueries({ queryKey: postKeys.lists() });
+      // Cancel all post list queries
+      await queryClient.cancelQueries({ queryKey: postKeys.all });
 
-      // Get previous data
-      const previousLists = queryClient.getQueryData(postKeys.lists());
-
-      // Optimistically update the posts list
-      queryClient.setQueryData(postKeys.lists(), (old: any) => {
-        if (!old?.data) return old;
-        return {
-          ...old,
-          data: old.data.map((post: any) =>
-            post.id === postId
-              ? {
-                  ...post,
-                  isLikedByUser: !post.isLikedByUser,
-                  _count: {
-                    ...post._count,
-                    likes: post.isLikedByUser
-                      ? post._count.likes - 1
-                      : post._count.likes + 1,
-                  },
-                }
-              : post,
-          ),
-        };
+      // Snapshot all list queries
+      const previousQueries = queryClient.getQueriesData({
+        queryKey: postKeys.all,
       });
 
-      return { previousLists };
+      // Optimistically update ALL post queries (lists, feed, myPosts, etc.)
+      queryClient.setQueriesData({ queryKey: postKeys.all }, (old: any) => {
+        if (!old?.data) return old;
+
+        // Handle array of posts (list/feed queries)
+        if (Array.isArray(old.data)) {
+          return {
+            ...old,
+            data: old.data.map((post: any) =>
+              post.id === postId
+                ? {
+                    ...post,
+                    isLikedByUser: !post.isLikedByUser,
+                    _count: {
+                      ...post._count,
+                      likes: post.isLikedByUser
+                        ? post._count.likes - 1
+                        : post._count.likes + 1,
+                    },
+                  }
+                : post,
+            ),
+          };
+        }
+
+        // Handle single post (detail query)
+        if (old.data?.id === postId) {
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              isLikedByUser: !old.data.isLikedByUser,
+              _count: {
+                ...old.data._count,
+                likes: old.data.isLikedByUser
+                  ? old.data._count.likes - 1
+                  : old.data._count.likes + 1,
+              },
+            },
+          };
+        }
+
+        return old;
+      });
+
+      return { previousQueries };
     },
     onError: (error: any, postId, context) => {
-      // Rollback on error
-      if (context?.previousLists) {
-        queryClient.setQueryData(postKeys.lists(), context.previousLists);
+      // Rollback all queries
+      if (context?.previousQueries) {
+        context.previousQueries.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
       }
     },
     onSettled: () => {
-      // Refetch to ensure data is in sync
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: postKeys.all });
     },
   });
 }
@@ -228,30 +254,57 @@ export function useSharePost() {
         method: 'POST',
       }),
     onMutate: async (postId) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.lists() });
-      const previousLists = queryClient.getQueryData(postKeys.lists());
-
-      // Optimistically update share count
-      queryClient.setQueryData(postKeys.lists(), (old: any) => {
-        if (!old?.data) return old;
-        return {
-          ...old,
-          data: old.data.map((post: any) =>
-            post.id === postId
-              ? {
-                  ...post,
-                  isSharedByUser: true,
-                  _count: {
-                    ...post._count,
-                    shares: post._count.shares + 1,
-                  },
-                }
-              : post,
-          ),
-        };
+      await queryClient.cancelQueries({ queryKey: postKeys.all });
+      
+      const previousQueries = queryClient.getQueriesData({ 
+        queryKey: postKeys.all 
       });
 
-      return { previousLists };
+      // Optimistically update ALL post queries
+      queryClient.setQueriesData(
+        { queryKey: postKeys.all },
+        (old: any) => {
+          if (!old?.data) return old;
+          
+          // Handle array of posts
+          if (Array.isArray(old.data)) {
+            return {
+              ...old,
+              data: old.data.map((post: any) =>
+                post.id === postId
+                  ? {
+                      ...post,
+                      isSharedByUser: true,
+                      _count: {
+                        ...post._count,
+                        shares: post._count.shares + 1,
+                      },
+                    }
+                  : post
+              ),
+            };
+          }
+          
+          // Handle single post
+          if (old.data?.id === postId) {
+            return {
+              ...old,
+              data: {
+                ...old.data,
+                isSharedByUser: true,
+                _count: {
+                  ...old.data._count,
+                  shares: old.data._count.shares + 1,
+                },
+              },
+            };
+          }
+          
+          return old;
+        }
+      );
+
+      return { previousQueries };
     },
     onSuccess: () => {
       toaster.create({
@@ -261,12 +314,14 @@ export function useSharePost() {
       });
     },
     onError: (error: any, postId, context) => {
-      if (context?.previousLists) {
-        queryClient.setQueryData(postKeys.lists(), context.previousLists);
+      if (context?.previousQueries) {
+        context.previousQueries.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: postKeys.all });
     },
   });
 }

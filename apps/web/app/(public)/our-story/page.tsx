@@ -23,7 +23,7 @@ export const mySteps = [
           border='1px solid'
           borderColor='gray.200'
           borderRadius='2xl'
-          p={{ base: 6, md: 10 }}
+          p={{ base: 4, md: 10 }}
           bg='white'
           shadow='sm'
           mb={10}
@@ -36,23 +36,39 @@ export const mySteps = [
           >
             Hi, I'm Esther 👋
           </Heading>
-          <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
-            Good to have you here. <br />
-            Welcome to the Zago side. <br />
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Good to have you here.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Welcome to the Zago side.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
             Before Zago Tours, I ran Zippa Marketing, connecting thousands of
-            travel professionals across 70+ countries. <br />I was the person
-            people called when things went wrong: a traveler in trouble, an
-            operator panicking, a trip that suddenly felt unsafe.
+            travel professionals across 70+ countries. I was the person people
+            called when things went wrong: a traveler in trouble, an operator
+            panicking, a trip that suddenly felt unsafe.
           </Text>
         </Stack>
         <ResponsiveImage
           src='/images/events/esther-picture.webp'
           alt='Esther'
           borderRadius='xl'
-          height='200px'
+          height={{ base: '250px', md: '300px' }}
           maxW='100%'
           objectFit='cover'
-          objectPosition='right top'
+          objectPosition='center top'
         />
       </Box>
     ),
@@ -63,21 +79,46 @@ export const mySteps = [
         border='1px solid'
         borderColor='gray.200'
         borderRadius='2xl'
-        p={{ base: 6, md: 10 }}
+        p={{ base: 4, md: 10 }}
         bg='white'
         shadow='sm'
       >
-        <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
-          I would help fix the situation quietly… <br />
-          but deep down, I knew these incidents weren't random. <br /> Then came
-          the moment that changed me. <br /> Someone shared a story in our
-          community an adventure traveler whose adventure ended in a tragedy
-          that should never have happened. <br /> They asked for my thoughts,
-          and I couldn't look away. I needed to understand "why." <br /> My
-          research uncovered a truth the industry doesn't talk about enough:
-          Adventure travel is growing fast, <br /> but safety hasn't grown with
-          it.
-        </Text>
+        <Stack gap={4}>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            I would help fix the situation quietly… but deep down, I knew these
+            incidents weren't random.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Then came the moment that changed me.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Someone shared a story in our community — an adventure traveler
+            whose adventure ended in a tragedy that should never have happened.
+            They asked for my thoughts, and I couldn't look away. I needed to
+            understand "why."
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            My research uncovered a truth the industry doesn't talk about
+            enough: Adventure travel is growing fast, but safety hasn't grown
+            with it.
+          </Text>
+        </Stack>
       </Box>
     ),
   },
@@ -87,20 +128,45 @@ export const mySteps = [
         border='1px solid'
         borderColor='gray.200'
         borderRadius='2xl'
-        p={{ base: 6, md: 10 }}
+        p={{ base: 4, md: 10 }}
         bg='white'
         shadow='sm'
       >
-        <Text fontSize='lg' lineHeight='1.6' letterSpacing='wide'>
-          Young explorers are stepping into the world <br /> with courage and
-          curiosity, but too often, <br /> without protection or trust. <br />{' '}
-          That didn't sit right with me. And I could no longer pretend it wasn't
-          happening. <br /> So I started Zago Tours. A place where freedom and
-          safety can finally coexist. Where every adventure is verified. Where
-          travelers feel excited, not anxious. <br /> Because the world deserves
-          better adventures. And young travelers deserve to come home safely,
-          every single time.
-        </Text>
+        <Stack gap={4}>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Young explorers are stepping into the world with courage and
+            curiosity, but too often, without protection or trust.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            That didn't sit right with me. And I could no longer pretend it
+            wasn't happening.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            So I started Zago Tours. A place where freedom and safety can
+            finally coexist. Where every adventure is verified. Where travelers
+            feel excited, not anxious.
+          </Text>
+          <Text
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight='tall'
+            letterSpacing='wide'
+          >
+            Because the world deserves better adventures. And young travelers
+            deserve to come home safely, every single time.
+          </Text>
+        </Stack>
       </Box>
     ),
   },
@@ -111,7 +177,6 @@ export default function OurStory() {
   return (
     <Box my={10} mx={{ base: '4', md: '10' }}>
       <Stack gap={20}>
-        {' '}
         <StoryHero />
         {/* Story Section */}
         <Stack textAlign='center' gap={8}>
@@ -131,7 +196,7 @@ export default function OurStory() {
             color='primary'
             fontWeight='bolder'
           >
-            The moment everything <br /> changed
+            The moment everything changed
           </Text>
           <Box maxW='800px' mx='auto' w='full'>
             <ScrollProgressSteps items={mySteps} />

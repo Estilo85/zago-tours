@@ -20,7 +20,7 @@ import { Itinerary } from '@zagotours/types';
 import { LuStar, LuClock, LuMapPin, LuHeart } from 'react-icons/lu';
 import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 import AdventureSkeleton from './AdevntureSkeleton';
-import { useAdventure } from '@/hooks';
+import { useAdventure, usePermissions, useToggleLikeAdventure } from '@/hooks';
 import { ErrorState } from '../ui/ErrorState';
 import {
   Verified,
@@ -46,6 +46,7 @@ import { ResponsiveImage } from '../media/ResponsiveImage';
 import { AvatarImage } from '../media/AvatarImage';
 import ItineraryCard from '../ui/card/ItineraryCard';
 import { AppLink } from '../ui/link/AppLink';
+import { useRouter } from 'next/navigation';
 
 interface AdventureDetailProps {
   adventureId: string;
@@ -56,7 +57,23 @@ export default function AdventureDetailPage({
 }: AdventureDetailProps) {
   const { data: response, isLoading, error } = useAdventure(adventureId);
 
+  const { mutate: toggleLike } = useToggleLikeAdventure();
+  const { isAuthenticated } = usePermissions();
+  const router = useRouter();
+
   const adventure = response?.data;
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      router.push('/login?redirect=/adventures/' + adventureId);
+      return;
+    }
+
+    toggleLike(adventureId);
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -260,7 +277,27 @@ export default function AdventureDetailPage({
           borderRadius='none'
         />
 
-        <Icon as={Heart} position='absolute' top={4} right={4} />
+        <IconButton
+          aria-label='Like adventure'
+          position='absolute'
+          top={4}
+          right={4}
+          size='lg'
+          variant={adventure?.isLiked ? 'solid' : 'outline'}
+          colorScheme={adventure?.isLiked ? 'red' : 'gray'}
+          onClick={handleLikeClick}
+          bg='whiteAlpha.900'
+          borderRadius='full'
+          _hover={{ bg: 'white', transform: 'scale(1.1)' }}
+          zIndex={2}
+        >
+          <Icon
+            as={Heart}
+            boxSize='5'
+            color={adventure?.isLiked ? 'red.500' : 'gray.400'}
+            fill={adventure?.isLiked ? 'red.500' : 'none'}
+          />
+        </IconButton>
       </Box>
       {/* 4. DESCRIPTION & DETAILS */}
       <Flex
@@ -454,12 +491,19 @@ export default function AdventureDetailPage({
           >
             <IconButton
               aria-label='Like adventure'
-              variant='outline'
+              variant={adventure?.isLiked ? 'solid' : 'outline'}
+              colorScheme={adventure?.isLiked ? 'red' : 'gray'}
               size={{ base: 'md', md: 'lg' }}
               borderRadius='full'
-              _hover={{ bg: 'red.50', color: 'red.500' }}
+              onClick={handleLikeClick}
+              _hover={{ bg: 'red.50', transform: 'scale(1.1)' }}
             >
-              <Icon as={LuHeart} boxSize={{ base: 5, md: 6 }} />
+              <Icon
+                as={LuHeart}
+                boxSize={{ base: 5, md: 6 }}
+                color={adventure?.isLiked ? 'red.500' : 'gray.400'}
+                fill={adventure?.isLiked ? 'red.500' : 'none'}
+              />
             </IconButton>
             <AppLink href='https://wa.me/447418627748' target='_blank'>
               <Button

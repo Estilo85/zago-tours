@@ -55,6 +55,7 @@ export const MENU_CONFIG = {
     main: [
       { label: 'Events', icon: LuCalendar, href: '/dashboard/event' },
       { label: 'Adventures', icon: MapMinus, href: '/dashboard/adventure' },
+      { label: 'Review', icon: LuStar, href: '/dashboard/review' },
     ],
     support: [
       { label: 'Help', icon: HelpCircle, href: '/dashboard/help' },

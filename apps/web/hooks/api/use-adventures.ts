@@ -204,9 +204,17 @@ export function useToggleLikeAdventure() {
         method: 'POST',
       }),
     onMutate: async (id) => {
+      // Cancel outgoing queries
       await queryClient.cancelQueries({ queryKey: adventureKeys.detail(id) });
-      const previousData = queryClient.getQueryData(adventureKeys.detail(id));
+      await queryClient.cancelQueries({ queryKey: adventureKeys.lists() });
 
+      // Snapshot previous values
+      const previousDetail = queryClient.getQueryData(adventureKeys.detail(id));
+      const previousLists = queryClient.getQueriesData({
+        queryKey: adventureKeys.lists(),
+      });
+
+      // Optimistically update detail query
       queryClient.setQueryData(adventureKeys.detail(id), (old: any) => {
         if (!old?.data) return old;
 
@@ -228,15 +236,53 @@ export function useToggleLikeAdventure() {
         };
       });
 
-      return { previousData, id };
+      // Optimistically update all list queries
+      queryClient.setQueriesData(
+        { queryKey: adventureKeys.lists() },
+        (old: any) => {
+          if (!old?.data) return old;
+
+          return {
+            ...old,
+            data: old.data.map((adventure: any) => {
+              if (adventure.id !== id) return adventure;
+
+              const currentLikesCount = adventure._count?.likes || 0;
+              const isCurrentlyLiked = adventure.isLiked || false;
+
+              return {
+                ...adventure,
+                isLiked: !isCurrentlyLiked,
+                _count: {
+                  ...adventure._count,
+                  likes: isCurrentlyLiked
+                    ? currentLikesCount - 1
+                    : currentLikesCount + 1,
+                },
+              };
+            }),
+          };
+        },
+      );
+
+      return { previousDetail, previousLists, id };
     },
     onError: (_error, id, context) => {
-      if (context?.previousData) {
+      // Rollback detail query
+      if (context?.previousDetail) {
         queryClient.setQueryData(
           adventureKeys.detail(id),
-          context.previousData,
+          context.previousDetail,
         );
       }
+
+      // Rollback all list queries
+      if (context?.previousLists) {
+        context.previousLists.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+
       toaster.create({
         title: 'Error',
         description: 'Failed to update like status',

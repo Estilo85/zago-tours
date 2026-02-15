@@ -64,18 +64,9 @@ export default function Footer() {
                 objectFit='contain'
                 borderRadius='none'
               />
-
-              <Heading
-                size={{ base: 'md', md: 'lg' }}
-                fontWeight='bold'
-                color='gray.200'
-                letterSpacing='tight'
-              >
-                Zago
-              </Heading>
             </Flex>
             <Text color='textPrimary'>
-              73 Shelton Street <br />
+              73, Shelton Street <br />
               Covent Garden <br /> United Kingdom
             </Text>
             <Flex align='center' gap={2} color='textPrimary'>

@@ -57,68 +57,30 @@ export class EmailService {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #4F46E5; color: white; padding: 20px; text-align: center; }
+            .header { background-color: #fff; padding: 20px; text-align: center; }
+            .header img { max-width: 100%; height: auto; }
             .content { padding: 20px; background-color: #f9fafb; }
             .button { display: inline-block; padding: 12px 24px; background-color: #4F46E5; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+            .signature { margin-top: 20px; font-style: italic; }
+            .ps { margin-top: 15px; font-size: 0.9em; color: #666; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <h1>Welcome to Zagotours!</h1>
+              <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmdvdmxmbm1wejNybWF3bWc0M2w1dnFvMnplb3JseXhmajk1N2Z2eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oFzm6XsCKxVRbZDLq/giphy.gif" alt="Welcome" />
             </div>
             <div class="content">
-              <h2>Hi ${name},</h2>
-              <p>Thank you for joining Zagotours! We're excited to have you as part of our adventure community.</p>
-              <p>Get ready to explore amazing destinations and create unforgettable memories.</p>
-              <a href="${process.env.FRONTEND_URL}/adventures" class="button">Explore Adventures</a>
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-
-    await this.sendEmail({
-      to: email,
-      subject: 'Welcome to Zagotours!',
-      html,
-    });
-  }
-
-  /**
-   * Send password reset email
-   */
-  static async sendPasswordResetEmail(
-    email: string,
-    resetToken: string,
-    name?: string,
-  ): Promise<void> {
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #4F46E5; color: white; padding: 20px; text-align: center; }
-            .content { padding: 20px; background-color: #f9fafb; }
-            .button { display: inline-block; padding: 12px 24px; background-color: #4F46E5; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-            .warning { background-color: #FEF3C7; padding: 10px; border-left: 4px solid #F59E0B; margin: 20px 0; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>Password Reset Request</h1>
-            </div>
-            <div class="content">
-              <h2>Hi ${name},</h2>
-              <p>We received a request to reset your password. Click the button below to create a new password:</p>
-              <a href="${resetUrl}" class="button">Reset Password</a>
-              <div class="warning">
-                <strong>Security Note:</strong> This link will expire in 1 hour. If you didn't request this reset, please ignore this email.
+              <h2>Hey ${name},</h2>
+              <p>Welcome to Zago Tours!</p>
+              <p>Over the next few days I'll be sending you notes on how to use our platform.</p>
+              <p>But for now…</p>
+              <a href="${process.env.FRONTEND_URL}/login" class="button">Activate your account</a>
+              <div class="ps">
+                <p><strong>PS:</strong> If we landed in your spam, you might want to mark us as "not spam"</p>
+              </div>
+              <div class="signature">
+                <p>Esther</p>
               </div>
             </div>
           </div>
@@ -128,7 +90,7 @@ export class EmailService {
 
     await this.sendEmail({
       to: email,
-      subject: 'Reset Your Password - Zagotours',
+      subject: 'Welcome to Zago Tours',
       html,
     });
   }

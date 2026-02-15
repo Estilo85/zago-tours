@@ -17,7 +17,7 @@ export const TripTypeLabels: Record<TripType, string> = {
   SKYDIVING: 'Skydiving',
   SAFARIS: 'Safaris',
   CLIMBING: 'Mountain Climbing',
-  JUMPING: 'Bungee Jumping',
+  JUMPING: 'Jumping',
 };
 
 export const RoleLabels: Record<Role, string> = {
@@ -30,14 +30,14 @@ export const RoleLabels: Record<Role, string> = {
 };
 
 export const AdventureLevelLabels: Record<AdventureLevel, string> = {
-  MEDIUM: 'Intermediate',
+  MEDIUM: 'Medium',
   CHALLENGING: 'Challenging',
-  HARD: 'Expert / Hard',
+  HARD: 'Hard',
 };
 
 export const AdventureStatusLabels: Record<AdventureStatus, string> = {
   DRAFT: 'Draft',
-  ACTIVE: 'Live / Active',
+  ACTIVE: 'Active',
   COMPLETED: 'Completed',
 };
 
