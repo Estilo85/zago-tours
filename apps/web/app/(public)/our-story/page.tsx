@@ -116,7 +116,7 @@ export const mySteps = [
             letterSpacing='wide'
           >
             Someone shared a story in our community — an adventure traveler
-            whose adventure ended in a tragedy that should never have happened.
+            whose adventure ended in a tragedy.
           </Text>
           <Text
             fontSize={{ base: 'md', md: 'lg' }}

@@ -40,7 +40,7 @@ const destinations = createListCollection({
 
 const dates = createListCollection({
   items: [
-    { label: 'All date', value: '' },
+    { label: 'All dates', value: '' },
     { label: 'This Week', value: 'week' },
     { label: 'This Month', value: 'month' },
     { label: 'Next Month', value: 'next-month' },

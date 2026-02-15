@@ -31,7 +31,7 @@ export const StoryHero = () => {
         <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
           Adventure travel is meant to feel exciting, not uncertain <br /> We’re
           building a network where every trip is trusted,
-          <br /> transparent, and truly transformative
+          <br /> transparent, and transformative
         </Text>
       </Stack>
     </Box>

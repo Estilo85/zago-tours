@@ -138,7 +138,7 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
           pb={index < items.length - 1 ? { base: 6, md: 8 } : 0}
         >
           {/* Step Indicator Column */}
-          <Flex direction='column' alignItems='center' flexShrink={0}>
+          <Flex direction='column' alignItems='center' flexShrink={0} h='full'>
             {/* Circle Indicator */}
             <Box
               w={{ base: '35px', md: '35px' }}
@@ -151,14 +151,13 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
               flexShrink={0}
             />
 
-            {/* Connector Line - now grows with content */}
+            {/* Connector Line */}
             {index < items.length - 1 && (
               <Box
                 w='2px'
-                h='100%'
+                flex='1'
                 bg='primary'
                 transition='background-color 0.3s ease'
-                flexGrow={1}
               />
             )}
           </Flex>

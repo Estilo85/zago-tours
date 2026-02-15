@@ -34,7 +34,7 @@ const cardData = [
   {
     title: 'QUALITY',
     image: '/images/home/home-why-choose-sect-4.webp',
-    desc: 'We partner with operators who protect nature and culture.Travel that respects the places we love.',
+    desc: 'We partner with operators who protect nature and culture. Travel that respects the places we love.',
     rightIcon: Globe,
   },
 ];

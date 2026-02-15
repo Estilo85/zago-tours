@@ -9,6 +9,7 @@ import { SearchBar } from '@/components/ui/search/Search';
 import { TripRequestDialog } from '../dialogs/trip-request-dialog';
 import { usePermissions, useUserProfile } from '@/hooks';
 import { PlanningCallDialog } from '../dialogs/PlanningCallDialog';
+import { PhoneCall } from 'lucide-react';
 
 interface NavbarProps {
   onOpen: () => void;
@@ -63,13 +64,22 @@ export const Navbar = ({ onOpen }: NavbarProps) => {
             </Button>
           )}
           {!isAnyAdmin && (
-            <Button
-              bg='primary'
-              color='white'
-              onClick={() => setIsPlanningCallDialogOpen(true)}
-            >
-              Book your trip planning call
-            </Button>
+            <>
+              <Box display={{ base: 'inline', md: 'none' }}>
+                <PhoneCall
+                  color='primary'
+                  onClick={() => setIsPlanningCallDialogOpen(true)}
+                />
+              </Box>
+              <Button
+                bg='primary'
+                color='white'
+                display={{ base: 'none', md: 'inline' }}
+                onClick={() => setIsPlanningCallDialogOpen(true)}
+              >
+                Book your trip-planning call
+              </Button>
+            </>
           )}
 
           <AvatarImage src={userImage} name={userName} />

@@ -10,7 +10,7 @@ const cardData = [
     heading: 'Safety',
     icon: ShieldCheck,
     description:
-      'We use a safety-first verification approach for adventure experiences. Adventure is supposed tobe thrilling not risky in the wrong ways',
+      'We use a safety-first verification approach for adventure experiences. Adventure is supposed to be thrilling not risky in the wrong ways',
   },
   {
     heading: 'Partnership',
@@ -43,7 +43,7 @@ export default function PurposeSection() {
           color='primary'
           fontWeight='bolder'
         >
-          Why we do what we do
+          Why We Do What We Do
         </Text>
         <SimpleGrid
           columns={{ base: 1, md: 2 }}
