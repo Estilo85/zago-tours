@@ -42,7 +42,7 @@ export function SecuritySection({ finalRole }: any) {
           render={({ field }) => (
             <FormField
               {...field}
-              label='Become a safety ambassador'
+              label='Become a Safety Ambassador'
               type='checkbox'
             />
           )}

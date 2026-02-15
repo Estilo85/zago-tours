@@ -206,7 +206,7 @@ export default function Footer() {
             <Text fontWeight='bold' mb={2} color='textInverse'>
               Contact Us
             </Text>
-            <Text>partnerships@zagotours.com</Text>
+            <Text>Partnerships@zagotours.com</Text>
             <Text>Phone: +44-7418-627-748</Text>
           </Stack>
         </SimpleGrid>

@@ -102,7 +102,7 @@ export default function PostHero() {
           >
             Welcome to Zago Voice{' '}
             <Box display={{ base: 'none', md: 'block' }}>
-              <Heart size={32} fill='green.100' color='green.300' />
+              <Heart size={32} fill='red' />
             </Box>
           </Heading>
 
@@ -127,8 +127,7 @@ export default function PostHero() {
           maxW='600px'
           textAlign='left'
         >
-          Where trips and shared experiences shape better standards in adventure
-          tourism.
+          Where real experiences shape safer, better adventure tourism.
         </Text>
       </Stack>
     </Box>

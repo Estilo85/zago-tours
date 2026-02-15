@@ -70,7 +70,7 @@ export const ScrollProgressSteps = ({ items }: ScrollProgressStepsProps) => {
                 flex='1'
                 bg='primary'
                 transition='background-color 0.3s ease'
-                minH='100%'
+                minH='600px'
               />
             )}
           </Flex>

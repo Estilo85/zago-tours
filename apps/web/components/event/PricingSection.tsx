@@ -31,8 +31,8 @@ export const PricingSection = () => {
                   Call Credit / month (up to 10 minutes)'
           features={[
             'Unlimited safety guidance',
-            'Access to Safety Library',
-            'Monthly Adventure Safety Digest (real stories, prevention tips)',
+            'Access to safety library',
+            'Monthly adventure safety digest (real stories, prevention tips)',
             'Purchase extra call credits (£5 per call)',
           ]}
           href='https://buy.stripe.com/3cI9AT78wb84dd56z9cfK03'
@@ -46,10 +46,10 @@ export const PricingSection = () => {
            10 minutes each).'
           isActive={true}
           features={[
-            'All Tier 1 benefits',
-            'light mediation',
+            'All tier 1 benefits',
+            'Light mediation',
             '24/7 priority line',
-            'Optional Safety Check-in service',
+            'Optional safety check-in service',
             'Early access to verified safe experiences',
             'Purchase extra call credits (£5 per call)',
           ]}
@@ -66,7 +66,7 @@ export const PricingSection = () => {
             'All Tier 1 + 2 benefits.',
             'Unlimited safety calls, with fair-use policy',
             'Full mediation support',
-            'Assigned Safety Ambassador',
+            'Assigned safety ambassador',
             'Emergency coordination support',
           ]}
           href='https://buy.stripe.com/28E00j50ogso0qj9LlcfK06'

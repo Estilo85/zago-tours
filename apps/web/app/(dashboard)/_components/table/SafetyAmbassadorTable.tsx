@@ -85,7 +85,7 @@ const SafetyAmbassadorTable = () => {
   return (
     <Box bg='textInverse' p={5}>
       <Heading mb={6} fontSize='lg' fontWeight='bold'>
-        Become a safety Ambassador
+        Become a Safety Ambassador
       </Heading>
       <DataTable columns={columns} data={data} />
     </Box>

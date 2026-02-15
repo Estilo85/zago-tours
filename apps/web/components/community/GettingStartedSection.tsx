@@ -54,7 +54,7 @@ export default function GettingStartedSection() {
         fontWeight='bold'
         textAlign='center'
       >
-        Getting started
+        Getting Started
       </Heading>
 
       <Flex

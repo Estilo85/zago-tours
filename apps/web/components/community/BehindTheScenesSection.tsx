@@ -11,7 +11,7 @@ const cardInfo = [
     heading: 'Real Experiences',
     icon: LifeBuoy,
     description:
-      'Stories from travelers and professionals who have real, lived experience.',
+      'Stories from travelers and professionals with lived experience.',
   },
   {
     heading: 'Shared Knowledge',

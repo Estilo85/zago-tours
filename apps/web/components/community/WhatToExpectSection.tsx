@@ -66,7 +66,7 @@ export default function WhatToExpectSection() {
             color='primary'
             fontWeight='bold'
           >
-            What you’ll find
+            What You’ll Find
           </Text>
         </Center>
       </VStack>
