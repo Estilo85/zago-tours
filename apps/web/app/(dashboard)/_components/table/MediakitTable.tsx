@@ -32,28 +32,28 @@ export function MediaKitTable() {
       adventureName: 'Rafting in Jinja Uganda',
       createdAt: '2026-02-12T14:30:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1_qPTpjlYb7nmYLGGYazIWKOEsPdNvIa2',
+        'https://drive.google.com/drive/folders/13ppM5bklzm30uj9vxtx35yrbwfHjNmGL',
     },
     {
       id: '3',
       adventureName: 'Inca Trail(Machu Picchu)',
       createdAt: '2026-02-13T09:00:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1BmAbNfu5o1BgwjPtujNsvg0GtQ0eENu5',
+        'https://drive.google.com/drive/folders/1hobOsbzM5NRsLdo4u0ah-_mZJzEcWFq0',
     },
     {
       id: '4',
       adventureName: 'Experience Flying Safari in Kenya',
       createdAt: '2026-02-14T11:00:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1hobOsbzM5NRsLdo4u0ah-_mZJzEcWFq0',
+        'https://drive.google.com/drive/folders/1BmAbNfu5o1BgwjPtujNsvg0GtQ0eENu5',
     },
     {
       id: '5',
       adventureName: 'Balloon Safari in South Africa',
       createdAt: '2026-02-14T16:00:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/13ppM5bklzm30uj9vxtx35yrbwfHjNmGL',
+        'https://drive.google.com/drive/folders/1_qPTpjlYb7nmYLGGYazIWKOEsPdNvIa2',
     },
     {
       id: '6',
@@ -67,14 +67,14 @@ export function MediaKitTable() {
       adventureName: 'Quad biking in South Africa',
       createdAt: '2026-02-15T12:00:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1YnDhjlbNHqNAI5oUAA1b3m7SfOABRuVZ',
+        'https://drive.google.com/drive/folders/1xvj0MFGb6Ypwp7a2x3lGU8CJyqFX9ENr',
     },
     {
       id: '8',
       adventureName: 'Mountain Trekking',
       createdAt: '2026-02-15T18:45:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1XldP_jlC7CP37bORfDskBBqff_QrKPTW',
+        'https://drive.google.com/drive/folders/1KOaOGN7UM9xxHH9k6m8MU5JHoouSQaSy',
     },
     {
       id: '9',
@@ -88,7 +88,14 @@ export function MediaKitTable() {
       adventureName: 'Island Hopping in the Philippines',
       createdAt: '2026-02-16T10:30:00Z',
       driveUrl:
-        'https://drive.google.com/drive/folders/1KOaOGN7UM9xxHH9k6m8MU5JHoouSQaSy',
+        'https://drive.google.com/drive/folders/1XldP_jlC7CP37bORfDskBBqff_QrKPTW',
+    },
+    {
+      id: '11',
+      adventureName: 'Big 5 tracking in South Africa',
+      createdAt: '2026-02-16T10:30:00Z',
+      driveUrl:
+        'https://drive.google.com/drive/folders/1YnDhjlbNHqNAI5oUAA1b3m7SfOABRuVZ',
     },
   ];
 

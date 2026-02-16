@@ -16,7 +16,7 @@ export const CommunityHero = () => {
     >
       <Stack textAlign='center' gap={5} align='center' py='50px'>
         <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
-          The Community for <br /> those who travel boldly
+          The community for <br /> those who travel boldly
         </Heading>
 
         <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
