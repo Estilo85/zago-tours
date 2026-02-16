@@ -17,7 +17,7 @@ import {
   RatingGroup,
 } from '@chakra-ui/react';
 import { Itinerary } from '@zagotours/types';
-import { LuStar, LuClock, LuMapPin, LuHeart } from 'react-icons/lu';
+import { LuClock, LuMapPin } from 'react-icons/lu';
 import { ScrollProgressSteps } from '../ui/stepper/scroll-progress-step';
 import AdventureSkeleton from './AdevntureSkeleton';
 import { useAdventure, usePermissions, useToggleLikeAdventure } from '@/hooks';
@@ -38,12 +38,10 @@ import {
   Heart,
   Lightbulb,
   CircleAlert,
-  PencilOff,
   CircleX,
   CircleCheck,
 } from 'lucide-react';
 import { ResponsiveImage } from '../media/ResponsiveImage';
-import { AvatarImage } from '../media/AvatarImage';
 import ItineraryCard from '../ui/card/ItineraryCard';
 import { AppLink } from '../ui/link/AppLink';
 import { useRouter } from 'next/navigation';
@@ -68,7 +66,7 @@ export default function AdventureDetailPage({
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      router.push('/login?redirect=/adventures/' + adventureId);
+      router.push('/login');
       return;
     }
 
@@ -83,9 +81,7 @@ export default function AdventureDetailPage({
           text: `Check out this adventure: ${adventure?.title}`,
           url: window.location.href,
         });
-      } catch (error) {
-        console.log('Error sharing', error);
-      }
+      } catch (error) {}
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
@@ -494,7 +490,7 @@ export default function AdventureDetailPage({
               _hover={{ bg: 'red.50', transform: 'scale(1.1)' }}
             >
               <Icon
-                as={LuHeart}
+                as={Heart}
                 boxSize={{ base: 5, md: 6 }}
                 color={adventure?.isLiked ? 'red.500' : 'gray.400'}
                 fill={adventure?.isLiked ? 'red.500' : 'none'}
@@ -623,8 +619,6 @@ export default function AdventureDetailPage({
             </Heading>
 
             <HStack gap={4} p={2} bg='blue.50/50' borderRadius='xl'>
-              {/* Using a placeholder for AvatarImage as requested */}
-
               <Stack gap={0} flex='1'>
                 <Text fontSize='xs' color='gray.500'>
                   Expert in West African heritage tours with over 10 years of

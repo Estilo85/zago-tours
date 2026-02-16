@@ -30,7 +30,7 @@ const menuList = [
   { label: 'Agent', value: 'AGENT' },
 ];
 
-export const NavbarAuthActions = () => {
+export const NavbarAuthActions = ({ onClose }: { onClose?: () => void }) => {
   const router = useRouter();
   const { isAuthenticated } = useAuthSession();
   const { logout } = useAuth();
@@ -46,6 +46,7 @@ export const NavbarAuthActions = () => {
   const handleRoleSelect = (value: string) => {
     setRole(value);
     setCollapsibleOpen(false);
+    onClose?.();
     router.push('/register');
   };
 
@@ -61,6 +62,7 @@ export const NavbarAuthActions = () => {
           py={5}
           borderRadius={{ base: 'full', md: 'lg' }}
           _hover={{ bg: 'gray.50', transform: 'scale(1.1)' }}
+          onClick={onClose}
         >
           <AppLink href='/dashboard'>
             <LayoutDashboard size={16} />
@@ -76,7 +78,10 @@ export const NavbarAuthActions = () => {
           color='white'
           borderRadius='full'
           _hover={{ transform: 'scale(1.1)' }}
-          onClick={logout}
+          onClick={() => {
+            logout();
+            onClose?.();
+          }}
         >
           <LogOut size={16} />
         </Button>
@@ -97,6 +102,7 @@ export const NavbarAuthActions = () => {
         bg='textInverse'
         textDecor='none'
         color='dark'
+        onClick={onClose}
       >
         <AppLink href='/login'>Login</AppLink>
       </Button>

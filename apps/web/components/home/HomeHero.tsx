@@ -33,8 +33,8 @@ export const HomeHero = () => {
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 5, md: 10 }}
-      pb={{ base: '100px', md: '200px' }}
-      mb={{ base: '100px', md: '350px' }}
+      pb={{ base: 5, md: '200px' }}
+      mb={{ base: 5, md: '350px' }}
       position='relative'
     >
       <Stack
@@ -77,11 +77,12 @@ export const HomeHero = () => {
 
       <Box
         width={{ base: '100%', md: '75%', lg: '65%' }}
-        position='absolute'
-        bottom={{ base: '-80px', md: '-250px' }}
-        left='50%'
-        transform='translateX(-50%)'
+        position={{ base: 'relative', md: 'absolute' }}
+        bottom={{ base: 0, md: '-250px' }}
+        left={{ base: 0, md: '50%' }}
+        transform={{ base: 'none', md: 'translateX(-50%)' }}
         zIndex={10}
+        mt={{ base: 5, md: 0 }}
       >
         {swiper_image.length > 0 ? (
           <ImageSwiper images={swiper_image} autoplaySpeed={3000} />

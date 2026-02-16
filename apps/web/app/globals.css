@@ -1,0 +1,28 @@
+.slick-slider {
+  margin-bottom: 0 !important;
+}
+
+.slick-list {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.slick-track {
+  display: flex !important;
+  margin-bottom: 0 !important;
+}
+
+.slick-slide {
+  margin-bottom: 0 !important;
+}
+
+/* Remove dots container padding */
+.slick-dots {
+  display: none !important;
+}
+
+/* Remove arrow buttons */
+.slick-prev,
+.slick-next {
+  display: none !important;
+}

@@ -52,7 +52,12 @@ export const MobileNav = () => {
           <Portal>
             <Drawer.Backdrop />
             <Drawer.Positioner>
-              <Drawer.Content>
+              <Drawer.Content
+                css={{
+                  transition:
+                    'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
+                }}
+              >
                 <Drawer.CloseTrigger />
                 <Drawer.Header borderBottomWidth='1px'>
                   <Heading size='sm' color='primary'>
@@ -74,7 +79,7 @@ export const MobileNav = () => {
                       </AppLink>
                     ))}
 
-                    <NavbarAuthActions />
+                    <NavbarAuthActions onClose={() => setOpen(false)} />
                   </VStack>
                 </Drawer.Body>
                 <Drawer.CloseTrigger asChild>

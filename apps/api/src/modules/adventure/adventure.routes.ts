@@ -39,7 +39,7 @@ router.post(
 router
   .route('/:id')
   .all(validateRequest({ params: commonValidation.uuidParam }))
-  .get(authenticate, controller.getById)
+  .get(controller.getById)
   .patch(
     authenticate,
     authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),

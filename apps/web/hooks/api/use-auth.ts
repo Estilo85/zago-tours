@@ -100,7 +100,7 @@ export function useAuth() {
 
   // --- LOGOUT ---
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login' });
+    await signOut({ callbackUrl: '/' });
     queryClient.clear();
   };
 

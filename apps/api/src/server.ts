@@ -20,6 +20,7 @@ export const createServer = (): Express => {
           'https://zagotours.com',
         ],
         credentials: true,
+        maxAge: 86400,
       }),
     )
     .use(express.json())
