@@ -43,22 +43,24 @@ export const MobileNav = () => {
           placement='end'
           size='xs'
         >
-          <Drawer.Trigger asChild>
-            <IconButton aria-label='Open menu' variant='ghost'>
-              <Menu />
-            </IconButton>
-          </Drawer.Trigger>
-
           <Portal>
             <Drawer.Backdrop />
             <Drawer.Positioner>
               <Drawer.Content
+                position='relative'
                 css={{
                   transition:
                     'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
                 }}
               >
-                <Drawer.CloseTrigger />
+                <Drawer.CloseTrigger
+                  asChild
+                  position='absolute'
+                  top='2'
+                  right='2'
+                >
+                  <CloseButton size='sm' p={2} />
+                </Drawer.CloseTrigger>
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     {navlinks.map((link, index) => (

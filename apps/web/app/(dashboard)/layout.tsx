@@ -57,15 +57,20 @@ export default function DashboardLayout({
           <Portal>
             <Drawer.Backdrop />
             <Drawer.Positioner>
-              <Drawer.Content bg='primary'>
+              <Drawer.Content bg='primary' position='relative'>
+                <Drawer.CloseTrigger
+                  position='absolute'
+                  top='2'
+                  right='2'
+                  zIndex='skipLink'
+                >
+                  <CloseButton color='white' />
+                </Drawer.CloseTrigger>
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     <Sidebar role={userRole} onClose={() => setOpen(false)} />
                   </VStack>
                 </Drawer.Body>
-                <Drawer.CloseTrigger>
-                  <CloseButton m={4} fill='white' />
-                </Drawer.CloseTrigger>
               </Drawer.Content>
             </Drawer.Positioner>
           </Portal>
