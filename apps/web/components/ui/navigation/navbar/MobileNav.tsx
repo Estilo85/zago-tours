@@ -2,13 +2,12 @@
 import {
   Box,
   Flex,
-  Heading,
   VStack,
   Portal,
   IconButton,
   CloseButton,
 } from '@chakra-ui/react';
-import { Menu } from 'lucide-react';
+import { Menu } from 'lucide-react'; // This is your "Open" icon
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Drawer } from '@chakra-ui/react';
@@ -43,6 +42,12 @@ export const MobileNav = () => {
           placement='end'
           size='xs'
         >
+          <Drawer.Trigger asChild>
+            <IconButton aria-label='Open menu' variant='ghost'>
+              <Menu color='black' />
+            </IconButton>
+          </Drawer.Trigger>
+
           <Portal>
             <Drawer.Backdrop />
             <Drawer.Positioner>
@@ -58,11 +63,13 @@ export const MobileNav = () => {
                   position='absolute'
                   top='2'
                   right='2'
+                  zIndex='skipLink'
                 >
-                  <CloseButton size='sm' p={2} />
+                  <CloseButton size='sm' />
                 </Drawer.CloseTrigger>
+
                 <Drawer.Body>
-                  <VStack align='stretch' gap={6} mt={4}>
+                  <VStack align='stretch' gap={6} mt={12}>
                     {navlinks.map((link, index) => (
                       <AppLink
                         key={index}
@@ -78,9 +85,6 @@ export const MobileNav = () => {
                     <NavbarAuthActions onClose={() => setOpen(false)} />
                   </VStack>
                 </Drawer.Body>
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton size='sm' />
-                </Drawer.CloseTrigger>
               </Drawer.Content>
             </Drawer.Positioner>
           </Portal>
