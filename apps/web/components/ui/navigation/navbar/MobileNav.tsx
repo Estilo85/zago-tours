@@ -59,12 +59,6 @@ export const MobileNav = () => {
                 }}
               >
                 <Drawer.CloseTrigger />
-                <Drawer.Header borderBottomWidth='1px'>
-                  <Heading size='sm' color='primary'>
-                    Menu
-                  </Heading>
-                </Drawer.Header>
-
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     {navlinks.map((link, index) => (

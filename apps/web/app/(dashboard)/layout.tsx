@@ -58,19 +58,14 @@ export default function DashboardLayout({
             <Drawer.Backdrop />
             <Drawer.Positioner>
               <Drawer.Content bg='primary'>
-                <Drawer.CloseTrigger>
-                  <CloseButton m={4} />
-                </Drawer.CloseTrigger>
-                <Drawer.Header borderBottomWidth='1px'>
-                  <Heading size='sm' color='white'>
-                    Menu
-                  </Heading>
-                </Drawer.Header>
                 <Drawer.Body>
                   <VStack align='stretch' gap={6} mt={4}>
                     <Sidebar role={userRole} onClose={() => setOpen(false)} />
                   </VStack>
                 </Drawer.Body>
+                <Drawer.CloseTrigger>
+                  <CloseButton m={4} fill='white' />
+                </Drawer.CloseTrigger>
               </Drawer.Content>
             </Drawer.Positioner>
           </Portal>

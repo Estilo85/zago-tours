@@ -58,14 +58,6 @@ const AdventureCard = ({
     toggleLike(adventure.id);
   };
 
-  // NEW: Handle card click for unauthenticated users
-  const handleCardClick = (e: React.MouseEvent) => {
-    if (!isAuthenticated) {
-      e.preventDefault();
-      router.push('/login');
-    }
-  };
-
   return (
     <Card.Root
       w={{ base: 'full', md: '280px' }}
@@ -81,7 +73,6 @@ const AdventureCard = ({
         },
       }}
     >
-      {/* IMAGE SECTION */}
       <Box position='relative' overflow='hidden'>
         <AspectRatio ratio={4 / 3}>
           <ResponsiveImage
@@ -99,7 +90,6 @@ const AdventureCard = ({
           />
         </AspectRatio>
 
-        {/* Top Floating Badges */}
         <Flex
           position='absolute'
           top='3'
@@ -147,110 +137,51 @@ const AdventureCard = ({
         </Flex>
       </Box>
 
-      {/* BODY SECTION - Changed: Conditional rendering based on authentication */}
-      {isAuthenticated ? (
-        <AppLink href={`/adventures/${adventure.id}`}>
-          <Card.Body p='4' pt='6' gap='1' position='relative'>
-            {/* RATING BRIDGE */}
-            <Flex
-              position='absolute'
-              top='0'
-              left='4'
-              transform='translateY(-50%)'
-              bg='white'
-              px='2'
-              py='1'
-              borderRadius='full'
-              boxShadow='md'
-              alignItems='center'
-              zIndex='3'
+      {/* BODY SECTION - Always wrapped in AppLink now */}
+      <AppLink href={`/adventures/${adventure.id}`}>
+        <Card.Body p='4' pt='6' gap='1' position='relative'>
+          <Flex
+            position='absolute'
+            top='0'
+            left='4'
+            transform='translateY(-50%)'
+            bg='white'
+            px='2'
+            py='1'
+            borderRadius='full'
+            boxShadow='md'
+            alignItems='center'
+            zIndex='3'
+          >
+            <RatingGroup.Root
+              count={5}
+              value={adventure.rating}
+              readOnly
+              size='xs'
             >
-              <RatingGroup.Root
-                count={5}
-                value={adventure.rating}
-                readOnly
-                size='xs'
-              >
-                <RatingGroup.HiddenInput />
-                <RatingGroup.Control />
-              </RatingGroup.Root>
+              <RatingGroup.HiddenInput />
+              <RatingGroup.Control />
+            </RatingGroup.Root>
 
-              <Text fontWeight='bold' fontSize='xs' ml='1.5' color='gray.600'>
-                {adventure.rating.toFixed(1)}
-              </Text>
-            </Flex>
+            <Text fontWeight='bold' fontSize='xs' ml='1.5' color='gray.600'>
+              {adventure.rating.toFixed(1)}
+            </Text>
+          </Flex>
 
-            <Card.Title
-              fontWeight='bold'
-              fontSize='md'
-              lineHeight='tight'
-              minH='45px'
-            >
-              {adventure.title}
-            </Card.Title>
-            <Card.Description
-              color='gray.500'
-              fontSize='xs'
-              fontWeight='medium'
-            >
-              {adventure.days} Days / {nights}{' '}
-              {nights === 1 ? 'Night' : 'Nights'}
-            </Card.Description>
-          </Card.Body>
-        </AppLink>
-      ) : (
-        <Box onClick={handleCardClick} cursor='pointer'>
-          <Card.Body p='4' pt='6' gap='1' position='relative'>
-            {/* RATING BRIDGE */}
-            <Flex
-              position='absolute'
-              top='0'
-              left='4'
-              transform='translateY(-50%)'
-              bg='white'
-              px='2'
-              py='1'
-              borderRadius='full'
-              boxShadow='md'
-              alignItems='center'
-              zIndex='3'
-            >
-              <RatingGroup.Root
-                count={5}
-                value={adventure.rating}
-                readOnly
-                size='xs'
-              >
-                <RatingGroup.HiddenInput />
-                <RatingGroup.Control />
-              </RatingGroup.Root>
+          <Card.Title
+            fontWeight='bold'
+            fontSize='md'
+            lineHeight='tight'
+            minH='45px'
+          >
+            {adventure.title}
+          </Card.Title>
+          <Card.Description color='gray.500' fontSize='xs' fontWeight='medium'>
+            {adventure.days} Days / {nights} {nights === 1 ? 'Night' : 'Nights'}
+          </Card.Description>
+        </Card.Body>
+      </AppLink>
 
-              <Text fontWeight='bold' fontSize='xs' ml='1.5' color='gray.600'>
-                {adventure.rating.toFixed(1)}
-              </Text>
-            </Flex>
-
-            <Card.Title
-              fontWeight='bold'
-              fontSize='md'
-              lineHeight='tight'
-              minH='45px'
-            >
-              {adventure.title}
-            </Card.Title>
-            <Card.Description
-              color='gray.500'
-              fontSize='xs'
-              fontWeight='medium'
-            >
-              {adventure.days} Days / {nights}{' '}
-              {nights === 1 ? 'Night' : 'Nights'}
-            </Card.Description>
-          </Card.Body>
-        </Box>
-      )}
-
-      {/* FOOTER SECTION */}
       <Card.Footer pt='0'>
         <Flex
           w='full'

@@ -14,15 +14,6 @@ import Button from '../ui/button/Button';
 import { ArrowRight } from 'lucide-react';
 import { useAuthSession } from '@/hooks';
 import { AppLink } from '../ui/link/AppLink';
-import { ImageSwiper } from '../ui/swiper/ImageSwiper';
-
-const swiper_image = [
-  '/images/home/swipper/kayaking.webp',
-  '/images/home/swipper/Mountain climbing.webp',
-  '/images/home/swipper/Skiing.webp',
-  '/images/home/swipper/Skydiving.webp',
-  '/images/home/swipper/snowboarding.webp',
-];
 
 export const HomeHero = () => {
   const { isAuthenticated } = useAuthSession();
@@ -84,22 +75,18 @@ export const HomeHero = () => {
         zIndex={10}
         mt={{ base: 5, md: 0 }}
       >
-        {swiper_image.length > 0 ? (
-          <ImageSwiper images={swiper_image} autoplaySpeed={3000} />
-        ) : (
-          <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
-            <ResponsiveImage
-              src='/images/home/banner.webp'
-              alt='home page banner image'
-              width='100%'
-              priority={true}
-              loading='eager'
-              height='100%'
-              borderRadius='2xl'
-              boxShadow='2xl'
-            />
-          </AspectRatio>
-        )}
+        <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
+          <ResponsiveImage
+            src='/images/home/banner.webp'
+            alt='home page banner image'
+            width='100%'
+            priority={true}
+            loading='eager'
+            height='100%'
+            borderRadius='2xl'
+            boxShadow='2xl'
+          />
+        </AspectRatio>
       </Box>
     </Box>
   );
