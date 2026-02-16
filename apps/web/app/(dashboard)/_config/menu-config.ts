@@ -91,7 +91,7 @@ export const MENU_CONFIG = {
     ],
     [Role.AFFILIATE]: [
       { label: 'Dashboard', icon: House, href: '/dashboard' },
-      { label: 'Contracts', icon: LuUserPlus, href: '/affiliate/contracts' },
+      { label: 'Contract', icon: LuUserPlus, href: '/affiliate/contracts' },
     ],
   },
 };

@@ -20,7 +20,7 @@ const cardData = [
   {
     heading: 'Old Way',
     icon: Shuffle,
-    description: 'Good insertions No rewards',
+    description: 'Good insertions, no rewards',
     rotateIcon: true,
   },
   {
@@ -57,7 +57,7 @@ export default function TransformationSection() {
             borderRadius='full'
             letterSpacing='widest'
           >
-            the transformation
+            The Transformation
           </Text>
         </Center>
         <Text

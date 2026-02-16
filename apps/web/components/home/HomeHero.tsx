@@ -76,9 +76,9 @@ export const HomeHero = () => {
       </Stack>
 
       <Box
-        width={{ base: '90%', md: '75%', lg: '65%' }}
+        width={{ base: '100%', md: '75%', lg: '65%' }}
         position='absolute'
-        bottom={{ base: '-80px', md: '-300px' }}
+        bottom={{ base: '-80px', md: '-250px' }}
         left='50%'
         transform='translateX(-50%)'
         zIndex={10}

@@ -26,33 +26,23 @@ export const ImageSwiper = ({
   const SliderComponent = Slider as any;
 
   return (
-    <Box
-      maxW='100%'
-      mx='auto'
-      borderRadius='3xl'
-      marginBottom={0}
-      style={{
-        marginBottom: 0,
-      }}
-    >
-      <SliderComponent {...settings}>
-        {images.map((image, index) => (
-          <Box key={index} position='relative'>
-            <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
-              <ResponsiveImage
-                src={image}
-                alt={`Slide ${index + 1}`}
-                priority={index === 0}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                width='100%'
-                height='100%'
-                borderRadius='2xl'
-                boxShadow='2xl'
-              />
-            </AspectRatio>
-          </Box>
-        ))}
-      </SliderComponent>
-    </Box>
+    <SliderComponent {...settings}>
+      {images.map((image, index) => (
+        <Box key={index} position='relative'>
+          <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
+            <ResponsiveImage
+              src={image}
+              alt={`Slide ${index + 1}`}
+              priority={index === 0}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              width='100%'
+              height='100%'
+              borderRadius='2xl'
+              boxShadow='2xl'
+            />
+          </AspectRatio>
+        </Box>
+      ))}
+    </SliderComponent>
   );
 };

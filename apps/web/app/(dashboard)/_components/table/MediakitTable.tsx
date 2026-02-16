@@ -22,70 +22,70 @@ export function MediaKitTable() {
   const mediaKits: MediaKit[] = [
     {
       id: '1',
-      adventureName: 'Safari Adventure Kenya',
+      adventureName: 'Skydiving in Mauritius',
       createdAt: '2026-02-10T10:00:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1EngUqCMIFaFQ0eoaxexs69e6Rvk1jQkB',
     },
     {
       id: '2',
-      adventureName: 'Mountain Hiking Nepal',
+      adventureName: 'Rafting in Jinja Uganda',
       createdAt: '2026-02-12T14:30:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1_qPTpjlYb7nmYLGGYazIWKOEsPdNvIa2',
     },
     {
       id: '3',
-      adventureName: 'Beach Escape Bali',
+      adventureName: 'Inca Trail(Machu Picchu)',
       createdAt: '2026-02-13T09:00:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1BmAbNfu5o1BgwjPtujNsvg0GtQ0eENu5',
     },
     {
       id: '4',
-      adventureName: 'Desert Tour Dubai',
+      adventureName: 'Experience Flying Safari in Kenya',
       createdAt: '2026-02-14T11:00:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1hobOsbzM5NRsLdo4u0ah-_mZJzEcWFq0',
     },
     {
       id: '5',
-      adventureName: 'City Lights Tokyo',
+      adventureName: 'Balloon Safari in South Africa',
       createdAt: '2026-02-14T16:00:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/13ppM5bklzm30uj9vxtx35yrbwfHjNmGL',
     },
     {
       id: '6',
-      adventureName: 'Amazon Rainforest Expedition',
+      adventureName: 'Gorrila tracking in Uganda',
       createdAt: '2026-02-15T08:30:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1SWCUwRPTUs9RtA_tGR0XhXkWUJmn_sHu',
     },
     {
       id: '7',
-      adventureName: 'Swiss Alps Skiing',
+      adventureName: 'Quad biking in South Africa',
       createdAt: '2026-02-15T12:00:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1YnDhjlbNHqNAI5oUAA1b3m7SfOABRuVZ',
     },
     {
       id: '8',
-      adventureName: 'Northern Lights Iceland',
+      adventureName: 'Mountain Trekking',
       createdAt: '2026-02-15T18:45:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1XldP_jlC7CP37bORfDskBBqff_QrKPTW',
     },
     {
       id: '9',
-      adventureName: 'Great Wall Trek China',
+      adventureName: 'Paragliding in South Africa',
       createdAt: '2026-02-16T07:15:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1HaM87cXHTAxDRVz3Hn37JPXxACv_wvbp',
     },
     {
       id: '10',
-      adventureName: 'Pyramids Giza Tour',
+      adventureName: 'Island Hopping in the Philippines',
       createdAt: '2026-02-16T10:30:00Z',
       driveUrl:
         'https://drive.google.com/drive/folders/1KOaOGN7UM9xxHH9k6m8MU5JHoouSQaSy',

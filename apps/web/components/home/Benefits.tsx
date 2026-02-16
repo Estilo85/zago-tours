@@ -60,7 +60,7 @@ export const Benefits = () => {
             borderRadius='full'
             letterSpacing='widest'
           >
-            Safety first adventure
+            Safety First Adventure
           </Text>
         </Center>
 
@@ -70,7 +70,7 @@ export const Benefits = () => {
           color='primary'
           fontWeight='bolder'
         >
-          Why choose Zago Tours
+          Why Choose Zago Tours
         </Heading>
 
         <Flex
