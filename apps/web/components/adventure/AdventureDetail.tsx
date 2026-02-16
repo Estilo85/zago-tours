@@ -150,11 +150,6 @@ export default function AdventureDetailPage({
       py={{ base: 4, md: 10 }}
       px={{ base: 4, md: 6 }}
     >
-      {/* 1. TOP STATS CARD */}
-      <Flex align='center' gap={3} mb={4}>
-        <Text>Adventure </Text> | <Text> Details</Text>
-      </Flex>
-
       <Box
         borderRadius='xl'
         boxShadow='sm'
@@ -629,33 +624,8 @@ export default function AdventureDetailPage({
 
             <HStack gap={4} p={2} bg='blue.50/50' borderRadius='xl'>
               {/* Using a placeholder for AvatarImage as requested */}
-              <Box
-                w='50px'
-                h='50px'
-                borderRadius='full'
-                overflow='hidden'
-                bg='gray.200'
-                flexShrink={0}
-              >
-                <img
-                  src='/images/events/esther-picture.webp'
-                  alt='esther'
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </Box>
 
               <Stack gap={0} flex='1'>
-                <HStack gap={1}>
-                  <Text fontWeight='bold' fontSize='md'>
-                    Esther Akinwale
-                  </Text>
-                  <Icon
-                    as={Verified}
-                    color='blue.500'
-                    fill='blue.50'
-                    size='sm'
-                  />
-                </HStack>
                 <Text fontSize='xs' color='gray.500'>
                   Expert in West African heritage tours with over 10 years of
                   experience.
