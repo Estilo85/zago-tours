@@ -8,6 +8,7 @@ import { FormInput } from '@/components/ui/input/FormInput';
 import { PasswordInput } from '@/components/ui/input/password-input';
 import { LoginFormData, loginSchema } from '@/app/validations/auth-validation';
 import { useAuth } from '@/hooks';
+import { AppLink } from '@/components/ui/link/AppLink';
 
 export function LoginForm() {
   const { login, isLoggingIn } = useAuth();
@@ -114,6 +115,11 @@ export function LoginForm() {
               Sign In
             </Button>
           </Stack>
+          <Text textAlign='center' color='primary'>
+            <AppLink href='/forgot-password' textDecor='underline'>
+              Forgot password?
+            </AppLink>
+          </Text>
         </VStack>
       </form>
     </Box>

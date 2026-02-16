@@ -22,25 +22,26 @@ export default function Register() {
   return (
     <Container
       maxW={{ base: '100%', md: 'container.xl' }}
-      py={{ base: 0, md: 10 }}
-      px={{ base: 0, md: 8 }}
+      p={{ base: 0, md: 5 }}
       display='flex'
       justifyContent='center'
+      alignItems='center'
     >
       <Flex
         position='relative'
         width='full'
         justify={{ base: 'center', md: 'center' }}
-        align={{ base: 'center', md: 'flex-start' }}
+        align={{ base: 'center', md: 'center' }}
       >
         <Box
           width='700px'
-          maxH='1200px'
+          maxH='1000px'
           height='600px'
           bg='primary'
           p={5}
           borderRadius='2xl'
           display={{ base: 'none', md: 'block' }}
+          transform={{ md: 'translateX(-150px)' }}
         >
           <ResponsiveImage
             src={getImageSource()}
@@ -51,10 +52,12 @@ export default function Register() {
             objectFit='cover'
           />
         </Box>
+
+        {/* Form - Overlays right side of image */}
         <Box
           position={{ base: 'relative', md: 'absolute' }}
           top={{ base: 'auto', md: '50%' }}
-          right={{ base: 'auto', md: '-30px' }}
+          right={{ base: 'auto', md: '8%' }}
           transform={{ base: 'none', md: 'translateY(-50%)' }}
           width={{ base: '100%', md: '40%' }}
           maxWidth={{ base: '100%', md: 'none' }}

@@ -112,6 +112,13 @@ function RegistrationFormContent() {
       maxW={{ base: '100%', md: 'md' }}
       maxH={{ base: 'none', md: '570px' }}
       overflowY='auto'
+      css={{
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+      }}
     >
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onFormSubmit)}>
