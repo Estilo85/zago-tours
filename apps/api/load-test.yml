@@ -74,8 +74,8 @@ scenarios:
       - post:
           url: "/api/auth/login"
           json:
-            email: "test@zagotours.com"
-            password: "testpassword123"
+            email: "admin@zagotours.com"
+            password: "StrongPassword123!"
           # We expect 200 or 401 — both are valid (not a server crash)
           expect:
             - statusCode:

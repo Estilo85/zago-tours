@@ -10,13 +10,18 @@ export class EventRepository extends BaseRepository<
 > {
   protected readonly modelDelegate = prisma.event;
 
+  // For LIST - just counts and creator
+  private readonly listInclude: Prisma.EventInclude = {
+    creator: {
+      select: { id: true, name: true, image: true },
+    },
+    _count: { select: { registrations: true } },
+  };
+
+  // For DETAIL - full data, keep as is
   private readonly standardInclude: Prisma.EventInclude = {
     creator: {
-      select: {
-        id: true,
-        name: true,
-        image: true,
-      },
+      select: { id: true, name: true, image: true },
     },
     registrations: {
       take: 5,
@@ -34,7 +39,7 @@ export class EventRepository extends BaseRepository<
         date: { gte: new Date() },
       },
       orderBy: { date: 'asc' },
-      include: this.standardInclude,
+      include: this.listInclude,
     });
   }
 
@@ -49,7 +54,7 @@ export class EventRepository extends BaseRepository<
         location: { contains: location, mode: 'insensitive' },
       },
       orderBy: { date: 'asc' },
-      include: this.standardInclude,
+      include: this.listInclude,
     });
   }
 
@@ -60,7 +65,7 @@ export class EventRepository extends BaseRepository<
         date: { gte: startDate, lte: endDate },
       },
       orderBy: { date: 'asc' },
-      include: this.standardInclude,
+      include: this.listInclude,
     });
   }
 
@@ -72,7 +77,7 @@ export class EventRepository extends BaseRepository<
         date: { gte: new Date() },
       },
       orderBy: { date: 'asc' },
-      include: this.standardInclude,
+      include: this.listInclude,
     });
   }
 
