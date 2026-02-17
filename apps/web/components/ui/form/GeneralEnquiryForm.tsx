@@ -61,7 +61,7 @@ export default function GeneralEnquiryForm() {
           <Heading size='lg' color='primary' mb={2}>
             Get in Touch
           </Heading>
-          <Text fontSize='sm' color='gray.500'>
+          <Text fontSize='sm' color='gray.600'>
             Have questions about an adventure? We're here to help.
           </Text>
         </Box>

@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   Stack,
-  Stat,
   Text,
   Separator,
 } from '@chakra-ui/react';
@@ -12,9 +11,21 @@ import React from 'react';
 import { AvatarImage } from '../media/AvatarImage';
 
 const advisors = [
-  { src: '/images/home/home-hero-advisor-1.webp', name: 'Belly' },
-  { src: '/images/home/home-hero-advisor-2.webp', name: 'Brand' },
-  { src: '/images/home/home-hero-advisor-3.webp', name: 'Brook' },
+  {
+    src: '/images/home/home-hero-advisor-1.webp',
+    name: 'Belly',
+    alt: 'Travel advisor Belly',
+  },
+  {
+    src: '/images/home/home-hero-advisor-2.webp',
+    name: 'Brand',
+    alt: 'Travel advisor Brand',
+  },
+  {
+    src: '/images/home/home-hero-advisor-3.webp',
+    name: 'Brook',
+    alt: 'Travel advisor Brook',
+  },
 ];
 
 const stats = [
@@ -55,7 +66,7 @@ export const StatsHero = () => {
               borderColor='primary'
               borderRadius='full'
             >
-              <AvatarImage src={adv.src} name={adv.name} />
+              <AvatarImage src={adv.src} name={adv.name} alt={adv.alt} />
             </Box>
           ))}
           <Avatar.Root bg='white' color='primary'>
@@ -85,22 +96,19 @@ export const StatsHero = () => {
       >
         {stats.map((stat, idx) => (
           <React.Fragment key={idx}>
-            <Stat.Root textAlign='center' alignItems='center' minW='100px'>
-              <Stat.ValueText
-                fontWeight='bolder'
-                fontSize={{ base: '2xl', md: '3xl' }}
-              >
+            <Box textAlign='center' alignItems='center' minW='100px'>
+              <Text fontWeight='bolder' fontSize={{ base: '2xl', md: '3xl' }}>
                 {stat.value}+
-              </Stat.ValueText>
-              <Stat.Label
+              </Text>
+              <Text
                 color='gray.600'
                 fontSize={{ base: 'xs', md: 'sm' }}
                 textTransform='uppercase'
                 letterSpacing='wider'
               >
                 {stat.label}
-              </Stat.Label>
-            </Stat.Root>
+              </Text>
+            </Box>
 
             {idx < stats.length - 1 && (
               <Separator

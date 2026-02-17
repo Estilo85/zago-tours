@@ -111,7 +111,15 @@ export function Testimonials() {
           </Carousel.NextTrigger>
         </Carousel.Control>
 
-        <Carousel.Indicators mt={8} />
+        <Carousel.Indicators mt={8}>
+          {allTestimonials.map((_, index) => (
+            <Carousel.Indicator
+              key={index}
+              index={index}
+              style={{ padding: '10px' }}
+            />
+          ))}
+        </Carousel.Indicators>
       </Carousel.Root>
     </Container>
   );

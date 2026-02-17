@@ -134,6 +134,7 @@ export const HowItWorks = () => {
                   alt='how it work image'
                   height='200px'
                   width='200px'
+                  sizes='(max-width: 768px) 200px, 350px'
                 />
               </Box>
             ))}

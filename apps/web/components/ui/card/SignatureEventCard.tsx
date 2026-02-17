@@ -38,6 +38,7 @@ export const SignatureEventCard = ({
           width='100%'
           objectFit='cover'
           borderRadius='none'
+          priority={true}
         />
       </Box>
 

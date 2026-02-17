@@ -102,6 +102,7 @@ export class AdventureController {
       return ResponseUtil.success(res, result, 'Adventure updated');
     },
   );
+
   //==== GET ALL ADVENTURES ======
   getAll = asyncHandler(
     async (req: ReqQuery<AdventureListQueryDto>, res: Response) => {
@@ -149,14 +150,16 @@ export class AdventureController {
         where,
         orderBy: { createdAt: 'desc' },
       });
-
       if (req.userId) {
-        result.data = await Promise.all(
-          result.data.map(async (adventure) => ({
-            ...adventure,
-            isLiked: await this.service.checkIfLiked(req.userId!, adventure.id),
-          })),
+        const likedIds = await this.service.getLikedIds(
+          req.userId,
+          result.data.map((a) => a.id),
         );
+        const likedSet = new Set(likedIds);
+        result.data = result.data.map((adventure) => ({
+          ...adventure,
+          isLiked: likedSet.has(adventure.id),
+        }));
       }
 
       return ResponseUtil.paginated(res, result);

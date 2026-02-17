@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { Toaster } from '@/components/ui/toaster';
 import { Provider } from '@/components/ui/provider';
-import { Box, Flex } from '@chakra-ui/react';
 import Navbar from '@/components/layout/navbar/Navbar';
-import Footer from '@/components/layout/footer/Footer';
+
+import styles from './layout.module.css';
+import {
+  ClientFooter,
+  ClientToaster,
+} from '@/components/layout/ClientComponents';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,30 +38,14 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
-          <Flex direction='column' minH='100dvh' position='relative'>
-            <Box
-              as='header'
-              position='sticky'
-              top={0}
-              zIndex={1000}
-              bg='white'
-              borderBottomWidth='1px'
-            >
+          <div className={styles.layout}>
+            <header className={styles.header}>
               <Navbar />
-            </Box>
-
-            {/* Main Content Area - Takes remaining space */}
-            <Box as='main' flex='1 0 auto' width='100%' position='relative'>
-              {children}
-            </Box>
-
-            {/* Footer - Stays at bottom */}
-            <Box as='footer' flexShrink={0} width='100%' mt='auto'>
-              <Footer />
-            </Box>
-          </Flex>
-
-          <Toaster />
+            </header>
+            <main className={styles.main}>{children}</main>
+            <ClientFooter />
+          </div>
+          <ClientToaster />
         </Provider>
       </body>
     </html>

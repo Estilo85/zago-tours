@@ -70,7 +70,10 @@ export default function Footer() {
               Covent Garden <br /> United Kingdom
             </Text>
             <Flex align='center' gap={2} color='textPrimary'>
-              <AppLink href='https://www.instagram.com/zago.tours/'>
+              <AppLink
+                href='https://www.instagram.com/zago.tours/'
+                aria-label='Follow us on Instagram'
+              >
                 <Icon
                   as={FaInstagram}
                   size={{ base: 'md', md: 'xl' }}
@@ -80,7 +83,10 @@ export default function Footer() {
                   fill='gray.200'
                 />
               </AppLink>
-              <AppLink href='https://www.linkedin.com/company/zago-tours/'>
+              <AppLink
+                href='https://www.linkedin.com/company/zago-tours/'
+                aria-label='Follow us on Linkedin'
+              >
                 <Icon
                   as={FaLinkedin}
                   size={{ base: 'md', md: 'xl' }}
@@ -91,7 +97,10 @@ export default function Footer() {
                 />
               </AppLink>
 
-              <AppLink href='https://www.tiktok.com/@zagotours?_r=1&_t=ZS-93g7ciMliOj'>
+              <AppLink
+                href='https://www.tiktok.com/@zagotours?_r=1&_t=ZS-93g7ciMliOj'
+                aria-label='Follow us on Tiktok'
+              >
                 <Icon
                   as={FaTiktok}
                   size={{ base: 'md', md: 'xl' }}
@@ -102,7 +111,10 @@ export default function Footer() {
                 />
               </AppLink>
 
-              <AppLink href='https://youtube.com/@zagotours?si=BKyylHr3Xffm9TDI'>
+              <AppLink
+                href='https://youtube.com/@zagotours?si=BKyylHr3Xffm9TDI'
+                aria-label='Follow us on Youtube'
+              >
                 <Icon
                   as={FaYoutube}
                   size={{ base: 'md', md: 'xl' }}

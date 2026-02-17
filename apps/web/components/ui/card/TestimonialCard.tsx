@@ -53,7 +53,7 @@ export const TestimonialCard = ({
         <Box order={{ base: 1, md: 2 }}>
           <RatingGroup.Root count={5} value={rating} readOnly size='xs'>
             <RatingGroup.HiddenInput />
-            <RatingGroup.Control />
+            <RatingGroup.Control aria-hidden='true' />
           </RatingGroup.Root>
         </Box>
 

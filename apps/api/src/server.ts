@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -7,6 +8,19 @@ import { errorHandler } from './shared/middleware/error-handler.middleware';
 
 export const createServer = (): Express => {
   const app = express();
+  app.set('trust proxy', 1);
+
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+  });
 
   // Middleware Configuration
   app
@@ -25,8 +39,17 @@ export const createServer = (): Express => {
     )
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(morgan('dev'))
+    .use(express.json({ limit: '1mb' }))
+    .use(express.urlencoded({ extended: true, limit: '1mb' }))
 
+    //=======RateLimit=======
+    .use('/api', apiLimiter)
+    .use('/api/auth', authLimiter)
+    .use('/api/newsletter', authLimiter)
+    .use('/api/inquiries', authLimiter)
+    .use('/api/callback-requests', authLimiter)
+
+    .use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'))
     // Routes
     .get('/api', (req: Request, res: Response) => {
       res.json({
@@ -42,7 +65,6 @@ export const createServer = (): Express => {
         uptime: process.uptime(),
       });
     })
-    // .use(maintenanceMiddleware)
     .use(router)
 
     // Error Handler

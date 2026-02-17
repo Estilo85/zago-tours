@@ -8,6 +8,7 @@ interface AvatarImageProps {
   name: string;
   size?: AvatarSize;
   id?: string;
+  alt?: string;
 }
 
 export const AvatarImage = ({
@@ -15,6 +16,7 @@ export const AvatarImage = ({
   name,
   size = 'md',
   id,
+  alt,
 }: AvatarImageProps) => {
   const stableId = useMemo(() => {
     if (id) return id;
@@ -24,7 +26,7 @@ export const AvatarImage = ({
   return (
     <Avatar.Root size={size} id={stableId}>
       <Avatar.Fallback name={name} />
-      {src && <Avatar.Image src={src} />}
+      {src && <Avatar.Image src={src} alt={alt ?? name} />}{' '}
     </Avatar.Root>
   );
 };

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 
 interface ResponsiveImageProps {
-  src?: string; // Make optional
+  src?: string;
   alt: string;
   width?: BoxProps['width'];
   maxW?: '100%';

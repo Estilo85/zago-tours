@@ -34,6 +34,11 @@ export class AdventureService extends BaseService<
     await this.adventureRepo.createLike(userId, adventureId);
     return { liked: true, message: 'Liked' };
   }
+
+  async getLikedIds(userId: string, adventureIds: string[]): Promise<string[]> {
+    return this.adventureRepo.findLikedIds(userId, adventureIds);
+  }
+
   async checkIfLiked(userId: string, adventureId: string): Promise<boolean> {
     return !!(await this.adventureRepo.findLike(userId, adventureId));
   }

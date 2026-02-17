@@ -17,6 +17,7 @@ import { Calendar, MapPin, Timer } from 'lucide-react';
 import { AppLink } from '../link/AppLink';
 import { formatDate } from '@/utils/DateFormat';
 import { formatTime } from '@/utils/TimeFormat';
+import { optimizeCloudinaryImage } from '@/utils/CloudinaryImageOptimize';
 
 interface EventCardProps {
   event: EventResponseDto;
@@ -26,7 +27,7 @@ export const EventCard = ({ event }: EventCardProps) => {
   const attendees =
     event.registrations?.map((reg) => ({
       name: reg.user.name,
-      src: reg.user.image || undefined,
+      src: reg.user.image ? optimizeCloudinaryImage(reg.user.image) : undefined,
     })) || [];
 
   return (
@@ -144,6 +145,7 @@ export const EventCard = ({ event }: EventCardProps) => {
                   key={i}
                   name={person.name}
                   src={person.src || ''}
+                  alt={person.name}
                 />
               ))}
             </AvatarGroup>

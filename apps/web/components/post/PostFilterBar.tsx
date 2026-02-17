@@ -23,7 +23,13 @@ export function PostFilterBar({
   const [selectedTitle, setSelectedTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const countryOptions = getCountryOptions();
+  const [countryOptions, setCountryOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  useEffect(() => {
+    getCountryOptions().then(setCountryOptions);
+  }, []);
 
   useEffect(() => {
     const filtered = posts.filter((post) => {

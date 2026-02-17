@@ -83,6 +83,7 @@ const AdventureCard = ({
             borderRadius='none'
             objectFit='cover'
             objectPosition='top'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 280px'
             containerProps={{
               transition: 'transform 0.5s ease',
               _groupHover: { transform: 'scale(1.08)' },
@@ -160,7 +161,10 @@ const AdventureCard = ({
               size='xs'
             >
               <RatingGroup.HiddenInput />
-              <RatingGroup.Control />
+              <RatingGroup.Control
+                aria-hidden='true'
+                css={{ '& [data-part="item"]': { padding: '6px' } }}
+              />
             </RatingGroup.Root>
 
             <Text fontWeight='bold' fontSize='xs' ml='1.5' color='gray.600'>

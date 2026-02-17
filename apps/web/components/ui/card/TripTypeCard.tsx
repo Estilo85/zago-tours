@@ -4,6 +4,7 @@ import { AvatarImage } from '@/components/media/AvatarImage';
 import { Flex, Text, Icon, VStack, LinkBox } from '@chakra-ui/react';
 import { LuChevronRight } from 'react-icons/lu';
 import { AppLink } from '../link/AppLink';
+import { ResponsiveImage } from '@/components/media/ResponsiveImage';
 
 interface TripTypeCardProps {
   type: string;
@@ -22,8 +23,14 @@ export const TripTypeCard = ({
     <LinkBox>
       <Flex align='center' justify='space-between'>
         <Flex align='center' gap={4}>
-          <AvatarImage src={imageUrl || ''} name={label} />
-
+          <ResponsiveImage
+            src={imageUrl || ''}
+            alt={label}
+            width='70px'
+            height='70px'
+            borderRadius='full'
+            sizes='70px'
+          />
           <VStack align='start' gap={0}>
             <AppLink href={`/adventures/tripType/${type}`}>
               <Text fontWeight='bold' fontSize='lg'>

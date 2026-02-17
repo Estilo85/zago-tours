@@ -136,14 +136,6 @@ export const AdventureHero = ({
                 width={{ base: 'full', sm: 'auto' }}
                 justify='space-between'
               >
-                <Text
-                  fontWeight='bold'
-                  fontSize='sm'
-                  whiteSpace='nowrap'
-                  color='gray.700'
-                >
-                  Where to
-                </Text>
                 <Select.Root
                   collection={destinations}
                   size='sm'
@@ -151,6 +143,14 @@ export const AdventureHero = ({
                   value={selectedDestination ? [selectedDestination] : []}
                   onValueChange={(e) => onDestinationChange(e.value[0] || '')}
                 >
+                  <Select.Label
+                    fontWeight='bold'
+                    fontSize='sm'
+                    whiteSpace='nowrap'
+                    color='gray.700'
+                  >
+                    Where to
+                  </Select.Label>
                   <Select.Control>
                     <Select.Trigger>
                       <Select.ValueText placeholder='Select Country' />
@@ -184,14 +184,6 @@ export const AdventureHero = ({
                 width={{ base: 'full', sm: 'auto' }}
                 justify='space-between'
               >
-                <Text
-                  fontWeight='bold'
-                  fontSize='sm'
-                  whiteSpace='nowrap'
-                  color='gray.700'
-                >
-                  When
-                </Text>
                 <Select.Root
                   collection={dates}
                   size='sm'
@@ -199,6 +191,14 @@ export const AdventureHero = ({
                   value={selectedDate ? [selectedDate] : []}
                   onValueChange={(e) => onDateChange(e.value[0] || '')}
                 >
+                  <Select.Label
+                    fontWeight='bold'
+                    fontSize='sm'
+                    whiteSpace='nowrap'
+                    color='gray.700'
+                  >
+                    When
+                  </Select.Label>
                   <Select.Control>
                     <Select.Trigger>
                       <Select.ValueText placeholder='Anytime' />

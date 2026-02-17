@@ -84,6 +84,20 @@ export class AdventureRepository extends BaseRepository<
     });
   }
 
+  async findLikedIds(
+    userId: string,
+    adventureIds: string[],
+  ): Promise<string[]> {
+    const likes = await prisma.adventureLike.findMany({
+      where: {
+        userId,
+        adventureId: { in: adventureIds },
+      },
+      select: { adventureId: true },
+    });
+    return likes.map((l) => l.adventureId);
+  }
+
   async createLike(userId: string, adventureId: string) {
     return prisma.adventureLike.create({ data: { userId, adventureId } });
   }

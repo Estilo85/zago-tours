@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "browserslist": [
+    "chrome >= 109",
+    "firefox >= 115",
+    "safari >= 15.6",
+    "edge >= 109",
+    "not dead",
+    "not op_mini all"
+  ],
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
@@ -34,8 +42,6 @@
     "react-icons": "^5.5.0",
     "react-international-phone": "^4.6.1",
     "react-select": "^5.10.2",
-    "react-slick": "^0.31.0",
-    "slick-carousel": "^1.8.1",
     "world-countries": "^5.1.0",
     "zod": "^4.3.5",
     "zustand": "^5.0.9"
@@ -49,7 +55,6 @@
     "@types/node": "^25.0.3",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
-    "@types/react-slick": "^0.23.13",
     "@vitejs/plugin-react": "^5.1.2",
     "@zagotours/eslint-config": "workspace:*",
     "@zagotours/typescript-config": "workspace:*",
