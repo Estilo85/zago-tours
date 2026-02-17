@@ -18,16 +18,18 @@ import { dashboardRoute } from 'src/modules/dashboard/dashboard.routes';
 import { newsletterRoutes } from 'src/modules/newsletter/newsletter.routes';
 
 const router: Router = Router();
+const adventureRouter: Router = Router();
+
+adventureRouter.use(itineraryRoutes);
+adventureRouter.use(adventureGalleryRoutes);
+adventureRouter.use(adventureRoutes);
 
 // // Auth & User
 router.use('/api/auth', authRoutes);
 router.use('/api/users', userRoutes);
 
 // // Adventures
-router.use('/api/adventures', adventureRoutes);
-router.use('/api/adventures', itineraryRoutes);
-router.use('/api/adventures', adventureGalleryRoutes);
-
+router.use('/api/adventures', adventureRouter);
 // // Reviews
 router.use('/api/reviews', reviewRoutes);
 router.use('/api/newsletter', newsletterRoutes);

@@ -13,8 +13,6 @@ const repository = new ItineraryRepository();
 const service = new ItineraryService(repository);
 const controller = new ItineraryController(service);
 
-router.use(authenticate);
-
 router.post(
   '/:adventureId/itineraries',
   authenticate,
@@ -24,11 +22,7 @@ router.post(
 );
 
 // Get all itineraries for an adventure
-router.get(
-  '/:adventureId/itineraries',
-  authenticate,
-  controller.getByAdventure,
-);
+router.get('/:adventureId/itineraries', controller.getByAdventure);
 
 // Get single itinerary by ID
 router.get(

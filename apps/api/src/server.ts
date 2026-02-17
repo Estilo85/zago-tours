@@ -10,16 +10,21 @@ export const createServer = (): Express => {
   const app = express();
   app.set('trust proxy', 1);
 
-  const apiLimiter = rateLimit({
+  // Only define limiters for routes that actually need them
+  const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 200,
     standardHeaders: true,
     legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
   });
 
-  const authLimiter = rateLimit({
+  const strictLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
   });
 
   // Middleware Configuration
@@ -37,17 +42,25 @@ export const createServer = (): Express => {
         maxAge: 86400,
       }),
     )
-    .use(express.json())
-    .use(express.urlencoded({ extended: true }))
     .use(express.json({ limit: '1mb' }))
     .use(express.urlencoded({ extended: true, limit: '1mb' }))
 
     //=======RateLimit=======
-    .use('/api', apiLimiter)
-    .use('/api/auth', authLimiter)
-    .use('/api/newsletter', authLimiter)
-    .use('/api/inquiries', authLimiter)
-    .use('/api/callback-requests', authLimiter)
+    // Strict routes
+    .use('/api/auth', strictLimiter)
+    .use('/api/newsletter', strictLimiter)
+    .use('/api/inquiries', strictLimiter)
+    .use('/api/callback-requests', strictLimiter)
+
+    // General routes
+    .use('/api/users', generalLimiter)
+    .use('/api/reviews', generalLimiter)
+    .use('/api/trip-requests', generalLimiter)
+    .use('/api/trip-planning-calls', generalLimiter)
+    .use('/api/contracts', generalLimiter)
+    .use('/api/platform-settings', generalLimiter)
+    .use('/api/destination-countries', generalLimiter)
+    .use('/api/dashboard', generalLimiter)
 
     .use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'))
     // Routes
