@@ -48,10 +48,10 @@ export class AuthController {
   /**
    * Authenticate user and return user data (safe)
    */
-  login = async (req: ReqBody<LoginDto>, res: Response) => {
+  login = asyncHandler(async (req: ReqBody<LoginDto>, res: Response) => {
     const result = await this.authService.login(req.body);
     return ResponseUtil.success(res, result, 'Login successful');
-  };
+  });
 
   // Refresh token
   refreshToken = asyncHandler(
@@ -84,8 +84,10 @@ export class AuthController {
   /**
    * Reset password using a valid token
    */
-  resetPassword = async (req: ReqBody<ResetPasswordDto>, res: Response) => {
-    const result = await this.authService.resetPassword(req.body);
-    return ResponseUtil.success(res, null, result.message);
-  };
+  resetPassword = asyncHandler(
+    async (req: ReqBody<ResetPasswordDto>, res: Response) => {
+      const result = await this.authService.resetPassword(req.body);
+      return ResponseUtil.success(res, null, result.message);
+    },
+  );
 }
