@@ -62,7 +62,7 @@ export class ReviewRepository extends BaseRepository<
   async paginateWithDetails(
     page: number,
     limit: number,
-    filters?: Prisma.ReviewWhereInput
+    filters?: Prisma.ReviewWhereInput,
   ) {
     return this.paginate({
       page,

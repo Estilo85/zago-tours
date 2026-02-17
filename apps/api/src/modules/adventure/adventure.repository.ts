@@ -10,17 +10,28 @@ export class AdventureRepository extends BaseRepository<
 > {
   protected readonly modelDelegate = prisma.adventure;
 
+  // For LIST (paginate) - only counts, no nested data
+  private readonly listInclude: Prisma.AdventureInclude = {
+    _count: {
+      select: {
+        likes: true,
+        itineraries: true,
+        gallery: true,
+      },
+    },
+    gallery: {
+      orderBy: { order: 'asc' },
+      take: 1,
+    },
+  };
+
   private readonly standardInclude: Prisma.AdventureInclude = {
     itineraries: { orderBy: { dayNumber: 'asc' } },
     gallery: { orderBy: { order: 'asc' } },
     likes: {
       include: {
         user: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
+          select: { id: true, name: true, image: true },
         },
       },
     },
@@ -72,7 +83,7 @@ export class AdventureRepository extends BaseRepository<
   async paginate(options: any) {
     return super.paginate({
       ...options,
-      include: options.include || this.standardInclude,
+      include: options.include || this.listInclude,
       where: { deletedAt: null, ...options.where },
       orderBy: { createdAt: 'desc' },
     });
