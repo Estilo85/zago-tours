@@ -10,10 +10,17 @@ export const createServer = (): Express => {
   const app = express();
   app.set('trust proxy', 1);
 
-  // Only define limiters for routes that actually need them
   const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 200,
+    max: 1000,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
+  });
+
+  const publicLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 1000,
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: 'Too many requests, please try again in 15 minutes.' },

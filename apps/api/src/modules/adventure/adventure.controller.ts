@@ -1,3 +1,4 @@
+import NodeCache from 'node-cache';
 import { Response } from 'express';
 import { AdventureService } from './adventure.service';
 import { ResponseUtil } from 'src/shared/utils/responseUtils';
@@ -17,6 +18,7 @@ import {
 import { UuidParam } from 'src/common/validation/common.validation';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
 
+const cache = new NodeCache({ stdTTL: 60 });
 export class AdventureController {
   constructor(private readonly service: AdventureService) {}
 
@@ -119,6 +121,25 @@ export class AdventureController {
         minPrice,
       } = req.query;
 
+      const hasFilters = !!(
+        status ||
+        level ||
+        access ||
+        location ||
+        search ||
+        tripType ||
+        maxPrice ||
+        minPrice
+      );
+      const isAuthed = !!req.userId;
+      const isDefaultPage = page === '1' && limit === '10';
+
+      // Serve from cache for default unauthenticated list only
+      if (!hasFilters && !isAuthed && isDefaultPage) {
+        const cached = cache.get<any>('adventures:list:default');
+        if (cached) return ResponseUtil.paginated(res, cached);
+      }
+
       const where: any = { deletedAt: null };
 
       if (status) where.status = status.toUpperCase();
@@ -150,6 +171,7 @@ export class AdventureController {
         where,
         orderBy: { createdAt: 'desc' },
       });
+
       if (req.userId) {
         const likedIds = await this.service.getLikedIds(
           req.userId,
@@ -162,10 +184,14 @@ export class AdventureController {
         }));
       }
 
+      // Store in cache only for default unauthenticated list
+      if (!hasFilters && !isAuthed && isDefaultPage) {
+        cache.set('adventures:list:default', result);
+      }
+
       return ResponseUtil.paginated(res, result);
     },
   );
-
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const { id } = req.params;
