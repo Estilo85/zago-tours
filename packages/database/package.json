@@ -23,7 +23,7 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
-    "db:seed": "tsx src/seed.ts",
+    "db:create-admin": "tsx src/create-admin.ts",
     "dev": "tsup src/client.ts --watch",
     "format": "prisma format",
     "generate": "prisma generate",
