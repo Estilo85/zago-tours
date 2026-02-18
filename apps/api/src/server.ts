@@ -1,10 +1,46 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import router from './routes';
+import { errorHandler } from './shared/middleware/error-handler.middleware';
 
 export const createServer = (): Express => {
   const app = express();
+  app.set('trust proxy', 1);
+
+  const strictLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
+  });
+
+  const formLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 50,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
+  });
+
+  const publicLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 500,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
+  });
+
+  const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again in 15 minutes.' },
+  });
 
   // Middleware Configuration
   app
@@ -12,16 +48,38 @@ export const createServer = (): Express => {
     .use(helmet())
     .use(
       cors({
-        origin: process.env.CLIENT_URL || 'http://localhost:3000',
+        origin: [
+          process.env.FRONTEND_URL || 'http://localhost:3000',
+          'https://staging.zagotours.com',
+          'https://zagotours.com',
+        ],
         credentials: true,
-      })
+        maxAge: 86400,
+      }),
     )
-    .use(express.json())
-    .use(express.urlencoded({ extended: true }))
-    .use(morgan('dev'))
+    .use(express.json({ limit: '1mb' }))
+    .use(express.urlencoded({ extended: true, limit: '1mb' }))
 
+    //=======RateLimit=======
+    .use('/api/auth', strictLimiter)
+    .use('/api/newsletter', formLimiter)
+    .use('/api/inquiries', formLimiter)
+    .use('/api/callback-requests', formLimiter)
+
+    .use('/api/adventures', publicLimiter)
+    .use('/api/events', publicLimiter)
+    .use('/api/reviews', publicLimiter)
+
+    .use('/api/users', generalLimiter)
+    .use('/api/trip-requests', generalLimiter)
+    .use('/api/trip-planning-calls', generalLimiter)
+    .use('/api/contracts', generalLimiter)
+    .use('/api/platform-settings', generalLimiter)
+    .use('/api/dashboard', generalLimiter)
+
+    .use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'))
     // Routes
-    .get('/', (req: Request, res: Response) => {
+    .get('/api', (req: Request, res: Response) => {
       res.json({
         message: 'Welcome to ZagoTour API',
         version: '1.0.0',
@@ -35,24 +93,10 @@ export const createServer = (): Express => {
         uptime: process.uptime(),
       });
     })
+    .use(router)
 
-    // 404 Handler
-    .use((req: Request, res: Response) => {
-      res.status(404).json({
-        error: 'Route not found',
-        path: req.path,
-      });
-    })
-
-    // Error Handling Middleware
-    .use((err: Error, req: Request, res: Response, next: NextFunction) => {
-      console.error('Error:', err.stack);
-      res.status(500).json({
-        error: 'Something went wrong!',
-        message:
-          process.env.NODE_ENV === 'development' ? err.message : undefined,
-      });
-    });
+    // Error Handler
+    .use(errorHandler);
 
   return app;
 };

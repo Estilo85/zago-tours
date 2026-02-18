@@ -1,7 +1,23 @@
 'use client';
 
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
+import { SessionProvider } from 'next-auth/react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { getQueryClient } from '@/lib/get-query-client';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import system from '@/theme';
+import { useState } from 'react';
 
 export function Provider({ children }: { children: React.ReactNode }) {
-  return <ChakraProvider value={defaultSystem}>{children}</ChakraProvider>;
+  const [queryClient] = useState(() => getQueryClient());
+  return (
+    <SessionProvider>
+      <ChakraProvider value={system}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ChakraProvider>
+    </SessionProvider>
+  );
 }

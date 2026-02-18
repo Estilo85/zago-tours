@@ -1,15 +1,18 @@
-import { config } from 'dotenv';
+import 'dotenv/config';
 import { createServer } from './server';
+import { prisma } from '@zagotours/database';
 
-// Load environment
-config();
+const port = process.env.PORT || 3000;
+const app = createServer();
 
-const port = process.env.PORT || 4000;
-const server = createServer();
+const server = app.listen(port, () => {
+  console.log(`⚡️ API running on ${port}`);
+});
 
-server.listen(port, () => {
-  console.log(`⚡️ [server]: API server is running on port ${port}`);
-  console.log(
-    `🌍 [server]: Environment: ${process.env.NODE_ENV || 'development'}`
-  );
+process.on('SIGTERM', async () => {
+  console.log('Shutting down gracefully...');
+  server.close(async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });
 });

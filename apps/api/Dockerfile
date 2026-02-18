@@ -1,57 +1,44 @@
-# Stage 1: The Base
+# Stage 1: Base image
 FROM node:20-alpine AS base
 RUN npm install -g pnpm turbo
 WORKDIR /app
 
-# Stage 2: The Pruner
+# Stage 2: Extract only the API sub-graph
 FROM base AS pruner
-ARG APP_NAME
+ARG APP_NAME=@zagotours/api
 COPY . .
 RUN turbo prune ${APP_NAME} --docker
 
-# Stage 3: The Installer
+# Stage 3: Install dependencies
 FROM base AS installer
-ARG APP_NAME
 WORKDIR /app
-
-# Copy the "thin" package.json files and the lockfile
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-
-# Install dependencies (even for the database package)
 RUN pnpm install --frozen-lockfile
 
-# Stage 4: The Builder
+# Stage 4: Build the API
 FROM base AS builder
-ARG APP_NAME
+ARG APP_NAME=@zagotours/api
 WORKDIR /app
-
-# Copy the node_modules from the installer stage
 COPY --from=installer /app .
-# Copy the actual source code from the pruner stage
 COPY --from=pruner /app/out/full/ .
 COPY turbo.json turbo.json
 
-# 1. Generate the Prisma Client for Linux (Alpine)
-RUN pnpm turbo run generate --filter=@zagotours/database
+RUN pnpm turbo run generate --filter=${APP_NAME}
 
-# 2. Build the app (API or Web)
 RUN pnpm turbo run build --filter=${APP_NAME}
 
-# Stage 5: The Runner
-
+# Stage 5: Final Runner
 FROM node:20-alpine AS runner
 WORKDIR /app
-ARG APP_NAME
-# Set an environment variable so the CMD knows which app to start
-ENV APP_TARGET=${APP_NAME}
+ENV NODE_ENV=production
+ARG APP_NAME=@zagotours/api
 
-# Copy the built files and the modules from the builder
+# Copy everything from builder
 COPY --from=builder /app .
 
-# Expose ports for both API (3001) and Web (3000)
-EXPOSE 3000 3001
+EXPOSE 3001
 
-# Start the specific app
-CMD pnpm --filter ${APP_TARGET} start
+# Start the API using the turbo filter
+CMD ["pnpm", "turbo", "run", "start", "--filter=@zagotours/api"]
