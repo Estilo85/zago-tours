@@ -171,9 +171,11 @@ export function useJoinEvent() {
       apiRequest(API_ENDPOINTS.EVENTS.JOIN(id), {
         method: 'POST',
       }),
-    onSuccess: async (_result, id) => {
-      await queryClient.refetchQueries({ queryKey: eventKeys.detail(id) });
-      await queryClient.refetchQueries({ queryKey: eventKeys.myBookings() });
+    onSuccess: (_result, id) => {
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
       toaster.create({
         title: 'Registration Successful',
         description: 'You have successfully registered for this event',
@@ -183,7 +185,7 @@ export function useJoinEvent() {
     onError: (error: any) => {
       toaster.create({
         title: 'Registration Failed',
-        description: error.message || 'Failed to register for event',
+        description: 'Failed to register for event',
         type: 'error',
       });
     },
@@ -198,9 +200,11 @@ export function useCancelEventRegistration() {
       apiRequest(API_ENDPOINTS.EVENTS.CANCEL_REGISTRATION(id), {
         method: 'POST',
       }),
-    onSuccess: async (_result, id) => {
-      await queryClient.refetchQueries({ queryKey: eventKeys.detail(id) });
-      await queryClient.refetchQueries({ queryKey: eventKeys.myBookings() });
+    onSuccess: (_result, id) => {
+      queryClient.invalidateQueries({ queryKey: eventKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
+      queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
       toaster.create({
         title: 'Registration Cancelled',
         description: 'Your event registration has been cancelled',
@@ -210,7 +214,7 @@ export function useCancelEventRegistration() {
     onError: (error: any) => {
       toaster.create({
         title: 'Cancellation Failed',
-        description: error.message || 'Failed to cancel registration',
+        description: 'Failed to cancel registration',
         type: 'error',
       });
     },

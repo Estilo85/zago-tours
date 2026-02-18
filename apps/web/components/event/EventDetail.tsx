@@ -40,7 +40,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
 
   const handleJoinEvent = () => {
     if (!isAuthenticated) {
-      router.push('/login?redirect=/events/' + event.id);
+      router.push('/login');
       return;
     }
     joinEvent.mutate(event.id);
