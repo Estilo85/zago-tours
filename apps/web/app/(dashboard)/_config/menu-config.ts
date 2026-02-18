@@ -2,15 +2,9 @@ import { Role } from '@zagotours/types';
 import { HelpCircle, House, MapMinus, Video } from 'lucide-react';
 import {
   LuCalendar,
-  LuMapPin,
   LuSettings,
-  LuShieldCheck,
   LuUsers,
-  LuPlane,
-  LuBriefcase,
-  LuBuilding2,
   LuTicket,
-  LuDollarSign,
   LuUserPlus,
   LuPhone,
   LuFileText,
@@ -18,7 +12,6 @@ import {
   LuMessagesSquare,
   LuClipboardList,
   LuGlobe,
-  LuSignature,
 } from 'react-icons/lu';
 
 // Comprehensive admin menu items

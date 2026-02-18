@@ -179,14 +179,6 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => buildUrl(`/contracts/${id}`),
   },
 
-  // Agent Assignment
-  AGENTS: {
-    AVAILABLE: buildUrl('/agents/available'),
-    VALIDATE: (id: string) => buildUrl(`/agents/${id}/validate`),
-    ASSIGNMENT_STATS: buildUrl('/agents/assignment-stats'),
-    TEST_AUTO_ASSIGN: buildUrl('/agents/test-auto-assign'),
-  },
-
   // Dashboard
   DASHBOARD: {
     STATS: buildUrl('/dashboard/stats'),
@@ -199,29 +191,6 @@ export const API_ENDPOINTS = {
   NEWSLETTER: {
     SUBSCRIBE: buildUrl('/newsletter/subscribe'),
     LIST: buildUrl('/newsletter/list'),
-  },
-
-  // Destination Countries
-  COUNTRIES: {
-    LIST: buildUrl('/countries'),
-    BY_ID: (id: string) => buildUrl(`/countries/${id}`),
-    CREATE: buildUrl('/countries'),
-    UPDATE: (id: string) => buildUrl(`/countries/${id}`),
-    TOGGLE_ACTIVE: (id: string) => buildUrl(`/countries/${id}/toggle-active`),
-    DELETE: (id: string) => buildUrl(`/countries/${id}`),
-  },
-
-  // Platform Settings
-  SETTINGS: {
-    PUBLIC: buildUrl('/settings/public'),
-    MAINTENANCE_CHECK: buildUrl('/settings/maintenance-check'),
-    GET: buildUrl('/settings'),
-    UPDATE: buildUrl('/settings'),
-    UPDATE_SITE_NAME: buildUrl('/settings/site-name'),
-    UPDATE_CONTACT_EMAIL: buildUrl('/settings/contact-email'),
-    ENABLE_MAINTENANCE: buildUrl('/settings/maintenance/enable'),
-    DISABLE_MAINTENANCE: buildUrl('/settings/maintenance/disable'),
-    CLEAR_CACHE: buildUrl('/settings/cache/clear'),
   },
 } as const;
 

@@ -4,12 +4,10 @@
   "type": "module",
   "private": true,
   "browserslist": [
-    "chrome >= 109",
-    "firefox >= 115",
-    "safari >= 15.6",
-    "edge >= 109",
+    "last 2 versions",
+    "> 0.5%",
     "not dead",
-    "not op_mini all"
+    "supports es6-module"
   ],
   "scripts": {
     "dev": "next dev --port 3000",
