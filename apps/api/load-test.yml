@@ -59,14 +59,13 @@ scenarios:
 
   # ─── 2. Auth rate-limit routes (intentionally low weight) ─────────────────
   - name: "Auth Routes"
-    weight: 10   # Only 10% — these are rate-limited to 10 req/15min
+    weight: 10   
     flow:
       - post:
           url: "/api/auth/login"
           json:
-            email: "admin@zagotours.com"
-            password: "StrongPassword123!"
-          # We expect 200 or 401 — both are valid (not a server crash)
+            email: "abdulazeezmuritador9@gmail.com"
+            password: "password123"
           expect:
             - statusCode:
                 - 200

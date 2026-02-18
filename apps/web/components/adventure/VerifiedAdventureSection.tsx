@@ -137,9 +137,11 @@ export default function VerifiedAdventureSection({
 
       <SimpleGrid
         columns={{ base: 1, md: 3 }}
-        gap={{ base: 2, md: 3 }}
+        spaceX={{ base: 4, md: 6 }}
+        spaceY={{ base: 8, md: 10 }}
         width={{ base: '100%', lg: '900px' }}
         justifyItems='center'
+        mt={8}
         p={0}
       >
         {filteredAdventures.map((adventure) => (

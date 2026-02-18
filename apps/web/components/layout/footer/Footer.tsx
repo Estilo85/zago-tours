@@ -55,16 +55,15 @@ export default function Footer() {
         >
           {/* Brand Section */}
           <Stack>
-            <Flex as='span' mt='-10px' alignItems='center' gap={3}>
-              <ResponsiveImage
-                src='/images/logo/zago logo png-03.webp'
-                alt='ZagoTours Logo'
-                width={{ base: '35px', md: '45px' }}
-                height={{ base: '35px', md: '45px' }}
-                objectFit='contain'
-                borderRadius='none'
-              />
-            </Flex>
+            <ResponsiveImage
+              src='/images/logo/zago logo png-03.webp'
+              alt='ZagoTours Logo'
+              width={{ base: '35px', md: '45px' }}
+              height={{ base: '35px', md: '45px' }}
+              objectFit='contain'
+              borderRadius='none'
+            />
+
             <Text color='textPrimary'>
               73, Shelton Street <br />
               Covent Garden <br /> United Kingdom
