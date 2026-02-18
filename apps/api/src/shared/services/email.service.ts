@@ -77,7 +77,11 @@ export class EmailService {
               <p>Welcome to Zago Tours!</p>
               <p>Over the next few days I'll be sending you notes on how to use our platform.</p>
               <p>But for now…</p>
-              <a href="${process.env.FRONTEND_URL}/login" class="button">Activate your account</a>
+            <a href="${process.env.FRONTEND_URL}/login" 
+            class="button" 
+          style="background-color: #196469; color: #ffffff; padding: 12px 25px; text-decoration: none; display: inline-block; border-radius: 4px; font-family: sans-serif; font-weight: bold;">
+                             Activate your account
+            </a>
               <div class="ps">
                 <p><strong>PS:</strong> If we landed in your spam, you might want to mark us as "not spam"</p>
               </div>

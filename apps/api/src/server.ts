@@ -53,20 +53,20 @@ export const createServer = (): Express => {
     .use(express.urlencoded({ extended: true, limit: '1mb' }))
 
     //=======RateLimit=======
-    // Strict routes
     .use('/api/auth', strictLimiter)
     .use('/api/newsletter', strictLimiter)
     .use('/api/inquiries', strictLimiter)
     .use('/api/callback-requests', strictLimiter)
 
-    // General routes
+    .use('/api/adventures', publicLimiter)
+    .use('/api/events', publicLimiter)
+    .use('/api/reviews', publicLimiter)
+
     .use('/api/users', generalLimiter)
-    .use('/api/reviews', generalLimiter)
     .use('/api/trip-requests', generalLimiter)
     .use('/api/trip-planning-calls', generalLimiter)
     .use('/api/contracts', generalLimiter)
     .use('/api/platform-settings', generalLimiter)
-    .use('/api/destination-countries', generalLimiter)
     .use('/api/dashboard', generalLimiter)
 
     .use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'))

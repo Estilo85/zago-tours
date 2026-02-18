@@ -53,17 +53,7 @@ scenarios:
             - statusCode: 200
 
       - get:
-          url: "/api/destination-countries"
-          expect:
-            - statusCode: 200
-
-      - get:
           url: "/api/events"
-          expect:
-            - statusCode: 200
-
-      - get:
-          url: "/api/platform-settings"
           expect:
             - statusCode: 200
 

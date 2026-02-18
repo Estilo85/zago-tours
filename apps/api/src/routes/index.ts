@@ -11,8 +11,6 @@ import { callbackRequestRoutes } from '../modules/callback-request/callback-requ
 import { generalInquiryRoutes } from '../modules/general-enquiry/general-inquiry.routes';
 import { tripPlanningCallRoutes } from '../modules/trip-planning-call/trip-planning-call.routes';
 import { contractRoutes } from '../modules/contract/contract.routes';
-import { platformSettingsRoutes } from '../modules/platform-settings/platform-settings.routes';
-import { destinationCountryRoutes } from '../modules/destination-country/destination-country.routes';
 import { itineraryRoutes } from 'src/modules/itinerary/itinerary.routes';
 import { dashboardRoute } from 'src/modules/dashboard/dashboard.routes';
 import { newsletterRoutes } from 'src/modules/newsletter/newsletter.routes';
@@ -46,10 +44,6 @@ router.use('/api/inquiries', generalInquiryRoutes);
 // // Calls & Contracts
 router.use('/api/trip-planning-calls', tripPlanningCallRoutes);
 router.use('/api/contracts', contractRoutes);
-
-// // Settings
-router.use('/api/platform-settings', platformSettingsRoutes);
-router.use('/api/destination-countries', destinationCountryRoutes);
 
 //Statistics
 router.use('/api/dashboard', dashboardRoute);
