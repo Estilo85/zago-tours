@@ -23,7 +23,7 @@ export const HomeHero = () => {
       bg='primary'
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
-      p={{ base: 5, md: 10 }}
+      p={{ base: 2, md: 10 }}
       pb={{ base: 5, md: '200px' }}
       mb={{ base: 5, md: '350px' }}
       position='relative'
@@ -77,7 +77,7 @@ export const HomeHero = () => {
       >
         <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
           <ResponsiveImage
-            src='/images/home/banner.webp'
+            src='/images/adventures/tripType/skiing.webp'
             alt='home page banner image'
             width='100%'
             priority={true}
