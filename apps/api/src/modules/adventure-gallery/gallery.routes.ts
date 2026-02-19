@@ -23,7 +23,7 @@ router.post(
 // Get all gallery items for an adventure
 router.get('/:adventureId/gallery', authenticate, controller.getByAdventure);
 
-router.put(
+router.patch(
   '/gallery/reorder',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
@@ -34,14 +34,12 @@ router.put(
 router.get('/gallery/:id', authenticate, controller.getById);
 
 // Update gallery item metadata (altText, order)
-router.put(
+router.patch(
   '/gallery/:id',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
   controller.update,
 );
-
-// Reorder gallery items
 
 // Delete gallery item (with Cloudinary cleanup)
 router.delete(

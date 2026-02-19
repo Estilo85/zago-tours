@@ -11,8 +11,6 @@ import {
   HStack,
   SimpleGrid,
   Field,
-  Spinner,
-  Center,
   createListCollection,
   Image,
   IconButton,
@@ -44,6 +42,7 @@ import {
   AdventureStatusLabels,
   UpdateAdventureDto,
 } from '@zagotours/types';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 type FormDataWithImage = UpdateAdventureDto & {
   imageFile?: File | null;
@@ -151,7 +150,6 @@ export default function EditAdventurePage() {
     e.preventDefault();
     if (!formData) return;
 
-    // Create FormData for multipart/form-data submission
     const submitData = new FormData();
 
     // Append all fields
@@ -197,11 +195,7 @@ export default function EditAdventurePage() {
   };
 
   if (isFetching || !formData) {
-    return (
-      <Center h='60vh'>
-        <Spinner size='xl' />
-      </Center>
-    );
+    return <LoadingState />;
   }
 
   const displayImage = formData.imagePreview || formData.currentImage;
