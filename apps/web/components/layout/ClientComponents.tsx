@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const Footer = dynamic(() => import('./footer/Footer'), { ssr: false });
+const Footer = dynamic(() => import('./Footer/Footer'), { ssr: false });
 
 const Toaster = dynamic(() => import('../ui/toaster').then((m) => m.Toaster), {
   ssr: false,
