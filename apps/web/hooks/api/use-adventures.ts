@@ -531,7 +531,7 @@ export function useReorderGallery() {
   return useMutation({
     mutationFn: (data: ReorderGalleryDto) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.GALLERY.REORDER, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(data),
       }),
     onSuccess: () => {

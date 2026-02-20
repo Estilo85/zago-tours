@@ -25,6 +25,7 @@ import { Adventure } from '@zagotours/types';
 import { LoadingState } from '@/components/ui/LoadingState';
 import { DataTable } from '../../_components/table/DataTable';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
+import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
 
 export default function AdventuresPage() {
   const router = useRouter();
@@ -150,7 +151,7 @@ export default function AdventuresPage() {
         overflow='hidden'
         position='relative'
       >
-        {isLoading && <LoadingState message='Loading data...' />}
+        {isLoading && <DataTableSkeleton columns={5} />}
 
         <DataTable columns={columns} data={adventures} />
 

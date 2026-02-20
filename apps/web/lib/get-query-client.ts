@@ -1,24 +1,11 @@
 import {
   isServer,
   QueryClient,
-  QueryCache,
   defaultShouldDehydrateQuery,
 } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 
 function makeQueryClient() {
   return new QueryClient({
-    queryCache: new QueryCache({
-      onError: (error) => {
-        if (!isServer) {
-          toaster.create({
-            title: 'Data Fetch Error',
-            description: error.message,
-            type: 'error',
-          });
-        }
-      },
-    }),
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000,
@@ -34,7 +21,6 @@ function makeQueryClient() {
   });
 }
 
-// Global variable to persist the client instance in the browser
 let browserQueryClient: QueryClient | undefined = undefined;
 
 export function getQueryClient() {
