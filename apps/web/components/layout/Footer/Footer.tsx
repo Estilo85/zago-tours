@@ -15,13 +15,7 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaTiktok,
-  FaYoutube,
-} from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Send } from 'lucide-react';
 import { navlinks } from '@/components/ui/navigation/navbar/nav.config';
 import { AppLink } from '@/components/ui/link/AppLink';

@@ -7,7 +7,6 @@ import {
   Heading,
   Text,
   Stack,
-  Box,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { LuArrowLeft, LuArrowRight } from 'react-icons/lu';
@@ -75,7 +74,7 @@ export function Testimonials() {
         slidesPerPage={slidesPerPage}
         position='relative'
       >
-        <Carousel.Control mb={6} justifyContent='flex-end' gap='3'>
+        <Carousel.Control mb={4} justifyContent='flex-end' gap='3'>
           <Carousel.PrevTrigger asChild>
             <IconButton
               variant='subtle'
@@ -86,19 +85,6 @@ export function Testimonials() {
               <LuArrowLeft />
             </IconButton>
           </Carousel.PrevTrigger>
-
-          <Carousel.ItemGroup>
-            {allTestimonials.map((item, index) => (
-              <Carousel.Item key={index} index={index}>
-                <TestimonialCard
-                  quote={item.qoute}
-                  author={item.author}
-                  rating={item.rating}
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel.ItemGroup>
-
           <Carousel.NextTrigger asChild>
             <IconButton
               variant='subtle'
@@ -111,15 +97,17 @@ export function Testimonials() {
           </Carousel.NextTrigger>
         </Carousel.Control>
 
-        <Carousel.Indicators mt={8}>
-          {allTestimonials.map((_, index) => (
-            <Carousel.Indicator
-              key={index}
-              index={index}
-              style={{ padding: '10px' }}
-            />
+        <Carousel.ItemGroup>
+          {allTestimonials.map((item, index) => (
+            <Carousel.Item key={index} index={index}>
+              <TestimonialCard
+                quote={item.qoute}
+                author={item.author}
+                rating={item.rating}
+              />
+            </Carousel.Item>
           ))}
-        </Carousel.Indicators>
+        </Carousel.ItemGroup>
       </Carousel.Root>
     </Container>
   );
