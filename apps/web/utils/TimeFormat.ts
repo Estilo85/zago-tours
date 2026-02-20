@@ -1,10 +1,7 @@
-export const formatTime = (dateTime: string | Date | null | undefined) => {
-  if (!dateTime) return 'N/A';
-
-  const dateObj = typeof dateTime === 'string' ? new Date(dateTime) : dateTime;
-
+export const formatTime = (date: string | Date | null | undefined) => {
+  if (!date) return 'N/A';
+  const dateObj = new Date(date);
   if (isNaN(dateObj.getTime())) return 'Invalid Time';
-
   return dateObj.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',

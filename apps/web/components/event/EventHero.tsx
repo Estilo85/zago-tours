@@ -7,7 +7,12 @@ import { AppLink } from '../ui/link/AppLink';
 
 export const EventHero = () => {
   return (
-    <Box bg='primary' color='textPrimary' p={{ base: 5, md: 10 }}>
+    <Box
+      bg='primary'
+      color='textPrimary'
+      p={{ base: 5, md: 10 }}
+      borderRadius='2xl'
+    >
       <Stack textAlign='center' gap={5} align='center'>
         <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
           Adventure Starts <br /> With Knowledge

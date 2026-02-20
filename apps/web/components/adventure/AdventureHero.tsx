@@ -79,7 +79,7 @@ export const AdventureHero = ({
         maxW='container.xl'
         mx='auto'
         px={4}
-        pb={{ base: 10, md: '100px' }}
+        pb={{ base: 5, md: '100px' }}
       >
         <Heading
           size={{ base: '2xl', md: '4xl' }}
@@ -139,7 +139,7 @@ export const AdventureHero = ({
                 <Select.Root
                   collection={destinations}
                   size='sm'
-                  width={{ base: '150px', md: '120px' }}
+                  width={{ base: '100%', md: '120px' }}
                   value={selectedDestination ? [selectedDestination] : []}
                   onValueChange={(e) => onDestinationChange(e.value[0] || '')}
                 >
@@ -187,7 +187,7 @@ export const AdventureHero = ({
                 <Select.Root
                   collection={dates}
                   size='sm'
-                  width={{ base: '150px', md: '120px' }}
+                  width={{ base: '100%', md: '120px' }}
                   value={selectedDate ? [selectedDate] : []}
                   onValueChange={(e) => onDateChange(e.value[0] || '')}
                 >

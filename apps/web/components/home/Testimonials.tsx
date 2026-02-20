@@ -69,7 +69,7 @@ export function Testimonials() {
       <Carousel.Root
         slideCount={allTestimonials.length}
         mx='auto'
-        gap='6'
+        gap='4'
         allowMouseDrag
         slidesPerPage={slidesPerPage}
         position='relative'

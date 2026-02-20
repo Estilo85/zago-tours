@@ -310,7 +310,7 @@ model Event {
   id                String              @id @default(uuid())
   title             String
   date              DateTime
-  time              String?
+
   description       String
   location          String
   creator           User                @relation(fields: [createdBy], references: [id])

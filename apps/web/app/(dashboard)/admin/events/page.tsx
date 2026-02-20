@@ -19,10 +19,10 @@ import { useDeleteEvent, useEvents } from '@/hooks';
 import { formatDate } from '@/utils/DateFormat';
 import { DataTable } from '../../_components/table/DataTable';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
-import { LoadingState } from '@/components/ui/LoadingState';
 import { useState, Suspense } from 'react';
 import { Grip } from 'lucide-react';
 import { formatTime } from '@/utils/TimeFormat';
+import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
 
 function AdminEventsContent() {
   const router = useRouter();
@@ -59,8 +59,8 @@ function AdminEventsContent() {
     },
     {
       label: 'Time',
-      key: 'time' as keyof EventResponseDto,
-      render: (val: any, row: any) => (
+      key: 'date' as keyof EventResponseDto,
+      render: (val: any) => (
         <Box>
           <Badge variant='subtle' colorPalette='blue' size='xs'>
             {formatTime(val)}
@@ -141,7 +141,7 @@ function AdminEventsContent() {
         borderWidth='1px'
         overflow='hidden'
       >
-        {isLoading && <LoadingState message='Loading data...' />}
+        {isLoading && <DataTableSkeleton columns={5} />}
 
         {!isLoading && <DataTable columns={columns} data={events} />}
 
@@ -181,7 +181,7 @@ function AdminEventsContent() {
 
 export default function AdminEventsPage() {
   return (
-    <Suspense fallback={<LoadingState message='Loading events...' />}>
+    <Suspense fallback={<DataTableSkeleton columns={5} />}>
       <AdminEventsContent />
     </Suspense>
   );
