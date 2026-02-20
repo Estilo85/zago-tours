@@ -124,6 +124,7 @@ export const HowItWorks = () => {
             {resImageData.map((img, i) => (
               <Box
                 key={i}
+                width='100%'
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
@@ -133,8 +134,8 @@ export const HowItWorks = () => {
                   src={img}
                   alt='how it work image'
                   height='200px'
-                  width='200px'
-                  sizes='(max-width: 768px) 200px, 350px'
+                  width={{ base: '100%', md: '200px' }}
+                  sizes='(max-width: 768px) 100vw, 350px'
                 />
               </Box>
             ))}
