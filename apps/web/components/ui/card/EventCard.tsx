@@ -80,7 +80,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
             <Flex align='center' gap={2}>
               <Timer size={12} />
-              <Text>{formatTime(event.time)}</Text>
+              <Text>{formatTime(event.date)}</Text>
             </Flex>
           </HStack>
 
