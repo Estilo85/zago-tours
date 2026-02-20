@@ -66,10 +66,13 @@ export const API_ENDPOINTS = {
         buildUrl(`/adventures/${adventureId}/gallery`),
       BULK_UPLOAD: (adventureId: string) =>
         buildUrl(`/adventures/${adventureId}/gallery/bulk`),
-      BY_ID: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
-      UPDATE: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
-      REORDER: buildUrl('/gallery/reorder'),
-      DELETE: (galleryId: string) => buildUrl(`/gallery/${galleryId}`),
+      BY_ID: (galleryId: string) =>
+        buildUrl(`/adventures/gallery/${galleryId}`),
+      UPDATE: (galleryId: string) =>
+        buildUrl(`/adventures/gallery/${galleryId}`),
+      REORDER: buildUrl('/adventures/gallery/reorder'),
+      DELETE: (galleryId: string) =>
+        buildUrl(`/adventures/gallery/${galleryId}`),
     },
   },
 

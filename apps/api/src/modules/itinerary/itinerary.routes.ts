@@ -33,7 +33,7 @@ router.get(
 );
 
 // Update itinerary
-router.put(
+router.patch(
   '/itineraries/:id',
   authenticate,
   authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
