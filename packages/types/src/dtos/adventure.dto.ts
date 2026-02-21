@@ -60,7 +60,7 @@ export interface AdventureResponseDto {
   level: AdventureLevel;
   tripType: TripType;
   safetyScore: number;
-  safetyTips: string | null;
+  safetyTips: string;
   rating: number;
   certification: string | null;
   gear: string | null;
