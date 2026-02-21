@@ -43,6 +43,7 @@ const INITIAL_ADVENTURE = {
   tripType: TripType.HIKING,
   days: 7,
   safetyScore: 85,
+  safetyTips: '',
   certification: '',
   gear: '',
   date: '',
@@ -119,6 +120,7 @@ export default function CreateAdventurePage() {
     formData.append('tripType', adventure.tripType);
     formData.append('days', adventure.days.toString());
     formData.append('safetyScore', adventure.safetyScore.toString());
+    formData.append('safetyTips', adventure.safetyTips);
     formData.append('rating', adventure.rating.toString());
     formData.append('date', adventure.date);
 
@@ -361,6 +363,14 @@ export default function CreateAdventurePage() {
                 onChange={(e) => handleChange('gear', e.target.value)}
                 placeholder='List required gear...'
                 rows={3}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>safetyTips</Field.Label>
+              <Input
+                value={adventure.safetyTips}
+                onChange={(e) => handleChange('safetyTips', e.target.value)}
+                placeholder='Enter safetyTips...'
               />
             </Field.Root>
           </VStack>
