@@ -8,9 +8,10 @@ export const StoryHero = () => {
       bg='primary'
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
-      p={10}
+      borderBottomRadius={{ base: '3xl', md: '3xl' }}
+      p={{ base: 4, md: 16 }}
     >
-      <Stack textAlign='center' gap={5} align='center'>
+      <Stack textAlign='center' gap={6} align='center'>
         <Center>
           <Text
             fontSize={{ base: 'xs', md: 'sm' }}
@@ -19,19 +20,31 @@ export const StoryHero = () => {
             border='1px solid white'
             borderRadius='full'
             letterSpacing='widest'
+            fontWeight='medium'
           >
             SAFE | SPONTANEOUS | SUSTAINABLE
           </Text>
         </Center>
 
-        <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
-          Extreme adrenaline <br /> without the “what-ifs”
+        <Heading
+          size={{ base: '2xl', md: '4xl' }}
+          lineHeight='1.2'
+          maxW={{ base: 'full', md: '800px' }}
+          wordBreak='break-word'
+        >
+          Extreme adrenaline without the “what-ifs”
         </Heading>
 
-        <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          Adventure travel is meant to feel exciting, not uncertain <br /> We’re
-          building a network where every trip is trusted,
-          <br /> transparent, and transformative
+        <Text
+          fontSize={{ base: 'md', md: 'lg' }}
+          opacity={0.9}
+          maxW={{ base: 'full', md: '700px' }}
+          wordBreak='break-word'
+          mx='auto'
+        >
+          Adventure travel is meant to feel exciting, not uncertain. We’re
+          building a network where every trip is trusted, transparent, and
+          transformative.
         </Text>
       </Stack>
     </Box>

@@ -22,8 +22,7 @@ export interface CreateAdventureDto {
   access?: AccessType;
   safetyScore?: number;
   safetyTips?: string;
-  rating?: number; // Added rating field
-  // Cloudinary media (uploaded separately)
+  rating?: number;
   mediaUrl?: string;
   publicId?: string;
 }

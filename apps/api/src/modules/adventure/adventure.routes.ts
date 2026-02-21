@@ -40,7 +40,7 @@ router
   .route('/:id')
   .all(validateRequest({ params: commonValidation.uuidParam }))
   .get(controller.getById)
-  .patch(
+  .put(
     authenticate,
     authorizeRoles(Role.ADMIN, Role.SUPER_ADMIN),
     upload.single('media'),

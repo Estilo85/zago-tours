@@ -123,7 +123,7 @@ export function useUpdateAdventure() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.UPDATE(id), {
-        method: 'PATCH',
+        method: 'PUT',
         body: data,
       }),
     onMutate: async ({ id, data }) => {

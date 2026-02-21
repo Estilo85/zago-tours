@@ -14,6 +14,7 @@ export const createAdventureSchema = z.object({
   gear: z.string().optional(),
   access: z.enum(AccessType).optional(),
   safetyScore: z.coerce.number().min(0).max(100).optional(),
+  safetyTips: z.string().optional(),
   mediaUrl: z.url().optional(),
   publicId: z.string().optional(),
 });

@@ -98,6 +98,7 @@ export default function EditAdventurePage() {
         tripType: adventure.tripType,
         days: adventure.days,
         safetyScore: adventure.safetyScore,
+        safetyTips: adventure.safetyTips || '',
         certification: adventure.certification || '',
         gear: adventure.gear || '',
         date: adventure.date

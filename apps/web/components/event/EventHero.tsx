@@ -10,33 +10,59 @@ export const EventHero = () => {
     <Box
       bg='primary'
       color='textPrimary'
-      p={{ base: 5, md: 10 }}
-      borderRadius='2xl'
+      p={{ base: 4, md: 16 }}
+      borderRadius={{ base: 'none', md: '3xl' }}
+      borderBottomRadius={{ base: '3xl', md: '3xl' }}
     >
-      <Stack textAlign='center' gap={5} align='center'>
-        <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
-          Adventure Starts <br /> With Knowledge
+      <Stack textAlign='center' gap={6} align='center'>
+        <Heading
+          size={{ base: '2xl', md: '4xl' }}
+          lineHeight='1.2'
+          maxW={{ base: 'full', md: '700px' }}
+          wordBreak='break-word'
+        >
+          Adventure Starts With Knowledge
         </Heading>
 
-        <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          Join live sessions designed to make every future trip <br />
-          smarter, safer, and more connected.
+        <Text
+          fontSize={{ base: 'md', md: 'lg' }}
+          opacity={0.9}
+          maxW={{ base: 'full', md: '600px' }}
+          wordBreak='break-word'
+          mx='auto'
+        >
+          Join live sessions designed to make every future trip smarter, safer,
+          and more connected.
         </Text>
 
-        <Flex direction={{ base: 'column', md: 'row' }} align='center' gap={3}>
-          <AppLink href='#'>
-            <Button bg='secondary' color='dark' fontWeight='bold'>
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          align='center'
+          gap={4}
+          w={{ base: 'full', md: 'auto' }}
+        >
+          <AppLink href='#' style={{ width: '100%' }}>
+            <Button
+              bg='secondary'
+              color='dark'
+              fontWeight='bold'
+              w={{ base: 'full', md: 'auto' }}
+            >
               Join an event
               <Icon as={ArrowRight} ml={2} />
             </Button>
           </AppLink>
 
-          <AppLink href='https://forms.gle/bpFRxCweT8ygcCW8A'>
+          <AppLink
+            href='https://forms.gle/bpFRxCweT8ygcCW8A'
+            style={{ width: '100%' }}
+          >
             <Button
               bg='primary'
               color='white'
               fontWeight='bold'
               border='2px solid white'
+              w={{ base: 'full', md: 'auto' }}
             >
               Host an event
               <Icon as={ArrowRight} ml={2} />
