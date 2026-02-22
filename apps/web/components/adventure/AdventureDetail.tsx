@@ -98,6 +98,7 @@ export default function AdventureDetailPage({
   const hasDiscount = false;
   const discountPrice = adventure.price * 0.9;
 
+  //=========ITINERARY ITEMS===========
   const itineraryItems = (adventure.itineraries || [])
     .sort((a, b) => a.dayNumber - b.dayNumber)
     .map((step: Itinerary) => ({
@@ -163,17 +164,17 @@ export default function AdventureDetailPage({
             {adventure.title}
           </Heading>
           <HStack gap={2}>
-            <Box bg='green.600' p={1} display='inline-flex'>
+            <Box bg='green.600' p={1} borderRadius='sm' display='inline-flex'>
               <RatingGroup.Root
                 count={5}
                 value={adventure.rating}
                 allowHalf
                 readOnly
                 size='xs'
-                colorPalette='yellow'
+                colorPalette='white'
                 css={{
+                  '--unit-color': 'rgba(255, 255, 255, 0.3)',
                   '& svg': {
-                    fill: adventure.rating > 0 ? 'white' : 'none',
                     color: 'white',
                   },
                 }}
@@ -413,7 +414,9 @@ export default function AdventureDetailPage({
                 <Icon as={Lightbulb} />
                 <Heading> Safety Tips </Heading>
               </HStack>
-              <Text fontSize={{ base: 'sm', md: 'md' }}>{adventure?.safetyTips}</Text>
+              <Text fontSize={{ base: 'sm', md: 'md' }} ml={3}>
+                {adventure?.safetyTips}
+              </Text>
             </Box>
           </Stack>
         </Box>
