@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   title: 'Zagotours',
   description: 'Travel with ease',
   icons: {
-    icon: '/icons/favicon.ico',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
 };
 

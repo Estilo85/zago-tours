@@ -11,6 +11,7 @@ import {
   AvatarGroup,
   Avatar,
   AspectRatio,
+  Badge,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
 import { Calendar, MapPin, Timer } from 'lucide-react';
@@ -53,9 +54,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             alt={event.title}
             width='100%'
             height='100%'
-            borderRadius='none'
             objectFit='cover'
-            objectPosition='top'
             containerProps={{
               transition: 'transform 0.5s ease',
               _groupHover: { transform: 'scale(1.08)' },
@@ -67,69 +66,56 @@ export const EventCard = ({ event }: EventCardProps) => {
       {/* BODY SECTION */}
       <AppLink href={`/events/${event.id}`}>
         <Card.Body p='4' gap='1'>
-          {/* Date and Time */}
           <HStack
             justify='space-between'
             fontSize='xs'
             fontWeight='bold'
             mb='2'
           >
-            <Flex align='center' gap={2}>
+            <Flex align='center' gap={1}>
               <Calendar size={12} />
               <Text>{formatDate(event.date)}</Text>
             </Flex>
-            <Flex align='center' gap={2}>
+            <Flex align='center' gap={1}>
               <Timer size={12} />
               <Text>{formatTime(event.date)}</Text>
             </Flex>
           </HStack>
 
-          {/* Title */}
           <Card.Title
             fontWeight='bold'
             fontSize='md'
             lineHeight='tight'
             minH='45px'
+            lineClamp={2}
           >
             {event.title}
           </Card.Title>
 
-          {/* Location and Tags */}
           <Stack gap='2' pt='2'>
             <Flex align='center' gap={2} width='full'>
               <MapPin size={14} style={{ flexShrink: 0 }} />
-              <Text fontSize='xs' truncate minW={0} flex={1}>
-                Coming soon... | {event.location}
+              <Text fontSize='xs' truncate flex={1}>
+                {event.location}
               </Text>
             </Flex>
-            <Flex align='center' gap={4}>
-              <Text
-                bg='textPrimary'
-                p={1}
-                borderRadius='md'
-                whiteSpace='nowrap'
-                fontSize='xx-small'
-              >
-                Free Entry
-              </Text>
-              <Text
-                bg='textPrimary'
-                p={1}
-                borderRadius='md'
-                whiteSpace='nowrap'
-                fontSize='xx-small'
-              >
-                Food Wine & Drinks
-              </Text>
-              <Text
-                bg='textPrimary'
-                p={1}
-                borderRadius='md'
-                whiteSpace='nowrap'
-                fontSize='xx-small'
-              >
-                Free Entry
-              </Text>
+
+            {/* TAGS SECTION: Fixed with Wrap */}
+            <Flex align='center' gap={1.5} wrap='wrap'>
+              {['Free Entry', 'Food Wine & Drinks'].map((tag, idx) => (
+                <Badge
+                  key={idx}
+                  bg='gray.100'
+                  px={2}
+                  py={0.5}
+                  borderRadius='md'
+                  whiteSpace='nowrap'
+                  fontSize='9px'
+                  fontWeight='bold'
+                >
+                  {tag}
+                </Badge>
+              ))}
             </Flex>
           </Stack>
         </Card.Body>
@@ -137,23 +123,27 @@ export const EventCard = ({ event }: EventCardProps) => {
 
       {/* FOOTER SECTION */}
       <Card.Footer pt='0'>
-        <Box w='full' borderTop='1px solid' borderColor='gray.100' pt='3'>
-          {attendees.length > 0 && (
-            <AvatarGroup size='xs'>
-              {attendees.slice(0, 3).map((person, i) => (
-                <AvatarImage
-                  key={i}
-                  name={person.name}
-                  src={person.src || ''}
-                  alt={person.name}
-                />
-              ))}
-            </AvatarGroup>
-          )}
-          <Avatar.Root>
-            <Avatar.Fallback>+3</Avatar.Fallback>
-          </Avatar.Root>
-        </Box>
+        <Flex
+          w='full'
+          borderTop='1px solid'
+          borderColor='gray.100'
+          pt='3'
+          justify='space-between'
+          align='center'
+        >
+          <AvatarGroup size='xs'>
+            {attendees.slice(0, 3).map((person, i) => (
+              <AvatarImage key={i} name={person.name} src={person.src || ''} />
+            ))}
+            {attendees.length > 3 && (
+              <Avatar.Root size='xs'>
+                <Avatar.Fallback fontSize='9px'>
+                  +{attendees.length - 3}
+                </Avatar.Fallback>
+              </Avatar.Root>
+            )}
+          </AvatarGroup>
+        </Flex>
       </Card.Footer>
     </Card.Root>
   );
