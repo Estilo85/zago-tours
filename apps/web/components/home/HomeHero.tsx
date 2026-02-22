@@ -23,7 +23,7 @@ export const HomeHero = () => {
       bg='primary'
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
-      p={{ base: 2, md: 10 }}
+      p={{ base: 4, md: 10 }} // Increased base padding for better mobile edge spacing
       pb={{ base: 5, md: '200px' }}
       mb={{ base: 5, md: '350px' }}
       position='relative'
@@ -47,13 +47,24 @@ export const HomeHero = () => {
           </Text>
         </Center>
 
-        <Heading size={{ base: '2xl', md: '4xl' }} lineHeight='1.2'>
-          Show Up Excited, Return <br /> Home Your Best Self.
+        <Heading
+          size={{ base: '2xl', md: '4xl' }}
+          lineHeight='1.2'
+          maxW={{ base: '100%', md: '800px' }}
+          overflowWrap='anywhere'
+          wordBreak='break-word'
+        >
+          Show Up Excited, Return Home Your Best Self.
         </Heading>
 
-        <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          You take adventure seriously. <br /> We take your safety even more
-          seriously.
+        <Text
+          fontSize={{ base: 'md', md: 'lg' }}
+          opacity={0.9}
+          maxW={{ base: '100%', md: '600px' }}
+          overflowWrap='anywhere'
+          wordBreak='break-word'
+        >
+          You take adventure seriously. We take your safety even more seriously.
         </Text>
 
         {!isAuthenticated && (
@@ -77,8 +88,8 @@ export const HomeHero = () => {
       >
         <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
           <ResponsiveImage
-            src='/images/adventures/tripType/skiing.webp'
-            alt='home page banner image'
+            src='/images/home/banner.webp'
+            alt='our-story banner image'
             width='100%'
             priority={true}
             loading='eager'

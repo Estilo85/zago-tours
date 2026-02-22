@@ -64,19 +64,20 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
         borderRadius={{ base: 'none', md: '3xl' }}
         px={{ base: 5, md: 10 }}
         pt='120px'
-        mb={{ base: 0, md: '150px' }}
+        mb={{ base: 0, md: '250px' }}
         position='relative'
       >
         <Stack
           textAlign='center'
           gap={5}
           align='center'
-          pb={{ base: 5, md: '200px' }}
+          pb={{ base: 10, md: '280px' }}
         >
           <Heading
             size={{ base: '2xl', md: '4xl' }}
             lineHeight='1.2'
             color='white'
+            mb={{ base: 4, md: 8 }}
           >
             {event.title}
           </Heading>
@@ -84,14 +85,14 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
           <Box
             width={{ base: '100%', md: '80%', lg: '70%' }}
             position={{ base: 'relative', md: 'absolute' }}
-            bottom={{ base: '0', md: '-120px' }}
+            bottom={{ base: '0', md: '-150px' }}
             left='50%'
             transform='translateX(-50%)'
             zIndex={10}
             mt={{ base: 6, md: 0 }}
           >
             <ResponsiveImage
-              src={event.mediaUrl || ''}
+              src={event?.mediaUrl || ''}
               alt={event.title}
               width='100%'
               loading='eager'
@@ -135,7 +136,9 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                 </HStack>
                 <HStack>
                   <Timer size={20} color='var(--chakra-colors-primary)' />
-                  <Text fontWeight='semibold'>{formatTime(event.date)}</Text>
+                  <Text fontWeight='semibold'>
+                    {formatTime(event.date, true)}
+                  </Text>
                 </HStack>
                 <HStack>
                   <MapPin size={20} color='var(--chakra-colors-primary)' />

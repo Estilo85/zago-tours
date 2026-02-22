@@ -243,11 +243,12 @@ export default function OurStory() {
             <Text
               border='1px solid'
               borderColor='primary'
+              fontWeight='semibold'
               px={4}
               py={1}
               borderRadius='full'
             >
-              Our story
+              OUR STRORY
             </Text>
           </Center>
           <Text

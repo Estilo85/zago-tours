@@ -46,14 +46,15 @@ export const EventCard = ({ event }: EventCardProps) => {
         },
       }}
     >
-      {/* IMAGE SECTION */}
-      <Box position='relative' overflow='hidden'>
+      {/* IMAGE SECTION WITH PADDING */}
+      <Box position='relative' overflow='hidden' p='3' pb='0'>
         <AspectRatio ratio={4 / 3}>
           <ResponsiveImage
             src={event.mediaUrl as string}
             alt={event.title}
             width='100%'
             height='100%'
+            borderRadius='2xl'
             objectFit='cover'
             containerProps={{
               transition: 'transform 0.5s ease',
@@ -63,14 +64,15 @@ export const EventCard = ({ event }: EventCardProps) => {
         </AspectRatio>
       </Box>
 
-      {/* BODY SECTION */}
+      {/* BODY SECTION - TIGHTER SPACING */}
       <AppLink href={`/events/${event.id}`}>
-        <Card.Body p='4' gap='1'>
+        <Card.Body p='4' pt='3' gap='1'>
           <HStack
             justify='space-between'
             fontSize='xs'
             fontWeight='bold'
-            mb='2'
+            mb='1'
+            color='gray.600'
           >
             <Flex align='center' gap={1}>
               <Calendar size={12} />
@@ -86,32 +88,30 @@ export const EventCard = ({ event }: EventCardProps) => {
             fontWeight='bold'
             fontSize='md'
             lineHeight='tight'
-            minH='45px'
-            lineClamp={2}
+            minH='auto'
           >
             {event.title}
           </Card.Title>
 
-          <Stack gap='2' pt='2'>
-            <Flex align='center' gap={2} width='full'>
-              <MapPin size={14} style={{ flexShrink: 0 }} />
+          <Stack gap='1.5' pt='1'>
+            <Flex align='center' gap={2} width='full' color='gray.500'>
+              <MapPin size={13} style={{ flexShrink: 0 }} />
               <Text fontSize='xs' truncate flex={1}>
                 {event.location}
               </Text>
             </Flex>
 
-            {/* TAGS SECTION: Fixed with Wrap */}
             <Flex align='center' gap={1.5} wrap='wrap'>
-              {['Free Entry', 'Food Wine & Drinks'].map((tag, idx) => (
+              {['Free Entry', 'Food & Drinks'].map((tag, idx) => (
                 <Badge
                   key={idx}
                   bg='gray.100'
                   px={2}
                   py={0.5}
                   borderRadius='md'
-                  whiteSpace='nowrap'
                   fontSize='9px'
                   fontWeight='bold'
+                  color='gray.700'
                 >
                   {tag}
                 </Badge>
@@ -121,7 +121,6 @@ export const EventCard = ({ event }: EventCardProps) => {
         </Card.Body>
       </AppLink>
 
-      {/* FOOTER SECTION */}
       <Card.Footer pt='0'>
         <Flex
           w='full'

@@ -17,7 +17,8 @@ export const TestimonialCard = ({
 }: TestimonialCardProps) => {
   return (
     <Box
-      maxW='sm'
+      maxW={{ base: 'full', md: 'sm' }}
+      width='100%'
       minH={{ base: 'auto', md: '230px' }}
       maxH={{ base: 'auto', md: '230px' }}
       display='flex'
@@ -51,7 +52,13 @@ export const TestimonialCard = ({
         flexShrink={0}
       >
         <Box order={{ base: 1, md: 2 }}>
-          <RatingGroup.Root count={5} value={rating} readOnly size='xs'>
+          <RatingGroup.Root
+            count={5}
+            value={rating}
+            readOnly
+            size='xs'
+            colorPalette='yellow'
+          >
             <RatingGroup.HiddenInput />
             <RatingGroup.Control aria-hidden='true' />
           </RatingGroup.Root>

@@ -74,6 +74,7 @@ export function IdentitySection({ finalRole }: { finalRole: Role | null }) {
               {...field}
               label='Phone'
               type='tel'
+              placeholder='Enter phone number'
               error={errors.phone?.message}
             />
           )}

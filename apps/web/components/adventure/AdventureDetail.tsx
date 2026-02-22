@@ -126,15 +126,17 @@ export default function AdventureDetailPage({
             </Text>
 
             {step.imageUrl && (
-              <ResponsiveImage
-                src={step.imageUrl || ''}
-                alt={step.title}
-                borderRadius='md'
-                // mb={4}
-                maxH='300px'
-                width='100%'
-                objectFit='cover'
-              />
+              <Box mt={4} border='1px solid red'>
+                <ResponsiveImage
+                  src={step.imageUrl}
+                  alt={step.title}
+                  borderRadius='md'
+                  maxH='300px'
+                  width='100%'
+                  objectFit='cover'
+                  minH='200px'
+                />
+              </Box>
             )}
           </Box>
         </Box>
