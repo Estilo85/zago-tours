@@ -108,9 +108,14 @@ export const HowItWorks = () => {
           How It Works
         </Heading>
 
-        <Text fontSize={{ base: 'md', md: 'lg' }} opacity={0.9}>
-          Wherever you are in the world, <br /> pick your adventure, it's that
-          SIMPLE
+        <Text
+          fontSize={{ base: 'md', md: 'lg' }}
+          opacity={0.9}
+          maxW={{ base: '100%', md: '600px' }}
+          overflowWrap='anywhere'
+          wordBreak='break-word'
+        >
+          Wherever you are in the world, pick your adventure, it's that SIMPLE
         </Text>
 
         <Flex
@@ -120,11 +125,12 @@ export const HowItWorks = () => {
           justify='center'
           width='full'
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} width='full'>
             {resImageData.map((img, i) => (
               <Box
                 key={i}
                 width='100%'
+                display={{ base: i > 1 ? 'none' : 'block', md: 'block' }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
@@ -133,9 +139,13 @@ export const HowItWorks = () => {
                 <ResponsiveImage
                   src={img}
                   alt='how it work image'
-                  height='200px'
-                  width={{ base: '100%', md: '200px' }}
-                  sizes='(max-width: 768px) 100vw, 350px'
+                  height={{ base: '200px', md: '250px' }}
+                  width='100%'
+                  maxW={{ base: '100%', md: '300px' }}
+                  mx='auto'
+                  borderRadius='xl'
+                  objectFit='cover'
+                  sizes='(max-width: 768px) 100vw, 300px'
                 />
               </Box>
             ))}

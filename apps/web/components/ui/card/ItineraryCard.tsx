@@ -27,7 +27,6 @@ const ItineraryCard = ({
 }: {
   adventure: AdventureDetailResponseDto;
 }) => {
-  // We use an object to track expanded state for each itinerary ID
   const [expandedStates, setExpandedStates] = useState<{
     [key: string]: boolean;
   }>({});
@@ -47,7 +46,7 @@ const ItineraryCard = ({
         return (
           <Card.Root
             w={{ base: 'full', md: '300px' }}
-            h='fit-content' // Allows card to grow when expanded
+            h='fit-content'
             minH='400px'
             overflow='hidden'
             _hover={{ boxShadow: 'md' }}
@@ -126,7 +125,6 @@ const ItineraryCard = ({
                   color='gray.600'
                   fontSize='sm'
                   lineHeight='tall'
-                  // If not expanded, we clamp the text to 3 lines
                   lineClamp={isExpanded ? undefined : 3}
                 >
                   {itinerary.activityDetails}

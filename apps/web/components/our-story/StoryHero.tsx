@@ -1,6 +1,14 @@
 'use client';
 
-import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react';
+import {
+  AspectRatio,
+  Box,
+  Center,
+  Heading,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import { ResponsiveImage } from '../media/ResponsiveImage';
 
 export const StoryHero = () => {
   return (
@@ -47,6 +55,21 @@ export const StoryHero = () => {
           transformative.
         </Text>
       </Stack>
+
+      <Box display={{ base: 'block', md: 'none' }}>
+        <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
+          <ResponsiveImage
+            src='/images/adventures/tripType/skiing.webp'
+            alt='home page banner image'
+            width='100%'
+            priority={true}
+            loading='eager'
+            height='100%'
+            borderRadius='2xl'
+            boxShadow='2xl'
+          />
+        </AspectRatio>
+      </Box>
     </Box>
   );
 };

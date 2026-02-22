@@ -7,6 +7,7 @@ import { PostResponseDto, TripTypeLabels } from '@zagotours/types';
 import { SearchBar } from '../ui/search/Search';
 import { SelectInput } from '../ui/input/SelectInput';
 import { getCountryOptions } from '@/utils/Countries';
+import { useCommunityStore } from '@/store/use-community-store';
 
 interface FilterProps {
   posts: PostResponseDto[];
@@ -22,6 +23,8 @@ export function PostFilterBar({
   const [location, setLocation] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { activeTab, setActiveTab } = useCommunityStore();
 
   const [countryOptions, setCountryOptions] = useState<
     { value: string; label: string }[]
@@ -141,10 +144,27 @@ export function PostFilterBar({
 
         {/* Mobile Icons */}
         <HStack gap={4} display={{ base: 'flex', md: 'none' }}>
-          <Users size={32} />
-          <SwatchBook size={32} />
+          <Box
+            p={2}
+            borderRadius='md'
+            bg={activeTab === 'about' ? 'primary' : 'transparent'}
+            color={activeTab === 'about' ? 'white' : 'gray.600'}
+            onClick={() => setActiveTab('about')}
+            cursor='pointer'
+          >
+            <Users size={28} />
+          </Box>
+          <Box
+            p={2}
+            borderRadius='md'
+            bg={activeTab === 'posts' ? 'primary' : 'transparent'}
+            color={activeTab === 'posts' ? 'white' : 'gray.600'}
+            onClick={() => setActiveTab('posts')}
+            cursor='pointer'
+          >
+            <SwatchBook size={28} />
+          </Box>
         </HStack>
-
         {/* Search Input */}
         <Box>
           <SearchBar

@@ -38,7 +38,6 @@ const AdventureCard = ({
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
     if (isMobile) {
       window.location.href = whatsappUrl;
     } else {
@@ -49,12 +48,10 @@ const AdventureCard = ({
   const handleLikeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (!isAuthenticated) {
       router.push('/login');
       return;
     }
-
     toggleLike(adventure.id);
   };
 
@@ -73,14 +70,15 @@ const AdventureCard = ({
         },
       }}
     >
-      <Box position='relative' overflow='hidden'>
+      {/* IMAGE SECTION WITH PADDING */}
+      <Box position='relative' overflow='hidden' p='3' pb='0'>
         <AspectRatio ratio={4 / 3}>
           <ResponsiveImage
             src={adventure.mediaUrl || ''}
             alt={adventure.title}
             width='100%'
             height='100%'
-            borderRadius='none'
+            borderRadius='2xl'
             objectFit='cover'
             objectPosition='top'
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 280px'
@@ -91,11 +89,12 @@ const AdventureCard = ({
           />
         </AspectRatio>
 
+        {/* Adjusted Badge and Heart to align with inset padding */}
         <Flex
           position='absolute'
-          top='3'
-          left='3'
-          right='3'
+          top='5'
+          left='5'
+          right='5'
           justify='flex-end'
           gap='2'
           zIndex='2'
@@ -122,7 +121,6 @@ const AdventureCard = ({
             aria-label='Like'
             size='sm'
             variant={adventure?.isLiked ? 'solid' : 'outline'}
-            colorScheme={adventure?.isLiked ? 'red' : 'gray'}
             onClick={handleLikeClick}
             bg='whiteAlpha.900'
             borderRadius='full'
@@ -138,13 +136,13 @@ const AdventureCard = ({
         </Flex>
       </Box>
 
-      {/* BODY SECTION - Always wrapped in AppLink now */}
       <AppLink href={`/adventures/${adventure.id}`}>
-        <Card.Body p='4' pt='6' gap='1' position='relative'>
+        <Card.Body p='4' pt='5' gap='0.5' position='relative'>
+          {/* Rating adjusted left to 6 to align with image edge */}
           <Flex
             position='absolute'
             top='0'
-            left='4'
+            left='6'
             transform='translateY(-50%)'
             bg='white'
             px='2'
@@ -163,21 +161,16 @@ const AdventureCard = ({
               <RatingGroup.HiddenInput />
               <RatingGroup.Control
                 aria-hidden='true'
-                css={{ '& [data-part="item"]': { padding: '6px' } }}
+                css={{ '& [data-part="item"]': { padding: '4px' } }}
               />
             </RatingGroup.Root>
 
-            <Text fontWeight='bold' fontSize='xs' ml='1.5' color='gray.600'>
+            <Text fontWeight='bold' fontSize='xs' ml='1' color='gray.600'>
               {adventure.rating.toFixed(1)}
             </Text>
           </Flex>
 
-          <Card.Title
-            fontWeight='bold'
-            fontSize='md'
-            lineHeight='tight'
-            minH='45px'
-          >
+          <Card.Title fontWeight='bold' fontSize='md' lineHeight='tight' mt='1'>
             {adventure.title}
           </Card.Title>
           <Card.Description color='gray.500' fontSize='xs' fontWeight='medium'>
@@ -205,13 +198,12 @@ const AdventureCard = ({
           </Box>
           <Button
             onClick={handleWhatsAppBooking}
-            bg='surface'
-            color='dark'
+            bg='black'
+            color='white'
             size='sm'
             px='4'
             borderRadius='xl'
             fontWeight='bold'
-            _hover={{ filter: 'brightness(90%)' }}
           >
             Book Now
           </Button>

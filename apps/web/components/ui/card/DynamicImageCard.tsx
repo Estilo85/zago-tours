@@ -19,6 +19,7 @@ export const DynamicImageCard = ({
 }: ImageCardProps) => {
   return (
     <Card.Root
+      width='100%'
       maxW={maxWidth}
       overflow='hidden'
       variant='elevated'

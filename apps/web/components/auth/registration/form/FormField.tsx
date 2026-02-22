@@ -3,6 +3,8 @@ import { forwardRef } from 'react';
 import { PasswordInput } from '@/components/ui/input/password-input';
 import { Input, Textarea, Field, Checkbox } from '@chakra-ui/react';
 import Select from 'react-select';
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 export const FormField = forwardRef<any, any>(
   (
@@ -107,6 +109,32 @@ export const FormField = forwardRef<any, any>(
                     {label}
                   </Checkbox.Label>
                 </Checkbox.Root>
+              );
+            case 'tel':
+              return (
+                <PhoneInput
+                  defaultCountry='us'
+                  value={value ?? ''}
+                  onChange={(phone) => onChange(phone)}
+                  inputRef={ref}
+                  placeholder={placeholder}
+                  inputStyle={{
+                    width: '100%',
+                    height: '40px',
+                    fontSize: '14px',
+                    borderRadius: '0 0.375rem 0.375rem 0',
+                    border: error ? '1px solid #E53E3E' : '1px solid #E2E8F0',
+                  }}
+                  countrySelectorStyleProps={{
+                    buttonStyle: {
+                      height: '40px',
+                      borderRadius: '0.375rem 0 0 0.375rem',
+                      border: error ? '1px solid #E53E3E' : '1px solid #E2E8F0',
+                      borderRight: 'none',
+                      backgroundColor: '#F7FAFC',
+                    },
+                  }}
+                />
               );
             default:
               return (

@@ -6,8 +6,10 @@ interface ResponsiveImageProps {
   src?: string;
   alt: string;
   width?: BoxProps['width'];
-  maxW?: '100%';
+  maxW?: BoxProps['maxW'];
   height?: BoxProps['height'];
+  mx?: BoxProps['mx'];
+  minH?: BoxProps['height'];
   maxH?: BoxProps['height'];
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   borderRadius?: BoxProps['borderRadius'];
@@ -25,8 +27,10 @@ export const ResponsiveImage = ({
   alt,
   width = '100%',
   maxW = '100%',
+  mx,
   height = '100%',
   maxH,
+  minH,
   objectFit = 'cover',
   borderRadius = '2xl',
   priority = false,
@@ -44,6 +48,7 @@ export const ResponsiveImage = ({
         width={width}
         height={height}
         maxH={maxH}
+        minH={minH}
         borderRadius={borderRadius}
         boxShadow={boxShadow}
         overflow='hidden'
@@ -66,6 +71,8 @@ export const ResponsiveImage = ({
       width={width}
       height={height}
       maxH={maxH}
+      maxW={maxW}
+      mx={mx}
       borderRadius={borderRadius}
       boxShadow={boxShadow}
       objectPosition={objectPosition}
@@ -79,7 +86,7 @@ export const ResponsiveImage = ({
         priority={priority}
         loading={priority ? undefined : loading}
         sizes={sizes}
-        style={{ objectFit }}
+        style={{ objectFit, objectPosition }}
         fetchPriority={priority ? 'high' : 'auto'}
         onError={(e) => {
           e.currentTarget.style.display = 'none';
