@@ -5,7 +5,6 @@ import { EventStatus } from '../enums';
 export interface CreateEventDto {
   title: string;
   date: Date | string;
-  time: string;
   description: string;
   location: string;
   spotLeft: number;
@@ -20,7 +19,6 @@ export interface CreateEventDto {
 export interface UpdateEventDto {
   title?: string;
   date?: Date | string;
-  time?: string;
   description?: string;
   isSignature?: boolean;
   location?: string;
@@ -36,7 +34,6 @@ export interface EventResponseDto {
   id: string;
   title: string;
   date: Date;
-  time: string;
   description: string;
   location: string;
   createdBy: string;

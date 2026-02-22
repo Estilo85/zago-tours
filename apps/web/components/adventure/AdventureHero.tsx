@@ -67,8 +67,8 @@ export const AdventureHero = ({
   return (
     <Box
       bg='primary'
-      borderRadius={{ base: 'none', md: '4xl' }}
-      p={{ base: 3, md: 10 }}
+      borderRadius='4xl'
+      p={{ base: 2, md: 10 }}
       mb={{ base: 0, md: '40px' }}
     >
       <Stack
@@ -79,7 +79,7 @@ export const AdventureHero = ({
         maxW='container.xl'
         mx='auto'
         px={4}
-        pb={{ base: 10, md: '100px' }}
+        pb={{ base: 5, md: '100px' }}
       >
         <Heading
           size={{ base: '2xl', md: '4xl' }}
@@ -104,7 +104,7 @@ export const AdventureHero = ({
           left='50%'
           transform='translateX(-50%)'
           zIndex={10}
-          mt={{ base: 10, md: 0 }}
+          mt={{ base: 4, md: 0 }}
           bg='white'
           p={{ base: 4, md: 6 }}
           borderRadius='2xl'
@@ -133,13 +133,13 @@ export const AdventureHero = ({
               {/* Where to Group */}
               <HStack
                 gap={3}
-                width={{ base: 'full', sm: 'auto' }}
+                width={{ base: 'full', md: 'auto' }}
                 justify='space-between'
               >
                 <Select.Root
                   collection={destinations}
                   size='sm'
-                  width={{ base: '150px', md: '120px' }}
+                  width={{ base: '100%', md: '120px' }}
                   value={selectedDestination ? [selectedDestination] : []}
                   onValueChange={(e) => onDestinationChange(e.value[0] || '')}
                 >
@@ -173,21 +173,20 @@ export const AdventureHero = ({
               </HStack>
 
               <Separator
-                orientation='vertical'
-                height='20px'
+                orientation={{ base: 'horizontal', md: 'vertical' }}
                 display={{ base: 'none', md: 'block' }}
               />
 
               {/* When Group */}
               <HStack
                 gap={3}
-                width={{ base: 'full', sm: 'auto' }}
+                width={{ base: 'full', md: 'auto' }}
                 justify='space-between'
               >
                 <Select.Root
                   collection={dates}
                   size='sm'
-                  width={{ base: '150px', md: '120px' }}
+                  width={{ base: '100%', md: '120px' }}
                   value={selectedDate ? [selectedDate] : []}
                   onValueChange={(e) => onDateChange(e.value[0] || '')}
                 >

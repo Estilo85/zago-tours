@@ -21,8 +21,8 @@ export interface CreateAdventureDto {
   gear?: string;
   access?: AccessType;
   safetyScore?: number;
-  rating?: number; // Added rating field
-  // Cloudinary media (uploaded separately)
+  safetyTips?: string;
+  rating?: number;
   mediaUrl?: string;
   publicId?: string;
 }
@@ -41,6 +41,7 @@ export interface UpdateAdventureDto {
   access?: AccessType;
   status?: AdventureStatus;
   safetyScore?: number;
+  safetyTips?: string;
   rating?: number; // Added rating field
   isVerified?: boolean;
   lastSafetyCertDate?: Date | string;
@@ -58,6 +59,7 @@ export interface AdventureResponseDto {
   level: AdventureLevel;
   tripType: TripType;
   safetyScore: number;
+  safetyTips: string;
   rating: number;
   certification: string | null;
   gear: string | null;

@@ -3,7 +3,7 @@
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+ directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -172,6 +172,7 @@ model Adventure {
   level              AdventureLevel
   tripType           TripType
   safetyScore        Int             @default(0)
+  safetyTips         String?
   rating             Float           @default(0.0)
   certification      String?
   gear               String?
@@ -310,7 +311,6 @@ model Event {
   id                String              @id @default(uuid())
   title             String
   date              DateTime
-  time              String?
   description       String
   location          String
   creator           User                @relation(fields: [createdBy], references: [id])

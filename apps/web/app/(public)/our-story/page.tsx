@@ -234,7 +234,7 @@ export const mySteps = [
 export default function OurStory() {
   const { isAuthenticated } = useAuthSession();
   return (
-    <Box my={10} mx={{ base: '4', md: '10' }}>
+    <Box my={{ base: 0, md: 10 }} mx={{ md: '10' }}>
       <Stack gap={20}>
         <StoryHero />
         {/* Story Section */}

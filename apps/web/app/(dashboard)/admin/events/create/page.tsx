@@ -78,16 +78,19 @@ export default function CreateEventPage() {
     formData.append('description', form.description);
     formData.append('location', form.location);
 
-    // 3. Always append cancellationTerms (send empty string if null/undefined)
     formData.append('cancellationTerms', form.cancellationTerms || '');
 
-    // 4. Handle Numbers and Booleans (Must be strings for FormData)
     formData.append('spotLeft', form.spotLeft.toString());
     formData.append('isSignature', String(form.isSignature));
 
     // 5. Time and Dates
-    formData.append('time', form.time);
-    formData.append('date', new Date(form.date).toISOString());
+    const [hours, minutes] = form.time.split(':').map(Number);
+    const combinedDate = new Date(form.date);
+    if (hours !== undefined && minutes !== undefined) {
+      combinedDate.setUTCHours(hours, minutes, 0, 0);
+    }
+    formData.append('date', combinedDate.toISOString());
+
     formData.append('joinTill', new Date(form.joinTill).toISOString());
 
     if (selectedFile) {

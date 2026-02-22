@@ -98,6 +98,7 @@ export default function EditAdventurePage() {
         tripType: adventure.tripType,
         days: adventure.days,
         safetyScore: adventure.safetyScore,
+        safetyTips: adventure.safetyTips || '',
         certification: adventure.certification || '',
         gear: adventure.gear || '',
         date: adventure.date
@@ -163,6 +164,8 @@ export default function EditAdventurePage() {
     if (formData.days) submitData.append('days', formData.days.toString());
     if (formData.safetyScore)
       submitData.append('safetyScore', formData.safetyScore.toString());
+    if (formData.safetyTips)
+      submitData.append('safetyTips', formData.safetyTips);
     if (formData.rating !== undefined)
       submitData.append('rating', formData.rating.toString());
     if (formData.date) {
@@ -395,7 +398,13 @@ export default function EditAdventurePage() {
                   }
                 />
               </Field.Root>
-
+              <Field.Root required>
+                <Field.Label>safetyTips</Field.Label>
+                <Input
+                  value={formData.safetyTips}
+                  onChange={(e) => handleChange('safetyTips', e.target.value)}
+                />
+              </Field.Root>
               <Field.Root required>
                 <Field.Label>Rating (0-5)</Field.Label>
                 <Input

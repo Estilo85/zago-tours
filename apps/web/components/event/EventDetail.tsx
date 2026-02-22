@@ -135,7 +135,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                 </HStack>
                 <HStack>
                   <Timer size={20} color='var(--chakra-colors-primary)' />
-                  <Text fontWeight='semibold'>{formatTime(event.time)}</Text>
+                  <Text fontWeight='semibold'>{formatTime(event.date)}</Text>
                 </HStack>
                 <HStack>
                   <MapPin size={20} color='var(--chakra-colors-primary)' />

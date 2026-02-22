@@ -16,6 +16,7 @@ export interface Adventure {
   level: AdventureLevel;
   tripType: TripType;
   safetyScore: number;
+  safetyTips: string;
   rating: number;
   certification: string | null;
   gear: string | null;

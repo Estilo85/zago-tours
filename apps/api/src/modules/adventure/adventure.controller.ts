@@ -74,7 +74,7 @@ export class AdventureController {
       if (adventureData.safetyScore)
         adventureData.safetyScore = Number(adventureData.safetyScore);
       if (adventureData.rating)
-        adventureData.rating = Number(adventureData.rating); // ADD THIS LINE
+        adventureData.rating = Number(adventureData.rating);
 
       if (adventureData.date) {
         adventureData.date = new Date(adventureData.date);
