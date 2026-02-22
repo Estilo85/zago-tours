@@ -44,7 +44,8 @@ const cardInfo = [
 
 export default function WhatToExpectSection() {
   return (
-    <Box gapY={10}>
+    <Box py={10}>
+      {' '}
       <VStack mb={10} gap={5}>
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
@@ -70,21 +71,21 @@ export default function WhatToExpectSection() {
           </Text>
         </Center>
       </VStack>
-
       <Flex
-        gap={{ base: 4 }}
+        gap={6}
         direction={{ base: 'column', md: 'row' }}
         mx='auto'
         justify='center'
         align='center'
         px={4}
+        width='100%'
       >
         {cardInfo.map((card, idx) => (
           <DynamicImageCard
             key={idx}
             image={card.url}
             description={card.content}
-            maxWidth='250px'
+            maxWidth={{ base: '100%', md: '250px' }}
           />
         ))}
       </Flex>

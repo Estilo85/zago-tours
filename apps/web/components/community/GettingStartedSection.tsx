@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { DynamicImageCard } from '../ui/card/DynamicImageCard';
@@ -38,13 +40,13 @@ const cardInfo = [
 export default function GettingStartedSection() {
   return (
     <Stack
-      mx={5}
+      mx={{ base: 0, md: 4 }}
       my={24}
-      bg='white'
-      px={{ base: 4, md: 6 }}
+      bg={{ base: 'primary', md: 'white' }}
+      px={{ base: 2, md: 6 }}
       py={20}
       gap={10}
-      borderRadius='xl'
+      borderRadius={{ base: 'none', md: 'xl' }}
       borderWidth='1px'
       borderColor='gray.200'
     >
@@ -58,11 +60,13 @@ export default function GettingStartedSection() {
       </Heading>
 
       <Flex
-        gap={{ base: 4, md: 7 }}
+        gap={{ base: 6, md: 7 }}
         direction={{ base: 'column', md: 'row' }}
         maxW={{ lg: '1000px', xl: '1200px' }}
+        w='100%'
         mx='auto'
         justify='center'
+        align='center'
         px={4}
       >
         {cardInfo.map((card, idx) => (
@@ -71,7 +75,7 @@ export default function GettingStartedSection() {
             image={card.url}
             title={card.title}
             description={card.content}
-            maxWidth='350px'
+            maxWidth={{ base: '100%', md: '350px' }}
           />
         ))}
       </Flex>
