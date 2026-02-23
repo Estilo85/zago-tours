@@ -388,12 +388,17 @@ export function useUpdateItinerary() {
     }) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.ITINERARIES.UPDATE(itineraryId), {
         method: 'PATCH',
-        body: JSON.stringify(data),
+        body: data,
       }),
     onSuccess: (_result, { adventureId, data }) => {
       const dayNumber = data.get('dayNumber');
+
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: adventureKeys.detail(adventureId),
       });
       toaster.create({
         title: 'Itinerary Updated',

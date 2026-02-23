@@ -117,7 +117,6 @@ export default function AdventureDetailPage({
             p={{ base: 4, md: 6 }}
             bg='gray.50'
             borderWidth='1px'
-            my={2}
             width='full'
             maxW={{ base: '100%', md: '500px' }}
             minW={{ md: '500px' }}
