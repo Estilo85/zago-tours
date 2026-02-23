@@ -10,10 +10,10 @@ import { tripRequestRoutes } from '../modules/trip-request/trip-request.routes';
 import { callbackRequestRoutes } from '../modules/callback-request/callback-request.routes';
 import { generalInquiryRoutes } from '../modules/general-enquiry/general-inquiry.routes';
 import { tripPlanningCallRoutes } from '../modules/trip-planning-call/trip-planning-call.routes';
-import { contractRoutes } from '../modules/contract/contract.routes';
 import { itineraryRoutes } from 'src/modules/itinerary/itinerary.routes';
 import { dashboardRoute } from 'src/modules/dashboard/dashboard.routes';
 import { newsletterRoutes } from 'src/modules/newsletter/newsletter.routes';
+import { platformGalleryRoutes } from 'src/modules/platform-gallery/platform-gallery.routes';
 
 const router: Router = Router();
 const adventureRouter: Router = Router();
@@ -34,16 +34,15 @@ router.use('/api/newsletter', newsletterRoutes);
 
 // // Community
 router.use('/api/posts', postRoutes);
-
+router.use('/api/platform-galleries', platformGalleryRoutes);
 // // Events & Requests
 router.use('/api/events', eventRoutes);
 router.use('/api/trip-requests', tripRequestRoutes);
 router.use('/api/callback-requests', callbackRequestRoutes);
 router.use('/api/inquiries', generalInquiryRoutes);
 
-// // Calls & Contracts
+// // Calls
 router.use('/api/trip-planning-calls', tripPlanningCallRoutes);
-router.use('/api/contracts', contractRoutes);
 
 //Statistics
 router.use('/api/dashboard', dashboardRoute);
