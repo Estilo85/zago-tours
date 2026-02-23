@@ -35,7 +35,7 @@ export default function EventSection({
 
   // Generate unique locations from events data
   const uniqueLocations = useMemo(() => {
-    if (!data?.data) return [{ label: 'All Locations', value: '' }]; // Add default
+    if (!data?.data) return [{ label: 'All Locations', value: '' }];
 
     const validLocations: string[] = [];
     data.data.forEach((event: EventResponseDto) => {
@@ -171,7 +171,6 @@ export default function EventSection({
               gap={6}
               width={sectionWidth}
               mx='auto'
-              justifyItems='center'
             >
               {Array.from({ length: 3 }).map((_, idx) => (
                 <EventCardSkeleton key={idx} />
@@ -194,10 +193,10 @@ export default function EventSection({
           {!isLoading && upcomingEvents.length > 0 && (
             <SimpleGrid
               columns={{ base: 1, md: 3 }}
-              gap={6}
+              gap={{ base: 6, md: 3 }}
+              rowGap={{ base: 6, md: 5 }}
               width={sectionWidth}
               mx='auto'
-              justifyItems='center'
             >
               {upcomingEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
@@ -247,7 +246,6 @@ export default function EventSection({
               gap={6}
               width={sectionWidth}
               mx='auto'
-              justifyItems='center'
             >
               {Array.from({ length: 3 }).map((_, idx) => (
                 <EventCardSkeleton key={idx} />

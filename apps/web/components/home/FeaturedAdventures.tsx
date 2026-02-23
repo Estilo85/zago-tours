@@ -33,7 +33,6 @@ export const FeaturedAdventures = () => {
           rowGap={9}
           gap={{ base: 6, md: 5 }}
           width={{ base: 'full', lg: '900px' }}
-          justifyItems='center'
         >
           {Array.from({ length: 3 }).map((_, idx) => (
             <AdventureCardSkeleton key={idx} />
@@ -50,7 +49,6 @@ export const FeaturedAdventures = () => {
         gap={{ base: 6, md: 3 }}
         rowGap={{ base: 6, md: 5 }}
         width={{ base: 'full', lg: '900px' }}
-        justifyItems='center'
         px={{ base: 0, md: 0 }}
       >
         {adventures.map((adventure) => (
