@@ -61,7 +61,7 @@ const ItineraryCard = ({
                 alt={itinerary.title}
                 width='100%'
                 height='100%'
-                borderRadius='none'
+                borderRadius='3xl'
               />
             </Box>
 
