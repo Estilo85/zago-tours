@@ -84,12 +84,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
           </HStack>
 
-          <Card.Title
-            fontWeight='bold'
-            fontSize='md'
-            lineHeight='tight'
-            minH='auto'
-          >
+          <Card.Title fontWeight='bold' fontSize='md' minH='auto'>
             {event.title}
           </Card.Title>
 
@@ -121,12 +116,13 @@ export const EventCard = ({ event }: EventCardProps) => {
         </Card.Body>
       </AppLink>
 
-      <Card.Footer pt='0'>
+      <Card.Footer p={0}>
         <Flex
           w='full'
           borderTop='1px solid'
           borderColor='gray.100'
-          pt='3'
+          pt={3}
+          pb={0}
           justify='space-between'
           align='center'
         >
