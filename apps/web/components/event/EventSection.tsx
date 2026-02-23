@@ -11,25 +11,18 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { EventResponseDto } from '@zagotours/types';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { EventCard } from '../ui/card/EventCard';
 import { SelectInput } from '../ui/input/SelectInput';
 import { useEvents } from '@/hooks';
 import { ErrorState } from '../ui/ErrorState';
 import { EventCardSkeleton } from '../ui/card/Eventcardskeleton';
 
-interface EventSectionProps {
-  searchQuery?: string;
-  selectedLocation?: string;
-  selectedDate?: string;
-}
+export default function EventSection() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
 
-export default function EventSection({
-  searchQuery = '',
-  selectedLocation = '',
-  selectedDate = '',
-}: EventSectionProps) {
-  // Shared width logic to ensure alignment
   const sectionWidth = { base: 'full', lg: '900px' };
   const { data, isLoading, isError, error } = useEvents();
 
@@ -151,13 +144,13 @@ export default function EventSection({
             <HStack display={{ base: 'none', md: 'flex' }} spaceX={4}>
               <SelectInput
                 value={selectedLocation}
-                onChange={() => {}}
+                onChange={(value) => setSelectedLocation(value)}
                 placeholder='Location'
                 options={uniqueLocations}
               />
               <SelectInput
                 value={selectedDate}
-                onChange={() => {}}
+                onChange={(value) => setSelectedDate(value)}
                 placeholder='Date Range'
                 options={dateOptions}
               />
@@ -193,7 +186,7 @@ export default function EventSection({
           {!isLoading && upcomingEvents.length > 0 && (
             <SimpleGrid
               columns={{ base: 1, md: 3 }}
-              gap={{ base: 6, md: 3 }}
+              gap={{ base: 6, md: 5 }}
               rowGap={{ base: 6, md: 5 }}
               width={sectionWidth}
               mx='auto'
@@ -226,13 +219,13 @@ export default function EventSection({
             <HStack display={{ base: 'none', md: 'flex' }} spaceX={4}>
               <SelectInput
                 value={selectedLocation}
-                onChange={() => {}}
+                onChange={(value) => setSelectedLocation(value)}
                 placeholder='Location'
                 options={uniqueLocations}
               />
               <SelectInput
                 value={selectedDate}
-                onChange={() => {}}
+                onChange={(value) => setSelectedDate(value)}
                 placeholder='Date Range'
                 options={dateOptions}
               />
