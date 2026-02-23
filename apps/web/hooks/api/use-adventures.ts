@@ -319,9 +319,15 @@ export function useCreateItinerary() {
         method: 'POST',
         body: data,
       }),
-    onSuccess: (_result, { adventureId }) => {
+    onSuccess: (_result, { adventureId, data }) => {
+      const dayNumber = data.get('dayNumber');
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
+      });
+      toaster.create({
+        title: 'Itinerary Created',
+        description: `Day ${dayNumber} has been added successfully`,
+        type: 'success',
       });
     },
     onError: () => {
@@ -384,9 +390,15 @@ export function useUpdateItinerary() {
         method: 'PATCH',
         body: JSON.stringify(data),
       }),
-    onSuccess: (_result, { adventureId }) => {
+    onSuccess: (_result, { adventureId, data }) => {
+      const dayNumber = data.get('dayNumber');
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
+      });
+      toaster.create({
+        title: 'Itinerary Updated',
+        description: `Day ${dayNumber} has been updated successfully`,
+        type: 'success',
       });
     },
     onError: () => {
@@ -406,16 +418,23 @@ export function useDeleteItinerary() {
     mutationFn: ({
       itineraryId,
       adventureId,
+      dayNumber,
     }: {
       itineraryId: string;
       adventureId: string;
+      dayNumber?: number;
     }) =>
       apiRequest(API_ENDPOINTS.ADVENTURES.ITINERARIES.DELETE(itineraryId), {
         method: 'DELETE',
       }),
-    onSuccess: (_result, { adventureId }) => {
+    onSuccess: (_result, { adventureId, dayNumber }) => {
       queryClient.invalidateQueries({
         queryKey: adventureKeys.itineraries(adventureId),
+      });
+      toaster.create({
+        title: 'Itinerary Deleted',
+        description: `Day ${dayNumber} has been removed`,
+        type: 'success',
       });
     },
     onError: () => {

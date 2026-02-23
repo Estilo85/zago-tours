@@ -55,7 +55,7 @@ const ItineraryCard = ({
             key={itinerary.id}
             my={5}
           >
-            <Box position='relative' h='180px' flexShrink={0}>
+            <Box position='relative' h='180px' p='3' flexShrink={0}>
               <ResponsiveImage
                 src={itinerary.imageUrl || ''}
                 alt={itinerary.title}

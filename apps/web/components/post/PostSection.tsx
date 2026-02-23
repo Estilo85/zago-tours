@@ -45,33 +45,36 @@ export default function PostSection({ posts }: PostSectionProps) {
         borderColor='gray.100'
         borderRadius='xl'
         boxShadow='sm'
-        gap={9}
+        gap={5}
       >
-        <Button
-          width='100%'
-          justifyContent='flex-start'
-          bg={activeTab === 'about' ? 'primary' : 'gray.50'}
-          color={activeTab === 'about' ? 'white' : 'black'}
-          onClick={() => setActiveTab('about')}
-        >
-          <HStack gap={4}>
-            <Users size={18} />
-            <Text>About Community</Text>
-          </HStack>
-        </Button>
-
-        <Button
-          width='100%'
-          justifyContent='flex-start'
-          bg={activeTab === 'posts' ? 'primary' : 'gray.50'}
-          color={activeTab === 'posts' ? 'white' : 'black'}
-          onClick={() => setActiveTab('posts')}
-        >
-          <HStack gap={4}>
-            <SwatchBook size={18} />
-            <Text>Posts</Text>
-          </HStack>
-        </Button>
+        <Box>
+          <Button
+            width='100%'
+            justifyContent='flex-start'
+            bg={activeTab === 'about' ? 'primary' : 'gray.50'}
+            color={activeTab === 'about' ? 'white' : 'black'}
+            onClick={() => setActiveTab('about')}
+          >
+            <HStack gap={4}>
+              <Users size={18} />
+              <Text>About Community</Text>
+            </HStack>
+          </Button>
+        </Box>
+        <Box>
+          <Button
+            width='100%'
+            justifyContent='flex-start'
+            bg={activeTab === 'posts' ? 'primary' : 'gray.50'}
+            color={activeTab === 'posts' ? 'white' : 'black'}
+            onClick={() => setActiveTab('posts')}
+          >
+            <HStack gap={4}>
+              <SwatchBook size={18} />
+              <Text>Posts</Text>
+            </HStack>
+          </Button>
+        </Box>
       </Stack>
 
       {/* Content Area */}

@@ -186,7 +186,11 @@ export default function ItineraryPage() {
                   colorPalette='red'
                   variant='ghost'
                   onClick={() =>
-                    deleteMutation.mutate({ itineraryId: item.id, adventureId })
+                    deleteMutation.mutate({
+                      itineraryId: item.id,
+                      adventureId,
+                      dayNumber: item.dayNumber,
+                    })
                   }
                 >
                   <FiTrash2 />
