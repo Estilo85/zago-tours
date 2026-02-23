@@ -25,9 +25,10 @@ export const FeaturedAdventures = () => {
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}
-          rowGap={9}
-          gap={{ base: 6, md: 5 }}
+          rowGap={{ base: 6, md: 5 }}
+          columnGap={{ base: 6, md: 8 }}
           width={{ base: 'full', lg: '900px' }}
+          mx='auto'
         >
           {Array.from({ length: 3 }).map((_, idx) => (
             <AdventureCardSkeleton key={idx} />

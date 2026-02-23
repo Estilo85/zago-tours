@@ -96,7 +96,7 @@ export default function VerifiedAdventureSection({
   }, [adventures, searchQuery, selectedDestination, selectedDate]);
 
   return (
-    <Container maxW='container.xl' justifyItems='center' mt={5}>
+    <Container maxW='container.xl' mt={5}>
       {/* Header */}
       <Flex align='center' mb={6} gap={5}>
         <Heading
@@ -114,9 +114,10 @@ export default function VerifiedAdventureSection({
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}
-          gap={{ base: 6, md: 3 }}
-          width={{ base: '100%', lg: '900px' }}
-          justifyItems='center'
+          rowGap={{ base: 6, md: 5 }}
+          columnGap={{ base: 6, md: 8 }}
+          width={{ base: 'full', lg: '900px' }}
+          mx='auto'
         >
           {Array.from({ length: 6 }).map((_, idx) => (
             <AdventureCardSkeleton key={idx} />
@@ -137,11 +138,11 @@ export default function VerifiedAdventureSection({
 
       <SimpleGrid
         columns={{ base: 1, md: 3 }}
-        spaceX={{ base: 4, md: 6 }}
-        spaceY={{ base: 8, md: 10 }}
-        width={{ base: '100%', lg: '900px' }}
-        justifyItems='center'
-        mt={8}
+        rowGap={{ base: 6, md: 5 }}
+        columnGap={{ base: 6, md: 8 }}
+        width={{ base: 'full', lg: '900px' }}
+        mx='auto'
+        mt={4}
         p={0}
       >
         {filteredAdventures.map((adventure) => (
