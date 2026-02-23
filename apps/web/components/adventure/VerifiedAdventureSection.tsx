@@ -98,7 +98,7 @@ export default function VerifiedAdventureSection({
   return (
     <Container maxW='container.xl' mt={5}>
       {/* Header */}
-      <Flex align='center' mb={6} gap={5}>
+      <Flex align='center' justify='center' mb={6} gap={5}>
         <Heading
           size={{ base: '2xl', md: '4xl' }}
           lineHeight='1.2'
