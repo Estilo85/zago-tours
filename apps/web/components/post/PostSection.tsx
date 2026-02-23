@@ -45,15 +45,16 @@ export default function PostSection({ posts }: PostSectionProps) {
         borderColor='gray.100'
         borderRadius='xl'
         boxShadow='sm'
-        gap={4}
+        gap={9}
       >
         <Button
           width='100%'
+          justifyContent='flex-start'
           bg={activeTab === 'about' ? 'primary' : 'gray.50'}
           color={activeTab === 'about' ? 'white' : 'black'}
           onClick={() => setActiveTab('about')}
         >
-          <HStack gap={2}>
+          <HStack gap={4}>
             <Users size={18} />
             <Text>About Community</Text>
           </HStack>
@@ -61,11 +62,12 @@ export default function PostSection({ posts }: PostSectionProps) {
 
         <Button
           width='100%'
+          justifyContent='flex-start'
           bg={activeTab === 'posts' ? 'primary' : 'gray.50'}
           color={activeTab === 'posts' ? 'white' : 'black'}
           onClick={() => setActiveTab('posts')}
         >
-          <HStack gap={2}>
+          <HStack gap={4}>
             <SwatchBook size={18} />
             <Text>Posts</Text>
           </HStack>

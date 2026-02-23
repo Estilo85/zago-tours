@@ -133,11 +133,7 @@ export default function CreateAdventurePage() {
       formData.append('media', adventure.imageFile);
     }
 
-    createAdventure(formData as any, {
-      onSuccess: () => {
-        router.push('/admin/adventures');
-      },
-    });
+    createAdventure(formData as any);
   };
 
   return (

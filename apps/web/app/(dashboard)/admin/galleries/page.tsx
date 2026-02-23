@@ -58,9 +58,6 @@ export default function GalleryManagement() {
             Manage platform-wide images and videos
           </Text>
         </VStack>
-        <Badge colorPalette='blue' variant='subtle' p={2} borderRadius='md'>
-          Total: {data?.pagination?.total || 0}
-        </Badge>
         <HStack gap={3}>
           <Badge colorPalette='blue' variant='subtle' p={2} borderRadius='md'>
             Total: {data?.pagination?.total || 0}

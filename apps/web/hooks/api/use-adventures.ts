@@ -84,6 +84,11 @@ export function useCreateAdventure() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
+      toaster.create({
+        title: 'Adventure Added',
+        description: 'Adventure has been added successfully',
+        type: 'success',
+      });
     },
     onError: () => {
       toaster.create({
@@ -140,6 +145,11 @@ export function useUpdateAdventure() {
     onSuccess: (_result, { id }) => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
+      toaster.create({
+        title: 'Adventure Updated',
+        description: 'Adventure has been updated successfully',
+        type: 'success',
+      });
     },
     onError: (_error, { id }, context) => {
       if (context?.previousData) {
