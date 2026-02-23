@@ -202,12 +202,18 @@ export default function ViewAdventurePage() {
           <Separator />
 
           {/* Detailed Content */}
-          <Box>
+          <Box gap={4}>
             <Heading size='sm' mb={3}>
               Description
             </Heading>
             <Text lineHeight='tall' color='fg.subtle'>
               {adventure.description}
+            </Text>
+            <Heading size='sm' mb={3}>
+              SafetyTips
+            </Heading>
+            <Text lineHeight='tall' color='fg.subtle'>
+              {adventure.safetyTips}
             </Text>
           </Box>
 

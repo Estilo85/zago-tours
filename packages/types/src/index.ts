@@ -19,6 +19,7 @@ export * from './entities/dashboard.types';
 // DTOs
 export * from './dtos/auth.dto';
 export * from './dtos/user.dto';
+export * from './dtos/platformGallery.dto';
 export * from './dtos/adventure.dto';
 export * from './dtos/community.dto';
 export * from './dtos/event.dto';

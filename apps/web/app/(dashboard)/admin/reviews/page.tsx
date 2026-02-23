@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Text, Badge, IconButton, HStack, VStack } from '@chakra-ui/react';
-import { Eye, Trash2, Edit, Star } from 'lucide-react';
+import { Eye, Trash2, Star } from 'lucide-react';
 import { useReviews, useToggleFeaturedReview } from '@/hooks';
 import { ReviewResponseDto } from '@zagotours/types';
 import { Column, DataTable } from '../../_components/table/DataTable';
@@ -30,11 +30,6 @@ export default function DashboardReviews() {
   const handleView = (review: ReviewResponseDto) => {
     setSelectedReview(review);
     setViewOpen(true);
-  };
-
-  const handleEdit = (review: ReviewResponseDto) => {
-    setSelectedReview(review);
-    setEditOpen(true);
   };
 
   const handleDelete = (review: ReviewResponseDto) => {
@@ -117,15 +112,7 @@ export default function DashboardReviews() {
           >
             <Eye size={16} />
           </IconButton>
-          <IconButton
-            aria-label='Edit'
-            variant='ghost'
-            size='sm'
-            colorPalette='blue'
-            onClick={() => handleEdit(review)}
-          >
-            <Edit size={16} />
-          </IconButton>
+
           <IconButton
             aria-label='Toggle Featured'
             variant='ghost'

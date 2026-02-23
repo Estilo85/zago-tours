@@ -57,7 +57,7 @@ const AdventureCard = ({
 
   return (
     <Card.Root
-      w={{ base: 'full', md: '280px' }}
+      w='full'
       variant='elevated'
       overflow='hidden'
       borderRadius='3xl'

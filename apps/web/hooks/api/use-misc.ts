@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
-import { dashboardKeys, settingsKeys } from './query-keys';
+import { dashboardKeys } from './query-keys';
 
 // ============================================
 // DASHBOARD QUERIES

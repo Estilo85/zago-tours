@@ -33,7 +33,7 @@ export const EventCard = ({ event }: EventCardProps) => {
 
   return (
     <Card.Root
-      w={{ base: 'full', md: '280px' }}
+      w='full'
       variant='elevated'
       overflow='hidden'
       borderRadius='3xl'
@@ -66,7 +66,7 @@ export const EventCard = ({ event }: EventCardProps) => {
 
       {/* BODY SECTION - TIGHTER SPACING */}
       <AppLink href={`/events/${event.id}`}>
-        <Card.Body p='4' pt='3' gap='1'>
+        <Card.Body p='4' pb='0' pt='3' gap='1'>
           <HStack
             justify='space-between'
             fontSize='xs'
@@ -84,12 +84,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
           </HStack>
 
-          <Card.Title
-            fontWeight='bold'
-            fontSize='md'
-            lineHeight='tight'
-            minH='auto'
-          >
+          <Card.Title fontWeight='bold' fontSize='md' minH='auto'>
             {event.title}
           </Card.Title>
 
@@ -121,12 +116,13 @@ export const EventCard = ({ event }: EventCardProps) => {
         </Card.Body>
       </AppLink>
 
-      <Card.Footer pt='0'>
+      <Card.Footer px='4' py='1'>
         <Flex
           w='full'
           borderTop='1px solid'
           borderColor='gray.100'
-          pt='3'
+          pt={3}
+          pb={3}
           justify='space-between'
           align='center'
         >

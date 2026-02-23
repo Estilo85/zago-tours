@@ -110,20 +110,12 @@ export const newsletterKeys = {
   list: () => [...newsletterKeys.all, 'list'] as const,
 };
 
-export const contractKeys = {
-  all: ['contracts'] as const,
-  lists: () => [...contractKeys.all, 'list'] as const,
-  list: (filters?: any) => [...contractKeys.lists(), { filters }] as const,
-  details: () => [...contractKeys.all, 'detail'] as const,
-  detail: (id: string) => [...contractKeys.details(), id] as const,
-  myContracts: () => [...contractKeys.all, 'my-contracts'] as const,
-  pending: () => [...contractKeys.all, 'pending'] as const,
-};
-
-export const agentKeys = {
-  all: ['agents'] as const,
-  available: () => [...agentKeys.all, 'available'] as const,
-  assignmentStats: () => [...agentKeys.all, 'assignment-stats'] as const,
+export const galleryKeys = {
+  all: ['platform-galleries'] as const,
+  lists: () => [...galleryKeys.all, 'list'] as const,
+  list: (filters?: any) => [...galleryKeys.lists(), { filters }] as const,
+  details: () => [...galleryKeys.all, 'detail'] as const,
+  detail: (id: string) => [...galleryKeys.details(), id] as const,
 };
 
 export const dashboardKeys = {
@@ -134,18 +126,4 @@ export const dashboardKeys = {
     [...dashboardKeys.all, 'agent', agentId] as const,
   affiliateStats: (affiliateId: string) =>
     [...dashboardKeys.all, 'affiliate', affiliateId] as const,
-};
-
-export const countryKeys = {
-  all: ['countries'] as const,
-  lists: () => [...countryKeys.all, 'list'] as const,
-  list: (filters?: any) => [...countryKeys.lists(), { filters }] as const,
-  details: () => [...countryKeys.all, 'detail'] as const,
-  detail: (id: string) => [...countryKeys.details(), id] as const,
-};
-
-export const settingsKeys = {
-  all: ['settings'] as const,
-  public: () => [...settingsKeys.all, 'public'] as const,
-  detail: () => [...settingsKeys.all, 'detail'] as const,
 };

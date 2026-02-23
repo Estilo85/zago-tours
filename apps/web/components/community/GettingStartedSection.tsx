@@ -44,7 +44,7 @@ export default function GettingStartedSection() {
       my={24}
       bg={{ base: 'primary', md: 'white' }}
       px={{ base: 2, md: 6 }}
-      py={20}
+      py={{ base: 5, md: 15 }}
       gap={10}
       borderRadius={{ base: 'none', md: 'xl' }}
       borderWidth='1px'

@@ -1,5 +1,5 @@
 import { Role } from '@zagotours/types';
-import { HelpCircle, House, MapMinus, Video } from 'lucide-react';
+import {  HelpCircle, House, Image as ImageIcon, MapMinus, Video } from 'lucide-react';
 import {
   LuCalendar,
   LuSettings,
@@ -36,7 +36,7 @@ const adminMenuItems = [
   { label: 'Callback Requests', icon: LuPhone, href: '/admin/callbacks' },
   { label: 'Planning Calls', icon: LuTicket, href: '/admin/planning-calls' },
   { label: 'Inquiries', icon: LuFileText, href: '/admin/inquiries' },
-
+  { label: 'Galleries', icon: ImageIcon, href: '/admin/galleries' },
   { label: 'Subscribers', icon: LuGlobe, href: '/admin/newsletter' },
 
   // Settings

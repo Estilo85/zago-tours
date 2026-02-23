@@ -15,6 +15,7 @@ import {
   Badge,
   Separator,
   RatingGroup,
+  VStack,
 } from '@chakra-ui/react';
 import { Itinerary } from '@zagotours/types';
 import { LuClock, LuMapPin } from 'react-icons/lu';
@@ -116,7 +117,6 @@ export default function AdventureDetailPage({
             p={{ base: 4, md: 6 }}
             bg='gray.50'
             borderWidth='1px'
-            my={4}
             width='full'
             maxW={{ base: '100%', md: '500px' }}
             minW={{ md: '500px' }}
@@ -126,15 +126,15 @@ export default function AdventureDetailPage({
             </Text>
 
             {step.imageUrl && (
-              <Box mt={4} border='1px solid red'>
+              <Box mt={4} h='200px'>
                 <ResponsiveImage
                   src={step.imageUrl}
                   alt={step.title}
                   borderRadius='md'
                   maxH='300px'
                   width='100%'
+                  height='100%'
                   objectFit='cover'
-                  minH='200px'
                 />
               </Box>
             )}
@@ -411,15 +411,15 @@ export default function AdventureDetailPage({
               ).toLocaleDateString()}
             />
 
-            <Box>
+            <VStack align='start' gap={3}>
               <HStack gap={3}>
                 <Icon as={Lightbulb} />
-                <Heading> Safety Tips </Heading>
+                <Heading>Safety Tips</Heading>
               </HStack>
-              <Text fontSize={{ base: 'sm', md: 'md' }} ml={3}>
+              <Text fontSize={{ base: 'sm', md: 'md' }} ml={5}>
                 {adventure?.safetyTips}
               </Text>
-            </Box>
+            </VStack>
           </Stack>
         </Box>
 
