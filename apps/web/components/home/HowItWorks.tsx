@@ -117,15 +117,16 @@ export const HowItWorks = () => {
         >
           Wherever you are in the world, pick your adventure, it's that SIMPLE
         </Text>
-
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={10}
           align='center'
           justify='center'
-          width={{ base: 'full', md: '900px' }}
+          maxW='900px'
+          w='full'
+          mx='auto'
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} width='full'>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} flex='1' minW='0'>
             {resImageData.map((img, i) => (
               <Box
                 key={i}
@@ -151,7 +152,7 @@ export const HowItWorks = () => {
             ))}
           </SimpleGrid>
 
-          <Stack gap={6} flex='1' textAlign='left' maxW={{ lg: '500px' }}>
+          <Stack gap={6} flex='1' minW='0' textAlign='left'>
             {cardData.map((card, idx) => (
               <FeatureCard
                 key={idx}
