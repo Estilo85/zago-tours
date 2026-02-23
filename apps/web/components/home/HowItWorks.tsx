@@ -123,13 +123,9 @@ export const HowItWorks = () => {
           gap={10}
           align='center'
           justify='center'
-          width='full'
+          width={{ base: 'full', md: '900px' }}
         >
-          <SimpleGrid
-            columns={{ base: 1, md: 2 }}
-            gap={4}
-            width={{ base: 'full', md: '900px' }}
-          >
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} width='full'>
             {resImageData.map((img, i) => (
               <Box
                 key={i}
