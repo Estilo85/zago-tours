@@ -73,10 +73,11 @@ export default function EditEventPage() {
     submitData.append('isSignature', formData.isSignature.toString());
     submitData.append('cancellationTerms', formData.cancellationTerms);
 
-    submitData.append('time', formData.time);
-
-    if (formData.date) {
-      submitData.append('date', new Date(formData.date).toISOString());
+    if (formData.date && formData.time) {
+      const [hours, minutes] = formData.time.split(':').map(Number);
+      const combinedDate = new Date(formData.date);
+      combinedDate.setUTCHours(hours, minutes, 0, 0);
+      submitData.append('date', combinedDate.toISOString());
     }
     if (formData.joinTill) {
       submitData.append('joinTill', new Date(formData.joinTill).toISOString());

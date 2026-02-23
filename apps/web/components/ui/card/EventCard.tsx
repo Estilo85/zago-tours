@@ -116,13 +116,13 @@ export const EventCard = ({ event }: EventCardProps) => {
         </Card.Body>
       </AppLink>
 
-      <Card.Footer p={0}>
+      <Card.Footer px='4' py='3'>
         <Flex
           w='full'
           borderTop='1px solid'
           borderColor='gray.100'
           pt={3}
-          pb={0}
+          pb={3}
           justify='space-between'
           align='center'
         >
