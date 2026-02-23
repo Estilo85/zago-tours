@@ -188,8 +188,8 @@ export default function EventSection() {
               columns={{ base: 1, md: 3 }}
               gap={{ base: 6, md: 5 }}
               rowGap={{ base: 6, md: 5 }}
-              width={sectionWidth}
               mx='auto'
+              width={sectionWidth}
             >
               {upcomingEvents.map((event) => (
                 <EventCard key={event.id} event={event} />

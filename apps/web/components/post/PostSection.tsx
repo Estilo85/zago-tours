@@ -37,7 +37,8 @@ export default function PostSection({ posts }: PostSectionProps) {
       {/* Sidebar */}
       <Stack
         bg='white'
-        display={{ base: 'none', md: 'block' }}
+        display={{ base: 'none', md: 'flex' }}
+        flexDirection='column'
         w='300px'
         height='fit-content'
         p={5}
@@ -47,34 +48,30 @@ export default function PostSection({ posts }: PostSectionProps) {
         boxShadow='sm'
         gap={5}
       >
-        <Box>
-          <Button
-            width='100%'
-            justifyContent='flex-start'
-            bg={activeTab === 'about' ? 'primary' : 'gray.50'}
-            color={activeTab === 'about' ? 'white' : 'black'}
-            onClick={() => setActiveTab('about')}
-          >
-            <HStack gap={4}>
-              <Users size={18} />
-              <Text>About Community</Text>
-            </HStack>
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            width='100%'
-            justifyContent='flex-start'
-            bg={activeTab === 'posts' ? 'primary' : 'gray.50'}
-            color={activeTab === 'posts' ? 'white' : 'black'}
-            onClick={() => setActiveTab('posts')}
-          >
-            <HStack gap={4}>
-              <SwatchBook size={18} />
-              <Text>Posts</Text>
-            </HStack>
-          </Button>
-        </Box>
+        <Button
+          width='100%'
+          justifyContent='flex-start'
+          bg={activeTab === 'about' ? 'primary' : 'gray.50'}
+          color={activeTab === 'about' ? 'white' : 'black'}
+          onClick={() => setActiveTab('about')}
+        >
+          <HStack gap={4}>
+            <Users size={18} />
+            <Text>About Community</Text>
+          </HStack>
+        </Button>
+        <Button
+          width='100%'
+          justifyContent='flex-start'
+          bg={activeTab === 'posts' ? 'primary' : 'gray.50'}
+          color={activeTab === 'posts' ? 'white' : 'black'}
+          onClick={() => setActiveTab('posts')}
+        >
+          <HStack gap={4}>
+            <SwatchBook size={18} />
+            <Text>Posts</Text>
+          </HStack>
+        </Button>
       </Stack>
 
       {/* Content Area */}
@@ -159,6 +156,7 @@ export default function PostSection({ posts }: PostSectionProps) {
               borderRadius='xl'
               border='1px solid'
               borderColor='gray.100'
+              mb={20}
             >
               <Heading fontSize='lg' fontWeight='bold' mb={4}>
                 Gallery
