@@ -9,7 +9,6 @@ import { galleryKeys } from './query-keys';
 // ============================================
 
 export function useGalleries(filters?: any) {
-  // Convert filters to query string if apiRequest doesn't handle it
   const queryParams = new URLSearchParams(filters).toString();
   const url = queryParams
     ? `${API_ENDPOINTS.PLATFORM_GALLERIES.LIST}?${queryParams}`
