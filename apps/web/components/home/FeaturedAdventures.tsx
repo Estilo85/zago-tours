@@ -48,7 +48,7 @@ export const FeaturedAdventures = () => {
         columns={{ base: 1, md: 3 }}
         gap={{ base: 6, md: 5 }}
         rowGap={{ base: 6, md: 5 }}
-        mx='auto'
+        px={{ base: 0, md: 0 }}
         width={{ base: 'full', lg: '900px' }}
       >
         {adventures.map((adventure) => (
