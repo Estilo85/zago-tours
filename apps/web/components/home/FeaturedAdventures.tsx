@@ -48,8 +48,8 @@ export const FeaturedAdventures = () => {
         columns={{ base: 1, md: 3 }}
         gap={{ base: 6, md: 5 }}
         rowGap={{ base: 6, md: 5 }}
+        mx='auto'
         width={{ base: 'full', lg: '900px' }}
-        px={{ base: 0, md: 0 }}
       >
         {adventures.map((adventure) => (
           <AdventureCard key={adventure.id} adventure={adventure} />
