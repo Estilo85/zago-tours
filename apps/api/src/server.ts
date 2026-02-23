@@ -58,7 +58,6 @@ export const createServer = (): Express => {
         maxAge: 86400,
       }),
     )
-    .options('(.*)', cors())
     .use(express.json({ limit: '1mb' }))
     .use(express.urlencoded({ extended: true, limit: '1mb' }))
 
