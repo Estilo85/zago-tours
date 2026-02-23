@@ -171,15 +171,12 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => buildUrl(`/trip-planning-calls/${id}`),
   },
 
-  // Contracts
-  CONTRACTS: {
-    CREATE: buildUrl('/contracts'),
-    MY_CONTRACTS: buildUrl('/contracts/my-contracts'),
-    BY_ID: (id: string) => buildUrl(`/contracts/${id}`),
-    SIGN: (id: string) => buildUrl(`/contracts/${id}/sign`),
-    LIST: buildUrl('/contracts'),
-    PENDING: buildUrl('/contracts/pending/list'),
-    DELETE: (id: string) => buildUrl(`/contracts/${id}`),
+  // Platform-galleries
+  PLATFORM_GALLERIES: {
+    CREATE: buildUrl('/platform-galleries'),
+    UPDATE: (id: string) => buildUrl(`/platform-galleries/${id}`),
+    LIST: buildUrl('/platform-galleries'),
+    DELETE: (id: string) => buildUrl(`/platform-galleries/${id}`),
   },
 
   // Dashboard
@@ -192,8 +189,8 @@ export const API_ENDPOINTS = {
   },
 
   NEWSLETTER: {
-    SUBSCRIBE: buildUrl('/newsletter/subscribe'),
-    LIST: buildUrl('/newsletter/list'),
+    SUBSCRIBE: buildUrl('/newsletters/subscribe'),
+    LIST: buildUrl('/newsletters/list'),
   },
 } as const;
 

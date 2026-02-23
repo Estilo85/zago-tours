@@ -36,7 +36,7 @@ export * from './api/use-inquiries';
 export * from './api/use-planning-calls';
 
 // Contract Hooks
-export * from './api/use-contracts';
+export * from './api/use-galleries';
 
 // Miscellaneous Hooks (Agents, Dashboard, Countries, Settings)
 export * from './api/use-misc';

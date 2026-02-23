@@ -30,7 +30,7 @@ router.use('/api/users', userRoutes);
 router.use('/api/adventures', adventureRouter);
 // // Reviews
 router.use('/api/reviews', reviewRoutes);
-router.use('/api/newsletter', newsletterRoutes);
+router.use('/api/newsletters', newsletterRoutes);
 
 // // Community
 router.use('/api/posts', postRoutes);
