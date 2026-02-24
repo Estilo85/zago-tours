@@ -214,15 +214,20 @@ export const HowItWorks = () => {
   return (
     <Box
       bg='surface'
+      my={{ base: 20, md: 32 }}
       borderRadius={{ base: 'none', md: '4xl' }}
       p={{ base: 6, md: 10 }}
-      pb={{ base: '100px', md: '200px' }} // Space for the absolute box
-      mb={{ base: '150px', md: '200px' }} // Space to prevent overlap with following sections
-      position='relative' // This is now the reference for the absolute child
+      pb={{ base: '250px', md: '200px' }}
+      position='relative'
     >
       <Box maxW='container.xl' mx='auto' px={4}>
-        {/* SECTION 1: Text Header */}
-        <Stack textAlign='center' gap={4} align='center' mb={16}>
+        {/* --- TOP SECTION (Text) --- */}
+        <Stack
+          textAlign='center'
+          gap={4}
+          align='center'
+          mb={{ base: 12, md: 20 }}
+        >
           <Center>
             <Text
               fontSize={{ base: 'xs', md: 'sm' }}
@@ -257,10 +262,10 @@ export const HowItWorks = () => {
           </Text>
         </Stack>
 
-        {/* SECTION 2: Images and Feature Cards */}
+        {/* --- MIDDLE SECTION (Images & Cards) --- */}
         <Flex
           direction={{ base: 'column', lg: 'row' }}
-          gap={{ base: 12, lg: 20 }}
+          gap={{ base: 10, lg: 20 }}
           align='center'
           justify='center'
           width='full'
@@ -282,20 +287,18 @@ export const HowItWorks = () => {
                 <ResponsiveImage
                   src={img}
                   alt='how it work image'
-                  height={{ base: '250px', md: '280px' }}
+                  height={{ base: '220px', md: '280px' }}
                   width='100%'
-                  mx='auto'
                   borderRadius='xl'
                   objectFit='cover'
                   priority={true}
-                  sizes='(max-width: 768px) 100vw, 300px'
                 />
               </Box>
             ))}
           </SimpleGrid>
 
           {/* Feature Cards List */}
-          <Stack gap={8} flex='1' textAlign='left'>
+          <Stack gap={6} flex='1' textAlign='left' width='full'>
             {cardData.map((card, idx) => (
               <FeatureCard
                 key={idx}
@@ -308,14 +311,15 @@ export const HowItWorks = () => {
         </Flex>
       </Box>
 
-      {/* SECTION 3: The Absolute Overlay Box */}
-      {/* Positioned at the bottom of the 'surface' Box */}
+      {/* --- BOTTOM SECTION (Absolute Box) --- */}
       <Box
-        width={{ base: '92%', md: '80%', lg: '70%' }}
+        width={{ base: '90%', md: '80%', lg: '70%' }}
         position='absolute'
+        // bottom="0" attaches it to the bottom of the 'surface' background
         bottom='0'
         left='50%'
-        transform='translate(-50%, 50%)' // Moves half its height below the bottom edge
+        // Pulls the box 50% of its own height downwards past the edge
+        transform='translate(-50%, 50%)'
         zIndex={10}
         bg='primary'
         p={{ base: 6, md: 10 }}
@@ -342,13 +346,11 @@ export const HowItWorks = () => {
           </AvatarGroup>
           <Text
             fontSize={{ base: 'md', md: 'xl', lg: '2xl' }}
-            lineHeight='tall'
-            fontWeight='medium'
+            lineHeight='short'
           >
             Our team and partners aren't new to this, we've spent decades
             leading travelers up mountains, across oceans, and into the kind of
-            stories you never forget. Together, that's over 100 years of
-            experience fueling your next adventure.
+            stories you never forget.
           </Text>
         </Stack>
       </Box>
