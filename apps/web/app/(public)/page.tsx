@@ -9,7 +9,7 @@ import { Stack } from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <Stack gap={3} py={5}>
+    <Stack py={5}>
       <HomeHero />
       <StatsHero />
       <HowItWorks />

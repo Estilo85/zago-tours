@@ -41,37 +41,42 @@ const cardData = [
 
 export const Benefits = () => {
   return (
-    <Box>
+    <Box py={{ base: 10, md: 20 }}>
       <Stack
         position='relative'
         textAlign='center'
-        gap={10}
+        gap={16}
         align='center'
         maxW='container.xl'
         mx='auto'
         px={4}
       >
-        <Center>
-          <Text
-            fontSize={{ base: 'xs', md: 'sm' }}
-            px={4}
-            py={1}
-            border='1px solid gray'
-            borderRadius='full'
-            letterSpacing='widest'
-          >
-            Safety First Adventure
-          </Text>
-        </Center>
+        <Stack gap={3} align='center'>
+          <Center>
+            <Text
+              fontSize={{ base: 'xs', md: 'sm' }}
+              px={4}
+              py={1}
+              border='1px solid'
+              borderColor='gray.300' // Cleaner border definition
+              borderRadius='full'
+              letterSpacing='widest'
+              textTransform='uppercase'
+              fontWeight='medium'
+            >
+              Safety First Adventure
+            </Text>
+          </Center>
 
-        <Heading
-          size={{ base: '2xl', md: '4xl' }}
-          lineHeight='1.2'
-          color='primary'
-          fontWeight='bolder'
-        >
-          Why Choose Zago Tours
-        </Heading>
+          <Heading
+            size={{ base: '2xl', md: '4xl' }}
+            lineHeight='1.2'
+            color='primary'
+            fontWeight='bolder'
+          >
+            Why Choose Zago Tours
+          </Heading>
+        </Stack>
 
         <Flex
           direction={{ base: 'column', lg: 'row' }}
@@ -83,7 +88,7 @@ export const Benefits = () => {
           <SimpleGrid
             columns={{ base: 1, md: 2 }}
             gap={6}
-            width={{ base: 'full', lg: '900px' }}
+            width={{ base: 'full', lg: '1000px' }} // Slightly wider for better balance
           >
             {cardData.map((card, index) => (
               <FeatureHighlightCard
