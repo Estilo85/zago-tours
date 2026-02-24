@@ -84,9 +84,14 @@ export class ItineraryController {
       req: ReqParamsBody<UuidParam, UpdateItineraryDto>,
       res: Response,
     ) => {
+      const dto: UpdateItineraryDto = {
+        ...req.body,
+        dayNumber: req.body.dayNumber ? Number(req.body.dayNumber) : undefined,
+      };
+
       const result = await this.service.updateWithImage(
         req.params.id,
-        req.body,
+        dto,
         req.file,
       );
       return ResponseUtil.success(res, result, 'Itinerary updated');
