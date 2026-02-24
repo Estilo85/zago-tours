@@ -70,7 +70,7 @@ export const HowItWorks = () => {
   return (
     <Box
       bg='surface'
-      my={{ base: 20, md: 32 }}
+      mb={32}
       borderRadius={{ base: 'none', md: '4xl' }}
       p={{ base: 6, md: 10 }}
       pb={{ base: '150px', md: '200px' }}
@@ -133,7 +133,7 @@ export const HowItWorks = () => {
               <Box
                 key={i}
                 width='100%'
-                // display={{ base: i > 1 ? 'none' : 'block', md: 'block' }}
+                display={{ base: i > 1 ? 'none' : 'block', md: 'block' }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'translateY(20px)',
@@ -166,14 +166,11 @@ export const HowItWorks = () => {
         </Flex>
       </Box>
 
-      {/* --- BOTTOM SECTION (Absolute Box) --- */}
       <Box
         width={{ base: '90%', md: '80%', lg: '70%' }}
         position='absolute'
-        // bottom="0" attaches it to the bottom of the 'surface' background
         bottom='0'
         left='50%'
-        // Pulls the box 50% of its own height downwards past the edge
         transform='translate(-50%, 50%)'
         zIndex={10}
         bg='primary'
