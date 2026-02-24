@@ -121,7 +121,12 @@ export default function EventSection() {
   if (isError) return <ErrorState message={error?.message} />;
 
   return (
-    <Container maxW='container.xl' py={10}>
+    <Container
+      id='join-event-section'
+      scrollMarginTop='100px'
+      maxW='container.xl'
+      py={10}
+    >
       <VStack spaceY={12} align='stretch'>
         {/* --- UPCOMING EVENTS SECTION --- */}
         <Box>

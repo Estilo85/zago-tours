@@ -64,7 +64,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
         color='textPrimary'
         borderRadius={{ base: 'none', md: '3xl' }}
         px={{ base: 5, md: 10 }}
-        pt={{ base: '5px', md: '120px' }}
+        pt={{ base: '20px', md: '120px' }}
         mb={{ base: 0, md: '250px' }}
         position='relative'
       >

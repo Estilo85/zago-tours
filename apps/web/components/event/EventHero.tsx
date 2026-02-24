@@ -38,21 +38,26 @@ export const EventHero = () => {
         <Flex
           direction={{ base: 'column', md: 'row' }}
           align='center'
+          justify='center'
           gap={4}
-          w={{ base: 'full', md: 'auto' }}
-          mx='auto'
+          w='full'
         >
-          <AppLink href='#' style={{ width: '100%' }}>
-            <Button bg='secondary' color='dark' fontWeight='bold' w='auto'>
-              Join an event
-              <Icon as={ArrowRight} ml={2} />
-            </Button>
-          </AppLink>
-
-          <AppLink
-            href='https://forms.gle/bpFRxCweT8ygcCW8A'
-            style={{ width: '100%' }}
+          <Button
+            onClick={() => {
+              document.getElementById('join-event-section')?.scrollIntoView({
+                behavior: 'smooth',
+              });
+            }}
+            bg='secondary'
+            color='dark'
+            fontWeight='bold'
+            w='auto'
           >
+            Join an event
+            <Icon as={ArrowRight} ml={2} />
+          </Button>
+
+          <AppLink href='https://forms.gle/bpFRxCweT8ygcCW8A'>
             <Button
               bg='primary'
               color='white'
