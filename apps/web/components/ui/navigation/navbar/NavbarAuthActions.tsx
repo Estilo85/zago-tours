@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowRight, LogOut, ChevronDown, LayoutDashboard } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRoleStore } from '@/store/role-selector.store';
 import Button from '@/components/ui/button/Button';
 import { AppLink } from '@/components/ui/link/AppLink';
@@ -40,6 +40,11 @@ export const NavbarAuthActions = ({ onClose }: { onClose?: () => void }) => {
 
   // Detect if mobile
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Store action
   const selectedRole = useRoleStore((state) => state.role);
@@ -115,8 +120,7 @@ export const NavbarAuthActions = ({ onClose }: { onClose?: () => void }) => {
             <AppLink href='/login'>Login</AppLink>
           </Button>
 
-          {isMobile ? (
-            /* MOBILE: Collapsible */
+          {mounted && isMobile ? (
             <Box position='relative'>
               <Collapsible.Root
                 open={collapsibleOpen}

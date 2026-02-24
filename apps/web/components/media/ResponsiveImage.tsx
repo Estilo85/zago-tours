@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Box, BoxProps, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
 
 interface ResponsiveImageProps {
   src?: string;
@@ -41,14 +42,16 @@ export const ResponsiveImage = ({
   objectPosition = 'center',
   fallbackBg = 'gray.100',
 }: ResponsiveImageProps) => {
-  if (!src) {
+  const [hasError, setHasError] = useState(false);
+
+  if (!src || hasError) {
     return (
       <Box
         position='relative'
         width={width}
         height={height}
         maxH={maxH}
-        minH={minH}
+        minH={minH || '200px'}
         borderRadius={borderRadius}
         boxShadow={boxShadow}
         overflow='hidden'
@@ -59,7 +62,7 @@ export const ResponsiveImage = ({
         {...containerProps}
       >
         <Text color='gray.500' fontSize='sm' textAlign='center' px={4}>
-          No Image Available
+          {hasError ? 'Image Load Error' : 'No Image Available'}
         </Text>
       </Box>
     );
@@ -72,11 +75,12 @@ export const ResponsiveImage = ({
       height={height}
       maxH={maxH}
       maxW={maxW}
+      minH={minH}
       mx={mx}
       borderRadius={borderRadius}
       boxShadow={boxShadow}
-      objectPosition={objectPosition}
       overflow='hidden'
+      style={{ minHeight: '1px', ...containerProps?.style }}
       {...containerProps}
     >
       <Image
@@ -88,9 +92,7 @@ export const ResponsiveImage = ({
         sizes={sizes}
         style={{ objectFit, objectPosition }}
         fetchPriority={priority ? 'high' : 'auto'}
-        onError={(e) => {
-          e.currentTarget.style.display = 'none';
-        }}
+        onError={() => setHasError(true)}
       />
     </Box>
   );

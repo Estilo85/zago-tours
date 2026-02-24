@@ -146,6 +146,7 @@ export const HowItWorks = () => {
                   borderRadius='xl'
                   objectFit='cover'
                   priority={i < 2}
+                  containerProps={{ style: { aspectRatio: '4/3' } }}
                 />
               </Box>
             ))}
