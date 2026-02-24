@@ -20,6 +20,8 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiUploadCloud, FiX, FiCalendar, FiClock } from 'react-icons/fi';
 import { useCreateEvent } from '@/hooks';
+import { EventPricing } from '@zagotours/types';
+import { SelectInput } from '@/components/ui/input/SelectInput';
 
 export default function CreateEventPage() {
   const router = useRouter();
@@ -32,9 +34,10 @@ export default function CreateEventPage() {
     title: '',
     description: '',
     location: '',
-    date: '', // Will store YYYY-MM-DD
-    time: '', // Will store HH:mm
-    joinTill: '', // Will store YYYY-MM-DD
+    date: '',
+    time: '',
+    joinTill: '',
+    pricing: EventPricing.FREE,
     spotLeft: 20,
     isSignature: false,
     cancellationTerms: '',
@@ -77,7 +80,7 @@ export default function CreateEventPage() {
     formData.append('title', form.title);
     formData.append('description', form.description);
     formData.append('location', form.location);
-
+    formData.append('pricing', form.pricing);
     formData.append('cancellationTerms', form.cancellationTerms || '');
 
     formData.append('spotLeft', form.spotLeft.toString());
@@ -220,6 +223,21 @@ export default function CreateEventPage() {
               />
             </Field.Root>
           </SimpleGrid>
+
+          <Field.Root required>
+            <Field.Label>Pricing</Field.Label>
+            <SelectInput
+              value={form.pricing}
+              onChange={(val) =>
+                setForm({ ...form, pricing: val as EventPricing })
+              }
+              options={[
+                { label: 'Free', value: EventPricing.FREE },
+                { label: 'Paid', value: EventPricing.PAID },
+              ]}
+              placeholder='Select pricing type'
+            />
+          </Field.Root>
 
           <Field.Root required>
             <Field.Label>Description</Field.Label>

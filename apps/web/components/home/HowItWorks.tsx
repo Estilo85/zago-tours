@@ -77,7 +77,7 @@ export const HowItWorks = () => {
       <Stack
         position='relative'
         textAlign='center'
-        gap={10}
+        gap={2}
         align='center'
         maxW='container.xl'
         mx='auto'
@@ -89,9 +89,11 @@ export const HowItWorks = () => {
             fontSize={{ base: 'xs', md: 'sm' }}
             px={4}
             py={1}
-            border='1px solid white'
+            borderWidth='1px'
+            borderColor='primary'
             borderRadius='full'
             letterSpacing='widest'
+            bg='white'
             color='primary'
             fontWeight='semibold'
           >
@@ -101,7 +103,6 @@ export const HowItWorks = () => {
 
         <Heading
           size={{ base: '2xl', md: '4xl' }}
-          lineHeight='1.2'
           color='primary'
           fontWeight='bolder'
         >
@@ -120,18 +121,21 @@ export const HowItWorks = () => {
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={10}
+          my={15}
           align='center'
           justify='center'
-          maxW='900px'
-          w='full'
+          width={{ base: 'full', lg: '900px' }}
           mx='auto'
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} flex='1' minW='0'>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} flex='1'>
             {resImageData.map((img, i) => (
               <Box
                 key={i}
                 width='100%'
-                display={{ base: i > 1 ? 'none' : 'block', md: 'block' }}
+                display={{
+                  base: i < 2 ? 'block' : 'none',
+                  md: 'block',
+                }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
@@ -140,7 +144,7 @@ export const HowItWorks = () => {
                 <ResponsiveImage
                   src={img}
                   alt='how it work image'
-                  height={{ base: '200px', md: '250px' }}
+                  height={{ base: '200px', md: '230px' }}
                   width='100%'
                   maxW={{ base: '100%', md: '300px' }}
                   mx='auto'
@@ -152,7 +156,7 @@ export const HowItWorks = () => {
             ))}
           </SimpleGrid>
 
-          <Stack gap={6} flex='1' minW='0' textAlign='left'>
+          <Stack gap={6} flex='1' textAlign='left'>
             {cardData.map((card, idx) => (
               <FeatureCard
                 key={idx}

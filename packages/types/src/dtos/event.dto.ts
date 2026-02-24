@@ -1,12 +1,13 @@
 // ==================== EVENT DTOs ====================
 
-import { EventStatus } from '../enums';
+import { EventPricing, EventStatus } from '../enums';
 
 export interface CreateEventDto {
   title: string;
   date: Date | string;
   description: string;
   location: string;
+  pricing: EventPricing;
   spotLeft: number;
   isSignature: boolean;
   joinTill: Date | string;
@@ -22,6 +23,7 @@ export interface UpdateEventDto {
   description?: string;
   isSignature?: boolean;
   location?: string;
+  pricing?: EventPricing;
   spotLeft?: number;
   joinTill?: Date | string;
   cancellationTerms?: string;
@@ -39,6 +41,7 @@ export interface EventResponseDto {
   createdBy: string;
   isSignature: boolean;
   spotLeft: number;
+  pricing: EventPricing;
   joinTill: Date;
   cancellationTerms: string;
   mediaUrl: string | null;

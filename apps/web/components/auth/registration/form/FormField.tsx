@@ -118,6 +118,7 @@ export const FormField = forwardRef<any, any>(
                   onChange={(phone) => onChange(phone)}
                   inputRef={ref}
                   placeholder={placeholder}
+                  style={{ width: '100%' }}
                   inputStyle={{
                     width: '100%',
                     height: '40px',

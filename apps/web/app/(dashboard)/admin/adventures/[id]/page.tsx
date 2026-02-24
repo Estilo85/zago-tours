@@ -25,6 +25,7 @@ import {
   AdventureStatusLabels,
 } from '@zagotours/types';
 import { LoadingState } from '@/components/ui/LoadingState';
+import { formatDate } from '@/utils/DateFormat';
 
 export default function ViewAdventurePage() {
   const router = useRouter();
@@ -146,6 +147,32 @@ export default function ViewAdventurePage() {
                 Duration
               </Text>
               <Text fontWeight='medium'>{adventure.days} days</Text>
+            </GridItem>
+
+            <GridItem>
+              <Text
+                fontSize='xs'
+                color='fg.muted'
+                textTransform='uppercase'
+                fontWeight='bold'
+              >
+                Start Date
+              </Text>
+              <Text fontWeight='medium'>{formatDate(adventure.date)}</Text>
+            </GridItem>
+
+            <GridItem>
+              <Text
+                fontSize='xs'
+                color='fg.muted'
+                textTransform='uppercase'
+                fontWeight='bold'
+              >
+                Rating
+              </Text>
+              <Text fontWeight='bold' color='yellow.500' fontSize='lg'>
+                ⭐ {adventure.rating} / 5
+              </Text>
             </GridItem>
 
             <GridItem>

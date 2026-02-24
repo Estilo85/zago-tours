@@ -21,6 +21,7 @@ import {
   FiMapPin,
   FiCalendar,
   FiUsers,
+  FiTag,
 } from 'react-icons/fi';
 import { useEvent, useDeleteEvent } from '@/hooks';
 import { formatDate } from '@/utils/DateFormat';
@@ -137,6 +138,16 @@ export default function EventAdminDetail() {
             >
               {event.spotLeft} /{' '}
               {event.spotLeft + (event._count?.registrations || 0)}
+            </Badge>
+          </Box>
+
+          <Box p={4} borderWidth='1px' rounded='lg'>
+            <HStack mb={2}>
+              <FiTag />
+              <Text fontWeight='bold'>Pricing</Text>
+            </HStack>
+            <Badge colorPalette={event.pricing === 'FREE' ? 'green' : 'yellow'}>
+              {event.pricing}
             </Badge>
           </Box>
         </SimpleGrid>

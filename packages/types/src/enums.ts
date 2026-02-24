@@ -7,6 +7,10 @@ export enum Role {
   COOPERATE_AGENT = 'COOPERATE_AGENT',
 }
 
+export enum EventPricing {
+  FREE = 'FREE',
+  PAID = 'PAID',
+}
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
   SUSPENDED = 'SUSPENDED',

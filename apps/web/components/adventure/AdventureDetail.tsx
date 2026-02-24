@@ -174,20 +174,14 @@ export default function AdventureDetailPage({
                 readOnly
                 size='xs'
                 colorPalette='white'
-                css={{
-                  '--unit-color': 'rgba(255, 255, 255, 0.3)',
-                  '& svg': {
-                    color: 'white',
-                  },
-                }}
               >
                 <RatingGroup.HiddenInput />
-                <RatingGroup.Control />
+                <RatingGroup.Control
+                  aria-hidden='true'
+                  css={{ '& [data-part="item"]': { padding: '4px' } }}
+                />
               </RatingGroup.Root>
             </Box>
-            <Text fontSize={{ base: 'sm', md: 'md' }}>
-              {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
-            </Text>
           </HStack>
           <Flex
             align='center'
@@ -365,7 +359,7 @@ export default function AdventureDetailPage({
             <DetailItem
               icon={ShieldPlus}
               label='Safety Score'
-              value={`${adventure.safetyScore}/10`}
+              value={`${adventure.safetyScore}/100`}
             />
             <DetailItem
               icon={LuMapPin}

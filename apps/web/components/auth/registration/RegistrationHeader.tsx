@@ -13,8 +13,8 @@ export function RegistrationHeader() {
       >
         Zago Tours
       </Heading>
-      <Heading>Create account</Heading>
-      <Text color='primary'>
+      <Heading>Create an account</Heading>
+      <Text>
         Already have an account?{' '}
         <AppLink href='/login' textDecor='underline'>
           Log in

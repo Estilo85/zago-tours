@@ -27,6 +27,7 @@ import {
   usePermissions,
 } from '@/hooks';
 import { formatTime } from '@/utils/TimeFormat';
+import { FiTag } from 'react-icons/fi';
 
 interface EventDetailPageProps {
   event: EventResponseDto;
@@ -63,7 +64,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
         color='textPrimary'
         borderRadius={{ base: 'none', md: '3xl' }}
         px={{ base: 5, md: 10 }}
-        pt='120px'
+        pt={{ base: '20px', md: '120px' }}
         mb={{ base: 0, md: '250px' }}
         position='relative'
       >
@@ -77,7 +78,7 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
             size={{ base: '2xl', md: '4xl' }}
             lineHeight='1.2'
             color='white'
-            mb={{ base: 4, md: 8 }}
+            mb={{ base: 4, md: 16 }}
           >
             {event.title}
           </Heading>
@@ -143,6 +144,21 @@ export const EventDetailPage = ({ event }: EventDetailPageProps) => {
                 <HStack>
                   <MapPin size={20} color='var(--chakra-colors-primary)' />
                   <Text fontWeight='semibold'>{event.location}</Text>
+                </HStack>
+
+                <HStack>
+                  <FiTag size={20} color='var(--chakra-colors-primary)' />
+                  <Badge
+                    bg='gray.100'
+                    px={2}
+                    py={0.5}
+                    borderRadius='md'
+                    fontSize='9px'
+                    fontWeight='bold'
+                    color='gray.700'
+                  >
+                    {event?.pricing}
+                  </Badge>
                 </HStack>
               </Flex>
 

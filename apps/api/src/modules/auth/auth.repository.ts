@@ -12,8 +12,8 @@ export class AuthRepository extends BaseRepository<
 
   //===== FIND BY UNIQUE EMAIL =======
   async findByEmail(email: string): Promise<User | null> {
-    return this.modelDelegate.findUnique({
-      where: { email },
+    return this.modelDelegate.findFirst({
+      where: { email, deletedAt: null },
       include: {
         independentDetails: true,
         cooperateDetails: true,
@@ -27,8 +27,8 @@ export class AuthRepository extends BaseRepository<
 
   //===== FIND BY ID (if you have this method) =======
   async findById(id: string): Promise<User | null> {
-    return this.modelDelegate.findUnique({
-      where: { id },
+    return this.modelDelegate.findFirst({
+      where: { id, deletedAt: null },
       include: {
         independentDetails: true,
         cooperateDetails: true,

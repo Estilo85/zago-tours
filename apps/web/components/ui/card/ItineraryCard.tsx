@@ -10,6 +10,7 @@ import {
   HStack,
   Box,
   Button,
+  RatingGroup,
 } from '@chakra-ui/react';
 import {
   BadgeCheck,
@@ -72,11 +73,21 @@ const ItineraryCard = ({
 
               <HStack gap={2}>
                 <Box bg='green.600' p={1} borderRadius='sm'>
-                  <Icon as={LuStar} fill='white' color='white' size='xs' />
+                  <RatingGroup.Root
+                    count={5}
+                    value={adventure.rating}
+                    readOnly
+                    allowHalf
+                    size='xs'
+                    colorPalette='white'
+                  >
+                    <RatingGroup.HiddenInput />
+                    <RatingGroup.Control
+                      aria-hidden='true'
+                      css={{ '& [data-part="item"]': { padding: '4px' } }}
+                    />
+                  </RatingGroup.Root>
                 </Box>
-                <Text fontSize='sm' fontWeight='bold'>
-                  {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
-                </Text>
               </HStack>
 
               {/* Badges with wrap and gap fixed */}

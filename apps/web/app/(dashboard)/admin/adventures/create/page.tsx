@@ -47,7 +47,7 @@ const INITIAL_ADVENTURE = {
   certification: '',
   gear: '',
   date: '',
-  rating: 0,
+  rating: '0',
   imageFile: null as File | null,
   imagePreview: null as string | null,
 };
@@ -121,7 +121,7 @@ export default function CreateAdventurePage() {
     formData.append('days', adventure.days.toString());
     formData.append('safetyScore', adventure.safetyScore.toString());
     formData.append('safetyTips', adventure.safetyTips);
-    formData.append('rating', adventure.rating.toString());
+    formData.append('rating', Number(adventure.rating).toString());
     formData.append('date', adventure.date);
 
     if (adventure.certification)
@@ -336,9 +336,7 @@ export default function CreateAdventurePage() {
                   max='5'
                   step='0.1'
                   value={adventure.rating}
-                  onChange={(e) =>
-                    handleChange('rating', Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange('rating', e.target.value)}
                 />
               </Field.Root>
             </SimpleGrid>
@@ -361,12 +359,14 @@ export default function CreateAdventurePage() {
                 rows={3}
               />
             </Field.Root>
+
             <Field.Root required>
-              <Field.Label>safetyTips</Field.Label>
-              <Input
+              <Field.Label>Safety Tips</Field.Label>
+              <Textarea
                 value={adventure.safetyTips}
                 onChange={(e) => handleChange('safetyTips', e.target.value)}
-                placeholder='Enter safetyTips...'
+                placeholder='Enter safety tips...'
+                rows={4}
               />
             </Field.Root>
           </VStack>

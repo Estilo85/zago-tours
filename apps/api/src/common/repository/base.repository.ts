@@ -29,7 +29,7 @@ export abstract class BaseRepository<
   async update(
     id: string,
     data: TUpdateInput,
-    include?: TInclude
+    include?: TInclude,
   ): Promise<TModel> {
     return this.modelDelegate.update({
       where: { id },
@@ -73,7 +73,7 @@ export abstract class BaseRepository<
   //===== GET ONE =====
   async findOne(
     where: TWhereInput,
-    include?: TInclude
+    include?: TInclude,
   ): Promise<TModel | null> {
     return this.modelDelegate.findFirst({
       where,
@@ -83,7 +83,7 @@ export abstract class BaseRepository<
 
   //===== PAGINATION =====
   async paginate(
-    options: PaginationOptions<TWhereInput>
+    options: PaginationOptions<TWhereInput>,
   ): Promise<PaginationResult<TModel>> {
     const { page, limit, where, include, orderBy } = options;
     const skip = (page - 1) * limit;
