@@ -58,7 +58,7 @@ export const Benefits = () => {
               px={4}
               py={1}
               border='1px solid'
-              borderColor='gray.300' // Cleaner border definition
+              borderColor='gray.300'
               borderRadius='full'
               letterSpacing='widest'
               textTransform='uppercase'

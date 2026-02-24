@@ -70,7 +70,7 @@ export const HowItWorks = () => {
   return (
     <Box
       bg='surface'
-      mb={32}
+      mb={{ base: 48, md: 32 }}
       borderRadius={{ base: 'none', md: '4xl' }}
       p={{ base: 6, md: 10 }}
       pb={{ base: '150px', md: '200px' }}
@@ -117,7 +117,6 @@ export const HowItWorks = () => {
           </Text>
         </Stack>
 
-        {/* --- MIDDLE SECTION (Images & Cards) --- */}
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={{ base: 10, lg: 20 }}
