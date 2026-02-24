@@ -174,15 +174,12 @@ export default function AdventureDetailPage({
                 readOnly
                 size='xs'
                 colorPalette='white'
-                css={{
-                  '--unit-color': 'rgba(255, 255, 255, 0.3)',
-                  '& svg': {
-                    color: 'white',
-                  },
-                }}
               >
                 <RatingGroup.HiddenInput />
-                <RatingGroup.Control />
+                <RatingGroup.Control
+                  aria-hidden='true'
+                  css={{ '& [data-part="item"]': { padding: '4px' } }}
+                />
               </RatingGroup.Root>
             </Box>
           </HStack>

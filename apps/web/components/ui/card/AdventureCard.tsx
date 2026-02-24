@@ -156,6 +156,7 @@ const AdventureCard = ({
               count={5}
               value={adventure.rating}
               readOnly
+              allowHalf
               size='xs'
             >
               <RatingGroup.HiddenInput />
