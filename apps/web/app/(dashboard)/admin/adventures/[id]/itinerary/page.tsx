@@ -99,55 +99,28 @@ export default function ItineraryPage() {
     }
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append('dayNumber', String(formData.dayNumber));
-  //   formDataToSend.append('title', formData.title || '');
-  //   formDataToSend.append('activityDetails', formData.activityDetails || '');
-
-  //   if (imageFile) {
-  //     formDataToSend.append('media', imageFile);
-  //   }
-
-  //   if (editingId) {
-  //     updateMutation.mutate(
-  //       { adventureId, itineraryId: editingId, data: formDataToSend },
-  //       { onSuccess: () => setIsOpen(false) },
-  //     );
-  //   } else {
-  //     createMutation.mutate(
-  //       { adventureId, data: formDataToSend },
-  //       { onSuccess: () => setIsOpen(false) },
-  //     );
-  //   }
-  // };
-
-  const handleSubmit = async () => {
-    const data = new FormData();
-
-    if (formData.dayNumber)
-      data.append('dayNumber', String(formData.dayNumber));
-    if (formData.title) data.append('title', formData.title);
-    if (formData.activityDetails)
-      data.append('activityDetails', formData.activityDetails);
+    const formDataToSend = new FormData();
+    formDataToSend.append('dayNumber', String(formData.dayNumber));
+    formDataToSend.append('title', formData.title || '');
+    formDataToSend.append('activityDetails', formData.activityDetails || '');
 
     if (imageFile) {
-      data.append('media', imageFile);
+      formDataToSend.append('media', imageFile);
     }
 
     if (editingId) {
-      updateMutation.mutate({
-        itineraryId: editingId,
-        adventureId,
-        data: data,
-      });
+      updateMutation.mutate(
+        { adventureId, itineraryId: editingId, data: formDataToSend },
+        { onSuccess: () => setIsOpen(false) },
+      );
     } else {
-      createMutation.mutate({
-        adventureId,
-        data: data,
-      });
+      createMutation.mutate(
+        { adventureId, data: formDataToSend },
+        { onSuccess: () => setIsOpen(false) },
+      );
     }
   };
 
