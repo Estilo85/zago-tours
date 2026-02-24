@@ -168,7 +168,11 @@ export default function PostSection({ posts }: PostSectionProps) {
                 </Center>
               ) : galleryData?.data?.length > 0 ? (
                 <Grid
-                  templateColumns='repeat(auto-fill, minmax(160px, 1fr))'
+                  // Use 2 columns for mobile, auto-fill for desktop
+                  templateColumns={{
+                    base: 'repeat(2, 1fr)',
+                    md: 'repeat(auto-fill, minmax(160px, 1fr))',
+                  }}
                   gap={3}
                 >
                   {galleryData.data.map((item: any) => (
@@ -178,6 +182,8 @@ export default function PostSection({ posts }: PostSectionProps) {
                       overflow='hidden'
                       border='1px solid'
                       borderColor='gray.100'
+                      // Ensure the box stretches to fill the column width
+                      w='100%'
                     >
                       {item.mediaType === 'VIDEO' ? (
                         <video
@@ -201,7 +207,7 @@ export default function PostSection({ posts }: PostSectionProps) {
                       )}
 
                       <Box px={2} py={1} bg='white'>
-                        <Text fontSize='xs' color='gray.600' truncate>
+                        <Text fontSize='xs' color='gray.600'>
                           {item.title || 'Untitled'}
                         </Text>
                       </Box>

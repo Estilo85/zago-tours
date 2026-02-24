@@ -406,10 +406,10 @@ export function useUpdateItinerary() {
         type: 'success',
       });
     },
-    onError: (error: any) => {
+    onError: () => {
       toaster.create({
         title: 'Update Failed',
-        description: error.message + 'Failed to update itinerary',
+        description: 'Failed to update itinerary',
         type: 'error',
       });
     },

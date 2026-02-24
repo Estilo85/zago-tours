@@ -172,10 +172,10 @@ export default function AdminGalleryUpload() {
         </HStack>
 
         {/* Fixed: proper Chakra v3 Switch anatomy */}
-        <HStack justify='space-between' p={2} bg='blue.50' borderRadius='md'>
+        <HStack justify='space-between' p={2} bg='green.50' borderRadius='md'>
           <Text fontWeight='medium'>Feature this on landing page?</Text>
           <Switch.Root
-            colorPalette='blue'
+            colorPalette='green'
             checked={formData.featured}
             onCheckedChange={(e) =>
               setFormData({ ...formData, featured: !!e.checked })
@@ -191,7 +191,8 @@ export default function AdminGalleryUpload() {
         {/* Fixed: colorPalette instead of colorScheme (v3) */}
         <Button
           type='submit'
-          colorPalette='blue'
+          bg='primary'
+          color='white'
           loading={isPending}
           disabled={!selectedFile || isPending}
         >

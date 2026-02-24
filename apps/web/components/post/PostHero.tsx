@@ -35,7 +35,7 @@ export default function PostHero() {
       {/* Cover Image */}
       <Box w='full' h={{ base: '220px', md: '320px' }} position='relative'>
         <ResponsiveImage
-          src='/images/community/community-post-banner.webp'
+          src='/images/forms/coop-agent-form-bg.webp'
           alt='community banner'
           sizes='100vw'
           priority={true}
