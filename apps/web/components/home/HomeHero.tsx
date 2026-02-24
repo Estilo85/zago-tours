@@ -23,7 +23,7 @@ export const HomeHero = () => {
       bg='primary'
       color='textPrimary'
       borderRadius={{ base: 'none', md: '3xl' }}
-      p={{ base: 4, md: 10 }} // Increased base padding for better mobile edge spacing
+      p={{ base: 4, md: 10 }}
       pb={{ base: 5, md: '200px' }}
       mb={{ base: 5, md: '350px' }}
       position='relative'
@@ -88,7 +88,7 @@ export const HomeHero = () => {
       >
         <AspectRatio ratio={{ base: 21 / 9, md: 21 / 9 }}>
           <ResponsiveImage
-            src='/images/home/banner.webp'
+            src='/images/home/swipper/snowboarding.webp'
             alt='our-story banner image'
             width='100%'
             priority={true}

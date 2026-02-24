@@ -256,13 +256,15 @@ export default function AdventureDetailPage({
         </Box>
       </Flex>
 
-      <Box position='relative' height='300px' my={6}>
+      <Box position='relative' height='400px' my={6}>
         <ResponsiveImage
           src={adventure.mediaUrl || ''}
           alt={adventure.title}
           sizes='100vw'
           loading='eager'
-          borderRadius='none'
+          borderRadius='xl'
+          objectFit='cover'
+          objectPosition='50% 20%'
         />
 
         <IconButton
@@ -410,7 +412,7 @@ export default function AdventureDetailPage({
                 <Icon as={Lightbulb} />
                 <Heading>Safety Tips</Heading>
               </HStack>
-              <Text fontSize={{ base: 'sm', md: 'md' }} ml={5}>
+              <Text fontSize={{ base: 'sm', md: 'md' }} ml='25px'>
                 {adventure?.safetyTips}
               </Text>
             </VStack>
