@@ -80,7 +80,7 @@ export const HomeHero = () => {
       <Box
         width={{ base: '100%', md: '75%', lg: '65%' }}
         position={{ base: 'relative', md: 'absolute' }}
-        bottom={{ base: 0, md: '-250px' }}
+        bottom={{ base: 0, md: '-200px' }}
         left={{ base: 0, md: '50%' }}
         transform={{ base: 'none', md: 'translateX(-50%)' }}
         zIndex={10}

@@ -131,7 +131,10 @@ export const HowItWorks = () => {
               <Box
                 key={i}
                 width='100%'
-                display={{ base: i > 1 ? 'none' : 'block', md: 'block' }}
+                display={{
+                  base: i < 2 ? 'block' : 'none',
+                  md: 'block',
+                }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',

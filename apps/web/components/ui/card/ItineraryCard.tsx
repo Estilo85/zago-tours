@@ -78,18 +78,31 @@ const ItineraryCard = ({
                     value={adventure.rating}
                     readOnly
                     allowHalf
-                    size='xs'
-                    colorPalette='white'
                   >
                     <RatingGroup.HiddenInput />
-                    <RatingGroup.Control
-                      aria-hidden='true'
-                      css={{ '& [data-part="item"]': { padding: '4px' } }}
-                    />
+                    <RatingGroup.Control>
+                      <RatingGroup.Context>
+                        {({ items }) =>
+                          items.map((item) => (
+                            <RatingGroup.Item key={item} index={item}>
+                              <RatingGroup.ItemIndicator
+                                css={{
+                                  "&[data-state='highlighted']": {
+                                    color: 'white',
+                                    fill: 'white',
+                                  },
+                                  "&[data-state='off']": {
+                                    color: 'white',
+                                    fill: 'transparent',
+                                  },
+                                }}
+                              />
+                            </RatingGroup.Item>
+                          ))
+                        }
+                      </RatingGroup.Context>
+                    </RatingGroup.Control>
                   </RatingGroup.Root>
-                  <Text fontSize='sm' fontWeight='bold'>
-                    {adventure.rating.toFixed(1)}
-                  </Text>
                 </Box>
               </HStack>
 
