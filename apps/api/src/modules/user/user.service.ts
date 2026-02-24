@@ -164,9 +164,13 @@ export class UserService {
     if (role) where.role = role.toUpperCase() as Role;
     if (status) where.status = status;
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
+      where.AND = [
+        {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search, mode: 'insensitive' } },
+          ],
+        },
       ];
     }
 
@@ -221,11 +225,21 @@ export class UserService {
   /**
    * Delete user (soft or hard)
    */
+  // In UserService.ts
   async deleteUser(userId: string, hard = false): Promise<void> {
     if (hard) {
       await this.userRepository.delete(userId);
     } else {
-      await this.userRepository.softDelete(userId);
+      const user = await this.userRepository.findById(userId);
+      if (!user) return;
+
+      const deletedEmail = `deleted_${Date.now()}_${user.email}`;
+
+      await this.userRepository.update(userId, {
+        deletedAt: new Date(),
+        email: deletedEmail,
+        status: 'SUSPENDED',
+      });
     }
   }
 }

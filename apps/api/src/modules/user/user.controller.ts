@@ -34,7 +34,7 @@ export class UserController {
         const uploadResult = await CloudinaryService.uploadFile(
           req.file,
           'profile',
-          req.userId, 
+          req.userId,
         );
 
         updateData.image = uploadResult.url;

@@ -124,6 +124,14 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
+    if (user.deletedAt) {
+      throw new Error('This account has been deleted. Please contact support.');
+    }
+
+    if (user.status === 'SUSPENDED') {
+      throw new Error('Your account is currently suspended.');
+    }
+
     // Generate tokens
     const accessToken = JwtUtil.generateAccessToken({
       sub: user.id,
@@ -153,12 +161,13 @@ export class AuthService {
       throw new Error('Invalid or expired refresh token');
     }
 
-    // Get user from database
     const user = await this.authRepository.findById(decoded.sub);
-    if (!user) {
-      throw new Error('User not found');
-    }
 
+    if (!user || user.deletedAt || user.status === 'SUSPENDED') {
+      throw new Error(
+        'Access denied. Account is inactive, deleted, or suspended.',
+      );
+    }
     // Generate new tokens
     const newAccessToken = JwtUtil.generateAccessToken({
       sub: user.id,

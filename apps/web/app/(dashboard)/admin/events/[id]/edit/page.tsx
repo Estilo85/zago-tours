@@ -21,7 +21,8 @@ import { useEffect, useState, useRef } from 'react';
 import { FiUploadCloud, FiX, FiCalendar, FiClock } from 'react-icons/fi';
 import { useEvent, useUpdateEvent } from '@/hooks';
 import { LoadingState } from '@/components/ui/LoadingState';
-
+import { EventPricing } from '@zagotours/types';
+import { SelectInput } from '@/components/ui/input/SelectInput';
 
 export default function EditEventPage() {
   const { id } = useParams<{ id: string }>();
@@ -34,24 +35,22 @@ export default function EditEventPage() {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [formData, setFormData] = useState<any>(null);
 
-const formatTimeFromDate = (dateValue: string) => {
-  if (!dateValue) return '';
-  const d = new Date(dateValue);
-  const hours = String(d.getUTCHours()).padStart(2, '0');
-  const minutes = String(d.getUTCMinutes()).padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
-
-const formatToDateOnly = (dateValue: string) => {
-  if (!dateValue) return '';
-  return new Date(dateValue).toISOString().split('T')[0];
+  const formatTimeFromDate = (dateValue: string) => {
+    if (!dateValue) return '';
+    const d = new Date(dateValue);
+    const hours = String(d.getUTCHours()).padStart(2, '0');
+    const minutes = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   };
-  
+
+  const formatToDateOnly = (dateValue: string) => {
+    if (!dateValue) return '';
+    return new Date(dateValue).toISOString().split('T')[0];
+  };
+
   useEffect(() => {
     if (response?.data) {
       const event = response.data;
-
-
 
       setFormData({
         title: event.title,
@@ -61,8 +60,9 @@ const formatToDateOnly = (dateValue: string) => {
         isSignature: event.isSignature,
         cancellationTerms: event.cancellationTerms || '',
         date: formatToDateOnly(event.date),
-        time: formatTimeFromDate(event.date) || '', 
+        time: formatTimeFromDate(event.date) || '',
         joinTill: formatToDateOnly(event.joinTill),
+        pricing: event.pricing || EventPricing.FREE,
       });
 
       if (event.mediaUrl) {
@@ -81,6 +81,7 @@ const formatToDateOnly = (dateValue: string) => {
     submitData.append('spotLeft', formData.spotLeft.toString());
     submitData.append('isSignature', formData.isSignature.toString());
     submitData.append('cancellationTerms', formData.cancellationTerms);
+    submitData.append('pricing', formData.pricing);
 
     if (formData.date && formData.time) {
       const [hours, minutes] = formData.time.split(':').map(Number);
@@ -229,6 +230,22 @@ const formatToDateOnly = (dateValue: string) => {
               onChange={(e) =>
                 setFormData({ ...formData, spotLeft: parseInt(e.target.value) })
               }
+            />
+          </Field.Root>
+
+          {/* ADD THIS */}
+          <Field.Root required>
+            <Field.Label>Pricing</Field.Label>
+            <SelectInput
+              value={formData.pricing}
+              onChange={(val) =>
+                setFormData({ ...formData, pricing: val as EventPricing })
+              }
+              options={[
+                { label: 'Free', value: EventPricing.FREE },
+                { label: 'Paid', value: EventPricing.PAID },
+              ]}
+              placeholder='Select pricing type'
             />
           </Field.Root>
 

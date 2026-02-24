@@ -1,4 +1,3 @@
-// authentication.middleware.ts
 import { Response, NextFunction } from 'express';
 import { JwtUtil } from '../utils/jwt';
 import { ResponseUtil } from '../utils/responseUtils';
@@ -19,13 +18,13 @@ export const authenticate = async (
     }
 
     const token = authHeader.substring(7);
-
-    // Use your JwtUtil to verify
     const decoded = JwtUtil.verifyAccessToken(token);
 
-    // ✅ Check if user exists and is not suspended
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.sub },
+    const user = await prisma.user.findFirst({
+      where: {
+        id: decoded.sub,
+        deletedAt: null,
+      },
       select: {
         id: true,
         status: true,
@@ -36,7 +35,11 @@ export const authenticate = async (
     });
 
     if (!user) {
-      return ResponseUtil.error(res, 'User not found', 404);
+      return ResponseUtil.error(
+        res,
+        'Account not found or has been deleted',
+        404,
+      );
     }
 
     // ✅ Block suspended users
