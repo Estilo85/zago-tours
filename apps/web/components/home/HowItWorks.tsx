@@ -62,7 +62,7 @@ const cardData = [
 const resImageData = [
   '/images/adventures/tripType/skiing.webp',
   '/images/adventures/tripType/hiking.webp',
-  '/images/adventures/tripType/mountain climbing.webp',
+  '/images/adventures/tripType/mountain-climbing.webp',
   '/images/adventures/tripType/safari.webp',
 ];
 
@@ -145,7 +145,7 @@ export const HowItWorks = () => {
                   width='100%'
                   borderRadius='xl'
                   objectFit='cover'
-                  priority={true}
+                  priority={i < 2}
                 />
               </Box>
             ))}
