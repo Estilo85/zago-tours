@@ -170,32 +170,16 @@ export default function AdventureDetailPage({
               <RatingGroup.Root
                 count={5}
                 value={adventure.rating}
-                readOnly
                 allowHalf
+                readOnly
+                size='xs'
+                colorPalette='white'
               >
                 <RatingGroup.HiddenInput />
-                <RatingGroup.Control>
-                  <RatingGroup.Context>
-                    {({ items }) =>
-                      items.map((item) => (
-                        <RatingGroup.Item key={item} index={item}>
-                          <RatingGroup.ItemIndicator
-                            css={{
-                              "&[data-state='highlighted']": {
-                                color: 'white',
-                                fill: 'white',
-                              },
-                              "&[data-state='off']": {
-                                color: 'white',
-                                fill: 'transparent',
-                              },
-                            }}
-                          />
-                        </RatingGroup.Item>
-                      ))
-                    }
-                  </RatingGroup.Context>
-                </RatingGroup.Control>
+                <RatingGroup.Control
+                  aria-hidden='true'
+                  css={{ '& [data-part="item"]': { padding: '4px' } }}
+                />
               </RatingGroup.Root>
             </Box>
           </HStack>
