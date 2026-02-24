@@ -40,6 +40,7 @@ export const EventHero = () => {
           align='center'
           gap={4}
           w={{ base: 'full', md: 'auto' }}
+          mx='auto'
         >
           <AppLink href='#' style={{ width: '100%' }}>
             <Button bg='secondary' color='dark' fontWeight='bold' w='auto'>

@@ -121,7 +121,7 @@ export const HowItWorks = () => {
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={10}
-          mt={4}
+          my={15}
           align='center'
           justify='center'
           width={{ base: 'full', lg: '900px' }}
@@ -132,6 +132,10 @@ export const HowItWorks = () => {
               <Box
                 key={i}
                 width='100%'
+                display={{
+                  base: i < 2 ? 'block' : 'none',
+                  md: 'block',
+                }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
