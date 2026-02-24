@@ -21,7 +21,7 @@ export const FeaturedAdventures = () => {
   const adventures = response?.data || [];
 
   return (
-    <Container maxW='container.xl' my={16} px={{ base: 4, md: 6 }}>
+    <Container maxW='container.xl' my={8} px={{ base: 4, md: 6 }}>
       {isLoading && (
         <SimpleGrid
           columns={{ base: 1, md: 3 }}

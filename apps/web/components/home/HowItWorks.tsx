@@ -77,7 +77,7 @@ export const HowItWorks = () => {
       <Stack
         position='relative'
         textAlign='center'
-        gap={10}
+        gap={2}
         align='center'
         maxW='container.xl'
         mx='auto'
@@ -121,6 +121,7 @@ export const HowItWorks = () => {
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           gap={10}
+          mt={4}
           align='center'
           justify='center'
           width={{ base: 'full', lg: '900px' }}
@@ -131,10 +132,6 @@ export const HowItWorks = () => {
               <Box
                 key={i}
                 width='100%'
-                display={{
-                  base: i < 2 ? 'block' : 'none',
-                  md: 'block',
-                }}
                 transform={{
                   base: 'none',
                   md: i % 2 === 0 ? 'translateY(-30px)' : 'none',
@@ -143,7 +140,7 @@ export const HowItWorks = () => {
                 <ResponsiveImage
                   src={img}
                   alt='how it work image'
-                  height={{ base: '200px', md: '250px' }}
+                  height={{ base: '200px', md: '230px' }}
                   width='100%'
                   maxW={{ base: '100%', md: '300px' }}
                   mx='auto'

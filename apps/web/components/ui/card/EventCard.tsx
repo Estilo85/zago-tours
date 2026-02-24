@@ -97,20 +97,17 @@ export const EventCard = ({ event }: EventCardProps) => {
             </Flex>
 
             <Flex align='center' gap={1.5} wrap='wrap'>
-              {['Free Entry', 'Food & Drinks'].map((tag, idx) => (
-                <Badge
-                  key={idx}
-                  bg='gray.100'
-                  px={2}
-                  py={0.5}
-                  borderRadius='md'
-                  fontSize='9px'
-                  fontWeight='bold'
-                  color='gray.700'
-                >
-                  {tag}
-                </Badge>
-              ))}
+              <Badge
+                bg='gray.100'
+                px={2}
+                py={0.5}
+                borderRadius='md'
+                fontSize='9px'
+                fontWeight='bold'
+                color='gray.700'
+              >
+                {event?.pricing}
+              </Badge>
             </Flex>
           </Stack>
         </Card.Body>
