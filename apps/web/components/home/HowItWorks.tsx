@@ -89,9 +89,11 @@ export const HowItWorks = () => {
             fontSize={{ base: 'xs', md: 'sm' }}
             px={4}
             py={1}
-            border='1px solid white'
+            borderWidth='1px'
+            borderColor='primary'
             borderRadius='full'
             letterSpacing='widest'
+            bg='white'
             color='primary'
             fontWeight='semibold'
           >
@@ -101,7 +103,6 @@ export const HowItWorks = () => {
 
         <Heading
           size={{ base: '2xl', md: '4xl' }}
-          lineHeight='1.2'
           color='primary'
           fontWeight='bolder'
         >
@@ -122,11 +123,10 @@ export const HowItWorks = () => {
           gap={10}
           align='center'
           justify='center'
-          maxW='900px'
-          w='full'
+          width={{ base: 'full', lg: '900px' }}
           mx='auto'
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} flex='1' minW='0'>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} flex='1'>
             {resImageData.map((img, i) => (
               <Box
                 key={i}
@@ -152,7 +152,7 @@ export const HowItWorks = () => {
             ))}
           </SimpleGrid>
 
-          <Stack gap={6} flex='1' minW='0' textAlign='left'>
+          <Stack gap={6} flex='1' textAlign='left'>
             {cardData.map((card, idx) => (
               <FeatureCard
                 key={idx}

@@ -185,9 +185,6 @@ export default function AdventureDetailPage({
                 <RatingGroup.Control />
               </RatingGroup.Root>
             </Box>
-            <Text fontSize={{ base: 'sm', md: 'md' }}>
-              {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
-            </Text>
           </HStack>
           <Flex
             align='center'
@@ -365,7 +362,7 @@ export default function AdventureDetailPage({
             <DetailItem
               icon={ShieldPlus}
               label='Safety Score'
-              value={`${adventure.safetyScore}/10`}
+              value={`${adventure.safetyScore}/100`}
             />
             <DetailItem
               icon={LuMapPin}

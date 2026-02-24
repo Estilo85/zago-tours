@@ -42,12 +42,7 @@ export const EventHero = () => {
           w={{ base: 'full', md: 'auto' }}
         >
           <AppLink href='#' style={{ width: '100%' }}>
-            <Button
-              bg='secondary'
-              color='dark'
-              fontWeight='bold'
-              w={{ base: 'full', md: 'auto' }}
-            >
+            <Button bg='secondary' color='dark' fontWeight='bold' w='auto'>
               Join an event
               <Icon as={ArrowRight} ml={2} />
             </Button>
@@ -62,7 +57,7 @@ export const EventHero = () => {
               color='white'
               fontWeight='bold'
               border='2px solid white'
-              w={{ base: 'full', md: 'auto' }}
+              w='auto'
             >
               Host an event
               <Icon as={ArrowRight} ml={2} />

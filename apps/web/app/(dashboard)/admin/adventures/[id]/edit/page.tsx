@@ -44,13 +44,12 @@ import {
 } from '@zagotours/types';
 import { LoadingState } from '@/components/ui/LoadingState';
 
-type FormDataWithImage = UpdateAdventureDto & {
+type FormDataWithImage = Omit<UpdateAdventureDto, 'rating'> & {
   imageFile?: File | null;
   imagePreview?: string | null;
   currentImage?: string | null;
-  rating?: number;
+  rating?: string;
 };
-
 export default function EditAdventurePage() {
   const router = useRouter();
   const params = useParams();
@@ -105,7 +104,7 @@ export default function EditAdventurePage() {
           ? new Date(adventure.date).toISOString().split('T')[0]
           : '',
         status: adventure.status,
-        rating: adventure.rating || 0,
+        rating: String(adventure.rating || 0),
         currentImage: adventure.mediaUrl || null,
       });
     }
@@ -167,7 +166,7 @@ export default function EditAdventurePage() {
     if (formData.safetyTips)
       submitData.append('safetyTips', formData.safetyTips);
     if (formData.rating !== undefined)
-      submitData.append('rating', formData.rating.toString());
+      submitData.append('rating', Number(formData.rating).toString());
     if (formData.date) {
       const dateValue =
         typeof formData.date === 'string'
@@ -398,13 +397,7 @@ export default function EditAdventurePage() {
                   }
                 />
               </Field.Root>
-              <Field.Root required>
-                <Field.Label>safetyTips</Field.Label>
-                <Input
-                  value={formData.safetyTips}
-                  onChange={(e) => handleChange('safetyTips', e.target.value)}
-                />
-              </Field.Root>
+
               <Field.Root required>
                 <Field.Label>Rating (0-5)</Field.Label>
                 <Input
@@ -413,9 +406,7 @@ export default function EditAdventurePage() {
                   max='5'
                   step='0.1'
                   value={formData.rating}
-                  onChange={(e) =>
-                    handleChange('rating', Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange('rating', e.target.value)}
                 />
               </Field.Root>
 
@@ -443,6 +434,16 @@ export default function EditAdventurePage() {
                 value={formData.gear}
                 onChange={(e) => handleChange('gear', e.target.value)}
                 rows={3}
+              />
+            </Field.Root>
+
+            <Field.Root required>
+              <Field.Label>Safety Tips</Field.Label>
+              <Textarea
+                value={formData.safetyTips}
+                onChange={(e) => handleChange('safetyTips', e.target.value)}
+                placeholder='Enter safety tips...'
+                rows={4}
               />
             </Field.Root>
 

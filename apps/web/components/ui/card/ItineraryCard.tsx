@@ -75,7 +75,7 @@ const ItineraryCard = ({
                   <Icon as={LuStar} fill='white' color='white' size='xs' />
                 </Box>
                 <Text fontSize='sm' fontWeight='bold'>
-                  {adventure.rating} {adventure.rating > 3.5 ? 'High' : 'Low'}
+                  {adventure.rating}
                 </Text>
               </HStack>
 
