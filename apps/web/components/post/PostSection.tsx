@@ -158,76 +158,88 @@ export default function PostSection({ posts }: PostSectionProps) {
               borderColor='gray.100'
               mb={20}
             >
-              <Heading fontSize='lg' fontWeight='bold' mb={4}>
-                Gallery
-              </Heading>
+              <Box
+                maxH='500px'
+                overflowY='auto'
+                pr={2}
+                css={{
+                  '&::-webkit-scrollbar': { width: '4px' },
+                  '&::-webkit-scrollbar-track': { background: 'transparent' },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: '#cbd5e0',
+                    borderRadius: '24px',
+                  },
+                }}
+              >
+                <Heading fontSize='lg' fontWeight='bold' mb={4}>
+                  Gallery
+                </Heading>
 
-              {galleryLoading ? (
-                <Center py={10}>
-                  <Spinner color='primary.500' />
-                </Center>
-              ) : galleryData?.data?.length > 0 ? (
-                <Grid
-                  // Use 2 columns for mobile, auto-fill for desktop
-                  templateColumns={{
-                    base: 'repeat(2, 1fr)',
-                    md: 'repeat(auto-fill, minmax(160px, 1fr))',
-                  }}
-                  gap={3}
-                >
-                  {galleryData.data.map((item: any) => (
-                    <Box
-                      key={item.id}
-                      borderRadius='lg'
-                      overflow='hidden'
-                      border='1px solid'
-                      borderColor='gray.100'
-                      // Ensure the box stretches to fill the column width
-                      w='100%'
-                    >
-                      {item.mediaType === 'VIDEO' ? (
-                        <video
-                          src={item.mediaUrl}
-                          controls
-                          style={{
-                            width: '100%',
-                            height: '140px',
-                            objectFit: 'cover',
-                            display: 'block',
-                          }}
-                        />
-                      ) : (
-                        <Image
-                          src={item.mediaUrl}
-                          alt={item.title || 'Gallery item'}
-                          h='140px'
-                          w='full'
-                          objectFit='cover'
-                        />
-                      )}
+                {galleryLoading ? (
+                  <Center py={10}>
+                    <Spinner color='primary.500' />
+                  </Center>
+                ) : galleryData?.data?.length > 0 ? (
+                  <Grid
+                    templateColumns={{
+                      base: 'repeat(2, 1fr)',
+                      md: 'repeat(auto-fill, minmax(160px, 1fr))',
+                    }}
+                    gap={3}
+                  >
+                    {galleryData.data.map((item: any) => (
+                      <Box
+                        key={item.id}
+                        borderRadius='lg'
+                        overflow='hidden'
+                        border='1px solid'
+                        borderColor='gray.100'
+                        w='100%'
+                      >
+                        {item.mediaType === 'VIDEO' ? (
+                          <video
+                            src={item.mediaUrl}
+                            controls
+                            style={{
+                              width: '100%',
+                              height: '140px',
+                              objectFit: 'cover',
+                              display: 'block',
+                            }}
+                          />
+                        ) : (
+                          <Image
+                            src={item.mediaUrl}
+                            alt={item.title || 'Gallery item'}
+                            h='140px'
+                            w='full'
+                            objectFit='cover'
+                          />
+                        )}
 
-                      <Box px={2} py={1} bg='white'>
-                        <Text fontSize='xs' color='gray.600'>
-                          {item.title || 'Untitled'}
-                        </Text>
+                        <Box px={2} py={1} bg='white'>
+                          <Text fontSize='xs' color='gray.600'>
+                            {item.title || 'Untitled'}
+                          </Text>
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
-                </Grid>
-              ) : (
-                <Box
-                  p={8}
-                  textAlign='center'
-                  bg='gray.50'
-                  borderRadius='xl'
-                  border='1px dashed'
-                  borderColor='gray.200'
-                >
-                  <Text color='gray.400' fontSize='sm'>
-                    No gallery items yet.
-                  </Text>
-                </Box>
-              )}
+                    ))}
+                  </Grid>
+                ) : (
+                  <Box
+                    p={8}
+                    textAlign='center'
+                    bg='gray.50'
+                    borderRadius='xl'
+                    border='1px dashed'
+                    borderColor='gray.200'
+                  >
+                    <Text color='gray.400' fontSize='sm'>
+                      No gallery items yet.
+                    </Text>
+                  </Box>
+                )}
+              </Box>
             </Box>
           </Stack>
         )}
