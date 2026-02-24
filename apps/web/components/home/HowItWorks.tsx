@@ -72,7 +72,7 @@ export const HowItWorks = () => {
       bg='surface'
       mb={{ base: 48, md: 32 }}
       borderRadius={{ base: 'none', md: '4xl' }}
-      p={{ base: 6, md: 10 }}
+      p={{ base: 2, md: 10 }}
       pb={{ base: '150px', md: '200px' }}
       position='relative'
     >
