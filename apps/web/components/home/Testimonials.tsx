@@ -54,7 +54,7 @@ export function Testimonials() {
   const allTestimonials = [...staticTestimonials, ...apiReviews];
 
   return (
-    <Container bg='surface' py={6} my={6}>
+    <Container bg='surface' width='100%' py={{ base: 5, md: 10 }} mt={6}>
       <Stack mb={10}>
         <Heading
           size={{ base: '2xl', md: '4xl' }}
@@ -68,7 +68,7 @@ export function Testimonials() {
       </Stack>
       <Carousel.Root
         slideCount={allTestimonials.length}
-        mx='auto'
+        // mx='auto'
         gap='1'
         allowMouseDrag
         slidesPerPage={slidesPerPage}
