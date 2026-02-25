@@ -12,6 +12,7 @@ export const CommunityHero = () => {
       color='textPrimary'
       p={{ base: 5, md: 10 }}
       mb={9}
+      borderBottomRadius='3xl'
       position='relative'
     >
       <Stack textAlign='center' gap={5} align='center' py='50px'>

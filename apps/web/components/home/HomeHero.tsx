@@ -50,7 +50,7 @@ export const HomeHero = () => {
         <Heading
           size={{ base: '2xl', md: '4xl' }}
           lineHeight='1.2'
-          maxW={{ base: '100%', md: '800px' }}
+          maxW={{ base: '100%', md: '400px' }}
           overflowWrap='anywhere'
           wordBreak='break-word'
         >
@@ -60,7 +60,7 @@ export const HomeHero = () => {
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
           opacity={0.9}
-          maxW={{ base: '100%', md: '600px' }}
+          maxW={{ base: '100%', md: '200px' }}
           overflowWrap='anywhere'
           wordBreak='break-word'
         >

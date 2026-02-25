@@ -49,9 +49,9 @@ export default function RootLayout({
               position='sticky'
               top='0'
               zIndex='1000'
-              bg='white'
+              bg='primary'
               borderBottom='1px solid'
-              borderColor='gray.200'
+              color='white'
             >
               <Navbar />
             </Box>

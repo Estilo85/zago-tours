@@ -12,15 +12,11 @@ export const DesktopNav = () => {
 
   return (
     <Box
-      as='nav'
       bg='textInverse'
       px={8}
       py={4}
       borderBottom='1px solid'
       borderColor='dark'
-      position='sticky'
-      top={0}
-      zIndex={1000}
       display={{ base: 'none', md: 'block' }}
       width='full'
     >

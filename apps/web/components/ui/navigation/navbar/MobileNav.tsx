@@ -24,14 +24,9 @@ export const MobileNav = () => {
 
   return (
     <Box
-      as='nav'
-      bg='textInverse'
       p={4}
-      borderBottom='1px solid'
-      borderColor='dark'
-      position='sticky'
-      top={0}
-      zIndex={1000}
+      bg='primary'
+      color='white'
       display={{ base: 'block', md: 'none' }}
     >
       <Flex justify='space-between' align='center'>
