@@ -27,6 +27,9 @@ export interface Adventure {
   description: string;
   days: number;
   access: AccessType;
+  inclusions?: string;
+  exclusions?: string;
+  partnerDescription?: string;
   lastSafetyCertDate: Date | null;
   createdAt: Date;
   updatedAt: Date;

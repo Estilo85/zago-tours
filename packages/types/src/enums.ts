@@ -68,4 +68,5 @@ export enum TripType {
   SAFARIS = 'SAFARIS',
   CLIMBING = 'CLIMBING',
   JUMPING = 'JUMPING',
+  RAFTING = 'RAFTING',
 }

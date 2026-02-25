@@ -18,6 +18,7 @@ export const TripTypeLabels: Record<TripType, string> = {
   SAFARIS: 'Safaris',
   CLIMBING: 'Mountain Climbing',
   JUMPING: 'Jumping',
+  RAFTING: 'Rafting',
 };
 
 export const RoleLabels: Record<Role, string> = {

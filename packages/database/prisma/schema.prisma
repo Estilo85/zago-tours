@@ -3,7 +3,7 @@
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
- directUrl = env("DIRECT_URL") 
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -83,6 +83,7 @@ enum TripType {
   SAFARIS
   CLIMBING
   JUMPING
+  RAFTING
 }
 
 // --- USER MODELS ---
@@ -189,7 +190,9 @@ model Adventure {
   days               Int
   access             AccessType      @default(LOCKED)
   lastSafetyCertDate DateTime?
-
+  inclusions         String?
+  exclusions         String?
+  partnerDescription String?
   likes       AdventureLike[]
   itineraries Itinerary[]
   gallery     AdventureGallery[]

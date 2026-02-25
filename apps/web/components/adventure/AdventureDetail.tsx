@@ -187,6 +187,7 @@ export default function AdventureDetailPage({
                 />
               </RatingGroup.Root>
             </Box>
+            <Text>{adventure.rating}</Text>
           </HStack>
           <Flex
             align='center'

@@ -93,6 +93,7 @@ const ItineraryCard = ({
                     />
                   </RatingGroup.Root>
                 </Box>
+                <Text>{adventure.rating}</Text>
               </HStack>
 
               {/* Badges with wrap and gap fixed */}

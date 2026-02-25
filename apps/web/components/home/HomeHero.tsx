@@ -25,7 +25,7 @@ export const HomeHero = () => {
       borderRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 4, md: 10 }}
       pb={{ base: 5, md: '200px' }}
-      mb={{ base: 5, md: '200px' }}
+      mb={{ base: 5, md: '150px' }}
       position='relative'
     >
       <Stack
@@ -80,7 +80,7 @@ export const HomeHero = () => {
       <Box
         width={{ base: '100%', md: '75%', lg: '65%' }}
         position={{ base: 'relative', md: 'absolute' }}
-        bottom={{ base: 0, md: '-200px' }}
+        bottom={{ base: 0, md: '-190px' }}
         left={{ base: 0, md: '50%' }}
         transform={{ base: 'none', md: 'translateX(-50%)' }}
         zIndex={10}
