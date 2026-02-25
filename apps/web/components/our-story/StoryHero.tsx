@@ -49,6 +49,7 @@ export const StoryHero = () => {
           maxW={{ base: 'full', md: '700px' }}
           wordBreak='break-word'
           mx='auto'
+          mb='10px'
         >
           Adventure travel is meant to feel exciting, not uncertain. We’re
           building a network where every trip is trusted, transparent, and
