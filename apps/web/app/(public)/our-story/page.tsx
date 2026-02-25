@@ -262,7 +262,7 @@ export default function OurStory() {
             w='100%'
             maxW={{ base: '100%', md: '800px' }}
             mx='auto'
-            px={{ base: 2, md: 0 }}
+            px={{ base: 4, md: 0 }}
           >
             <ScrollProgressSteps items={mySteps} />
           </Box>

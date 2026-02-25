@@ -35,7 +35,7 @@ export const MobileNav = () => {
         <ClientOnly
           fallback={
             <IconButton aria-label='Loading menu' variant='ghost'>
-              <Menu color='black' />
+              <Menu color='white' />
             </IconButton>
           }
         >
@@ -47,7 +47,7 @@ export const MobileNav = () => {
           >
             <Drawer.Trigger asChild>
               <IconButton aria-label='Open menu' variant='ghost'>
-                <Menu color='black' />
+                <Menu color='white' />
               </IconButton>
             </Drawer.Trigger>
 
@@ -60,6 +60,8 @@ export const MobileNav = () => {
                     transition:
                       'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
                   }}
+                  bg='primary'
+                  color='white'
                 >
                   <Drawer.CloseTrigger
                     asChild
@@ -68,7 +70,7 @@ export const MobileNav = () => {
                     right='2'
                     zIndex='skipLink'
                   >
-                    <CloseButton size='sm' />
+                    <CloseButton size='sm' color='white' />
                   </Drawer.CloseTrigger>
 
                   <Drawer.Body>
