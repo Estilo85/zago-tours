@@ -176,11 +176,13 @@ export default function AdventureDetailPage({
               >
                 <RatingGroup.HiddenInput />
                 <RatingGroup.Control
-                  color='white'
-                  fill='white'
                   css={{
+                    '& svg': {
+                      color: 'white !important',
+                      fill: 'white !important',
+                      stroke: 'white !important',
+                    },
                     '& [data-part="item"]': { padding: '2px' },
-                    '& [data-state="selected"]': { color: 'white' },
                   }}
                 />
               </RatingGroup.Root>
