@@ -230,17 +230,36 @@ export default function ViewAdventurePage() {
 
           {/* Detailed Content */}
           <Box gap={4}>
-            <Heading size='sm' mb={3}>
+            <Heading size='sm' mb={1}>
               Description
             </Heading>
             <Text lineHeight='tall' color='fg.subtle'>
               {adventure.description}
             </Text>
-            <Heading size='sm' mb={3}>
+            <Heading size='sm' mb={1}>
               SafetyTips
             </Heading>
             <Text lineHeight='tall' color='fg.subtle'>
               {adventure.safetyTips}
+            </Text>
+
+            <Heading size='sm' mb={1}>
+              Inclusions
+            </Heading>
+            <Text lineHeight='tall' color='fg.subtle'>
+              {adventure.inclusions}
+            </Text>
+            <Heading size='sm' mb={1}>
+              Exclusions
+            </Heading>
+            <Text lineHeight='tall' color='fg.subtle'>
+              {adventure.exclusions}
+            </Text>
+            <Heading size='sm' mb={1}>
+              Partner Detail
+            </Heading>
+            <Text lineHeight='tall' color='fg.subtle'>
+              {adventure.partnerDescription}
             </Text>
           </Box>
 

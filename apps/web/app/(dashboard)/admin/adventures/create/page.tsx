@@ -45,6 +45,9 @@ const INITIAL_ADVENTURE = {
   safetyScore: 85,
   safetyTips: '',
   certification: '',
+  inclusions: '',
+  exclusions: '',
+  partnerDescription: '',
   gear: '',
   date: '',
   rating: '0',
@@ -127,6 +130,10 @@ export default function CreateAdventurePage() {
     if (adventure.certification)
       formData.append('certification', adventure.certification);
     if (adventure.gear) formData.append('gear', adventure.gear);
+
+    formData.append('inclusions', adventure.inclusions);
+    formData.append('exclusions', adventure.exclusions);
+    formData.append('partnerDescription', adventure.partnerDescription);
 
     // Append image if exists
     if (adventure.imageFile) {
@@ -366,6 +373,36 @@ export default function CreateAdventurePage() {
                 value={adventure.safetyTips}
                 onChange={(e) => handleChange('safetyTips', e.target.value)}
                 placeholder='Enter safety tips...'
+                rows={4}
+              />
+            </Field.Root>
+
+            <Field.Root required>
+              <Field.Label>Inclusions</Field.Label>
+              <Textarea
+                value={adventure.inclusions}
+                onChange={(e) => handleChange('inclusions', e.target.value)}
+                placeholder='What includes...'
+                rows={4}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>Exclusions</Field.Label>
+              <Textarea
+                value={adventure.exclusions}
+                onChange={(e) => handleChange('exclusions', e.target.value)}
+                placeholder='What excludes...'
+                rows={4}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>Partner</Field.Label>
+              <Textarea
+                value={adventure.partnerDescription}
+                onChange={(e) =>
+                  handleChange('partnerDescription', e.target.value)
+                }
+                placeholder='Enter partner details...'
                 rows={4}
               />
             </Field.Root>

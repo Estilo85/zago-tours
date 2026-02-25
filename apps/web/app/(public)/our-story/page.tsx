@@ -248,7 +248,7 @@ export default function OurStory() {
               py={1}
               borderRadius='full'
             >
-              OUR STRORY
+              OUR STORY
             </Text>
           </Center>
           <Text

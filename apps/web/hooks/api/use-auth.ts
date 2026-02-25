@@ -66,12 +66,10 @@ export function useAuth() {
       );
       router.push('/login');
     },
-    onError: () => {
-      notify(
-        'Registration Failed',
-        'error',
-        'Unable to create account. Please try again.',
-      );
+    onError: (error: any) => {
+      const serverMessage =
+        error?.message || 'Unable to create account. Please try again.';
+      notify('Registration Failed', 'error', serverMessage);
     },
   });
 

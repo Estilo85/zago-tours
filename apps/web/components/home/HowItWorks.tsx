@@ -201,9 +201,10 @@ export const HowItWorks = () => {
             fontSize={{ base: 'md', md: 'xl', lg: '2xl' }}
             lineHeight='short'
           >
-            Our team and partners aren't new to this, we've spent decades
+            Our team and partners aren’t new to this, we’ve spent decades
             leading travelers up mountains, across oceans, and into the kind of
-            stories you never forget.
+            stories you never forget. Together, that’s over 100 years of
+            experience fueling your next adventure.
           </Text>
         </Stack>
       </Box>
