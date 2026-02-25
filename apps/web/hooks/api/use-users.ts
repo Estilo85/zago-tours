@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { userKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // USER QUERIES
@@ -55,18 +55,10 @@ export function useUpdateUserById() {
         queryKey: userKeys.detail(variables.id),
       });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      toaster.create({
-        title: 'User Updated',
-        description: 'User profile updated successfully',
-        type: 'success',
-      });
+      notify('User Updated', 'success', 'User profile updated successfully');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Update Failed',
-        description: 'Failed to update user profile',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update user profile');
     },
   });
 }
@@ -93,21 +85,17 @@ export function useUpdateProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.profile() });
-      toaster.create({
-        title: 'Profile Updated',
-        description: 'Your profile has been updated successfully',
-        type: 'success',
-      });
+      notify(
+        'Profile Updated',
+        'success',
+        'Your profile has been updated successfully',
+      );
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(userKeys.profile(), context.previousData);
       }
-      toaster.create({
-        title: 'Update Failed',
-        description: 'Failed to update profile',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update profile');
     },
   });
 }
@@ -123,18 +111,10 @@ export function useUpdateUserStatus() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      toaster.create({
-        title: 'Status Updated',
-        description: 'User status updated successfully',
-        type: 'success',
-      });
+      notify('Status Updated', 'success', 'User status updated successfully');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update user status',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update user status');
     },
   });
 }
@@ -159,19 +139,10 @@ export function usePromoteSafetyAmbassador() {
         queryKey: userKeys.detail(variables.id),
       });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      toaster.create({
-        title: 'Success',
-        description: 'Safety ambassador status updated',
-        type: 'success',
-      });
+      notify('Success', 'success', 'Safety ambassador status updated');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Failed',
-        description:
-          error.message || 'Failed to update safety ambassador status',
-        type: 'error',
-      });
+      notify('Failed', 'error', 'Failed to update safety ambassador status');
     },
   });
 }
@@ -200,21 +171,13 @@ export function useDeleteUser() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
-      toaster.create({
-        title: 'User Deleted',
-        description: 'User deleted successfully',
-        type: 'success',
-      });
+      notify('User Deleted', 'success', 'User deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(userKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete user',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete user');
     },
   });
 }

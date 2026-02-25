@@ -1,9 +1,15 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { forwardRef } from 'react';
 import { PasswordInput } from '@/components/ui/input/password-input';
 import { Input, Textarea, Field, Checkbox } from '@chakra-ui/react';
-import Select from 'react-select';
-import { PhoneInput } from 'react-international-phone';
+
+//Dynamic imports
+const Select = dynamic(() => import('react-select'), { ssr: false });
+const PhoneInput = dynamic(
+  () => import('react-international-phone').then((mod) => mod.PhoneInput),
+  { ssr: false },
+);
 import 'react-international-phone/style.css';
 
 export const FormField = forwardRef<any, any>(

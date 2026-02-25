@@ -2,7 +2,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { toaster } from '@/components/ui/toaster';
 import {
   LoginDto,
   RegisterDto,
@@ -13,6 +12,7 @@ import {
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { authKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // AUTH HOOK (Login, Register, Logout)
@@ -47,11 +47,7 @@ export function useAuth() {
       router.refresh();
     },
     onError: () => {
-      toaster.create({
-        title: 'Login Failed',
-        description: 'Invalid email or password',
-        type: 'error',
-      });
+      notify('Login Failed', 'error', 'Invalid email or password');
     },
   });
 
@@ -63,19 +59,19 @@ export function useAuth() {
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
-      toaster.create({
-        title: 'Account Created',
-        description: 'Please check your email to verify your account.',
-        type: 'success',
-      });
+      notify(
+        'Account Created',
+        'success',
+        'Please check your email to verify your account.',
+      );
       router.push('/login');
     },
     onError: () => {
-      toaster.create({
-        title: 'Registration Failed',
-        description: 'Unable to create account. Please try again.',
-        type: 'error',
-      });
+      notify(
+        'Registration Failed',
+        'error',
+        'Unable to create account. Please try again.',
+      );
     },
   });
 
@@ -88,13 +84,10 @@ export function useAuth() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
+      notify('Success', 'success', 'Unable to create admin account');
     },
     onError: () => {
-      toaster.create({
-        title: 'Failed',
-        description: 'Unable to create admin account',
-        type: 'error',
-      });
+      notify('Failed', 'error', 'Unable to create admin account');
     },
   });
 
@@ -132,21 +125,14 @@ export function usePassword() {
       });
     },
     onSuccess: () => {
-      toaster.create({
-        title: 'Email Sent',
-        description:
-          'If an account exists, you will receive a password reset link',
-        type: 'success',
-      });
+      notify(
+        'Email Sent',
+        'success',
+        'If an account exists, you will receive a password reset link',
+      );
     },
     onError: () => {
-      // Always show success to prevent user enumeration
-      toaster.create({
-        title: 'Email Sent',
-        description:
-          'If an account exists, you will receive a password reset link',
-        type: 'success',
-      });
+      notify('Failed', 'error', 'Error sending email');
     },
   });
 
@@ -159,18 +145,14 @@ export function usePassword() {
       });
     },
     onSuccess: () => {
-      toaster.create({
-        title: 'Password Reset',
-        description: 'Your password has been reset successfully',
-        type: 'success',
-      });
+      notify(
+        'Password Reset',
+        'success',
+        'Your password has been reset successfully',
+      );
     },
     onError: () => {
-      toaster.create({
-        title: 'Reset Failed',
-        description: 'Invalid or expired reset link',
-        type: 'error',
-      });
+      notify('Reset Failed', 'error', 'Invalid or expired reset link');
     },
   });
 

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { postKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // POST QUERIES
@@ -63,18 +63,14 @@ export function useCreatePost() {
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
       queryClient.invalidateQueries({ queryKey: postKeys.myPosts() });
       queryClient.invalidateQueries({ queryKey: postKeys.feed() });
-      toaster.create({
-        title: 'Post Created',
-        description: 'Your post has been created successfully',
-        type: 'success',
-      });
+      notify(
+        'Post Created',
+        'success',
+        'Your post has been created successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Creation Failed',
-        description: error.message || 'Failed to create post',
-        type: 'error',
-      });
+      notify('Creation Failed', 'error', 'Failed to create post');
     },
   });
 }
@@ -103,21 +99,13 @@ export function useUpdatePost() {
       queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
       queryClient.invalidateQueries({ queryKey: postKeys.myPosts() });
-      toaster.create({
-        title: 'Post Updated',
-        description: 'Post updated successfully',
-        type: 'success',
-      });
+      notify('Post Updated', 'success', 'Post updated successfully');
     },
     onError: (error: any, { id }, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(postKeys.detail(id), context.previousData);
       }
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update post',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update post');
     },
   });
 }
@@ -148,21 +136,13 @@ export function useDeletePost() {
       queryClient.invalidateQueries({ queryKey: postKeys.lists() });
       queryClient.invalidateQueries({ queryKey: postKeys.myPosts() });
       queryClient.invalidateQueries({ queryKey: postKeys.feed() });
-      toaster.create({
-        title: 'Post Deleted',
-        description: 'Post deleted successfully',
-        type: 'success',
-      });
+      notify('Post Deleted', 'success', 'Post deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(postKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete post',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete post');
     },
   });
 }
@@ -255,63 +235,56 @@ export function useSharePost() {
       }),
     onMutate: async (postId) => {
       await queryClient.cancelQueries({ queryKey: postKeys.all });
-      
-      const previousQueries = queryClient.getQueriesData({ 
-        queryKey: postKeys.all 
+
+      const previousQueries = queryClient.getQueriesData({
+        queryKey: postKeys.all,
       });
 
       // Optimistically update ALL post queries
-      queryClient.setQueriesData(
-        { queryKey: postKeys.all },
-        (old: any) => {
-          if (!old?.data) return old;
-          
-          // Handle array of posts
-          if (Array.isArray(old.data)) {
-            return {
-              ...old,
-              data: old.data.map((post: any) =>
-                post.id === postId
-                  ? {
-                      ...post,
-                      isSharedByUser: true,
-                      _count: {
-                        ...post._count,
-                        shares: post._count.shares + 1,
-                      },
-                    }
-                  : post
-              ),
-            };
-          }
-          
-          // Handle single post
-          if (old.data?.id === postId) {
-            return {
-              ...old,
-              data: {
-                ...old.data,
-                isSharedByUser: true,
-                _count: {
-                  ...old.data._count,
-                  shares: old.data._count.shares + 1,
-                },
-              },
-            };
-          }
-          
-          return old;
+      queryClient.setQueriesData({ queryKey: postKeys.all }, (old: any) => {
+        if (!old?.data) return old;
+
+        // Handle array of posts
+        if (Array.isArray(old.data)) {
+          return {
+            ...old,
+            data: old.data.map((post: any) =>
+              post.id === postId
+                ? {
+                    ...post,
+                    isSharedByUser: true,
+                    _count: {
+                      ...post._count,
+                      shares: post._count.shares + 1,
+                    },
+                  }
+                : post,
+            ),
+          };
         }
-      );
+
+        // Handle single post
+        if (old.data?.id === postId) {
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              isSharedByUser: true,
+              _count: {
+                ...old.data._count,
+                shares: old.data._count.shares + 1,
+              },
+            },
+          };
+        }
+
+        return old;
+      });
 
       return { previousQueries };
     },
     onSuccess: () => {
-      toaster.create({
-        title: 'Post Shared',
-        description: 'Post shared successfully',
-        type: 'success',
-      });
+      notify('Post Shared', 'success', 'Post shared successfully');
     },
     onError: (error: any, postId, context) => {
       if (context?.previousQueries) {
@@ -341,18 +314,10 @@ export function useCreateComment() {
     onSuccess: (_result, { postId }) => {
       queryClient.invalidateQueries({ queryKey: postKeys.comments(postId) });
       queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
-      toaster.create({
-        title: 'Comment Added',
-        description: 'Your comment has been added',
-        type: 'success',
-      });
+      notify('Comment Added', 'success', 'Your comment has been added');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Comment Failed',
-        description: error.message || 'Failed to add comment',
-        type: 'error',
-      });
+      notify('Comment Failed', 'error', 'Failed to add comment');
     },
   });
 }
@@ -388,11 +353,7 @@ export function useDeleteComment() {
     onSuccess: (_result, { postId }) => {
       queryClient.invalidateQueries({ queryKey: postKeys.comments(postId) });
       queryClient.invalidateQueries({ queryKey: postKeys.detail(postId) });
-      toaster.create({
-        title: 'Comment Deleted',
-        description: 'Comment removed successfully',
-        type: 'success',
-      });
+      notify('Comment Deleted', 'success', 'Comment removed successfully');
     },
     onError: (error: any, { postId }, context) => {
       if (context?.previousData) {
@@ -401,11 +362,7 @@ export function useDeleteComment() {
           context.previousData,
         );
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete comment',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete comment');
     },
   });
 }

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { callbackRequestKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // CALLBACK REQUEST QUERIES
@@ -65,18 +65,14 @@ export function useCreateCallbackRequest() {
       queryClient.invalidateQueries({
         queryKey: callbackRequestKeys.pending(),
       });
-      toaster.create({
-        title: 'Request Submitted',
-        description: 'Your callback request has been submitted successfully',
-        type: 'success',
-      });
+      notify(
+        'Request Submitted',
+        'success',
+        'Your callback request has been submitted successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Submission Failed',
-        description: error.message || 'Failed to submit callback request',
-        type: 'error',
-      });
+      notify('Submission Failed', 'error', 'Failed to submit callback request');
     },
   });
 }
@@ -112,11 +108,11 @@ export function useDeleteCallbackRequest() {
       queryClient.invalidateQueries({
         queryKey: callbackRequestKeys.myRequests(),
       });
-      toaster.create({
-        title: 'Request Deleted',
-        description: 'Callback request deleted successfully',
-        type: 'success',
-      });
+      notify(
+        'Request Deleted',
+        'success',
+        'Callback request deleted successfully',
+      );
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
@@ -125,11 +121,7 @@ export function useDeleteCallbackRequest() {
           context.previousData,
         );
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete callback request',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete callback request');
     },
   });
 }

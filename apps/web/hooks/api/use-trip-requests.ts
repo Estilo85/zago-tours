@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { tripRequestKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // TRIP REQUEST QUERIES
@@ -61,18 +61,14 @@ export function useCreateTripRequest() {
       queryClient.invalidateQueries({ queryKey: tripRequestKeys.lists() });
       queryClient.invalidateQueries({ queryKey: tripRequestKeys.myRequests() });
       queryClient.invalidateQueries({ queryKey: tripRequestKeys.recent() });
-      toaster.create({
-        title: 'Request Submitted',
-        description: 'Your trip request has been submitted successfully',
-        type: 'success',
-      });
+      notify(
+        'Request Submitted',
+        'success',
+        'Your trip request has been submitted successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Submission Failed',
-        description: error.message || 'Failed to submit trip request',
-        type: 'error',
-      });
+      notify('Submission Failed', 'error', 'Failed to submit trip request');
     },
   });
 }
@@ -102,21 +98,13 @@ export function useDeleteTripRequest() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tripRequestKeys.lists() });
       queryClient.invalidateQueries({ queryKey: tripRequestKeys.myRequests() });
-      toaster.create({
-        title: 'Request Deleted',
-        description: 'Trip request deleted successfully',
-        type: 'success',
-      });
+      notify('Request Deleted', 'success', 'Trip request deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(tripRequestKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete trip request',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete trip request');
     },
   });
 }

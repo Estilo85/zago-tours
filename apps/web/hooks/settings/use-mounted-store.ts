@@ -14,8 +14,3 @@ export function useMountedStore<T, F>(
 
   return mounted ? result : undefined;
 }
-
-// Safe from hydration errors!
-//   const isOpen = useMountedStore(useUIStore, (s) => s.isSidebarOpen);
-
-//   if (isOpen === undefined) return null;
