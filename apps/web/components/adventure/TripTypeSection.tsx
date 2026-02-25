@@ -15,8 +15,9 @@ const tripTypeImageMap: Record<TripType, string> = {
   [TripType.SKIING]: '/images/adventures/tripType/skiing.webp',
   [TripType.SKYDIVING]: '/images/adventures/tripType/skydiving.webp',
   [TripType.SAFARIS]: '/images/adventures/tripType/safari.webp',
-  [TripType.CLIMBING]: '/images/adventures/tripType/mountain climbing.webp',
-  [TripType.JUMPING]: '/images/adventures/tripType/base jumping.webp',
+  [TripType.CLIMBING]: '/images/adventures/tripType/mountain-climbing.webp',
+  [TripType.JUMPING]: '/images/adventures/tripType/base-jumping.webp',
+  [TripType.RAFTING]: '/images/adventures/tripType/rafting.webp',
 };
 
 export default function TripTypeSection() {
