@@ -258,7 +258,12 @@ export default function OurStory() {
           >
             The moment everything changed
           </Text>
-          <Box maxW='800px' mx='auto' w='full'>
+          <Box
+            w='100%'
+            maxW={{ base: '100%', md: '800px' }}
+            mx='auto'
+            px={{ base: 2, md: 0 }}
+          >
             <ScrollProgressSteps items={mySteps} />
           </Box>
         </Stack>
