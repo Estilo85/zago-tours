@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { galleryKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // GALLERY QUERIES
@@ -44,18 +44,14 @@ export function useCreateGallery() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
-      toaster.create({
-        title: 'Media Added',
-        description: 'Image has been added to the gallery successfully',
-        type: 'success',
-      });
+      notify(
+        'Media Added',
+        'success',
+        'Image has been added to the gallery successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Upload Failed',
-        description: error.message || 'Failed to upload media',
-        type: 'error',
-      });
+      notify('Upload Failed', 'error', 'Failed to upload media');
     },
   });
 }
@@ -72,18 +68,10 @@ export function useUpdateGallery() {
     onSuccess: (_result, { id }) => {
       queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: galleryKeys.detail(id) });
-      toaster.create({
-        title: 'Gallery Updated',
-        description: 'Gallery item updated successfully',
-        type: 'success',
-      });
+      notify('Gallery Updated', 'success', 'Gallery item updated successfully');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update gallery item',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update gallery item');
     },
   });
 }
@@ -113,21 +101,17 @@ export function useDeleteGallery() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: galleryKeys.lists() });
-      toaster.create({
-        title: 'Item Deleted',
-        description: 'Media removed from gallery successfully',
-        type: 'success',
-      });
+      notify(
+        'Item Deleted',
+        'success',
+        'Media removed from gallery successfully',
+      );
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(galleryKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to remove media',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to remove media');
     },
   });
 }

@@ -3,11 +3,11 @@ import localFont from 'next/font/local';
 import { Provider } from '@/components/ui/provider';
 import Navbar from '@/components/layout/navbar/Navbar';
 
-import styles from './layout.module.css';
 import {
   ClientFooter,
   ClientToaster,
 } from '@/components/layout/ClientComponents';
+import { Box, Flex } from '@chakra-ui/react';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -43,13 +43,25 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Provider>
-          <div className={styles.layout}>
-            <header className={styles.header}>
+          <Flex direction='column' minH='100dvh' position='relative'>
+            <Box
+              as='header'
+              position='sticky'
+              top='0'
+              zIndex='1000'
+              bg='white'
+              borderBottom='1px solid'
+              borderColor='gray.200'
+            >
               <Navbar />
-            </header>
-            <main className={styles.main}>{children}</main>
+            </Box>
+
+            <Box as='main' flex='1 0 auto' w='full' position='relative'>
+              {children}
+            </Box>
+
             <ClientFooter />
-          </div>
+          </Flex>
           <ClientToaster />
         </Provider>
       </body>

@@ -62,7 +62,7 @@ const cardData = [
 const resImageData = [
   '/images/adventures/tripType/skiing.webp',
   '/images/adventures/tripType/hiking.webp',
-  '/images/adventures/tripType/mountain climbing.webp',
+  '/images/adventures/tripType/mountain-climbing.webp',
   '/images/adventures/tripType/safari.webp',
 ];
 
@@ -72,7 +72,8 @@ export const HowItWorks = () => {
       bg='surface'
       mb={{ base: 48, md: 32 }}
       borderRadius={{ base: 'none', md: '4xl' }}
-      p={{ base: 6, md: 10 }}
+      py={10}
+      px={{ base: 2, md: 10 }}
       pb={{ base: '150px', md: '200px' }}
       position='relative'
     >
@@ -145,7 +146,8 @@ export const HowItWorks = () => {
                   width='100%'
                   borderRadius='xl'
                   objectFit='cover'
-                  priority={true}
+                  priority={i < 2}
+                  containerProps={{ style: { aspectRatio: '4/3' } }}
                 />
               </Box>
             ))}

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { inquiryKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // INQUIRY QUERIES
@@ -46,18 +46,14 @@ export function useCreateInquiry() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inquiryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: inquiryKeys.recent() });
-      toaster.create({
-        title: 'Inquiry Submitted',
-        description: 'Your inquiry has been submitted successfully',
-        type: 'success',
-      });
+      notify(
+        'Inquiry Submitted',
+        'success',
+        'Your inquiry has been submitted successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Submission Failed',
-        description: error.message || 'Failed to submit inquiry',
-        type: 'error',
-      });
+      notify('Submission Failed', 'error', 'Failed to submit inquiry');
     },
   });
 }
@@ -86,21 +82,13 @@ export function useDeleteInquiry() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inquiryKeys.lists() });
-      toaster.create({
-        title: 'Inquiry Deleted',
-        description: 'Inquiry deleted successfully',
-        type: 'success',
-      });
+      notify('Inquiry Deleted', 'success', 'Inquiry deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(inquiryKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete inquiry',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete inquiry');
     },
   });
 }

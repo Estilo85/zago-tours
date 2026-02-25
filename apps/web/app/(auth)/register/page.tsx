@@ -1,8 +1,30 @@
 'use client';
-import RegistrationForm from '@/components/auth/registration/form/RegistrationForm';
 import { Box, Container, Flex } from '@chakra-ui/react';
 import { useRegistrationLogic } from '@/hooks/settings/use-registration-logic';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
+import dynamic from 'next/dynamic';
+
+const RegistrationForm = dynamic(
+  () => import('@/components/auth/registration/form/RegistrationForm'),
+  {
+    ssr: false,
+    loading: () => (
+      <Box
+        bg='white'
+        p={{ base: 5, md: 7 }}
+        borderRadius='lg'
+        boxShadow='sm'
+        width={{ base: '100%', md: 'md' }}
+        height='570px'
+        display='flex'
+        alignItems='center'
+        justifyContent='center'
+      >
+        Loading form...
+      </Box>
+    ),
+  },
+);
 
 export default function Register() {
   const { selectedCategory } = useRegistrationLogic();

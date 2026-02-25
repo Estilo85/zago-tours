@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { eventKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // EVENT QUERIES
@@ -60,18 +60,10 @@ export function useCreateEvent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
       queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
-      toaster.create({
-        title: 'Event Created',
-        description: 'Event has been created successfully',
-        type: 'success',
-      });
+      notify('Event Created', 'success', 'Event has been created successfully');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Creation Failed',
-        description: error.message || 'Failed to create event',
-        type: 'error',
-      });
+      notify('Creation Failed', 'error', 'Failed to create event');
     },
   });
 }
@@ -100,21 +92,13 @@ export function useUpdateEvent() {
       queryClient.invalidateQueries({ queryKey: eventKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
       queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
-      toaster.create({
-        title: 'Event Updated',
-        description: 'Event updated successfully',
-        type: 'success',
-      });
+      notify('Event Updated', 'success', 'Event updated successfully');
     },
     onError: (error: any, { id }, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(eventKeys.detail(id), context.previousData);
       }
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update event',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update event');
     },
   });
 }
@@ -144,21 +128,13 @@ export function useDeleteEvent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
       queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
-      toaster.create({
-        title: 'Event Deleted',
-        description: 'Event deleted successfully',
-        type: 'success',
-      });
+      notify('Event Deleted', 'success', 'Event deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(eventKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete event',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete event');
     },
   });
 }
@@ -176,18 +152,14 @@ export function useJoinEvent() {
       queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
       queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
-      toaster.create({
-        title: 'Registration Successful',
-        description: 'You have successfully registered for this event',
-        type: 'success',
-      });
+      notify(
+        'Registration Successful',
+        'success',
+        'You have successfully registered for this event',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Registration Failed',
-        description: 'Failed to register for event',
-        type: 'error',
-      });
+      notify('Registration Failed', 'error', 'Failed to register for event');
     },
   });
 }
@@ -205,18 +177,14 @@ export function useCancelEventRegistration() {
       queryClient.invalidateQueries({ queryKey: eventKeys.myBookings() });
       queryClient.invalidateQueries({ queryKey: eventKeys.lists() });
       queryClient.invalidateQueries({ queryKey: eventKeys.upcoming() });
-      toaster.create({
-        title: 'Registration Cancelled',
-        description: 'Your event registration has been cancelled',
-        type: 'info',
-      });
+      notify(
+        'Registration Cancelled',
+        'info',
+        'Your event registration has been cancelled',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Cancellation Failed',
-        description: 'Failed to cancel registration',
-        type: 'error',
-      });
+      notify('Cancellation Failed', 'error', 'Failed to cancel registration');
     },
   });
 }

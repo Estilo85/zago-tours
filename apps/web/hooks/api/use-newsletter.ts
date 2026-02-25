@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { newsletterKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // NEWSLETTER QUERIES (Admin Only)
@@ -30,18 +30,18 @@ export function useSubscribeToNewsletter() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: newsletterKeys.list() });
-      toaster.create({
-        title: 'Success!',
-        description: 'You have successfully joined the movement.',
-        type: 'success',
-      });
+      notify(
+        'Success!',
+        'success',
+        'You have successfully joined the movement.',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Subscription Failed',
-        description: error.message || 'Something went wrong. Please try again.',
-        type: 'error',
-      });
+      notify(
+        'Subscription Failed',
+        'error',
+        'Something went wrong. Please try again.',
+      );
     },
   });
 }

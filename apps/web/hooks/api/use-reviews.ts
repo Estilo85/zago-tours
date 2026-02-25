@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { reviewKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // REVIEW QUERIES
@@ -61,18 +61,14 @@ export function useCreateReview() {
       queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.myReviews() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.averageRating() });
-      toaster.create({
-        title: 'Review Created',
-        description: 'Your review has been submitted successfully',
-        type: 'success',
-      });
+      notify(
+        'Review Created',
+        'success',
+        'Your review has been submitted successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Submission Failed',
-        description: error.message || 'Failed to submit review',
-        type: 'error',
-      });
+      notify('Submission Failed', 'error', 'Failed to submit review');
     },
   });
 }
@@ -102,21 +98,13 @@ export function useUpdateReview() {
       queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.myReviews() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.averageRating() });
-      toaster.create({
-        title: 'Review Updated',
-        description: 'Review updated successfully',
-        type: 'success',
-      });
+      notify('Review Updated', 'success', 'Review updated successfully');
     },
     onError: (error: any, { id }, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(reviewKeys.detail(id), context.previousData);
       }
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to update review',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to update review');
     },
   });
 }
@@ -147,21 +135,13 @@ export function useDeleteReview() {
       queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.myReviews() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.averageRating() });
-      toaster.create({
-        title: 'Review Deleted',
-        description: 'Review deleted successfully',
-        type: 'success',
-      });
+      notify('Review Deleted', 'success', 'Review deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(reviewKeys.lists(), context.previousData);
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete review',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete review');
     },
   });
 }
@@ -177,18 +157,14 @@ export function useToggleFeaturedReview() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
       queryClient.invalidateQueries({ queryKey: reviewKeys.featured() });
-      toaster.create({
-        title: 'Review Updated',
-        description: 'Featured status toggled successfully',
-        type: 'success',
-      });
+      notify(
+        'Review Updated',
+        'success',
+        'Featured status toggled successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to toggle featured status',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to toggle featured status');
     },
   });
 }

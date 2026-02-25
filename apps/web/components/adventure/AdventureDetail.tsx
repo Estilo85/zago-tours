@@ -169,16 +169,21 @@ export default function AdventureDetailPage({
             <Box bg='green.600' p={1} borderRadius='sm' display='inline-flex'>
               <RatingGroup.Root
                 count={5}
-                value={adventure.rating}
+                value={adventure?.rating}
                 allowHalf
                 readOnly
                 size='xs'
-                colorPalette='white'
               >
                 <RatingGroup.HiddenInput />
                 <RatingGroup.Control
-                  aria-hidden='true'
-                  css={{ '& [data-part="item"]': { padding: '4px' } }}
+                  css={{
+                    '& svg': {
+                      color: 'white !important',
+                      fill: 'white !important',
+                      stroke: 'white !important',
+                    },
+                    '& [data-part="item"]': { padding: '2px' },
+                  }}
                 />
               </RatingGroup.Root>
             </Box>

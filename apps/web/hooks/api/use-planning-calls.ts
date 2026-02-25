@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toaster } from '@/components/ui/toaster';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { planningCallKeys } from './query-keys';
+import { notify } from '@/lib/toast';
 
 // ============================================
 // PLANNING CALL QUERIES
@@ -54,18 +54,14 @@ export function useSchedulePlanningCall() {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.lists() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.upcoming() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.myCalls() });
-      toaster.create({
-        title: 'Call Scheduled',
-        description: 'Your planning call has been scheduled successfully',
-        type: 'success',
-      });
+      notify(
+        'Call Scheduled',
+        'success',
+        'Your planning call has been scheduled successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Scheduling Failed',
-        description: error.message || 'Failed to schedule planning call',
-        type: 'error',
-      });
+      notify('Scheduling Failed', 'error', 'Failed to schedule planning call');
     },
   });
 }
@@ -84,18 +80,18 @@ export function useReschedulePlanningCall() {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.lists() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.upcoming() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.myCalls() });
-      toaster.create({
-        title: 'Call Rescheduled',
-        description: 'Planning call rescheduled successfully',
-        type: 'success',
-      });
+      notify(
+        'Call Rescheduled',
+        'success',
+        'Planning call rescheduled successfully',
+      );
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Rescheduling Failed',
-        description: error.message || 'Failed to reschedule planning call',
-        type: 'error',
-      });
+      notify(
+        'Rescheduling Failed',
+        'error',
+        'Failed to reschedule planning call',
+      );
     },
   });
 }
@@ -113,18 +109,10 @@ export function useCancelPlanningCall() {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.lists() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.upcoming() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.myCalls() });
-      toaster.create({
-        title: 'Call Cancelled',
-        description: 'Planning call cancelled successfully',
-        type: 'info',
-      });
+      notify('Call Cancelled', 'info', 'Planning call cancelled successfully');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Cancellation Failed',
-        description: error.message || 'Failed to cancel planning call',
-        type: 'error',
-      });
+      notify('Cancellation Failed', 'error', 'Failed to cancel planning call');
     },
   });
 }
@@ -140,18 +128,10 @@ export function useCompletePlanningCall() {
     onSuccess: (_result, id) => {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.lists() });
-      toaster.create({
-        title: 'Call Completed',
-        description: 'Planning call marked as completed',
-        type: 'success',
-      });
+      notify('Call Completed', 'success', 'Planning call marked as completed');
     },
     onError: (error: any) => {
-      toaster.create({
-        title: 'Update Failed',
-        description: error.message || 'Failed to mark call as completed',
-        type: 'error',
-      });
+      notify('Update Failed', 'error', 'Failed to mark call as completed');
     },
   });
 }
@@ -181,11 +161,7 @@ export function useDeletePlanningCall() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: planningCallKeys.lists() });
       queryClient.invalidateQueries({ queryKey: planningCallKeys.myCalls() });
-      toaster.create({
-        title: 'Call Deleted',
-        description: 'Planning call deleted successfully',
-        type: 'success',
-      });
+      notify('Call Deleted', 'success', 'Planning call deleted successfully');
     },
     onError: (error: any, _variables, context) => {
       if (context?.previousData) {
@@ -194,11 +170,7 @@ export function useDeletePlanningCall() {
           context.previousData,
         );
       }
-      toaster.create({
-        title: 'Delete Failed',
-        description: error.message || 'Failed to delete planning call',
-        type: 'error',
-      });
+      notify('Delete Failed', 'error', 'Failed to delete planning call');
     },
   });
 }
