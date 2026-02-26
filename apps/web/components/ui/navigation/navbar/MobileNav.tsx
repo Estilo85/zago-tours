@@ -6,6 +6,7 @@ import {
   Portal,
   IconButton,
   CloseButton,
+  Text,
 } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -73,7 +74,7 @@ export const MobileNav = () => {
                     <CloseButton size='sm' color='white' />
                   </Drawer.CloseTrigger>
 
-                  <Drawer.Body color='white'>
+                  <Drawer.Body>
                     <VStack align='stretch' gap={6} mt={12}>
                       {navlinks.map((link, index) => (
                         <AppLink
@@ -83,7 +84,7 @@ export const MobileNav = () => {
                           fontWeight={isActive(link.href) ? 'bold' : 'normal'}
                           onClick={() => setOpen(false)}
                         >
-                          {link.label}
+                          <Text color='white'>{link.label}</Text>
                         </AppLink>
                       ))}
 
