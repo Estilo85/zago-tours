@@ -177,8 +177,6 @@ export default function UsersAdminPage() {
     },
   ];
 
-  if (isLoading) return <DataTableSkeleton columns={6} />;
-
   if (isError)
     return (
       <Center h='400px'>
@@ -203,7 +201,9 @@ export default function UsersAdminPage() {
         bg='bg.panel'
         overflow='hidden'
       >
-        {hasData ? (
+        {isLoading ? (
+          <DataTableSkeleton columns={6} />
+        ) : hasData ? (
           <>
             <DataTable columns={columns} data={response.data} />
             {response?.pagination && (
@@ -239,7 +239,7 @@ export default function UsersAdminPage() {
       <Dialog.Root
         open={isDeleteDialogOpen}
         onOpenChange={(e) => setIsDeleteDialogOpen(e.open)}
-        role='alertdialog' // Better for accessibility on delete actions
+        role='alertdialog'
       >
         <Portal>
           <Dialog.Backdrop />
