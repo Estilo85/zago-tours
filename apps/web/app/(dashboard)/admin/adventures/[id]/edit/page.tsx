@@ -99,6 +99,9 @@ export default function EditAdventurePage() {
         safetyScore: adventure.safetyScore,
         safetyTips: adventure.safetyTips || '',
         certification: adventure.certification || '',
+        inclusions: adventure.inclusions || '',
+        exclusions: adventure.exclusions || '',
+        partnerDescription: adventure.partnerDescription || '',
         gear: adventure.gear || '',
         date: adventure.date
           ? new Date(adventure.date).toISOString().split('T')[0]
@@ -165,6 +168,13 @@ export default function EditAdventurePage() {
       submitData.append('safetyScore', formData.safetyScore.toString());
     if (formData.safetyTips)
       submitData.append('safetyTips', formData.safetyTips);
+    if (formData.inclusions)
+      submitData.append('inclusions', formData.inclusions);
+    if (formData.exclusions)
+      submitData.append('exclusions', formData.exclusions);
+    if (formData.partnerDescription)
+      submitData.append('partnerDescription', formData.partnerDescription);
+
     if (formData.rating !== undefined)
       submitData.append('rating', Number(formData.rating).toString());
     if (formData.date) {
@@ -442,7 +452,32 @@ export default function EditAdventurePage() {
               <Textarea
                 value={formData.safetyTips}
                 onChange={(e) => handleChange('safetyTips', e.target.value)}
-                placeholder='Enter safety tips...'
+                rows={4}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>Inclusions</Field.Label>
+              <Textarea
+                value={formData.inclusions}
+                onChange={(e) => handleChange('inclusions', e.target.value)}
+                rows={4}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>Exclusions</Field.Label>
+              <Textarea
+                value={formData.exclusions}
+                onChange={(e) => handleChange('exclusions', e.target.value)}
+                rows={4}
+              />
+            </Field.Root>
+            <Field.Root required>
+              <Field.Label>Partner</Field.Label>
+              <Textarea
+                value={formData.partnerDescription}
+                onChange={(e) =>
+                  handleChange('partnerDescription', e.target.value)
+                }
                 rows={4}
               />
             </Field.Root>

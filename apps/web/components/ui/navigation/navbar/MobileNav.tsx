@@ -6,6 +6,7 @@ import {
   Portal,
   IconButton,
   CloseButton,
+  Text,
 } from '@chakra-ui/react';
 import { Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -24,15 +25,12 @@ export const MobileNav = () => {
 
   return (
     <Box
-      as='nav'
-      bg='textInverse'
       p={4}
-      borderBottom='1px solid'
-      borderColor='dark'
-      position='sticky'
-      top={0}
-      zIndex={1000}
+      bg='primary'
+      color='white'
       display={{ base: 'block', md: 'none' }}
+      borderBottom='1px solid'
+      borderColor='gray.50'
     >
       <Flex justify='space-between' align='center'>
         <Logo />
@@ -40,7 +38,7 @@ export const MobileNav = () => {
         <ClientOnly
           fallback={
             <IconButton aria-label='Loading menu' variant='ghost'>
-              <Menu color='black' />
+              <Menu color='white' />
             </IconButton>
           }
         >
@@ -52,7 +50,7 @@ export const MobileNav = () => {
           >
             <Drawer.Trigger asChild>
               <IconButton aria-label='Open menu' variant='ghost'>
-                <Menu color='black' />
+                <Menu color='white' />
               </IconButton>
             </Drawer.Trigger>
 
@@ -65,6 +63,8 @@ export const MobileNav = () => {
                     transition:
                       'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
                   }}
+                  bg='primary'
+                  color='white'
                 >
                   <Drawer.CloseTrigger
                     asChild
@@ -73,7 +73,7 @@ export const MobileNav = () => {
                     right='2'
                     zIndex='skipLink'
                   >
-                    <CloseButton size='sm' />
+                    <CloseButton size='sm' color='white' />
                   </Drawer.CloseTrigger>
 
                   <Drawer.Body>
@@ -86,7 +86,7 @@ export const MobileNav = () => {
                           fontWeight={isActive(link.href) ? 'bold' : 'normal'}
                           onClick={() => setOpen(false)}
                         >
-                          {link.label}
+                          <Text color='white'>{link.label}</Text>
                         </AppLink>
                       ))}
 

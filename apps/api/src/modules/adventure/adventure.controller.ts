@@ -14,6 +14,7 @@ import {
   ReqParamsBody,
   ReqParamsQuery,
   ReqQuery,
+  TypedRequest,
 } from 'src/shared/types/express.types';
 import { UuidParam } from 'src/common/validation/common.validation';
 import { CloudinaryService } from 'src/shared/services/cloudinary.service';
@@ -227,6 +228,13 @@ export class AdventureController {
   toggleLike = asyncHandler(
     async (req: ReqParams<UuidParam>, res: Response) => {
       const result = await this.service.toggleLike(req.userId!, req.params.id);
+      return ResponseUtil.success(res, result);
+    },
+  );
+
+  getTripTypeCounts = asyncHandler(
+    async (req: TypedRequest<{}, {}, {}>, res: Response) => {
+      const result = await this.service.getTripTypeCounts();
       return ResponseUtil.success(res, result);
     },
   );

@@ -17,7 +17,6 @@ export const TestimonialCard = ({
 }: TestimonialCardProps) => {
   return (
     <Box
-      maxW={{ base: 'full', md: 'sm' }}
       width='100%'
       minH={{ base: 'auto', md: '230px' }}
       maxH={{ base: 'auto', md: '230px' }}

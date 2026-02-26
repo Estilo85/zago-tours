@@ -16,6 +16,12 @@ export interface TripRequestResponseDto {
   date: Date;
   preferences: string | null;
   createdAt: Date;
+  adventurer: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+  };
 }
 
 export interface TripRequestListQueryDto {

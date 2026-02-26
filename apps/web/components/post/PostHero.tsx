@@ -2,7 +2,7 @@
 
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { usePermissions, useUserProfile } from '@/hooks';
+import { usePermissions, usePlatformSettings, useUserProfile } from '@/hooks';
 import { Box, Flex, Heading, Icon, Text, Stack } from '@chakra-ui/react';
 import { Heart, ImagePlay, Share } from 'lucide-react';
 import React from 'react';
@@ -10,8 +10,12 @@ import Button from '../ui/button/Button';
 
 export default function PostHero() {
   const { data } = useUserProfile();
+  const { data: res } = usePlatformSettings();
   const { isAnyAdmin } = usePermissions();
   const profileImage = data?.data?.image;
+  const coverImage = res?.data?.coverImage;
+  const description = res?.data?.description;
+  const siteName = res?.data?.siteName;
 
   const handleShare = async () => {
     try {
@@ -31,11 +35,11 @@ export default function PostHero() {
   };
 
   return (
-    <Box w='full' bg='white' borderBottom='1px solid gray'>
+    <Box w='full' bg='white' borderBottom='1px solid' borderColor='gray.50'>
       {/* Cover Image */}
-      <Box w='full' h={{ base: '220px', md: '320px' }} position='relative'>
+      <Box w='full' h={{ base: '220px', md: '350px' }} position='relative'>
         <ResponsiveImage
-          src='/images/forms/coop-agent-form-bg.webp'
+          src={coverImage ?? '/images/forms/coop-agent-form-bg.webp'}
           alt='community banner'
           sizes='100vw'
           priority={true}
@@ -100,7 +104,7 @@ export default function PostHero() {
             gap={2}
             textAlign={{ base: 'center', md: 'left' }}
           >
-            Welcome to Zago Voice{' '}
+            Welcome to {siteName}
             <Box display={{ base: 'none', md: 'block' }}>
               <Heart size={32} fill='red' />
             </Box>
@@ -127,7 +131,7 @@ export default function PostHero() {
           maxW='600px'
           textAlign='left'
         >
-          Where real experiences shape safer, better adventure tourism.
+          {description}
         </Text>
       </Stack>
     </Box>

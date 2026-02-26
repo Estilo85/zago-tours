@@ -24,7 +24,7 @@ const ROLE_ACCESS: Record<string, Role[]> = {
 };
 
 // Routes that require authentication but are not role-specific
-const AUTH_REQUIRED_ROUTES = ['/posts', '/community'];
+const AUTH_REQUIRED_ROUTES = ['/posts'];
 
 // Public routes (no auth needed)
 const PUBLIC_ROUTES = [
@@ -61,10 +61,7 @@ export async function proxy(request: NextRequest) {
   if (matchedRoleRoute) {
     const allowedRoles = ROLE_ACCESS[matchedRoleRoute];
     if (!allowedRoles?.includes(role)) {
-      // Redirect unauthorized users to their dashboard
-      return NextResponse.redirect(
-        new URL(ROLE_HOME[role] || '/adventurer', request.url),
-      );
+      return NextResponse.redirect(new URL(ROLE_HOME[role], request.url));
     }
     return NextResponse.next();
   }

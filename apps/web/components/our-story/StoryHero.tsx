@@ -37,7 +37,7 @@ export const StoryHero = () => {
         <Heading
           size={{ base: '2xl', md: '4xl' }}
           lineHeight='1.2'
-          maxW={{ base: 'full', md: '800px' }}
+          maxW={{ base: 'full', md: '500px' }}
           wordBreak='break-word'
         >
           Extreme adrenaline without the “what-ifs”
@@ -46,9 +46,10 @@ export const StoryHero = () => {
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
           opacity={0.9}
-          maxW={{ base: 'full', md: '700px' }}
+          maxW={{ base: 'full', md: '500px' }}
           wordBreak='break-word'
           mx='auto'
+          mb='10px'
         >
           Adventure travel is meant to feel exciting, not uncertain. We’re
           building a network where every trip is trusted, transparent, and

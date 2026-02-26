@@ -57,7 +57,7 @@ export const Sidebar = ({
   );
 
   return (
-    <Stack h='100vh' overflow='hidden'>
+    <Stack h='100vh' pb={5} overflow='hidden'>
       <Box flex='1' overflowY='auto' pr={1}>
         <SectionHeading>General Setting</SectionHeading>
         <Stack gap={1}>

@@ -67,14 +67,16 @@ export const AdventureHero = ({
   return (
     <Box
       bg='primary'
-      borderRadius='4xl'
+      borderBottomRadius='4xl'
+      borderTopRadius={{ base: 'none', md: '4xl' }}
       p={{ base: 2, md: 10 }}
+      pt={{ base: 5, md: 10 }}
       mb={{ base: 0, md: '40px' }}
     >
       <Stack
         position='relative'
         textAlign='center'
-        gap={10}
+        gap={{ base: 5, md: 10 }}
         align='center'
         maxW='container.xl'
         mx='auto'

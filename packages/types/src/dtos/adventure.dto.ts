@@ -23,6 +23,9 @@ export interface CreateAdventureDto {
   safetyScore?: number;
   safetyTips?: string;
   rating?: number;
+  inclusions?: string;
+  exclusions?: string;
+  partnerDescription?: string;
   mediaUrl?: string;
   publicId?: string;
 }
@@ -42,7 +45,10 @@ export interface UpdateAdventureDto {
   status?: AdventureStatus;
   safetyScore?: number;
   safetyTips?: string;
-  rating?: number; // Added rating field
+  rating?: number;
+  inclusions?: string;
+  exclusions?: string;
+  partnerDescription?: string;
   isVerified?: boolean;
   lastSafetyCertDate?: Date | string;
   // Cloudinary media update
@@ -64,6 +70,9 @@ export interface AdventureResponseDto {
   certification: string | null;
   gear: string | null;
   status: AdventureStatus;
+  inclusions?: string;
+  exclusions?: string;
+  partnerDescription?: string;
   mediaUrl: string | null;
   publicId: string | null;
   date: Date;

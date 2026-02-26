@@ -28,6 +28,7 @@ export const adventureKeys = {
     [...adventureKeys.all, 'itineraries', adventureId] as const,
   gallery: (adventureId: string) =>
     [...adventureKeys.all, 'gallery', adventureId] as const,
+  tripTypeCounts: () => [...adventureKeys.all, 'trip-type-counts'] as const,
 };
 
 export const postKeys = {
@@ -126,4 +127,9 @@ export const dashboardKeys = {
     [...dashboardKeys.all, 'agent', agentId] as const,
   affiliateStats: (affiliateId: string) =>
     [...dashboardKeys.all, 'affiliate', affiliateId] as const,
+};
+
+export const platformSettingsKeys = {
+  all: ['platform-settings'] as const,
+  detail: () => [...platformSettingsKeys.all, 'detail'] as const,
 };

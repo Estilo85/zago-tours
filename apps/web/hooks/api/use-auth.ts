@@ -41,10 +41,9 @@ export function useAuth() {
       return result;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: authKeys.session() });
-      await queryClient.invalidateQueries({ queryKey: authKeys.profile() });
+      queryClient.invalidateQueries({ queryKey: authKeys.session() });
+      queryClient.invalidateQueries({ queryKey: authKeys.profile() });
       router.push('/dashboard');
-      router.refresh();
     },
     onError: () => {
       notify('Login Failed', 'error', 'Invalid email or password');
@@ -66,12 +65,10 @@ export function useAuth() {
       );
       router.push('/login');
     },
-    onError: () => {
-      notify(
-        'Registration Failed',
-        'error',
-        'Unable to create account. Please try again.',
-      );
+    onError: (error: any) => {
+      const serverMessage =
+        error?.message || 'Unable to create account. Please try again.';
+      notify('Registration Failed', 'error', serverMessage);
     },
   });
 
@@ -84,7 +81,7 @@ export function useAuth() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      notify('Success', 'success', 'Unable to create admin account');
+      notify('Success', 'success', 'Admin account created successfully');
     },
     onError: () => {
       notify('Failed', 'error', 'Unable to create admin account');

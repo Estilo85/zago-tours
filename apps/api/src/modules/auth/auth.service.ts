@@ -23,7 +23,7 @@ export class AuthService {
   async register(data: RegisterDto): Promise<UserResponse> {
     const existingUser = await this.authRepository.findByEmail(data.email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('Email already exists');
     }
 
     this.validateRoleSpecificFields(data);
@@ -80,8 +80,9 @@ export class AuthService {
     country?: string;
   }): Promise<UserResponse> {
     const existingUser = await this.authRepository.findByEmail(data.email);
+
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('Email already exists');
     }
 
     const hashedPassword = await BcryptUtil.hash(data.password);

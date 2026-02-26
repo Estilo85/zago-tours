@@ -15,7 +15,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { useUsers, useDeleteUser } from '@/hooks';
+import { useUsers, useDeleteUser, useCurrentUser } from '@/hooks';
 import { Column, DataTable } from '../../_components/table/DataTable';
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
@@ -35,7 +35,7 @@ export default function UsersAdminPage() {
     isLoading,
     isError,
   } = useUsers({ page: currentPage });
-
+  const { data: currentUser } = useCurrentUser();
   const deleteUserMutation = useDeleteUser();
 
   const handleView = (user: User) => {
@@ -79,9 +79,16 @@ export default function UsersAdminPage() {
         <HStack gap={3}>
           <AvatarImage src={user.image} name={user.name} size='sm' />
           <VStack align='start' gap={0}>
-            <Text fontWeight='medium' fontSize='sm'>
-              {user.name}
-            </Text>
+            <HStack gap={2}>
+              <Text fontWeight='medium' fontSize='sm'>
+                {user.name}
+              </Text>
+              {currentUser?.id === user.id && (
+                <Badge variant='subtle' colorPalette='blue' fontSize='xs'>
+                  you
+                </Badge>
+              )}
+            </HStack>
             <Text fontSize='xs' color='fg.muted'>
               {user.email}
             </Text>

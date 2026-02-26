@@ -10,6 +10,7 @@ import {
   Box,
   Drawer,
   Portal,
+  Flex,
   Button,
   CloseButton,
   Heading,
@@ -19,7 +20,16 @@ import {
 import { useTripRequests, useDeleteTripRequest } from '@/hooks';
 import { Column, DataTable } from '../../_components/table/DataTable';
 import { PaginationControl } from '@/components/ui/pagination/PaginationControl';
-import { Eye, Trash2, Plane, Calendar, MapPin, FileText } from 'lucide-react';
+import {
+  Eye,
+  Trash2,
+  Plane,
+  Calendar,
+  MapPin,
+  FileText,
+  User,
+  Mail,
+} from 'lucide-react';
 import { TripRequestResponseDto } from '@zagotours/types';
 import AdminTableWrapper from '../../_components/table/AdminTableWrapper';
 import { DataTableSkeleton } from '../../_components/table/Datatableskeleton';
@@ -185,9 +195,42 @@ export default function DashboardTripRequest() {
                 </Drawer.Title>
               </Drawer.Header>
 
-              <Drawer.Body py={6}>
+              <Drawer.Body py={6} overflow='auto'>
                 {selectedRequest && (
                   <Stack gap={6}>
+                    {/* Destination Section */}
+                    <Flex align='center' justify='space-between'>
+                      <Box>
+                        <Text fontSize='sm' color='fg.muted' mb={2}>
+                          Name
+                        </Text>
+                        <HStack gap={2}>
+                          <User
+                            size={18}
+                            color='var(--chakra-colors-blue-500)'
+                          />
+                          <Heading size='lg' color='blue.600'>
+                            {selectedRequest?.adventurer?.name}
+                          </Heading>
+                        </HStack>
+                      </Box>
+                      <Box>
+                        <Text fontSize='sm' color='fg.muted' mb={2}>
+                          Email
+                        </Text>
+                        <HStack gap={2}>
+                          <Mail
+                            size={18}
+                            color='var(--chakra-colors-blue-500)'
+                          />
+                          <Heading size='lg' color='blue.600'>
+                            {selectedRequest.adventurer.email}
+                          </Heading>
+                        </HStack>
+                      </Box>
+                    </Flex>
+
+                    <Separator />
                     {/* Destination Section */}
                     <Box>
                       <Text fontSize='sm' color='fg.muted' mb={2}>

@@ -44,15 +44,15 @@ export default function GettingStartedSection() {
       my={24}
       bg={{ base: 'primary', md: 'white' }}
       px={{ base: 2, md: 6 }}
-      py={{ base: 5, md: 15 }}
+      py={{ base: 6, md: 15 }}
       gap={10}
-      borderRadius={{ base: 'none', md: 'xl' }}
+      borderRadius={{ base: '3xl', md: '3xl' }}
       borderWidth='1px'
       borderColor='gray.200'
     >
       <Heading
         size={{ base: '2xl', md: '4xl' }}
-        color='primary'
+        color={{ base: 'gray.200', md: 'primary' }}
         fontWeight='bold'
         textAlign='center'
       >

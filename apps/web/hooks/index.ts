@@ -39,6 +39,7 @@ export * from './api/use-planning-calls';
 export * from './api/use-galleries';
 
 export * from './api/use-misc';
+export * from './api/use-platform-settings';
 
 //Settings and Stores
 export * from './settings/use-mounted-store';

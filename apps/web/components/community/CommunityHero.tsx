@@ -10,8 +10,10 @@ export const CommunityHero = () => {
     <Box
       bg='primary'
       color='textPrimary'
-      p={{ base: 5, md: 10 }}
+      px={{ base: 5, md: 10 }}
+      py={{ base: 2, md: 10 }}
       mb={9}
+      borderBottomRadius='3xl'
       position='relative'
     >
       <Stack textAlign='center' gap={5} align='center' py='50px'>

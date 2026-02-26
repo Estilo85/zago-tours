@@ -14,7 +14,7 @@ export default function Adventures() {
   const [selectedDate, setSelectedDate] = useState('');
 
   return (
-    <Stack mb={16} spaceY={16}>
+    <Stack mb={16} spaceY={10}>
       <AdventureHero
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

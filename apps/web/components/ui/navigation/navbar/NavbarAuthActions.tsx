@@ -90,8 +90,8 @@ export const NavbarAuthActions = ({ onClose }: { onClose?: () => void }) => {
           <Button
             aria-label='logout'
             cursor='pointer'
-            bg='primary'
-            color='white'
+            bg={{ base: 'white', md: 'primary' }}
+            color={{ base: 'primary', md: 'white' }}
             borderRadius='full'
             _hover={{ transform: 'scale(1.1)' }}
             onClick={() => {

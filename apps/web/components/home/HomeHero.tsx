@@ -22,10 +22,11 @@ export const HomeHero = () => {
     <Box
       bg='primary'
       color='textPrimary'
-      borderRadius={{ base: 'none', md: '3xl' }}
+      borderBottomRadius='3xl'
+      borderTopRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 4, md: 10 }}
       pb={{ base: 5, md: '200px' }}
-      mb={{ base: 5, md: '200px' }}
+      mb={{ base: 5, md: '150px' }}
       position='relative'
     >
       <Stack
@@ -50,7 +51,7 @@ export const HomeHero = () => {
         <Heading
           size={{ base: '2xl', md: '4xl' }}
           lineHeight='1.2'
-          maxW={{ base: '100%', md: '800px' }}
+          maxW={{ base: '100%', md: '400px' }}
           overflowWrap='anywhere'
           wordBreak='break-word'
         >
@@ -60,7 +61,7 @@ export const HomeHero = () => {
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
           opacity={0.9}
-          maxW={{ base: '100%', md: '600px' }}
+          maxW={{ base: '100%', md: '400px' }}
           overflowWrap='anywhere'
           wordBreak='break-word'
         >
@@ -80,7 +81,7 @@ export const HomeHero = () => {
       <Box
         width={{ base: '100%', md: '75%', lg: '65%' }}
         position={{ base: 'relative', md: 'absolute' }}
-        bottom={{ base: 0, md: '-200px' }}
+        bottom={{ base: 0, md: '-190px' }}
         left={{ base: 0, md: '50%' }}
         transform={{ base: 'none', md: 'translateX(-50%)' }}
         zIndex={10}

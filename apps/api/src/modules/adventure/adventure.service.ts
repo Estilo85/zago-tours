@@ -42,4 +42,8 @@ export class AdventureService extends BaseService<
   async checkIfLiked(userId: string, adventureId: string): Promise<boolean> {
     return !!(await this.adventureRepo.findLike(userId, adventureId));
   }
+
+  async getTripTypeCounts() {
+    return this.adventureRepo.getTripTypeCounts();
+  }
 }

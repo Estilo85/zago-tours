@@ -163,7 +163,7 @@ export class UserController {
       res: Response,
     ) => {
       const isHard = req.query.hard === 'true';
-      await this.userService.deleteUser(req.params.id, isHard);
+      await this.userService.deleteUser(req.params.id, req.userId!, isHard);
       return ResponseUtil.success(res, null, 'User deleted successfully');
     },
   );

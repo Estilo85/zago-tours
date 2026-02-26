@@ -28,6 +28,8 @@ router.post(
   controller.create,
 );
 
+router.get('/trip-type-counts', controller.getTripTypeCounts);
+
 router.post(
   '/bulk',
   authenticate,
