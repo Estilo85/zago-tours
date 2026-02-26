@@ -24,12 +24,7 @@ export default function Adventures() {
         onDateChange={setSelectedDate}
       />
       <TripTypeSection />
-      <Box>
-        <ResponsiveImage
-          src='/images/adventures/adventure-section.webp'
-          alt='adventure image'
-        />
-      </Box>
+
       <VerifiedAdventureSection
         searchQuery={searchQuery}
         selectedDestination={selectedDestination}
