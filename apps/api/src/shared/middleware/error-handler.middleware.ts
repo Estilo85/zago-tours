@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@zagotours/database';
 import { ResponseUtil } from '../utils/responseUtils';
-import { NotFoundException } from 'src/common/service/base.service';
+import {
+  ForbiddenException,
+  NotFoundException,
+} from 'src/common/service/base.service';
 
 export const errorHandler = (
   err: any,
@@ -12,6 +15,10 @@ export const errorHandler = (
   // Handle NotFoundException
   if (err instanceof NotFoundException) {
     return ResponseUtil.error(res, err.message, 404);
+  }
+
+  if (err instanceof ForbiddenException) {
+    return ResponseUtil.error(res, err.message, 403);
   }
 
   // Handle Zod Validation Errors

@@ -7,6 +7,7 @@ import {
   UserProfileResponseDto,
   ReferralStatsDto,
 } from '@zagotours/types';
+import { ForbiddenException } from 'src/common/service/base.service';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -225,16 +226,27 @@ export class UserService {
   /**
    * Delete user (soft or hard)
    */
-  // In UserService.ts
-  async deleteUser(userId: string, hard = false): Promise<void> {
+  async deleteUser(
+    userId: string,
+    requesterId: string,
+    hard = false,
+  ): Promise<void> {
+    // Prevent self-deletion
+    if (userId === requesterId) {
+      throw new ForbiddenException('You cannot delete your own account');
+    }
+
+    const user = await this.userRepository.findById(userId);
+    if (!user) return;
+
+    if (user.role === Role.SUPER_ADMIN) {
+      throw new ForbiddenException('Super admin accounts cannot be deleted');
+    }
+
     if (hard) {
       await this.userRepository.delete(userId);
     } else {
-      const user = await this.userRepository.findById(userId);
-      if (!user) return;
-
       const deletedEmail = `deleted_${Date.now()}_${user.email}`;
-
       await this.userRepository.update(userId, {
         deletedAt: new Date(),
         email: deletedEmail,

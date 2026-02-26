@@ -9,6 +9,12 @@ export class NotFoundException extends Error {
   }
 }
 
+export class ForbiddenException extends Error {
+  statusCode = 403;
+  constructor(message = 'Forbidden') {
+    super(message);
+  }
+}
 //===== BASE SERVICE =====
 export abstract class BaseService<
   TModel,
@@ -26,7 +32,7 @@ export abstract class BaseService<
       TCreateInput,
       TUpdateInput,
       TInclude
-    >
+    >,
   ) {}
 
   //===== CREATE =====
@@ -83,7 +89,7 @@ export abstract class BaseService<
       where?: TWhereInput;
       include?: TInclude;
       orderBy?: any;
-    }
+    },
   ): Promise<PaginationResult<TModel>> {
     return this.repository.paginate({
       page,
