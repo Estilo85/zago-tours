@@ -32,7 +32,7 @@ router.use('/api/adventures', adventureRouter);
 // // Reviews
 router.use('/api/reviews', reviewRoutes);
 router.use('/api/newsletters', newsletterRoutes);
-router.use('/api/platform-settings;', platformSettingsRoutes);
+router.use('/api/platform-settings', platformSettingsRoutes);
 
 // // Community
 router.use('/api/posts', postRoutes);

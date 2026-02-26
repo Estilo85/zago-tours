@@ -73,7 +73,7 @@ export const MobileNav = () => {
                     <CloseButton size='sm' color='white' />
                   </Drawer.CloseTrigger>
 
-                  <Drawer.Body>
+                  <Drawer.Body color='white'>
                     <VStack align='stretch' gap={6} mt={12}>
                       {navlinks.map((link, index) => (
                         <AppLink

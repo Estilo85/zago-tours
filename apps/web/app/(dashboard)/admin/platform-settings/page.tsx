@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/ui/button/Button';
 import {
   useCreatePlatformSettings,
   usePlatformSettings,
@@ -6,7 +7,6 @@ import {
 } from '@/hooks';
 import {
   Box,
-  Button,
   Container,
   Field,
   Flex,
@@ -170,7 +170,8 @@ export default function PlatformSettingsPage() {
               Cancel
             </Button>
             <Button
-              colorPalette='blue'
+              bg='primary'
+              color='white'
               loading={isPending}
               onClick={handleSubmit}
             >
@@ -186,7 +187,7 @@ export default function PlatformSettingsPage() {
     <Container maxW='3xl' py={8}>
       <Flex justify='space-between' align='center' mb={6}>
         <Heading size='md'>Platform Settings</Heading>
-        <Button colorPalette='blue' size='sm' onClick={openDialog}>
+        <Button bg='primary' color='white' size='sm' onClick={openDialog}>
           {settings ? 'Edit Settings' : 'Create Settings'}
         </Button>
       </Flex>
@@ -228,7 +229,7 @@ export default function PlatformSettingsPage() {
           <Text color='gray.500' mb={4}>
             No platform settings configured yet.
           </Text>
-          <Button colorPalette='blue' onClick={openDialog}>
+          <Button bg='primary' color='white' onClick={openDialog}>
             Get Started
           </Button>
         </Box>
