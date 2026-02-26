@@ -3,9 +3,8 @@
 import { SimpleGrid, Container, Heading } from '@chakra-ui/react';
 import { TripTypeCard } from '../ui/card/TripTypeCard';
 import { TripType, TripTypeLabels } from '@zagotours/types';
-import { useAdventures } from '@/hooks';
+import { useAdventureTripTypeCounts } from '@/hooks';
 
-// 1. Updated keys to match your Enum exactly
 const tripTypeImageMap: Record<TripType, string> = {
   [TripType.HIKING]: '/images/adventures/tripType/hiking.webp',
   [TripType.KAYAKING]: '/images/adventures/tripType/kayaking.webp',
@@ -21,27 +20,16 @@ const tripTypeImageMap: Record<TripType, string> = {
 };
 
 export default function TripTypeSection() {
-  const { data: response } = useAdventures();
-  const adventures = response?.data || [];
+  const { data: response } = useAdventureTripTypeCounts();
+  const counts = response?.data as Record<TripType, number> | undefined;
 
-  // Count adventures per type
-  const tripTypeCounts = adventures.reduce(
-    (acc, adventure) => {
-      const type = adventure.tripType;
-      acc[type] = (acc[type] || 0) + 1;
-      return acc;
-    },
-    {} as Record<TripType, number>,
-  );
-
-  // Map types for rendering
   const tripTypes = Object.entries(TripTypeLabels).map(([key, label]) => {
     const typeKey = key as TripType;
     return {
       key: typeKey,
       name: label,
-      count: tripTypeCounts[typeKey] || 0,
-      image: tripTypeImageMap[typeKey] || '/images/events/pricing-plan.webp',
+      count: counts?.[typeKey] ?? 0,
+      image: tripTypeImageMap[typeKey],
     };
   });
 

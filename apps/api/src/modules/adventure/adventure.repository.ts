@@ -129,4 +129,20 @@ export class AdventureRepository extends BaseRepository<
   async deleteLike(id: string) {
     return prisma.adventureLike.delete({ where: { id } });
   }
+
+  async getTripTypeCounts(): Promise<Record<string, number>> {
+    const counts = await prisma.adventure.groupBy({
+      by: ['tripType'],
+      where: { deletedAt: null },
+      _count: { tripType: true },
+    });
+
+    return counts.reduce(
+      (acc, item) => {
+        acc[item.tripType] = item._count.tripType;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+  }
 }

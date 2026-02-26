@@ -1,5 +1,11 @@
 import { Role } from '@zagotours/types';
-import {  HelpCircle, House, Image as ImageIcon, MapMinus, Video } from 'lucide-react';
+import {
+  HelpCircle,
+  House,
+  Image as ImageIcon,
+  MapMinus,
+  Video,
+} from 'lucide-react';
 import {
   LuCalendar,
   LuSettings,
@@ -40,7 +46,12 @@ const adminMenuItems = [
   { label: 'Subscribers', icon: LuGlobe, href: '/admin/newsletter' },
 
   // Settings
-  { label: 'Settings', icon: LuSettings, href: '/admin/settings' },
+  { label: 'Account Creation', icon: LuSettings, href: '/admin/create-admin' },
+  {
+    label: 'Platform Settings',
+    icon: LuSettings,
+    href: '/admin/platform-settings',
+  },
 ];
 
 export const MENU_CONFIG = {

@@ -414,11 +414,11 @@ export default function AdventureDetailPage({
             />
 
             <VStack align='start' gap={3}>
-              <HStack gap={3}>
+              <HStack gap={2}>
                 <Icon as={Lightbulb} />
                 <Heading>Safety Tips</Heading>
               </HStack>
-              <Text fontSize={{ base: 'sm', md: 'md' }} ml='25px'>
+              <Text fontSize={{ base: 'sm', md: 'md' }} ml='40px'>
                 {adventure?.safetyTips}
               </Text>
             </VStack>
@@ -587,7 +587,7 @@ export default function AdventureDetailPage({
               <HStack gap={3} align='start'>
                 <Icon as={CircleCheck} color='green.500' mt={0.5} />
                 <Text fontSize='sm' color='gray.600'>
-                  Professional certified tour guides and safety equipment
+                  {adventure?.inclusions}
                 </Text>
               </HStack>
             </Stack>
@@ -602,7 +602,7 @@ export default function AdventureDetailPage({
               <HStack gap={3} align='start'>
                 <Icon as={CircleX} color='red.400' mt={0.5} />
                 <Text fontSize='sm' color='gray.600'>
-                  Personal travel insurance and international flight tickets
+                  {adventure?.exclusions}
                 </Text>
               </HStack>
             </Stack>
@@ -628,8 +628,7 @@ export default function AdventureDetailPage({
             <HStack gap={4} p={2} bg='blue.50/50' borderRadius='xl'>
               <Stack gap={0} flex='1'>
                 <Text fontSize='xs' color='gray.500'>
-                  Expert in West African heritage tours with over 10 years of
-                  experience.
+                  {adventure?.partnerDescription}
                 </Text>
               </Stack>
             </HStack>

@@ -32,6 +32,14 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => buildUrl(`/users/${id}`),
   },
 
+  PLATFORM_SETTINGS: {
+    GET: buildUrl('/platform-settings'),
+    CREATE: buildUrl('/platform-settings'),
+    UPDATE: buildUrl('/platform-settings'),
+  },
+
+  // Inside ADVENTURES:
+
   // Adventures
   ADVENTURES: {
     LIST: buildUrl('/adventures'),
@@ -41,7 +49,7 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => buildUrl(`/adventures/${id}`),
     DELETE: (id: string) => buildUrl(`/adventures/${id}`),
     TOGGLE_LIKE: (id: string) => buildUrl(`/adventures/${id}/toggle-like`),
-
+    TRIP_TYPE_COUNTS: buildUrl('/adventures/trip-type-counts'),
     // Itineraries (nested under adventures)
     ITINERARIES: {
       LIST: (adventureId: string) =>

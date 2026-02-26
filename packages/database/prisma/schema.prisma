@@ -431,6 +431,9 @@ model Contract {
 model PlatformSettings {
   id           String   @id @default(uuid())
   siteName     String   @default("Zagotours")
+  description  String?
+  coverImage   String?
+  publicId     String?
   contactEmail String?
   maintenance  Boolean  @default(false)
   updatedAt    DateTime @updatedAt

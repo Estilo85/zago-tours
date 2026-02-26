@@ -2,7 +2,7 @@
 
 import { AvatarImage } from '@/components/media/AvatarImage';
 import { ResponsiveImage } from '@/components/media/ResponsiveImage';
-import { usePermissions, useUserProfile } from '@/hooks';
+import { usePermissions, usePlatformSettings, useUserProfile } from '@/hooks';
 import { Box, Flex, Heading, Icon, Text, Stack } from '@chakra-ui/react';
 import { Heart, ImagePlay, Share } from 'lucide-react';
 import React from 'react';
@@ -10,8 +10,10 @@ import Button from '../ui/button/Button';
 
 export default function PostHero() {
   const { data } = useUserProfile();
+  const { data: res } = usePlatformSettings();
   const { isAnyAdmin } = usePermissions();
   const profileImage = data?.data?.image;
+  const coverImage = res?.data?.coverImage;
 
   const handleShare = async () => {
     try {
@@ -35,7 +37,7 @@ export default function PostHero() {
       {/* Cover Image */}
       <Box w='full' h={{ base: '220px', md: '320px' }} position='relative'>
         <ResponsiveImage
-          src='/images/forms/coop-agent-form-bg.webp'
+          src={coverImage ?? '/images/forms/coop-agent-form-bg.webp'}
           alt='community banner'
           sizes='100vw'
           priority={true}

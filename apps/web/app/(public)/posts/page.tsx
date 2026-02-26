@@ -13,6 +13,7 @@ import React, { useState, useMemo } from 'react';
 export default function Post() {
   const { data, isLoading, isError, error } = usePosts();
   const { data: userData } = useCurrentUser();
+
   const [displayPosts, setDisplayPosts] = useState<any[]>([]);
 
   const userName = userData?.data?.name || 'User';

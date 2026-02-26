@@ -12,6 +12,7 @@ export type UploadContext =
   | 'itinerary'
   | 'adventure-gallery'
   | 'platform-gallery'
+  | 'platform-setting'
   | 'post'
   | 'profile'
   | 'contract'

@@ -14,6 +14,7 @@ import { itineraryRoutes } from 'src/modules/itinerary/itinerary.routes';
 import { dashboardRoute } from 'src/modules/dashboard/dashboard.routes';
 import { newsletterRoutes } from 'src/modules/newsletter/newsletter.routes';
 import { platformGalleryRoutes } from 'src/modules/platform-gallery/platform-gallery.routes';
+import { platformSettingsRoutes } from 'src/modules/platform-settings/platform-settings.routes';
 
 const router: Router = Router();
 const adventureRouter: Router = Router();
@@ -31,6 +32,7 @@ router.use('/api/adventures', adventureRouter);
 // // Reviews
 router.use('/api/reviews', reviewRoutes);
 router.use('/api/newsletters', newsletterRoutes);
+router.use('/api/platform-settings;', platformSettingsRoutes);
 
 // // Community
 router.use('/api/posts', postRoutes);

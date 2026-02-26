@@ -44,15 +44,7 @@ export default function RootLayout({
       >
         <Provider>
           <Flex direction='column' minH='100dvh' position='relative'>
-            <Box
-              as='header'
-              position='sticky'
-              top='0'
-              zIndex='1000'
-              bg='primary'
-              borderBottom='1px solid'
-              color='white'
-            >
+            <Box as='header' position='sticky' top='0' zIndex='1000'>
               <Navbar />
             </Box>
 

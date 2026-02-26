@@ -50,6 +50,13 @@ export function useAdventure(id: string) {
   });
 }
 
+export function useAdventureTripTypeCounts() {
+  return useQuery<Record<string, number>>({
+    queryKey: adventureKeys.tripTypeCounts(),
+    queryFn: () => apiRequest(API_ENDPOINTS.ADVENTURES.TRIP_TYPE_COUNTS),
+  });
+}
+
 export function useItineraries(adventureId: string) {
   return useQuery({
     queryKey: adventureKeys.itineraries(adventureId),
