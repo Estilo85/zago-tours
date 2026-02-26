@@ -29,6 +29,8 @@ export const MobileNav = () => {
       bg='primary'
       color='white'
       display={{ base: 'block', md: 'none' }}
+      borderBottom='1px solid'
+      borderColor='gray.50'
     >
       <Flex justify='space-between' align='center'>
         <Logo />

@@ -67,7 +67,8 @@ export const AdventureHero = ({
   return (
     <Box
       bg='primary'
-      borderRadius='4xl'
+      borderBottomRadius='4xl'
+      borderTopRadius={{ base: 'none', md: '4xl' }}
       p={{ base: 2, md: 10 }}
       mb={{ base: 0, md: '40px' }}
     >

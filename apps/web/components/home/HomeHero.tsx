@@ -22,7 +22,8 @@ export const HomeHero = () => {
     <Box
       bg='primary'
       color='textPrimary'
-      borderRadius={{ base: 'none', md: '3xl' }}
+      borderBottomRadius='3xl'
+      borderTopRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 4, md: 10 }}
       pb={{ base: 5, md: '200px' }}
       mb={{ base: 5, md: '150px' }}

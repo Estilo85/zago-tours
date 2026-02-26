@@ -35,7 +35,7 @@ export default function PostHero() {
   };
 
   return (
-    <Box w='full' bg='white' borderBottom='1px solid gray'>
+    <Box w='full' bg='white' borderBottom='1px solid' borderColor='gray.50'>
       {/* Cover Image */}
       <Box w='full' h={{ base: '220px', md: '350px' }} position='relative'>
         <ResponsiveImage

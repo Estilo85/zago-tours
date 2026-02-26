@@ -23,6 +23,7 @@ export const Sidebar = ({
         href={item.href}
         onClick={onClose}
         p={3}
+        pb={9}
         borderRadius='md'
         bg={isActive ? 'textInverse' : 'transparent'}
         color={isActive ? 'dark' : 'textPrimary'}
