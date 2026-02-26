@@ -270,7 +270,7 @@ export default function OurStory() {
         <TransformationSection />
         <PurposeSection />
         {!isAuthenticated && (
-          <Box textAlign='center'>
+          <Box textAlign='center' mb='9'>
             <AppLink href='/register'>
               <Button
                 aria-label='join-us'

@@ -88,12 +88,15 @@ const ItineraryCard = ({
                           fill: 'white !important',
                           stroke: 'white !important',
                         },
-                        '& [data-part="item"]': { padding: '2px' },
+                        '& [data-part="item"]': { padding: '1px' },
                       }}
                     />
                   </RatingGroup.Root>
                 </Box>
-                <Text>{adventure.rating}</Text>
+                <Text fontWeight='bold' fontSize='xs' ml='1' color='gray.600'>
+                  {' '}
+                  {adventure.rating.toFixed(1)}
+                </Text>
               </HStack>
 
               {/* Badges with wrap and gap fixed */}

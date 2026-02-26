@@ -84,6 +84,5 @@ export const config = {
     '/corporate-agent/:path*',
     '/adventurer/:path*',
     '/affiliate/:path*',
-    '/community/:path*',
   ],
 };
