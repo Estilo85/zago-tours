@@ -35,7 +35,7 @@ export default function PostHero() {
   };
 
   return (
-    <Box w='full' bg='white' borderBottom='1px solid' borderColor='gray.50'>
+    <Box w='full' bg='white' borderBottom='1px solid' borderColor='gray.200'>
       {/* Cover Image */}
       <Box w='full' h={{ base: '220px', md: '350px' }} position='relative'>
         <ResponsiveImage
@@ -82,7 +82,7 @@ export default function PostHero() {
       {/* Text Content Section */}
       <Stack
         px={4}
-        pt={{ base: 8, md: 6 }}
+        pt={{ base: 5, md: 4 }}
         pb={8}
         gap={2}
         align={{ base: 'center', md: 'flex-start' }}
