@@ -1,10 +1,8 @@
-// app/middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { Role } from '@zagotours/types';
 
-// Role home paths
 const ROLE_HOME: Record<Role, string> = {
   [Role.SUPER_ADMIN]: '/admin',
   [Role.ADMIN]: '/admin',
@@ -14,7 +12,6 @@ const ROLE_HOME: Record<Role, string> = {
   [Role.AFFILIATE]: '/affiliate',
 };
 
-// Role-based access map
 const ROLE_ACCESS: Record<string, Role[]> = {
   '/admin': [Role.SUPER_ADMIN, Role.ADMIN],
   '/independent-agent': [Role.INDEPENDENT_AGENT],
@@ -23,10 +20,8 @@ const ROLE_ACCESS: Record<string, Role[]> = {
   '/affiliate': [Role.AFFILIATE],
 };
 
-// Routes that require authentication but are not role-specific
 const AUTH_REQUIRED_ROUTES = ['/posts'];
 
-// Public routes (no auth needed)
 const PUBLIC_ROUTES = [
   '/login',
   '/register',
@@ -34,16 +29,13 @@ const PUBLIC_ROUTES = [
   '/forgot-password',
 ];
 
-// Middleware
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Allow public routes
   if (PUBLIC_ROUTES.some((p) => path.startsWith(p))) {
     return NextResponse.next();
   }
 
-  // Get token
   const token = await getToken({ req: request });
   if (!token) {
     const loginUrl = new URL('/login', request.url);
@@ -52,8 +44,13 @@ export async function proxy(request: NextRequest) {
   }
 
   const role = token.role as Role;
+  const roleHome = ROLE_HOME[role];
 
-  //  Handle role-restricted routes
+  if (path === '/dashboard') {
+    if (!roleHome) return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(roleHome, request.url));
+  }
+
   const matchedRoleRoute = Object.keys(ROLE_ACCESS).find((prefix) =>
     path.startsWith(prefix),
   );
@@ -61,26 +58,23 @@ export async function proxy(request: NextRequest) {
   if (matchedRoleRoute) {
     const allowedRoles = ROLE_ACCESS[matchedRoleRoute];
     if (!allowedRoles?.includes(role)) {
-      // Redirect unauthorized users to their dashboard
-      return NextResponse.redirect(
-        new URL(ROLE_HOME[role] || '/adventurer', request.url),
-      );
+      if (!roleHome)
+        return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL(roleHome, request.url));
     }
     return NextResponse.next();
   }
 
-  //  Handle general auth-required routes
   if (AUTH_REQUIRED_ROUTES.some((prefix) => path.startsWith(prefix))) {
     return NextResponse.next();
   }
 
-  // Everything else is public
   return NextResponse.next();
 }
 
-// Dashboard routes
 export const config = {
   matcher: [
+    '/dashboard',
     '/dashboard/:path*',
     '/admin/:path*',
     '/independent-agent/:path*',
