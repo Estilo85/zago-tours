@@ -35,13 +35,17 @@ export default function UsersAdminPage() {
     isLoading,
     isError,
   } = useUsers({ page: currentPage });
-  const { data: currentUser } = useCurrentUser();
+  const { data: res } = useCurrentUser();
   const deleteUserMutation = useDeleteUser();
+  const currentUser = res?.data;
 
+  
+  //Handle view
   const handleView = (user: User) => {
     router.push(`/admin/users/${user.id}`);
   };
 
+  //Handle Edit
   const handleEdit = (user: User) => {
     router.push(`/admin/users/${user.id}/edit`);
   };
