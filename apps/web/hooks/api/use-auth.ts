@@ -49,7 +49,7 @@ export function useAuth() {
       console.log('raw search:', window.location.search);
       console.log('callbackUrl:', callbackUrl);
       if (callbackUrl) {
-        router.push(decodeURIComponent(callbackUrl));
+        router.replace(decodeURIComponent(callbackUrl));
         return;
       }
 
