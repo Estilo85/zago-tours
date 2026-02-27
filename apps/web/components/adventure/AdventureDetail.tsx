@@ -421,7 +421,7 @@ export default function AdventureDetailPage({
                 <Icon as={Lightbulb} />
                 <Heading>Safety Tips</Heading>
               </HStack>
-              <Text fontSize={{ base: 'sm', md: 'md' }} ml='40px'>
+              <Text fontSize={{ base: 'sm', md: 'md' }} ml='-10px'>
                 {adventure?.safetyTips}
               </Text>
             </VStack>

@@ -41,7 +41,7 @@ export const StatsHero = () => {
       justifyContent='center'
       align='center'
       gap={{ base: 8, lg: 12 }}
-      mt={{ base: 4, md: 44 }}
+      mt={{ base: 4, md: 25 }}
       mb={{ base: 4, md: 20 }}
       py={6}
       px={4}
