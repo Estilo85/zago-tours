@@ -19,56 +19,6 @@ export class AuthService {
   // ============================================
   // REGISTRATION
   // ============================================
-
-  // async register(data: RegisterDto): Promise<UserResponse> {
-  //   const existingUser = await this.authRepository.findByEmail(data.email);
-  //   if (existingUser) {
-  //     throw new Error('Email already exists');
-  //   }
-
-  //   this.validateRoleSpecificFields(data);
-
-  //   const hashedPassword = await BcryptUtil.hash(data.password);
-  //   const referralCode = await this.generateUniqueReferralCode(data.role);
-
-  //   let referredById: string | null = null;
-
-  //   if (data.referralCode) {
-  //     const referrer = await this.authRepository.findByReferralCode(
-  //       data.referralCode.trim().toUpperCase(),
-  //     );
-
-  //     if (referrer) {
-  //       referredById = referrer.id;
-  //     }
-  //   }
-
-  //   const userData = {
-  //     name: data.name,
-  //     email: data.email,
-  //     password: hashedPassword,
-  //     phone: data.phone,
-  //     country: data.country,
-  //     role: data.role,
-  //     referralCode,
-  //     referredById,
-  //   };
-
-  //   const profileData = this.extractProfileData(data);
-
-  //   const user = await this.authRepository.registerWithProfile(
-  //     userData,
-  //     data.role,
-  //     profileData,
-  //   );
-  //   //Welcome Email
-  //   EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
-  //     console.error('Email background error:', err),
-  //   );
-
-  //   return this.mapUserResponse(user);
-  // }
-
   async register(data: RegisterDto): Promise<UserResponse> {
     const [exists, referrer] = await Promise.all([
       this.authRepository.emailExists(data.email),
@@ -109,11 +59,9 @@ export class AuthService {
       profileData,
     );
 
-    setImmediate(() => {
-      EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
-        console.error('Email background error:', err),
-      );
-    });
+    EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
+      console.error('Email background error:', err),
+    );
 
     return this.mapUserResponse(user);
   }

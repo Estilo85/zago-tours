@@ -20,6 +20,7 @@ export class AdventureRepository extends BaseRepository<
       },
     },
     gallery: {
+      where: { deletedAt: null },
       orderBy: { order: 'asc' },
       take: 1,
     },
@@ -27,7 +28,7 @@ export class AdventureRepository extends BaseRepository<
 
   private readonly standardInclude: Prisma.AdventureInclude = {
     itineraries: { orderBy: { dayNumber: 'asc' } },
-    gallery: { orderBy: { order: 'asc' } },
+    gallery: { where: { deletedAt: null }, orderBy: { order: 'asc' } },
     likes: {
       include: {
         user: {
@@ -39,7 +40,7 @@ export class AdventureRepository extends BaseRepository<
       select: {
         likes: true,
         itineraries: true,
-        gallery: true,
+        gallery: { where: { deletedAt: null } },
       },
     },
   };
@@ -73,11 +74,11 @@ export class AdventureRepository extends BaseRepository<
     });
   }
 
-  async findById(
-    id: string,
-    include?: Prisma.AdventureInclude,
-  ): Promise<Adventure | null> {
-    return super.findById(id, include || this.standardInclude);
+  async findById(id: string, include?: Prisma.AdventureInclude) {
+    return this.modelDelegate.findFirst({
+      where: { id, deletedAt: null },
+      include: include || this.standardInclude,
+    });
   }
 
   async paginate(options: any) {
