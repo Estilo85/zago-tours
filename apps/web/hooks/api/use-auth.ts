@@ -8,13 +8,11 @@ import {
   ForgotPasswordDto,
   ResetPasswordDto,
   AdminRegisterDto,
-  Role,
 } from '@zagotours/types';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { authKeys } from './query-keys';
 import { notify } from '@/lib/toast';
-import { ROLE_HOME } from '@/config/roles.config';
 
 // ============================================
 // AUTH HOOK (Login, Register, Logout)
@@ -32,7 +30,11 @@ export function useAuth() {
         redirect: false,
       });
 
-      if (result?.error || !result?.ok) {
+      if (result?.error) {
+        throw new Error('Invalid credentials');
+      }
+
+      if (!result?.ok) {
         throw new Error('Invalid credentials');
       }
 
@@ -42,21 +44,21 @@ export function useAuth() {
       queryClient.invalidateQueries({ queryKey: authKeys.session() });
       queryClient.invalidateQueries({ queryKey: authKeys.profile() });
 
-      const callbackUrl = new URLSearchParams(window.location.search).get(
-        'callbackUrl',
-      );
-      const session = await getSession();
-      const role = session?.user?.role as Role;
-      const destination = callbackUrl
-        ? decodeURIComponent(callbackUrl)
-        : (ROLE_HOME[role] ?? '/dashboard');
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get('callbackUrl');
 
-      router.push(destination);
+      if (callbackUrl) {
+        router.push(decodeURIComponent(callbackUrl));
+        return;
+      }
+
+      router.push('/dashboard');
     },
     onError: () => {
       notify('Login Failed', 'error', 'Invalid email or password');
     },
   });
+
   // --- REGISTER MUTATION ---
   const registerMutation = useMutation({
     mutationFn: (data: RegisterDto) =>
