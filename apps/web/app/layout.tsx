@@ -23,12 +23,24 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Zagotours',
-  description: 'Travel with ease',
+  title: {
+    default: 'Zagotours',
+    template: '%s | Zagotours',
+  },
+  description:
+    'Making adventure tourism safe for young travelers 18-35 again. Find and book thrilling trips vetted against our safety standards. ',
+  keywords: ['travel', 'tours', 'your other keywords'],
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
     apple: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'Zagotours',
+    description: 'Your custom description here.',
+    url: 'https://zagotours.com',
+    siteName: 'Zagotours',
+    type: 'website',
   },
 };
 

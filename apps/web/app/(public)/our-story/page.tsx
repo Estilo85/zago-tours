@@ -256,7 +256,7 @@ export default function OurStory() {
             color='primary'
             fontWeight='bolder'
           >
-            The moment everything changed
+            The Moment Everything Changed
           </Text>
           <Box
             w='100%'
