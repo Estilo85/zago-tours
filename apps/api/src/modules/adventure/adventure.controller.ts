@@ -28,6 +28,15 @@ export class AdventureController {
     async (req: ReqBody<CreateAdventureDto>, res: Response) => {
       const adventureData = req.body;
 
+      if (adventureData.price)
+        adventureData.price = Number(adventureData.price);
+      if (adventureData.days) adventureData.days = Number(adventureData.days);
+      if (adventureData.safetyScore)
+        adventureData.safetyScore = Number(adventureData.safetyScore);
+      if (adventureData.rating)
+        adventureData.rating = Number(adventureData.rating);
+      if (adventureData.date) adventureData.date = new Date(adventureData.date);
+
       if (req.file) {
         const uploadResult = await CloudinaryService.uploadFile(
           req.file,
