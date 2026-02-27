@@ -8,6 +8,7 @@ import {
   ClientToaster,
 } from '@/components/layout/ClientComponents';
 import { Box, Flex } from '@chakra-ui/react';
+import MaintenancePage from '@/components/layout/MaintenancePage';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -36,6 +37,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true') {
+    return <MaintenancePage />;
+  }
+
   return (
     <html lang='en'>
       <body
