@@ -124,16 +124,29 @@ export default function CreateAdventurePage() {
     formData.append('days', adventure.days.toString());
     formData.append('safetyScore', adventure.safetyScore.toString());
     formData.append('safetyTips', adventure.safetyTips);
-    formData.append('rating', Number(adventure.rating).toString());
+
+    if (adventure.rating) {
+      formData.append('rating', Number(adventure.rating).toString());
+    }
+
     formData.append('date', adventure.date);
 
-    if (adventure.certification)
+    if (adventure.certification) {
       formData.append('certification', adventure.certification);
-    if (adventure.gear) formData.append('gear', adventure.gear);
+    }
+    if (adventure.gear) {
+      formData.append('gear', adventure.gear);
+    }
 
-    formData.append('inclusions', adventure.inclusions);
-    formData.append('exclusions', adventure.exclusions);
-    formData.append('partnerDescription', adventure.partnerDescription);
+    if (adventure.inclusions) {
+      formData.append('inclusions', adventure.inclusions);
+    }
+    if (adventure.exclusions) {
+      formData.append('exclusions', adventure.exclusions);
+    }
+    if (adventure.partnerDescription) {
+      formData.append('partnerDescription', adventure.partnerDescription);
+    }
 
     // Append image if exists
     if (adventure.imageFile) {

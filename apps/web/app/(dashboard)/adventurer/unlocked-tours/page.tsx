@@ -32,7 +32,7 @@ const videos = [
     url: 'https://youtube.com/shorts/MPBg_hmeCSg',
   },
   {
-    name: 'White water rafting (Uganda)',
+    name: 'White Water Rafting (Uganda)',
     url: 'https://youtube.com/shorts/To6gLWHcwMA',
   },
   {

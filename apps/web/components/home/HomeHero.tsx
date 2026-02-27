@@ -65,7 +65,8 @@ export const HomeHero = () => {
           overflowWrap='anywhere'
           wordBreak='break-word'
         >
-          You take adventure seriously. We take your safety even more seriously.
+          You take adventure seriously. <br /> We take your safety even more
+          seriously.
         </Text>
 
         {!isAuthenticated && (
