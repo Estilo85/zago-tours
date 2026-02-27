@@ -181,7 +181,7 @@ export function useDeleteAdventure() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adventureKeys.lists() });
-      notify('Adventure Deleted ', 'success', 'Failed to delete adventure');
+      notify('Adventure Deleted ', 'success', 'Adventure Deleted Successfully');
     },
     onError: (_error, _variables, context) => {
       if (context?.previousData) {
