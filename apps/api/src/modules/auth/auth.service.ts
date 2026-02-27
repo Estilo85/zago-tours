@@ -19,29 +19,26 @@ export class AuthService {
   // ============================================
   // REGISTRATION
   // ============================================
-
   async register(data: RegisterDto): Promise<UserResponse> {
-    const existingUser = await this.authRepository.findByEmail(data.email);
-    if (existingUser) {
-      throw new Error('Email already exists');
-    }
+    const [exists, referrer] = await Promise.all([
+      this.authRepository.emailExists(data.email),
+      data.referralCode
+        ? this.authRepository.findByReferralCode(
+            data.referralCode.trim().toUpperCase(),
+          )
+        : Promise.resolve(null),
+    ]);
+
+    if (exists) throw new Error('Email already exists');
 
     this.validateRoleSpecificFields(data);
 
-    const hashedPassword = await BcryptUtil.hash(data.password);
-    const referralCode = await this.generateUniqueReferralCode(data.role);
+    const [hashedPassword, referralCode] = await Promise.all([
+      BcryptUtil.hash(data.password),
+      this.generateUniqueReferralCode(data.role),
+    ]);
 
-    let referredById: string | null = null;
-
-    if (data.referralCode) {
-      const referrer = await this.authRepository.findByReferralCode(
-        data.referralCode.trim().toUpperCase(),
-      );
-
-      if (referrer) {
-        referredById = referrer.id;
-      }
-    }
+    const referredById = referrer?.id ?? null;
 
     const userData = {
       name: data.name,
@@ -61,7 +58,7 @@ export class AuthService {
       data.role,
       profileData,
     );
-    //Welcome Email
+
     EmailService.sendWelcomeEmail(user.email, user.name).catch((err) =>
       console.error('Email background error:', err),
     );

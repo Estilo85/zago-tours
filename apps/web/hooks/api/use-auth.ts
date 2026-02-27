@@ -43,6 +43,15 @@ export function useAuth() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: authKeys.session() });
       queryClient.invalidateQueries({ queryKey: authKeys.profile() });
+
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get('callbackUrl');
+
+      if (callbackUrl) {
+        window.location.href = decodeURIComponent(callbackUrl);
+        return;
+      }
+
       router.push('/dashboard');
     },
     onError: () => {
