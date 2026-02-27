@@ -8,11 +8,13 @@ import {
   ForgotPasswordDto,
   ResetPasswordDto,
   AdminRegisterDto,
+  Role,
 } from '@zagotours/types';
 import { apiRequest } from '@/lib/api';
 import { API_ENDPOINTS } from '@/config/api.config';
 import { authKeys } from './query-keys';
 import { notify } from '@/lib/toast';
+import { ROLE_HOME } from '@/config/roles.config';
 
 // ============================================
 // AUTH HOOK (Login, Register, Logout)
@@ -43,7 +45,17 @@ export function useAuth() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: authKeys.session() });
       queryClient.invalidateQueries({ queryKey: authKeys.profile() });
-      router.push('/dashboard');
+
+      const params = new URLSearchParams(window.location.search);
+      const callbackUrl = params.get('callbackUrl');
+
+      if (callbackUrl) {
+        router.push(callbackUrl);
+      } else {
+        const session = await getSession();
+        const role = session?.user?.role as Role;
+        router.push(ROLE_HOME[role] ?? '/dashboard');
+      }
     },
     onError: () => {
       notify('Login Failed', 'error', 'Invalid email or password');
