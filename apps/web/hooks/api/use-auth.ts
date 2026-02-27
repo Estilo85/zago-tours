@@ -46,7 +46,8 @@ export function useAuth() {
 
       const params = new URLSearchParams(window.location.search);
       const callbackUrl = params.get('callbackUrl');
-
+      console.log('raw search:', window.location.search);
+      console.log('callbackUrl:', callbackUrl);
       if (callbackUrl) {
         router.push(decodeURIComponent(callbackUrl));
         return;
