@@ -25,6 +25,14 @@ export class AuthRepository extends BaseRepository<
     });
   }
 
+  async emailExists(email: string): Promise<boolean> {
+    const user = await this.modelDelegate.findFirst({
+      where: { email, deletedAt: null },
+      select: { id: true },
+    });
+    return !!user;
+  }
+
   //===== FIND BY ID (if you have this method) =======
   async findById(id: string): Promise<User | null> {
     return this.modelDelegate.findFirst({
