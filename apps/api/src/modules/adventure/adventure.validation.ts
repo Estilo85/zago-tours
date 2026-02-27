@@ -17,8 +17,12 @@ export const createAdventureSchema = z.object({
   safetyTips: z.string().optional(),
   mediaUrl: z.url().optional(),
   publicId: z.string().optional(),
-});
 
+  rating: z.coerce.number().min(0).max(5).optional(),
+  inclusions: z.string().optional(),
+  exclusions: z.string().optional(),
+  partnerDescription: z.string().optional(),
+});
 export type CreateAdventureInput = z.infer<typeof createAdventureSchema>;
 export const bulkCreateAdventureSchema: z.ZodType<CreateAdventureInput[]> = z
   .array(createAdventureSchema)
