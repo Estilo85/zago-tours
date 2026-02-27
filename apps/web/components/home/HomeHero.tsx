@@ -26,7 +26,7 @@ export const HomeHero = () => {
       borderTopRadius={{ base: 'none', md: '3xl' }}
       p={{ base: 4, md: 10 }}
       pb={{ base: 5, md: '200px' }}
-      mb={{ base: 5, md: '150px' }}
+      mb={{ base: 5, md: '200px' }}
       position='relative'
     >
       <Stack
