@@ -32,11 +32,7 @@ export function useAuth() {
         redirect: false,
       });
 
-      if (result?.error) {
-        throw new Error('Invalid credentials');
-      }
-
-      if (!result?.ok) {
+      if (result?.error || !result?.ok) {
         throw new Error('Invalid credentials');
       }
 
@@ -46,22 +42,21 @@ export function useAuth() {
       queryClient.invalidateQueries({ queryKey: authKeys.session() });
       queryClient.invalidateQueries({ queryKey: authKeys.profile() });
 
-      const params = new URLSearchParams(window.location.search);
-      const callbackUrl = params.get('callbackUrl');
+      const callbackUrl = new URLSearchParams(window.location.search).get(
+        'callbackUrl',
+      );
+      const session = await getSession();
+      const role = session?.user?.role as Role;
+      const destination = callbackUrl
+        ? decodeURIComponent(callbackUrl)
+        : (ROLE_HOME[role] ?? '/dashboard');
 
-      if (callbackUrl) {
-        router.push(callbackUrl);
-      } else {
-        const session = await getSession();
-        const role = session?.user?.role as Role;
-        router.push(ROLE_HOME[role] ?? '/dashboard');
-      }
+      router.push(destination);
     },
     onError: () => {
       notify('Login Failed', 'error', 'Invalid email or password');
     },
   });
-
   // --- REGISTER MUTATION ---
   const registerMutation = useMutation({
     mutationFn: (data: RegisterDto) =>
