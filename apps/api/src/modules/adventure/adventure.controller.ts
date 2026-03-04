@@ -202,6 +202,7 @@ export class AdventureController {
       return ResponseUtil.paginated(res, result);
     },
   );
+
   //==== GET ADVENTURE BY ID ======
   getById = asyncHandler(async (req: ReqParams<UuidParam>, res: Response) => {
     const { id } = req.params;
@@ -216,6 +217,7 @@ export class AdventureController {
 
     return ResponseUtil.success(res, result);
   });
+
   //==== DELETE AN ADVENTURE ======
   delete = asyncHandler(
     async (req: ReqParamsQuery<UuidParam, { hard: string }>, res: Response) => {
