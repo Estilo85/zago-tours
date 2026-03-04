@@ -191,14 +191,22 @@ export class UserService {
   /**
    * Get user by ID (admin)
    */
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string): Promise<UserProfileResponseDto> {
     const user = await this.userRepository.findWithProfile(userId);
 
     if (!user) {
       throw new Error('User not found');
     }
 
-    return user;
+    const stats = await this.userRepository.getUserStats(userId);
+
+    const { password, resetPasswordToken, resetPasswordExpires, ...profile } =
+      user as any;
+
+    return {
+      ...profile,
+      stats,
+    } as UserProfileResponseDto;
   }
 
   /**
