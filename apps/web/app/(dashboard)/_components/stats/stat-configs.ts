@@ -23,21 +23,36 @@ export const getAdminStatsConfig = (data: AdminStats): StatCardData[] => [
   {
     label: 'Total Users',
     value: data?.users.total.toLocaleString(),
+    trend: `+${data?.users.newThisMonth} this month`,
+    icon: LuUsers,
+  },
+  {
+    label: 'Active Today',
+    value: data?.users.activeToday.toLocaleString(),
     icon: LuUsers,
   },
   {
     label: 'Total Adventures',
     value: data?.adventures.total.toLocaleString(),
+    trend: `${data?.adventures.verified} verified`,
     icon: LuPlaneTakeoff,
+  },
+  {
+    label: 'Avg Adventure Price',
+    value: `$${data?.adventures.avgPrice?.toFixed(0) || '0'}`,
+    trend: `${data?.adventures.active} active`,
+    icon: LuTrendingUp,
   },
   {
     label: 'Upcoming Events',
     value: data?.events.upcoming.toLocaleString(),
+    trend: `${data?.events.totalRegistrations} registrations`,
     icon: LuCalendarCheck,
   },
   {
-    label: 'Total Posts',
+    label: 'Community Posts',
     value: data?.community.totalPosts.toLocaleString(),
+    trend: `${data?.community.totalComments} comments`,
     icon: LuFileText,
   },
   {
@@ -47,14 +62,21 @@ export const getAdminStatsConfig = (data: AdminStats): StatCardData[] => [
     icon: LuStar,
   },
   {
-    label: 'Unassigned Trip Requests',
-    value: data?.requests.unassignedTripRequests.toLocaleString(),
-    icon: AlertCircle,
+    label: 'Trip Requests',
+    value: data?.requests.totalTripRequests.toLocaleString(),
+    trend: `${data?.requests.unassignedTripRequests} unassigned`,
+    icon: LuClipboardList,
   },
   {
-    label: 'Unassigned Callbacks',
-    value: data?.requests.unassignedCallbacks.toLocaleString(),
+    label: 'Callback Requests',
+    value: data?.requests.totalCallbackRequests.toLocaleString(),
+    trend: `${data?.requests.pendingCallbacks} pending`,
     icon: LuPhone,
+  },
+  {
+    label: 'Planning Calls',
+    value: data?.requests.totalPlanningCalls.toLocaleString(),
+    icon: LuCalendarCheck,
   },
   {
     label: 'Total Referrals',

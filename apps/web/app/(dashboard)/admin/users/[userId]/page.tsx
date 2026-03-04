@@ -167,6 +167,50 @@ export default function UserDetailPage() {
         </Card.Body>
       </Card.Root>
 
+      {/* Stats */}
+
+      <Card.Root mb={6}>
+        <Card.Body>
+          <HStack gap={8} justify='center'>
+            <VStack gap={1}>
+              <Text fontSize='2xl' fontWeight='bold'>
+                {user.stats?.totalReferrals}
+              </Text>
+              <Text fontSize='sm' color='fg.muted'>
+                Referrals
+              </Text>
+            </VStack>
+            <Separator orientation='vertical' height='40px' />
+            <VStack gap={1}>
+              <Text fontSize='2xl' fontWeight='bold'>
+                {user.stats?.totalPosts}
+              </Text>
+              <Text fontSize='sm' color='fg.muted'>
+                Posts
+              </Text>
+            </VStack>
+            <Separator orientation='vertical' height='40px' />
+            <VStack gap={1}>
+              <Text fontSize='2xl' fontWeight='bold'>
+                {user.stats?.totalReviews}
+              </Text>
+              <Text fontSize='sm' color='fg.muted'>
+                Reviews
+              </Text>
+            </VStack>
+            <Separator orientation='vertical' height='40px' />
+            <VStack gap={1}>
+              <Text fontSize='2xl' fontWeight='bold'>
+                {user.stats?.totalAdventureLikes}
+              </Text>
+              <Text fontSize='sm' color='fg.muted'>
+                Likes
+              </Text>
+            </VStack>
+          </HStack>
+        </Card.Body>
+      </Card.Root>
+
       {/* User Information Grid */}
       <Grid templateColumns='repeat(2, 1fr)' gap={6}>
         {/* Basic Information */}
