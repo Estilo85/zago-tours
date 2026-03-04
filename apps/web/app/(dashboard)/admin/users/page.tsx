@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Heading,
@@ -26,20 +26,23 @@ import Button from '@/components/ui/button/Button';
 
 export default function UsersAdminPage() {
   const router = useRouter();
-  const [currentPage, setCurrentPage] = React.useState(1);
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  //Toggle drawer
   const [userToDelete, setUserToDelete] = React.useState<User | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
-  const {
-    data: response,
-    isLoading,
-    isError,
-  } = useUsers({ page: currentPage });
+  //Get all users
+  const { data: response, isLoading, isError } = useUsers({ page, limit });
+
   const { data: res } = useCurrentUser();
   const deleteUserMutation = useDeleteUser();
   const currentUser = res?.data;
 
-  
+  const pagination = response?.pagination;
+
   //Handle view
   const handleView = (user: User) => {
     router.push(`/admin/users/${user.id}`);
@@ -181,6 +184,7 @@ export default function UsersAdminPage() {
     },
   ];
 
+  //Error
   if (isError)
     return (
       <Center h='400px'>
@@ -190,6 +194,7 @@ export default function UsersAdminPage() {
       </Center>
     );
 
+  //Data avalaibility
   const hasData = response?.data && response.data.length > 0;
 
   return (
@@ -210,11 +215,14 @@ export default function UsersAdminPage() {
         ) : hasData ? (
           <>
             <DataTable columns={columns} data={response.data} />
-            {response?.pagination && (
+            {pagination && (
               <Box borderTopWidth='1px' py={4}>
                 <PaginationControl
-                  pagination={response.pagination}
-                  onPageChange={setCurrentPage}
+                  pagination={pagination}
+                  onPageChange={(newPage) => {
+                    setPage(newPage);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
                 />
               </Box>
             )}
