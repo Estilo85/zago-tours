@@ -22,10 +22,31 @@ export function useUserReferrals() {
   });
 }
 
-export function useUsers(filters?: any) {
+export function useUsers(filters?: {
+  page?: number;
+  limit?: number;
+  role?: string;
+  status?: string;
+  search?: string;
+}) {
   return useQuery({
     queryKey: userKeys.list(filters),
-    queryFn: () => apiRequest(API_ENDPOINTS.USERS.LIST),
+    queryFn: () => {
+      let url = API_ENDPOINTS.USERS.LIST;
+
+      if (filters) {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            params.append(key, value.toString());
+          }
+        });
+        const queryString = params.toString();
+        if (queryString) url = `${url}?${queryString}`;
+      }
+
+      return apiRequest(url);
+    },
   });
 }
 
