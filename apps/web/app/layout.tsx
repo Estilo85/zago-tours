@@ -29,7 +29,16 @@ export const metadata: Metadata = {
   },
   description:
     'Making adventure tourism safe for young travelers 18-35 again. Find and book thrilling trips vetted against our safety standards. ',
-  keywords: ['travel', 'tours', 'your other keywords'],
+  keywords: [
+    'travel',
+    'tours',
+    'adventure tourism',
+    'young travelers',
+    'safe travel',
+    'book trips',
+    'backpacking',
+    'group tours',
+  ],
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
@@ -37,10 +46,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Zagotours',
-    description: 'Your custom description here.',
+    description:
+      'Making adventure tourism safe for young travelers 18-35 again. Find and book thrilling trips vetted against our safety standards.',
     url: 'https://zagotours.com',
     siteName: 'Zagotours',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Zagotours',
+    description:
+      'Making adventure tourism safe for young travelers 18-35 again. Find and book thrilling trips vetted against our safety standards.',
   },
 };
 
