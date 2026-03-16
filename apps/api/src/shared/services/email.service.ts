@@ -1175,7 +1175,7 @@ export class EmailService {
           <p>📍 <strong>Location:</strong> ${eventDetails.location}</p>
         </div>
         <p>We can't wait to see you there!</p>
-        <a href="${process.env.FRONTEND_URL}/my-bookings" style="background: #4F46E5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View My Bookings</a>
+        <a href="${process.env.FRONTEND_URL}" style="background: #4F46E5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">View My Bookings</a>
       </div>
     `;
 
